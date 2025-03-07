@@ -1,5 +1,5 @@
 <header>
-    <img src="/placeholder.svg?height=70&width=70" alt="XING FU CHA Logo">
+    <img src="./assets/image/logo/logo.png" alt="XING FU CHA Logo">
     <div class="logo">XING FU CHA</div>
     <nav>
         <ul>
