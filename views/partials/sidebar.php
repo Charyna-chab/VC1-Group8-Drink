@@ -21,9 +21,14 @@
         <li><a href="/feedback"><i class="fas fa-comment-alt feedback-icon"></i> Feedback</a></li>
         <li><a href="/settings"><i class="fas fa-cogs setting-icon"></i> Setting</a></li>
     </ul>
+    
     <div class="upgrade-box">
         <p>Upgrade your Account to Get Free Voucher</p>
         <button>Upgrade</button>
     </div>
+    
+    <!-- Logout Option -->
+    <ul class="nav-list">
+        <li><a href="logout.php"><i class="fas fa-sign-out-alt logout-icon"></i> Logout</a></li>
+    </ul>
 </aside>
-
