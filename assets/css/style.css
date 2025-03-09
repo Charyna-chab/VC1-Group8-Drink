@@ -534,6 +534,22 @@ main {
     margin: 0 auto 20px;
 }
 
+.branch-order-sidebar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    width: 200px;
+}
+
+.branch-logo {
+    width: 100%;
+    height: auto;
+    max-width: 120px;
+}
+
 
 /* User Profile in Sidebar */
 

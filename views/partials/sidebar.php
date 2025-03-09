@@ -1,8 +1,9 @@
 <aside class="sidebar">
     <!-- User logo in Sidebar -->
     <div class="branch-order-sidebar">
-    <img src="<?php echo isset($branchLogo) ? $branchLogo : '/assets/images/default-logo.jpg'; ?>" alt="Branch Logo" class="branch-logo">
+    <img src="<?php echo isset($branchLogo) ? $branchLogo : '/assets/image/logo/logo.png'; ?>" alt="Branch Logo" class="branch-logo">
 </div>
+
 
 
     
