@@ -1,12 +1,10 @@
 <aside class="sidebar">
-    <!-- User Profile in Sidebar -->
-    <div class="user-profile-sidebar">
-        <img src="<?php echo isset($user) ? $user['profile_image'] : '/assets/images/default-user.jpg'; ?>" alt="User Profile">
-        <div>
-            <h4><?php echo isset($user) ? $user['name'] : 'Guest User'; ?></h4>
-            <p><?php echo isset($user) ? $user['membership'] : 'Sign in to order'; ?></p>
-        </div>
-    </div>
+    <!-- User logo in Sidebar -->
+    <div class="branch-order-sidebar">
+    <img src="<?php echo isset($branchLogo) ? $branchLogo : '/assets/images/default-logo.jpg'; ?>" alt="Branch Logo" class="branch-logo">
+</div>
+
+
     
     <ul class="nav-list">
         <li><a href="/"><i class="fas fa-mug-hot drink-icon"></i> Order drink</a></li>
