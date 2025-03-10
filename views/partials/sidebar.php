@@ -1,8 +1,6 @@
 <aside class="sidebar">
     <div class="user-profile-sidebar">
-        <img src="<?php echo isset($_SESSION['user']) ? $_SESSION['user']['avatar'] : '/assets/images/users/user1.jpg'; ?>" alt="User Profile">
-        <h4><?php echo isset($_SESSION['user']) ? $_SESSION['user']['name'] : 'Guest User'; ?></h4>
-        <p><?php echo isset($_SESSION['user']) ? $_SESSION['user']['email'] : 'Not logged in'; ?></p>
+        <img src="<?php echo isset($_SESSION['user']) ? $_SESSION['user']['avatar'] : '/assets/image/logo/logo.png'; ?>" alt="User Profile">
     </div>
     
     <ul class="nav-list">
