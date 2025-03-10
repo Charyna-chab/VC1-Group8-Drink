@@ -6,6 +6,9 @@ class Database {
     private $users = [];
     private $orders = [];
     private $toppings = [];
+    private $bookings = [];
+    private $favorites = [];
+    private $feedback = [];
     
     private function __construct() {
         // Initialize with fake data
@@ -13,6 +16,9 @@ class Database {
         $this->initProducts();
         $this->initToppings();
         $this->initUsers();
+        $this->initBookings();
+        $this->initFavorites();
+        $this->initFeedback();
     }
     
     public static function getInstance() {
@@ -40,21 +46,22 @@ class Database {
         $this->products = [
             // Milk Tea Category
             [
-                'id' => 'classic-milk-tea',
-                'name' => 'Classic Milk Tea',
-                'price' => 3.00,
-                'image' => '/assets/images/products/classic-milk-tea.jpg',
+                'id' => 'ovaltine-stick-lava',
+                'name' => 'Ovaltine Stick Lava',
+                'price' => 3.50, // Update price if necessary
+                'image' => '/assets/image/products/Ovaltine-stick-lava.png', // Ensure image path is correct
                 'category_id' => 3,
-                'category' => 'milk-tea',
-                'discount' => '10% Off!',
-                'description' => 'Our signature classic milk tea with a perfect balance of tea and creamy milk.',
+                'category' => 'milk-tea', // Update category if necessary
+                'discount' => '15% Off!', // Adjust discount if necessary
+                'description' => 'A rich and indulgent Ovaltine-based drink with a creamy, lava-like consistency. Perfect for Ovaltine lovers.',
                 'is_featured' => true
             ],
+            
             [
                 'id' => 'black-milk-tea',
                 'name' => 'Black Milk Tea',
                 'price' => 3.25,
-                'image' => '/assets/images/products/black-milk-tea.jpg',
+                'image' => '/assets/image/products/black-milk-tea.jpg',
                 'category_id' => 3,
                 'category' => 'milk-tea',
                 'discount' => '5% Off!',
@@ -65,7 +72,7 @@ class Database {
                 'id' => 'chocolate-milk-tea',
                 'name' => 'Chocolate Milk Tea',
                 'price' => 3.50,
-                'image' => '/assets/image/Chocolate-milk-tea.png',
+                'image' => '/assets/image/products/Chocolate-milk-tea.png',
                 'category_id' => 3,
                 'category' => 'milk-tea',
                 'discount' => '10% Off!',
@@ -76,7 +83,7 @@ class Database {
                 'id' => 'brown-sugar-milk-tea',
                 'name' => 'Brown Sugar Milk Tea',
                 'price' => 3.75,
-                'image' => '/assets/images/products/brown-sugar-milk-tea.jpg',
+                'image' => '/assets/image/products/brown-sugar-milk-tea.jpg',
                 'category_id' => 3,
                 'category' => 'milk-tea',
                 'discount' => '15% Off!',
@@ -87,7 +94,7 @@ class Database {
                 'id' => 'taro-milk-tea',
                 'name' => 'Taro Milk Tea',
                 'price' => 3.50,
-                'image' => '/assets/images/products/taro-milk-tea.jpg',
+                'image' => '/assets/image/products/taro-milk-tea.jpg',
                 'category_id' => 3,
                 'category' => 'milk-tea',
                 'discount' => '5% Off!',
@@ -98,7 +105,7 @@ class Database {
                 'id' => 'purple-sweet-potato',
                 'name' => 'Purple Sweet Potato Milk Tea',
                 'price' => 3.75,
-                'image' => '/assets/images/products/purple-sweet-potato.jpg',
+                'image' => '/assets/image/products/purple-sweet-potato.jpg',
                 'category_id' => 3,
                 'category' => 'milk-tea',
                 'discount' => '8% Off!',
@@ -109,7 +116,7 @@ class Database {
                 'id' => 'matcha-milk-tea',
                 'name' => 'Matcha Milk Tea',
                 'price' => 3.95,
-                'image' => '/assets/images/products/matcha-milk-tea.jpg',
+                'image' => '/assets/image/products/matcha-milk-tea.jpg',
                 'category_id' => 3,
                 'category' => 'milk-tea',
                 'discount' => '5% Off!',
@@ -120,22 +127,11 @@ class Database {
                 'id' => 'thai-tea',
                 'name' => 'Thai Milk Tea',
                 'price' => 3.50,
-                'image' => '/assets/images/products/thai-tea.jpg',
+                'image' => '/assets/image/products/thai-tea.jpg',
                 'category_id' => 3,
                 'category' => 'milk-tea',
                 'discount' => '10% Off!',
                 'description' => 'Traditional Thai tea with its distinctive orange color and rich, creamy taste with condensed milk.',
-                'is_featured' => false
-            ],
-            [
-                'id' => 'ovaltine-stick-lava',
-                'name' => 'Ovaltine Stick Lava',
-                'price' => 3.50,
-                'image' => '/assets/images/products/ovaltine-stick-lava.jpg',
-                'category_id' => 3,
-                'category' => 'milk-tea',
-                'discount' => '5% Off!',
-                'description' => 'Indulge in the creamy richness of our Ovaltine Stick Lava, expertly blended with the natural sweetness of ovaltine. This delightful drink offers the perfect balance of smooth, velvety milk tea with a hint of sweet, malty flavor.',
                 'is_featured' => false
             ],
     
@@ -144,7 +140,7 @@ class Database {
                 'id' => 'taiwan-tea',
                 'name' => 'Taiwan Oolong Tea',
                 'price' => 3.25,
-                'image' => '/assets/images/products/taiwan-tea.jpg',
+                'image' => '/assets/image/products/taiwan-tea.jpg',
                 'category_id' => 7,
                 'category' => 'fruit-tea',
                 'discount' => '5% Off!',
@@ -155,7 +151,7 @@ class Database {
                 'id' => 'jasmine-tea',
                 'name' => 'Jasmine Green Tea',
                 'price' => 2.95,
-                'image' => '/assets/images/products/jasmine-tea.jpg',
+                'image' => '/assets/image/products/jasmine-tea.jpg',
                 'category_id' => 7,
                 'category' => 'fruit-tea',
                 'discount' => '8% Off!',
@@ -166,7 +162,7 @@ class Database {
                 'id' => 'black-tea',
                 'name' => 'Pure Black Tea',
                 'price' => 2.75,
-                'image' => '/assets/images/products/black-tea.jpg',
+                'image' => '/assets/image/products/black-tea.jpg',
                 'category_id' => 7,
                 'category' => 'fruit-tea',
                 'discount' => '5% Off!',
@@ -177,7 +173,7 @@ class Database {
                 'id' => 'honey-tea',
                 'name' => 'Honey Green Tea',
                 'price' => 3.25,
-                'image' => '/assets/images/products/honey-tea.jpg',
+                'image' => '/assets/image/products/honey-tea.jpg',
                 'category_id' => 7,
                 'category' => 'fruit-tea',
                 'discount' => '10% Off!',
@@ -188,7 +184,7 @@ class Database {
                 'id' => 'oolong-tea',
                 'name' => 'Oolong Tea',
                 'price' => 3.00,
-                'image' => '/assets/images/products/oolong-tea.jpg',
+                'image' => '/assets/image/products/oolong-tea.jpg',
                 'category_id' => 7,
                 'category' => 'fruit-tea',
                 'discount' => '5% Off!',
@@ -199,7 +195,7 @@ class Database {
                 'id' => 'earl-grey',
                 'name' => 'Earl Grey Tea',
                 'price' => 3.25,
-                'image' => '/assets/images/products/earl-grey.jpg',
+                'image' => '/assets/image/products/earl-grey.jpg',
                 'category_id' => 7,
                 'category' => 'fruit-tea',
                 'discount' => '8% Off!',
@@ -210,7 +206,7 @@ class Database {
                 'id' => 'japan-tea',
                 'name' => 'Japanese Sencha Tea',
                 'price' => 3.50,
-                'image' => '/assets/images/products/japan-tea.jpg',
+                'image' => '/assets/image/products/japan-tea.jpg',
                 'category_id' => 7,
                 'category' => 'fruit-tea',
                 'discount' => '5% Off!',
@@ -223,7 +219,7 @@ class Database {
                 'id' => 'pumpkin-spice-latte',
                 'name' => 'Pumpkin Spice Latte',
                 'price' => 4.00,
-                'image' => '/assets/images/products/pumpkin-spice-latte.jpg',
+                'image' => '/assets/image/products/pumpkin-spice-latte.jpg',
                 'category_id' => 2,
                 'category' => 'seasonal',
                 'discount' => '10% Off!',
@@ -234,7 +230,7 @@ class Database {
                 'id' => 'gingerbread-latte',
                 'name' => 'Gingerbread Latte',
                 'price' => 3.75,
-                'image' => '/assets/images/products/gingerbread-latte.jpg',
+                'image' => '/assets/image/products/gingerbread-latte.jpg',
                 'category_id' => 2,
                 'category' => 'seasonal',
                 'discount' => '15% Off!',
@@ -247,7 +243,7 @@ class Database {
                 'id' => 'americano',
                 'name' => 'Americano',
                 'price' => 2.75,
-                'image' => '/assets/images/products/americano.jpg',
+                'image' => '/assets/image/products/americano.jpg',
                 'category_id' => 4,
                 'category' => 'coffee',
                 'discount' => '5% Off!',
@@ -258,7 +254,7 @@ class Database {
                 'id' => 'latte',
                 'name' => 'Latte',
                 'price' => 3.50,
-                'image' => '/assets/images/products/latte.jpg',
+                'image' => '/assets/image/products/latte.jpg',
                 'category_id' => 4,
                 'category' => 'coffee',
                 'discount' => '10% Off!',
@@ -271,7 +267,7 @@ class Database {
                 'id' => 'peach-tea',
                 'name' => 'Peach Tea',
                 'price' => 3.00,
-                'image' => '/assets/images/products/peach-tea.jpg',
+                'image' => '/assets/image/products/peach-tea.jpg',
                 'category_id' => 7,
                 'category' => 'fruit-tea',
                 'discount' => '10% Off!',
@@ -282,7 +278,7 @@ class Database {
                 'id' => 'lychee-tea',
                 'name' => 'Lychee Tea',
                 'price' => 3.25,
-                'image' => '/assets/images/products/lychee-tea.jpg',
+                'image' => '/assets/image/products/lychee-tea.jpg',
                 'category_id' => 7,
                 'category' => 'fruit-tea',
                 'discount' => '8% Off!',
@@ -295,7 +291,7 @@ class Database {
                 'id' => 'croissant',
                 'name' => 'Croissant',
                 'price' => 2.50,
-                'image' => '/assets/images/products/croissant.jpg',
+                'image' => '/assets/image/products/croissant.jpg',
                 'category_id' => 6,
                 'category' => 'bread',
                 'discount' => '10% Off!',
@@ -306,7 +302,7 @@ class Database {
                 'id' => 'chocolate-croissant',
                 'name' => 'Chocolate Croissant',
                 'price' => 2.75,
-                'image' => '/assets/images/products/chocolate-croissant.jpg',
+                'image' => '/assets/image/products/chocolate-croissant.jpg',
                 'category_id' => 6,
                 'category' => 'bread',
                 'discount' => '15% Off!',
@@ -319,7 +315,7 @@ class Database {
                 'id' => 'mango-smoothie',
                 'name' => 'Mango Smoothie',
                 'price' => 4.00,
-                'image' => '/assets/images/products/mango-smoothie.jpg',
+                'image' => '/assets/image/products/mango-smoothie.jpg',
                 'category_id' => 8,
                 'category' => 'smoothie',
                 'discount' => '10% Off!',
@@ -330,7 +326,7 @@ class Database {
                 'id' => 'berry-smoothie',
                 'name' => 'Berry Smoothie',
                 'price' => 3.75,
-                'image' => '/assets/images/products/berry-smoothie.jpg',
+                'image' => '/assets/image/products/berry-smoothie.jpg',
                 'category_id' => 8,
                 'category' => 'smoothie',
                 'discount' => '12% Off!',
@@ -343,7 +339,7 @@ class Database {
                 'id' => 'lemonade',
                 'name' => 'Lemonade',
                 'price' => 2.50,
-                'image' => '/assets/images/products/lemonade.jpg',
+                'image' => '/assets/image/products/lemonade.jpg',
                 'category_id' => 5,
                 'category' => 'lemon-drink',
                 'discount' => '10% Off!',
@@ -354,7 +350,7 @@ class Database {
                 'id' => 'pink-lemonade',
                 'name' => 'Pink Lemonade',
                 'price' => 2.75,
-                'image' => '/assets/images/products/pink-lemonade.jpg',
+                'image' => '/assets/image/products/pink-lemonade.jpg',
                 'category_id' => 5,
                 'category' => 'lemon-drink',
                 'discount' => '8% Off!',
@@ -367,7 +363,7 @@ class Database {
                 'id' => 'cheesecake',
                 'name' => 'Cheesecake',
                 'price' => 3.50,
-                'image' => '/assets/images/products/cheesecake.jpg',
+                'image' => '/assets/image/products/cheesecake.jpg',
                 'category_id' => 9,
                 'category' => 'pastry',
                 'discount' => '10% Off!',
@@ -378,7 +374,7 @@ class Database {
                 'id' => 'chocolate-cake',
                 'name' => 'Chocolate Cake',
                 'price' => 3.75,
-                'image' => '/assets/images/products/chocolate-cake.jpg',
+                'image' => '/assets/image/products/chocolate-cake.jpg',
                 'category_id' => 9,
                 'category' => 'pastry',
                 'discount' => '15% Off!',
@@ -387,7 +383,6 @@ class Database {
             ]
         ];
     }
-    
     
     private function initToppings() {
         $this->toppings = [
@@ -411,9 +406,87 @@ class Database {
                 'email' => 'john@example.com',
                 'password' => password_hash('password123', PASSWORD_DEFAULT),
                 'name' => 'John Doe',
-                'profile_image' => '/assets/images/users/john.jpg',
+                'profile_image' => '/assets/image/users/john.jpg',
                 'membership' => 'Premium',
-                'created_at' => '2023-01-15 10:30:00'
+                'created_at' => '2023-01-15 10:30:00',
+                'phone' => '555-123-4567',
+                'address' => '123 Main St, Anytown, USA',
+                'preferences' => [
+                    'notifications' => true,
+                    'newsletter' => true,
+                    'dark_mode' => false
+                ]
+            ]
+        ];
+    }
+    
+    private function initBookings() {
+        $this->bookings = [
+            [
+                'id' => 1,
+                'user_id' => 1,
+                'date' => '2023-06-15',
+                'time' => '14:30:00',
+                'guests' => 2,
+                'special_requests' => 'Window seat if possible',
+                'status' => 'confirmed',
+                'created_at' => '2023-06-10 09:15:00'
+            ],
+            [
+                'id' => 2,
+                'user_id' => 1,
+                'date' => '2023-07-22',
+                'time' => '18:00:00',
+                'guests' => 4,
+                'special_requests' => 'Birthday celebration',
+                'status' => 'pending',
+                'created_at' => '2023-07-15 16:45:00'
+            ]
+        ];
+    }
+    
+    private function initFavorites() {
+        $this->favorites = [
+            [
+                'id' => 1,
+                'user_id' => 1,
+                'product_id' => 'classic-milk-tea',
+                'added_at' => '2023-05-20 14:30:00'
+            ],
+            [
+                'id' => 2,
+                'user_id' => 1,
+                'product_id' => 'taro-milk-tea',
+                'added_at' => '2023-05-22 10:15:00'
+            ],
+            [
+                'id' => 3,
+                'user_id' => 1,
+                'product_id' => 'mango-smoothie',
+                'added_at' => '2023-06-01 16:45:00'
+            ]
+        ];
+    }
+    
+    private function initFeedback() {
+        $this->feedback = [
+            [
+                'id' => 1,
+                'user_id' => 1,
+                'subject' => 'Great Service!',
+                'message' => 'I had an amazing experience at your store. The staff was very friendly and helpful.',
+                'rating' => 5,
+                'created_at' => '2023-06-05 11:30:00',
+                'status' => 'read'
+            ],
+            [
+                'id' => 2,
+                'user_id' => 1,
+                'subject' => 'Suggestion for New Flavor',
+                'message' => 'I would love to see a strawberry cheesecake flavor added to your menu.',
+                'rating' => 4,
+                'created_at' => '2023-06-20 15:45:00',
+                'status' => 'unread'
             ]
         ];
     }
@@ -513,6 +586,122 @@ class Database {
             }
         }
         return $result;
+    }
+    
+    // Booking methods
+    public function getAllBookings() {
+        return $this->bookings;
+    }
+    
+    public function getBookingsByUserId($userId) {
+        $result = [];
+        foreach ($this->bookings as $booking) {
+            if ($booking['user_id'] == $userId) {
+                $result[] = $booking;
+            }
+        }
+        return $result;
+    }
+    
+    public function createBooking($data) {
+        $bookingId = count($this->bookings) + 1;
+        $data['id'] = $bookingId;
+        $data['created_at'] = date('Y-m-d H:i:s');
+        $data['status'] = 'pending';
+        
+        $this->bookings[] = $data;
+        return $bookingId;
+    }
+    
+    // Favorites methods
+    public function getFavoritesByUserId($userId) {
+        $result = [];
+        foreach ($this->favorites as $favorite) {
+            if ($favorite['user_id'] == $userId) {
+                $product = $this->getProductById($favorite['product_id']);
+                if ($product) {
+                    $result[] = [
+                        'id' => $favorite['id'],
+                        'product' => $product,
+                        'added_at' => $favorite['added_at']
+                    ];
+                }
+            }
+        }
+        return $result;
+    }
+    
+    public function addToFavorites($userId, $productId) {
+        // Check if already in favorites
+        foreach ($this->favorites as $favorite) {
+            if ($favorite['user_id'] == $userId && $favorite['product_id'] == $productId) {
+                return false; // Already in favorites
+            }
+        }
+        
+        $favoriteId = count($this->favorites) + 1;
+        $this->favorites[] = [
+            'id' => $favoriteId,
+            'user_id' => $userId,
+            'product_id' => $productId,
+            'added_at' => date('Y-m-d H:i:s')
+        ];
+        
+        return true;
+    }
+    
+    public function removeFromFavorites($userId, $favoriteId) {
+        foreach ($this->favorites as $key => $favorite) {
+            if ($favorite['user_id'] == $userId && $favorite['id'] == $favoriteId) {
+                unset($this->favorites[$key]);
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    // Feedback methods
+    public function getFeedbackByUserId($userId) {
+        $result = [];
+        foreach ($this->feedback as $item) {
+            if ($item['user_id'] == $userId) {
+                $result[] = $item;
+            }
+        }
+        return $result;
+    }
+    
+    public function createFeedback($data) {
+        $feedbackId = count($this->feedback) + 1;
+        $data['id'] = $feedbackId;
+        $data['created_at'] = date('Y-m-d H:i:s');
+        $data['status'] = 'unread';
+        
+        $this->feedback[] = $data;
+        return $feedbackId;
+    }
+    
+    public function getUnreadFeedbackCount() {
+        $count = 0;
+        foreach ($this->feedback as $item) {
+            if ($item['status'] == 'unread') {
+                $count++;
+            }
+        }
+        return $count;
+    }
+    
+    // User settings methods
+    public function updateUserSettings($userId, $settings) {
+        foreach ($this->users as &$user) {
+            if ($user['id'] == $userId) {
+                foreach ($settings as $key => $value) {
+                    $user[$key] = $value;
+                }
+                return true;
+            }
+        }
+        return false;
     }
 }
 ?>

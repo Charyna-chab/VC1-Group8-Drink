@@ -737,6 +737,51 @@ main {
     filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
 }
 
+.dish-item,
+.order-panel {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 10px;
+    transition: transform 0.3s ease;
+}
+
+.dish-item:hover,
+.order-panel:hover {
+    transform: translateY(-5px);
+}
+
+.price-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.discount {
+    background-color: #ff6b6b;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
+.confirm-btn {
+    background-color: #ff5e62;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.confirm-btn:hover {
+    background-color: #e62e24;
+}
+
 
 /* Category Section */
 
