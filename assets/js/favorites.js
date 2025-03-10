@@ -1,176 +1,99 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // Add favorite functionality for product cards
-    const favoriteButtons = document.querySelectorAll('.favorite-btn');
+document.addEventListener("DOMContentLoaded", () => {
+    // Remove favorite functionality
+    const removeButtons = document.querySelectorAll(".remove-favorite")
+    removeButtons.forEach((button) => {
+        button.addEventListener("click", function(e) {
+            e.stopPropagation()
 
-    favoriteButtons.forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
+            const favoriteId = this.getAttribute("data-id")
+            const favoriteCard = this.closest(".favorite-card")
 
-            // Check if user is logged in
-            if (!isLoggedIn()) {
-                showLoginPrompt();
-                return;
-            }
+            // Show confirmation dialog
+            if (confirm("Are you sure you want to remove this item from your favorites?")) {
+                // In a real app, you would send a request to the server
+                // For demo purposes, we'll just remove the card with animation
+                favoriteCard.style.opacity = "0"
+                favoriteCard.style.transform = "scale(0.8)"
 
-            const productId = this.getAttribute('data-product-id');
-            const isFavorite = this.classList.contains('active');
-
-            if (isFavorite) {
-                removeFavorite(productId, this);
-            } else {
-                addFavorite(productId, this);
-            }
-        });
-    });
-
-    function isLoggedIn() {
-        // Check if user is logged in (you can modify this based on your authentication system)
-        return document.body.classList.contains('user-logged-in');
-    }
-
-    function showLoginPrompt() {
-        const notification = document.createElement('div');
-        notification.className = 'notification info';
-        notification.innerHTML = `
-            <div class="notification-content">
-                <i class="fas fa-info-circle"></i>
-                <span>Please login to add items to your favorites</span>
-            </div>
-            <div class="notification-actions">
-                <a href="/login" class="btn btn-sm btn-primary">Login</a>
-                <button class="btn btn-sm btn-outline dismiss-btn">Dismiss</button>
-            </div>
-        `;
-
-        document.body.appendChild(notification);
-
-        // Add event listener to dismiss button
-        notification.querySelector('.dismiss-btn').addEventListener('click', function() {
-            notification.classList.add('fade-out');
-            setTimeout(() => {
-                document.body.removeChild(notification);
-            }, 300);
-        });
-
-        // Auto dismiss after 8 seconds
-        setTimeout(() => {
-            if (document.body.contains(notification)) {
-                notification.classList.add('fade-out');
                 setTimeout(() => {
-                    if (document.body.contains(notification)) {
-                        document.body.removeChild(notification);
+                    favoriteCard.remove()
+
+                    // Check if there are any favorites left
+                    const remainingFavorites = document.querySelectorAll(".favorite-card")
+                    if (remainingFavorites.length === 0) {
+                        // Show empty state
+                        const favoritesGrid = document.querySelector(".favorites-grid")
+                        favoritesGrid.innerHTML = `
+                <div class="empty-state">
+                  <img src="/assets/images/empty-favorites.png" alt="No Favorites">
+                  <h3>No Favorites Yet</h3>
+                  <p>You haven't added any favorites yet. Browse our menu and add items to your favorites!</p>
+                  <a href="/menu" class="btn-primary">Browse Menu</a>
+                </div>
+              `
                     }
-                }, 300);
+                }, 300)
+
+                // Show toast notification
+                showToast(
+                    "Removed from Favorites",
+                    "Item has been removed from your favorites",
+                    "/assets/images/logo/logo-small.png",
+                )
             }
-        }, 8000);
-    }
+        })
+    })
 
-    function addFavorite(productId, button) {
-        fetch('/favorites/add', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    productId: productId
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    button.classList.add('active');
-                    button.setAttribute('title', 'Remove from favorites');
-                    button.querySelector('i').classList.remove('far');
-                    button.querySelector('i').classList.add('fas');
+    // Order button functionality
+    const orderButtons = document.querySelectorAll(".order-btn")
+    orderButtons.forEach((button) => {
+        button.addEventListener("click", function(e) {
+            e.stopPropagation()
 
-                    showNotification('Added to favorites!', 'success');
-                    updateFavoritesCount(data.favoritesCount);
-                } else {
-                    showNotification(data.message || 'Failed to add to favorites', 'error');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                showNotification('An error occurred', 'error');
-            });
-    }
+            // Get product data
+            const productId = this.getAttribute("data-id")
+            const productName = this.getAttribute("data-name")
+            const productPrice = Number.parseFloat(this.getAttribute("data-price"))
+            const productImage = this.getAttribute("data-image")
 
-    function removeFavorite(productId, button) {
-        fetch('/favorites/remove-by-product', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    productId: productId
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    button.classList.remove('active');
-                    button.setAttribute('title', 'Add to favorites');
-                    button.querySelector('i').classList.remove('fas');
-                    button.querySelector('i').classList.add('far');
-
-                    showNotification('Removed from favorites', 'success');
-                    updateFavoritesCount(data.favoritesCount);
-                } else {
-                    showNotification(data.message || 'Failed to remove from favorites', 'error');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                showNotification('An error occurred', 'error');
-            });
-    }
-
-    function showNotification(message, type) {
-        const notification = document.createElement('div');
-        notification.className = `notification ${type}`;
-        notification.innerHTML = `
-            <div class="notification-content">
-                <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'info' ? 'fa-info-circle' : 'fa-exclamation-circle'}"></i>
-                <span>${message}</span>
-            </div>
-        `;
-
-        document.body.appendChild(notification);
-
-        // Remove notification after 3 seconds
-        setTimeout(() => {
-            notification.classList.add('fade-out');
-            setTimeout(() => {
-                document.body.removeChild(notification);
-            }, 300);
-        }, 3000);
-    }
-
-    function updateFavoritesCount(count) {
-        const favoritesCountBadge = document.querySelector('.sidebar-nav li a[href="/dashboard/favorites"] .badge');
-
-        if (count > 0) {
-            if (favoritesCountBadge) {
-                favoritesCountBadge.textContent = count;
-                favoritesCountBadge.classList.add('pulse');
-                setTimeout(() => {
-                    favoritesCountBadge.classList.remove('pulse');
-                }, 500);
+            // Use the openOrderPanel function from app.js
+            if (typeof window.openOrderPanel === "function") {
+                window.openOrderPanel(productId, productName, productPrice, productImage)
             } else {
-                const favoritesLink = document.querySelector('.sidebar-nav li a[href="/dashboard/favorites"]');
-                if (favoritesLink) {
-                    const badge = document.createElement('span');
-                    badge.className = 'badge pulse';
-                    badge.textContent = count;
-                    favoritesLink.appendChild(badge);
-
-                    setTimeout(() => {
-                        badge.classList.remove('pulse');
-                    }, 500);
-                }
+                // Fallback if the function is not available
+                alert(`Ordering ${productName} for $${productPrice}`)
             }
-        } else if (favoritesCountBadge) {
-            favoritesCountBadge.remove();
+        })
+    })
+
+    // Make entire card clickable to open order panel
+    const favoriteCards = document.querySelectorAll(".favorite-card")
+    favoriteCards.forEach((card) => {
+        card.addEventListener("click", function() {
+            const orderButton = this.querySelector(".order-btn")
+            if (orderButton) {
+                orderButton.click()
+            }
+        })
+    })
+
+    // Function to show toast notification
+    function showToast(title, message, image) {
+        const toast = document.getElementById("toastNotification")
+        const toastTitle = document.getElementById("toastTitle")
+        const toastMessage = document.getElementById("toastMessage")
+        const toastImage = document.getElementById("toastImage")
+
+        if (toast && toastTitle && toastMessage && toastImage) {
+            toastTitle.textContent = title
+            toastMessage.textContent = message
+            toastImage.src = image
+
+            toast.classList.add("active")
+
+            setTimeout(() => {
+                toast.classList.remove("active")
+            }, 3000)
         }
     }
-});
+})
