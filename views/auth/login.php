@@ -1,6 +1,7 @@
-<!-- views/auth/login.php -->
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,8 +10,10 @@
     <link rel="stylesheet" href="/assets/css/style.css">
     <link rel="stylesheet" href="/assets/css/auth.css">
 </head>
+
 <body>
     <?php include 'views/partials/header.php'; ?>
+
     <div class="auth-container">
         <div class="auth-form-container">
             <div class="auth-header">
@@ -74,6 +77,9 @@
             </div>
         </div>
     </div>
+
     <script src="/assets/js/auth.js"></script>
 </body>
+
 </html>
+
