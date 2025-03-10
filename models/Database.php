@@ -42,18 +42,40 @@ class Database {
             [
                 'id' => 'classic-milk-tea',
                 'name' => 'Classic Milk Tea',
-                'price' => 2.50,
+                'price' => 3.00,
                 'image' => '/assets/images/products/classic-milk-tea.jpg',
                 'category_id' => 3,
                 'category' => 'milk-tea',
                 'discount' => '10% Off!',
-                'description' => 'Traditional milk tea with a perfect balance of tea and milk.',
+                'description' => 'Our signature classic milk tea with a perfect balance of tea and creamy milk.',
+                'is_featured' => true
+            ],
+            [
+                'id' => 'black-milk-tea',
+                'name' => 'Black Milk Tea',
+                'price' => 3.25,
+                'image' => '/assets/images/products/black-milk-tea.jpg',
+                'category_id' => 3,
+                'category' => 'milk-tea',
+                'discount' => '5% Off!',
+                'description' => 'Strong black tea blended with creamy milk for a rich and satisfying flavor.',
+                'is_featured' => true
+            ],
+            [
+                'id' => 'chocolate-milk-tea',
+                'name' => 'Chocolate Milk Tea',
+                'price' => 3.50,
+                'image' => '/assets/image/Chocolate-milk-tea.png',
+                'category_id' => 3,
+                'category' => 'milk-tea',
+                'discount' => '10% Off!',
+                'description' => 'Rich and creamy chocolate milk tea, a perfect sweet treat!',
                 'is_featured' => true
             ],
             [
                 'id' => 'brown-sugar-milk-tea',
                 'name' => 'Brown Sugar Milk Tea',
-                'price' => 3.25,
+                'price' => 3.75,
                 'image' => '/assets/images/products/brown-sugar-milk-tea.jpg',
                 'category_id' => 3,
                 'category' => 'milk-tea',
@@ -72,7 +94,130 @@ class Database {
                 'description' => 'Creamy milk tea with sweet taro flavor.',
                 'is_featured' => false
             ],
-            
+            [
+                'id' => 'purple-sweet-potato',
+                'name' => 'Purple Sweet Potato Milk Tea',
+                'price' => 3.75,
+                'image' => '/assets/images/products/purple-sweet-potato.jpg',
+                'category_id' => 3,
+                'category' => 'milk-tea',
+                'discount' => '8% Off!',
+                'description' => 'Creamy milk tea infused with the natural sweetness of purple sweet potato, creating a unique and delicious flavor profile.',
+                'is_featured' => true
+            ],
+            [
+                'id' => 'matcha-milk-tea',
+                'name' => 'Matcha Milk Tea',
+                'price' => 3.95,
+                'image' => '/assets/images/products/matcha-milk-tea.jpg',
+                'category_id' => 3,
+                'category' => 'milk-tea',
+                'discount' => '5% Off!',
+                'description' => 'Premium Japanese matcha powder blended with creamy milk for an authentic and refreshing experience.',
+                'is_featured' => true
+            ],
+            [
+                'id' => 'thai-tea',
+                'name' => 'Thai Milk Tea',
+                'price' => 3.50,
+                'image' => '/assets/images/products/thai-tea.jpg',
+                'category_id' => 3,
+                'category' => 'milk-tea',
+                'discount' => '10% Off!',
+                'description' => 'Traditional Thai tea with its distinctive orange color and rich, creamy taste with condensed milk.',
+                'is_featured' => false
+            ],
+            [
+                'id' => 'ovaltine-stick-lava',
+                'name' => 'Ovaltine Stick Lava',
+                'price' => 3.50,
+                'image' => '/assets/images/products/ovaltine-stick-lava.jpg',
+                'category_id' => 3,
+                'category' => 'milk-tea',
+                'discount' => '5% Off!',
+                'description' => 'Indulge in the creamy richness of our Ovaltine Stick Lava, expertly blended with the natural sweetness of ovaltine. This delightful drink offers the perfect balance of smooth, velvety milk tea with a hint of sweet, malty flavor.',
+                'is_featured' => false
+            ],
+    
+            // Tea Category (Adding new tea options)
+            [
+                'id' => 'taiwan-tea',
+                'name' => 'Taiwan Oolong Tea',
+                'price' => 3.25,
+                'image' => '/assets/images/products/taiwan-tea.jpg',
+                'category_id' => 7,
+                'category' => 'fruit-tea',
+                'discount' => '5% Off!',
+                'description' => 'Authentic Taiwanese oolong tea with a delicate floral aroma and smooth finish.',
+                'is_featured' => true
+            ],
+            [
+                'id' => 'jasmine-tea',
+                'name' => 'Jasmine Green Tea',
+                'price' => 2.95,
+                'image' => '/assets/images/products/jasmine-tea.jpg',
+                'category_id' => 7,
+                'category' => 'fruit-tea',
+                'discount' => '8% Off!',
+                'description' => 'Fragrant jasmine-infused green tea with a delicate floral aroma.',
+                'is_featured' => false
+            ],
+            [
+                'id' => 'black-tea',
+                'name' => 'Pure Black Tea',
+                'price' => 2.75,
+                'image' => '/assets/images/products/black-tea.jpg',
+                'category_id' => 7,
+                'category' => 'fruit-tea',
+                'discount' => '5% Off!',
+                'description' => 'Bold and robust black tea, served hot or cold for a refreshing experience.',
+                'is_featured' => false
+            ],
+            [
+                'id' => 'honey-tea',
+                'name' => 'Honey Green Tea',
+                'price' => 3.25,
+                'image' => '/assets/images/products/honey-tea.jpg',
+                'category_id' => 7,
+                'category' => 'fruit-tea',
+                'discount' => '10% Off!',
+                'description' => 'Delicate green tea sweetened with natural honey for a soothing experience.',
+                'is_featured' => true
+            ],
+            [
+                'id' => 'oolong-tea',
+                'name' => 'Oolong Tea',
+                'price' => 3.00,
+                'image' => '/assets/images/products/oolong-tea.jpg',
+                'category_id' => 7,
+                'category' => 'fruit-tea',
+                'discount' => '5% Off!',
+                'description' => 'Semi-oxidized tea with a perfect balance between green and black tea, offering a complex flavor profile.',
+                'is_featured' => false
+            ],
+            [
+                'id' => 'earl-grey',
+                'name' => 'Earl Grey Tea',
+                'price' => 3.25,
+                'image' => '/assets/images/products/earl-grey.jpg',
+                'category_id' => 7,
+                'category' => 'fruit-tea',
+                'discount' => '8% Off!',
+                'description' => 'Classic black tea infused with bergamot oil for a distinctive citrusy aroma and flavor.',
+                'is_featured' => false
+            ],
+            [
+                'id' => 'japan-tea',
+                'name' => 'Japanese Sencha Tea',
+                'price' => 3.50,
+                'image' => '/assets/images/products/japan-tea.jpg',
+                'category_id' => 7,
+                'category' => 'fruit-tea',
+                'discount' => '5% Off!',
+                'description' => 'Premium Japanese green tea with a refreshing taste and grassy notes.',
+                'is_featured' => true
+            ],
+    
             // Seasonal Category
             [
                 'id' => 'pumpkin-spice-latte',
@@ -96,7 +241,7 @@ class Database {
                 'description' => 'A festive latte with gingerbread flavor.',
                 'is_featured' => false
             ],
-            
+    
             // Coffee Category
             [
                 'id' => 'americano',
@@ -120,7 +265,7 @@ class Database {
                 'description' => 'Espresso with steamed milk and a light layer of foam.',
                 'is_featured' => true
             ],
-            
+    
             // Fruit Tea Category
             [
                 'id' => 'peach-tea',
@@ -144,7 +289,7 @@ class Database {
                 'description' => 'Fragrant tea with exotic lychee flavor.',
                 'is_featured' => false
             ],
-            
+    
             // Bread Category
             [
                 'id' => 'croissant',
@@ -168,7 +313,7 @@ class Database {
                 'description' => 'Buttery croissant filled with rich chocolate.',
                 'is_featured' => false
             ],
-            
+    
             // Smoothie Category
             [
                 'id' => 'mango-smoothie',
@@ -192,7 +337,7 @@ class Database {
                 'description' => 'A blend of fresh berries for a refreshing drink.',
                 'is_featured' => false
             ],
-            
+    
             // Lemon Drink Category
             [
                 'id' => 'lemonade',
@@ -216,7 +361,7 @@ class Database {
                 'description' => 'Sweet and tangy pink lemonade.',
                 'is_featured' => false
             ],
-            
+    
             // Pastry Category
             [
                 'id' => 'cheesecake',
@@ -242,6 +387,7 @@ class Database {
             ]
         ];
     }
+    
     
     private function initToppings() {
         $this->toppings = [
@@ -370,4 +516,3 @@ class Database {
     }
 }
 ?>
-

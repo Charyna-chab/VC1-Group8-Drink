@@ -8,8 +8,9 @@
 
     
     <ul class="nav-list">
-        <li><a href="/"><i class="fas fa-mug-hot drink-icon"></i> Order drink</a></li>
         <li><a href="/dashboard"><i class="fas fa-tachometer-alt dashboard-icon"></i> Dashboard</a></li>
+        <li><a href="/"><i class="fas fa-mug-hot drink-icon"></i> Order drink</a></li>
+
         <li>
             <a href="/orders">
                 <i class="fas fa-calendar-check booking-icon"></i> Booking
