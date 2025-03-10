@@ -1,11 +1,11 @@
 <header>
-    <img src="/placeholder.svg?height=70&width=70" alt="XING FU CHA Logo">
+    <img src="/assets/image/logo/logo.png" alt="XING FU CHA Logo">
     <div class="logo">XING FU CHA</div>
     <nav>
         <ul>
-            <li><a href="#">Gift Card</a></li>
-            <li><a href="#">Locations</a></li>
-            <li><a href="#">Join The Team</a></li>
+            <li><a href="/gift-card">Gift Card</a></li>
+            <li><a href="/locations">Locations</a></li>
+            <li><a href="/join-the-team">Join The Team</a></li>
             <li><a href="#" id="moreMenuBtn">More</a></li>
         </ul>
     </nav>
@@ -40,4 +40,3 @@
         <a href="/faq"><i class="fas fa-question-circle"></i> FAQ</a>
     </div>
 </div>
-

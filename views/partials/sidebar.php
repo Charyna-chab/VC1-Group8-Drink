@@ -25,9 +25,11 @@
         <p>Upgrade your Account to Get Free Voucher</p>
         <button>Upgrade</button>
     </div>
+
     
     <!-- Logout Option -->
     <ul class="nav-list">
+        <hr>
         <li><a href="logout.php"><i class="fas fa-sign-out-alt logout-icon"></i> Logout</a></li>
     </ul>
 </aside>
