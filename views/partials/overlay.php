@@ -1,2 +1,1 @@
-<div class="overlay" id="overlay"></div>
-
+<div id="overlay"></div>
