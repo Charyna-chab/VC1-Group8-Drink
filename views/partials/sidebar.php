@@ -24,7 +24,7 @@
     
     <div class="upgrade-box">
         <p>Upgrade your Account to Get Free Voucher</p>
-        <button>Upgrade</button>
+        <button class="btn-1">Upgrade</button>
     </div>
 
     

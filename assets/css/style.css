@@ -682,9 +682,9 @@ main {
     line-height: 1.4;
 }
 
-.upgrade-box button {
+.upgrade-box .btn-1 {
     padding: 10px 20px;
-    background-color: #ff6f61;
+    background-color: #d31c0b;
     border-radius: 20px;
     color: white;
     border: none;
@@ -694,7 +694,7 @@ main {
     font-size: 14px;
 }
 
-.upgrade-box button:hover {
+.upgrade-box .btn-1:hover {
     background-color: #ff5b4a;
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
