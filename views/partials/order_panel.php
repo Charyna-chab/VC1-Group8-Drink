@@ -34,40 +34,47 @@
                 <label>TOPPING: ($0.85 each)</label>
                 <div id="toppings" class="toppings-grid">
                     <label class="topping-item">
-                        <input type="checkbox" name="topping" value="jelly" data-price="0.85">
                         Jelly $0.85
+                        <input class="option-add"type="checkbox" name="topping" value="jelly" data-price="0.85">
                     </label>
                     <label class="topping-item">
-                        <input type="checkbox" name="topping" value="cream" data-price="0.85">
+                
                         Cream $0.85
+                        <input class="option-add"type="checkbox" name="topping" value="cream" data-price="0.85">
                     </label>
                     <label class="topping-item">
-                        <input type="checkbox" name="topping" value="cheese_foam" data-price="0.85">
+                       
                         Cheese Foam $0.85
+                        <input class="option-add"type="checkbox" name="topping" value="cheese_foam" data-price="0.85">
                     </label>
                     <label class="topping-item">
-                        <input type="checkbox" name="topping" value="pearl" data-price="0.85">
+                       
                         Pearl $0.85
+                        <input class="option-add"type="checkbox" name="topping" value="pearl" data-price="0.85">
                     </label>
                     <label class="topping-item">
-                        <input type="checkbox" name="topping" value="coconut_jelly" data-price="0.85">
+                       
                         Coconut Jelly $0.85
+                        <input class="option-add"type="checkbox" name="topping" value="coconut_jelly" data-price="0.85">
                     </label>
                     <label class="topping-item">
-                        <input type="checkbox" name="topping" value="chocolate_chips" data-price="0.85">
+                       
                         Chocolate Chips $0.85
+                        <input class="option-add"type="checkbox" name="topping" value="chocolate_chips" data-price="0.85">
                     </label>
                     <label class="topping-item">
-                        <input type="checkbox" name="topping" value="red_bean" data-price="0.85">
+                       
                         Red Bean $0.85
+                        <input class="option-add"type="checkbox" name="topping" value="red_bean" data-price="0.85">
                     </label>
                     <label class="topping-item">
-                        <input type="checkbox" name="topping" value="whipped_cream" data-price="0.85">
                         Whipped Cream $0.85
+                        <input class="option-add"type="checkbox" name="topping" value="whipped_cream" data-price="0.85">
                     </label>
                     <label class="topping-item">
-                        <input type="checkbox" name="topping" value="caramel" data-price="0.85">
+                        
                         Caramel Drizzle $0.85
+                        <input class="option-add"type="checkbox" name="topping" value="caramel" data-price="0.85">
                     </label>
                 </div>
             </div>

@@ -1,12 +1,11 @@
 <aside class="sidebar">
-    <!-- User Profile in Sidebar -->
-    <div class="user-profile-sidebar">
-        <img src="<?php echo isset($user) ? $user['profile_image'] : '/assets/images/default-user.jpg'; ?>" alt="User Profile">
-        <div>
-            <h4><?php echo isset($user) ? $user['name'] : 'Guest User'; ?></h4>
-            <p><?php echo isset($user) ? $user['membership'] : 'Sign in to order'; ?></p>
-        </div>
-    </div>
+    <!-- User logo in Sidebar -->
+    <div class="branch-order-sidebar">
+    <img src="<?php echo isset($branchLogo) ? $branchLogo : '/assets/image/logo/logo.png'; ?>" alt="Branch Logo" class="branch-logo">
+</div>
+
+
+
     
     <ul class="nav-list">
         <li><a href="/"><i class="fas fa-mug-hot drink-icon"></i> Order drink</a></li>
@@ -26,9 +25,11 @@
         <p>Upgrade your Account to Get Free Voucher</p>
         <button>Upgrade</button>
     </div>
+
     
     <!-- Logout Option -->
     <ul class="nav-list">
+        <hr>
         <li><a href="logout.php"><i class="fas fa-sign-out-alt logout-icon"></i> Logout</a></li>
     </ul>
 </aside>
