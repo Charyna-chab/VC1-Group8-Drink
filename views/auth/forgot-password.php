@@ -1,17 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forgot Password - XING FU CHA</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="/assets/css/style.css">
-    <link rel="stylesheet" href="/assets/css/auth.css">
-</head>
-
-<body>
-    <?php include 'views/partials/header.php'; ?>
 
     <div class="auth-container">
         <div class="auth-form-container">
@@ -53,8 +40,5 @@
         </div>
     </div>
 
-    <script src="/assets/js/auth.js"></script>
-</body>
 
-</html>
 

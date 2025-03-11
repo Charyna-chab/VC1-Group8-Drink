@@ -8,6 +8,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="/assets/css/style.css">
     <link rel="stylesheet" href="/assets/css/auth.css">
+    <link rel="stylesheet" href="/assets/css/settings.css">
+    <link rel="stylesheet" href="/assets/css/favorite.css">
+    <link rel="stylesheet" href="/assets/css/feedback.css">
+    <link rel="stylesheet" href="/assets/css/menu.css">
+    <link rel="stylesheet" href="/assets/css/order.css">
+    <link rel="stylesheet" href="/assets/css/profile.css">
+    <link rel="stylesheet" href="/assets/css/splash.css">
+    
     <link rel="apple-touch-icon" sizes="76x76" href="/assets/image/logo/logo.png">
     <link rel="icon" type="image/png" href="/assets/image/logo/logo.png">
     <meta name="description" content="XING FU CHA - Your favorite place for delicious Boba Tea.">
@@ -19,4 +27,3 @@
     <!-- CSS Files -->
     <link id="pagestyle" href="/assets/css/argon-dashboard.css?v=2.1.0" rel="stylesheet" />  
 </head>
-

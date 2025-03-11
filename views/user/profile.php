@@ -189,12 +189,9 @@
             </div>
         </section>
     </main>
+    <script src="/assets/js/profile.js"></script> 
+    <?php include 'views/partials/footer.php'; ?>
+          
 
-    <?php include 'views/partials/overlay.php'; ?>
 
-    <script src="/assets/js/profile.js"></script>
-    <script src="/assets/js/app.js"></script>
-</body>
-
-</html>
 
