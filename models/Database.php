@@ -42,54 +42,27 @@ class Database
     private function initCategories()
     {
         $this->categories = [
-            ['id' => 1, 'name' => 'All Items', 'slug' => 'all'],
-            ['id' => 2, 'name' => 'Seasonal', 'slug' => 'seasonal'],
-            ['id' => 3, 'name' => 'Milk Tea', 'slug' => 'milk-tea'],
-            ['id' => 4, 'name' => 'Coffee', 'slug' => 'coffee'],
-            ['id' => 5, 'name' => 'Lemon Drink', 'slug' => 'lemon-drink'],
-            ['id' => 6, 'name' => 'Bread', 'slug' => 'bread'],
-            ['id' => 7, 'name' => 'Fruit Tea', 'slug' => 'fruit-tea'],
-            ['id' => 8, 'name' => 'Smoothie', 'slug' => 'smoothie'],
-            ['id' => 9, 'name' => 'Pastry', 'slug' => 'pastry']
+            ['id' => 1, 'name' => 'All', 'slug' => 'all'],
+            ['id' => 2, 'name' => 'Milk Tea', 'slug' => 'milk-tea'],
+            ['id' => 3, 'name' => 'Fruit Tea', 'slug' => 'fruit-tea'],
+            ['id' => 4, 'name' => 'Smoothies', 'slug' => 'smoothies'],
+            ['id' => 5, 'name' => 'Coffee', 'slug' => 'coffee'],
+            ['id' => 6, 'name' => 'Snacks', 'slug' => 'snacks']
         ];
     }
 
     private function initProducts()
     {
         $this->products = [
-            // Milk Tea Category
             [
-                'id' => 'classic-milk-tea',
-                'name' => 'Classic Milk Tea',
-                'price' => 2.50,
-                'image' => '/assets/images/products/classic-milk-tea.jpg',
-                'category_id' => 3,
-                'category' => 'milk-tea',
-                'discount' => '10% Off!',
-                'description' => 'Traditional milk tea with a perfect balance of tea and milk.',
-                'is_featured' => true
-            ],
-            [
-                'id' => 'brown-sugar-milk-tea',
-                'name' => 'Brown Sugar Milk Tea',
-                'price' => 3.25,
-                'image' => '/assets/images/products/brown-sugar-milk-tea.jpg',
-                'category_id' => 3,
-                'category' => 'milk-tea',
-                'discount' => '15% Off!',
-                'description' => 'Rich milk tea with caramelized brown sugar syrup.',
-                'is_featured' => true
-            ],
-            [
-                'id' => 'taro-milk-tea',
+                'id' => 1,
                 'name' => 'Taro Milk Tea',
-                'price' => 3.50,
+                'description' => 'Creamy taro milk tea with chewy tapioca pearls',
+                'price' => 4.50,
                 'image' => '/assets/images/products/taro-milk-tea.jpg',
-                'category_id' => 3,
                 'category' => 'milk-tea',
-                'discount' => '5% Off!',
-                'description' => 'Creamy milk tea with sweet taro flavor.',
-                'is_featured' => false
+                'discount' => '10% OFF',
+                'featured' => true
             ],
             // ...other products...
         ];
@@ -115,13 +88,53 @@ class Database
         $this->users = [
             [
                 'id' => 1,
-                'username' => 'john_doe',
+                'name' => 'John Doe',
                 'email' => 'john@example.com',
                 'password' => password_hash('password123', PASSWORD_DEFAULT),
-                'name' => 'John Doe',
-                'profile_image' => '/assets/images/users/john.jpg',
-                'membership' => 'Premium',
-                'created_at' => '2023-01-15 10:30:00'
+                'avatar' => '/assets/images/users/user1.jpg',
+                'role' => 'user'
+            ],
+            [
+                'id' => 2,
+                'name' => 'Jane Smith',
+                'email' => 'jane@example.com',
+                'password' => password_hash('password123', PASSWORD_DEFAULT),
+                'avatar' => '/assets/images/users/user2.jpg',
+                'role' => 'user'
+            ],
+            [
+                'id' => 3,
+                'name' => 'Admin User',
+                'email' => 'admin@example.com',
+                'password' => password_hash('admin123', PASSWORD_DEFAULT),
+                'avatar' => '/assets/images/users/admin.jpg',
+                'role' => 'admin'
+            ]
+        ];
+
+        // Initialize orders
+        $this->orders = [
+            [
+                'id' => 1,
+                'user_id' => 1,
+                'product_id' => 1,
+                'size' => 'medium',
+                'sugar_level' => '50%',
+                'toppings' => ['pearl', 'cream'],
+                'price' => 5.35,
+                'status' => 'completed',
+                'created_at' => '2023-05-15 14:30:00'
+            ],
+            [
+                'id' => 2,
+                'user_id' => 2,
+                'product_id' => 2,
+                'size' => 'large',
+                'sugar_level' => '75%',
+                'toppings' => ['pearl'],
+                'price' => 6.85,
+                'status' => 'processing',
+                'created_at' => '2023-05-16 10:15:00'
             ]
         ];
     }
@@ -161,7 +174,7 @@ class Database
     {
         $result = [];
         foreach ($this->products as $product) {
-            if ($product['is_featured']) {
+            if ($product['featured']) {
                 $result[] = $product;
             }
         }
@@ -262,5 +275,4 @@ class Database
         return $this->pdo->lastInsertId();
     }
 }
-?>
 

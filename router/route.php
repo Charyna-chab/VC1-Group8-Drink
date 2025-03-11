@@ -1,43 +1,10 @@
 <?php
-class Router {
-    private $routes = [];
-
-    public function get($uri, $action) {
-        $this->routes['GET'][$uri] = $action;
-    }
-
-    public function post($uri, $action) {
-        $this->routes['POST'][$uri] = $action;
-    }
-
-    public function delete($uri, $action) {
-        $this->routes['DELETE'][$uri] = $action;
-    }
-
-    public function put($uri, $action) {
-        $this->routes['PUT'][$uri] = $action;
-    }
-
-    public function route() {
-        $uri = $_SERVER['REQUEST_URI'];
-        $method = $_SERVER['REQUEST_METHOD'];
-        if (isset($this->routes[$method][$uri])) {
-            $action = $this->routes[$method][$uri];
-            call_user_func([new $action[0], $action[1]]);
-        } else {
-            http_response_code(404);
-            echo "404 Not Found";
-        }
-    }
-}
-
-
 require_once "Router.php";
-require_once "models/Database.php";
-require_once __DIR__ . "/../controllers/WelcomeController.php";
-require_once __DIR__ . "/../controllers/UserController.php";
-require_once __DIR__ . "/../controllers/CategoriesController.php";
-require_once __DIR__ . "/../controllers/ProductController.php";
+require_once "Models/Database.php";
+require_once "controllers/BaseController.php";
+require_once "controllers/WelcomeController.php";
+
+use YourNamespace\Router;
 
 $route = new Router();
 $route->get("/", [WelcomeController::class, 'welcome']);

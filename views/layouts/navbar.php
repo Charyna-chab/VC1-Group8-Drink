@@ -45,7 +45,7 @@
         <img src="<?php echo isset($_SESSION['user']) ? $_SESSION['user']['avatar'] : '/assets/image/placeholder.svg?height=40&width=40'; ?>" alt="User Profile">
     </div>
     <div class="notification-icon" id="notificationBtn">
-        <i class="fas fa-bell"></i>
+        <a href="/"></a><i class="fas fa-bell"></i>
         <span class="notification-badge" id="notificationBadge">0</span>
     </div>
 </header>

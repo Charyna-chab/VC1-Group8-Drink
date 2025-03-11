@@ -97,4 +97,5 @@ class Router
         echo "Page not found";
     }
 }
+?>
 
