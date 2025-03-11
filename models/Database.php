@@ -1,282 +1,237 @@
 <?php
+
 class Database {
     private static $instance = null;
     private $products = [];
     private $categories = [];
     private $users = [];
     private $orders = [];
-    private $toppings = [];
-    
+
     private function __construct() {
-        // Initialize with fake data
-        $this->initCategories();
-        $this->initProducts();
-        $this->initToppings();
-        $this->initUsers();
+        $this->initializeData();
     }
-    
+
     public static function getInstance() {
         if (self::$instance == null) {
             self::$instance = new Database();
         }
         return self::$instance;
     }
-    
-    private function initCategories() {
+
+    private function initializeData() {
+        // Initialize categories
         $this->categories = [
-            ['id' => 1, 'name' => 'All Items', 'slug' => 'all'],
-            ['id' => 2, 'name' => 'Seasonal', 'slug' => 'seasonal'],
-            ['id' => 3, 'name' => 'Milk Tea', 'slug' => 'milk-tea'],
-            ['id' => 4, 'name' => 'Coffee', 'slug' => 'coffee'],
-            ['id' => 5, 'name' => 'Lemon Drink', 'slug' => 'lemon-drink'],
-            ['id' => 6, 'name' => 'Bread', 'slug' => 'bread'],
-            ['id' => 7, 'name' => 'Fruit Tea', 'slug' => 'fruit-tea'],
-            ['id' => 8, 'name' => 'Smoothie', 'slug' => 'smoothie'],
-            ['id' => 9, 'name' => 'Pastry', 'slug' => 'pastry']
+            ['id' => 1, 'name' => 'All', 'slug' => 'all'],
+            ['id' => 2, 'name' => 'Milk Tea', 'slug' => 'milk-tea'],
+            ['id' => 3, 'name' => 'Fruit Tea', 'slug' => 'fruit-tea'],
+            ['id' => 4, 'name' => 'Smoothies', 'slug' => 'smoothies'],
+            ['id' => 5, 'name' => 'Coffee', 'slug' => 'coffee'],
+            ['id' => 6, 'name' => 'Snacks', 'slug' => 'snacks']
         ];
-    }
-    
-    private function initProducts() {
+
+        // Initialize products with real images
         $this->products = [
-            // Milk Tea Category
             [
-                'id' => 'classic-milk-tea',
-                'name' => 'Classic Milk Tea',
-                'price' => 2.50,
-                'image' => '/assets/images/products/classic-milk-tea.jpg',
-                'category_id' => 3,
-                'category' => 'milk-tea',
-                'discount' => '10% Off!',
-                'description' => 'Traditional milk tea with a perfect balance of tea and milk.',
-                'is_featured' => true
-            ],
-            [
-                'id' => 'brown-sugar-milk-tea',
-                'name' => 'Brown Sugar Milk Tea',
-                'price' => 3.25,
-                'image' => '/assets/images/products/brown-sugar-milk-tea.jpg',
-                'category_id' => 3,
-                'category' => 'milk-tea',
-                'discount' => '15% Off!',
-                'description' => 'Rich milk tea with caramelized brown sugar syrup.',
-                'is_featured' => true
-            ],
-            [
-                'id' => 'taro-milk-tea',
+                'id' => 1,
                 'name' => 'Taro Milk Tea',
-                'price' => 3.50,
+                'description' => 'Creamy taro milk tea with chewy tapioca pearls',
+                'price' => 4.50,
                 'image' => '/assets/images/products/taro-milk-tea.jpg',
-                'category_id' => 3,
                 'category' => 'milk-tea',
-                'discount' => '5% Off!',
-                'description' => 'Creamy milk tea with sweet taro flavor.',
-                'is_featured' => false
+                'discount' => '10% OFF',
+                'featured' => true
             ],
-            
-            // Seasonal Category
             [
-                'id' => 'pumpkin-spice-latte',
-                'name' => 'Pumpkin Spice Latte',
+                'id' => 2,
+                'name' => 'Brown Sugar Boba',
+                'description' => 'Rich brown sugar syrup with fresh milk and tapioca pearls',
+                'price' => 5.00,
+                'image' => '/assets/images/products/brown-sugar-boba.jpg',
+                'category' => 'milk-tea',
+                'discount' => '',
+                'featured' => true
+            ],
+            [
+                'id' => 3,
+                'name' => 'Matcha Latte',
+                'description' => 'Premium Japanese matcha with creamy milk',
+                'price' => 5.50,
+                'image' => '/assets/images/products/matcha-latte.jpg',
+                'category' => 'milk-tea',
+                'discount' => '',
+                'featured' => true
+            ],
+            [
+                'id' => 4,
+                'name' => 'Strawberry Milk Tea',
+                'description' => 'Sweet strawberry flavor with creamy milk tea',
+                'price' => 4.75,
+                'image' => '/assets/images/products/strawberry-milk-tea.jpg',
+                'category' => 'milk-tea',
+                'discount' => '15% OFF',
+                'featured' => true
+            ],
+            [
+                'id' => 5,
+                'name' => 'Classic Milk Tea',
+                'description' => 'Traditional milk tea with tapioca pearls',
                 'price' => 4.00,
-                'image' => '/assets/images/products/pumpkin-spice-latte.jpg',
-                'category_id' => 2,
-                'category' => 'seasonal',
-                'discount' => '10% Off!',
-                'description' => 'A warm and comforting pumpkin spice drink for the fall.',
-                'is_featured' => true
+                'image' => '/assets/images/products/classic-milk-tea.jpg',
+                'category' => 'milk-tea',
+                'discount' => '',
+                'featured' => true
             ],
             [
-                'id' => 'gingerbread-latte',
-                'name' => 'Gingerbread Latte',
-                'price' => 3.75,
-                'image' => '/assets/images/products/gingerbread-latte.jpg',
-                'category_id' => 2,
-                'category' => 'seasonal',
-                'discount' => '15% Off!',
-                'description' => 'A festive latte with gingerbread flavor.',
-                'is_featured' => false
-            ],
-            
-            // Coffee Category
-            [
-                'id' => 'americano',
-                'name' => 'Americano',
-                'price' => 2.75,
-                'image' => '/assets/images/products/americano.jpg',
-                'category_id' => 4,
-                'category' => 'coffee',
-                'discount' => '5% Off!',
-                'description' => 'Classic espresso diluted with hot water.',
-                'is_featured' => true
-            ],
-            [
-                'id' => 'latte',
-                'name' => 'Latte',
-                'price' => 3.50,
-                'image' => '/assets/images/products/latte.jpg',
-                'category_id' => 4,
-                'category' => 'coffee',
-                'discount' => '10% Off!',
-                'description' => 'Espresso with steamed milk and a light layer of foam.',
-                'is_featured' => true
-            ],
-            
-            // Fruit Tea Category
-            [
-                'id' => 'peach-tea',
-                'name' => 'Peach Tea',
-                'price' => 3.00,
-                'image' => '/assets/images/products/peach-tea.jpg',
-                'category_id' => 7,
-                'category' => 'fruit-tea',
-                'discount' => '10% Off!',
-                'description' => 'Refreshing tea with sweet peach flavor.',
-                'is_featured' => true
-            ],
-            [
-                'id' => 'lychee-tea',
-                'name' => 'Lychee Tea',
-                'price' => 3.25,
-                'image' => '/assets/images/products/lychee-tea.jpg',
-                'category_id' => 7,
-                'category' => 'fruit-tea',
-                'discount' => '8% Off!',
-                'description' => 'Fragrant tea with exotic lychee flavor.',
-                'is_featured' => false
-            ],
-            
-            // Bread Category
-            [
-                'id' => 'croissant',
-                'name' => 'Croissant',
-                'price' => 2.50,
-                'image' => '/assets/images/products/croissant.jpg',
-                'category_id' => 6,
-                'category' => 'bread',
-                'discount' => '10% Off!',
-                'description' => 'Flaky and buttery French-style croissant.',
-                'is_featured' => true
-            ],
-            [
-                'id' => 'chocolate-croissant',
-                'name' => 'Chocolate Croissant',
-                'price' => 2.75,
-                'image' => '/assets/images/products/chocolate-croissant.jpg',
-                'category_id' => 6,
-                'category' => 'bread',
-                'discount' => '15% Off!',
-                'description' => 'Buttery croissant filled with rich chocolate.',
-                'is_featured' => false
-            ],
-            
-            // Smoothie Category
-            [
-                'id' => 'mango-smoothie',
+                'id' => 6,
                 'name' => 'Mango Smoothie',
-                'price' => 4.00,
+                'description' => 'Refreshing mango smoothie with popping boba',
+                'price' => 5.25,
                 'image' => '/assets/images/products/mango-smoothie.jpg',
-                'category_id' => 8,
-                'category' => 'smoothie',
-                'discount' => '10% Off!',
-                'description' => 'Tropical mango smoothie with creamy texture.',
-                'is_featured' => true
+                'category' => 'smoothies',
+                'discount' => '',
+                'featured' => true
             ],
             [
-                'id' => 'berry-smoothie',
-                'name' => 'Berry Smoothie',
+                'id' => 7,
+                'name' => 'Thai Tea',
+                'description' => 'Authentic Thai tea with sweet condensed milk',
+                'price' => 4.50,
+                'image' => '/assets/images/products/thai-tea.jpg',
+                'category' => 'milk-tea',
+                'discount' => '',
+                'featured' => true
+            ],
+            [
+                'id' => 8,
+                'name' => 'Jasmine Green Tea',
+                'description' => 'Fragrant jasmine green tea with honey',
                 'price' => 3.75,
-                'image' => '/assets/images/products/berry-smoothie.jpg',
-                'category_id' => 8,
-                'category' => 'smoothie',
-                'discount' => '12% Off!',
-                'description' => 'A blend of fresh berries for a refreshing drink.',
-                'is_featured' => false
-            ],
-            
-            // Lemon Drink Category
-            [
-                'id' => 'lemonade',
-                'name' => 'Lemonade',
-                'price' => 2.50,
-                'image' => '/assets/images/products/lemonade.jpg',
-                'category_id' => 5,
-                'category' => 'lemon-drink',
-                'discount' => '10% Off!',
-                'description' => 'Freshly squeezed lemonade with a tangy twist.',
-                'is_featured' => true
+                'image' => '/assets/images/products/jasmine-green-tea.jpg',
+                'category' => 'fruit-tea',
+                'discount' => '',
+                'featured' => true
             ],
             [
-                'id' => 'pink-lemonade',
-                'name' => 'Pink Lemonade',
-                'price' => 2.75,
-                'image' => '/assets/images/products/pink-lemonade.jpg',
-                'category_id' => 5,
-                'category' => 'lemon-drink',
-                'discount' => '8% Off!',
-                'description' => 'Sweet and tangy pink lemonade.',
-                'is_featured' => false
-            ],
-            
-            // Pastry Category
-            [
-                'id' => 'cheesecake',
-                'name' => 'Cheesecake',
-                'price' => 3.50,
-                'image' => '/assets/images/products/cheesecake.jpg',
-                'category_id' => 9,
-                'category' => 'pastry',
-                'discount' => '10% Off!',
-                'description' => 'Creamy cheesecake with a graham cracker crust.',
-                'is_featured' => true
+                'id' => 9,
+                'name' => 'Coffee Milk Tea',
+                'description' => 'Bold coffee flavor with creamy milk tea',
+                'price' => 4.75,
+                'image' => '/assets/images/products/coffee-milk-tea.jpg',
+                'category' => 'coffee',
+                'discount' => '',
+                'featured' => false
             ],
             [
-                'id' => 'chocolate-cake',
-                'name' => 'Chocolate Cake',
-                'price' => 3.75,
-                'image' => '/assets/images/products/chocolate-cake.jpg',
-                'category_id' => 9,
-                'category' => 'pastry',
-                'discount' => '15% Off!',
-                'description' => 'Rich chocolate cake with a velvety texture.',
-                'is_featured' => false
+                'id' => 10,
+                'name' => 'Lychee Fruit Tea',
+                'description' => 'Sweet lychee fruit tea with jelly',
+                'price' => 4.25,
+                'image' => '/assets/images/products/lychee-fruit-tea.jpg',
+                'category' => 'fruit-tea',
+                'discount' => '20% OFF',
+                'featured' => false
+            ],
+            [
+                'id' => 11,
+                'name' => 'Passion Fruit Tea',
+                'description' => 'Tangy passion fruit tea with aloe vera',
+                'price' => 4.50,
+                'image' => '/assets/images/products/passion-fruit-tea.jpg',
+                'category' => 'fruit-tea',
+                'discount' => '',
+                'featured' => false
+            ],
+            [
+                'id' => 12,
+                'name' => 'Honey Lemon Tea',
+                'description' => 'Soothing honey lemon tea, perfect for cold days',
+                'price' => 3.95,
+                'image' => '/assets/images/products/honey-lemon-tea.jpg',
+                'category' => 'fruit-tea',
+                'discount' => '',
+                'featured' => false
             ]
         ];
-    }
-    
-    private function initToppings() {
-        $this->toppings = [
-            ['id' => 1, 'name' => 'Jelly', 'price' => 0.85],
-            ['id' => 2, 'name' => 'Cream', 'price' => 0.85],
-            ['id' => 3, 'name' => 'Cheese Foam', 'price' => 0.85],
-            ['id' => 4, 'name' => 'Pearl', 'price' => 0.85],
-            ['id' => 5, 'name' => 'Coconut Jelly', 'price' => 0.85],
-            ['id' => 6, 'name' => 'Chocolate Chips', 'price' => 0.85],
-            ['id' => 7, 'name' => 'Red Bean', 'price' => 0.85],
-            ['id' => 8, 'name' => 'Whipped Cream', 'price' => 0.85],
-            ['id' => 9, 'name' => 'Caramel Drizzle', 'price' => 0.85]
-        ];
-    }
-    
-    private function initUsers() {
+
+        // Initialize users
         $this->users = [
             [
                 'id' => 1,
-                'username' => 'john_doe',
+                'name' => 'John Doe',
                 'email' => 'john@example.com',
                 'password' => password_hash('password123', PASSWORD_DEFAULT),
-                'name' => 'John Doe',
-                'profile_image' => '/assets/images/users/john.jpg',
-                'membership' => 'Premium',
-                'created_at' => '2023-01-15 10:30:00'
+                'avatar' => '/assets/images/users/user1.jpg',
+                'role' => 'user'
+            ],
+            [
+                'id' => 2,
+                'name' => 'Jane Smith',
+                'email' => 'jane@example.com',
+                'password' => password_hash('password123', PASSWORD_DEFAULT),
+                'avatar' => '/assets/images/users/user2.jpg',
+                'role' => 'user'
+            ],
+            [
+                'id' => 3,
+                'name' => 'Admin User',
+                'email' => 'admin@example.com',
+                'password' => password_hash('admin123', PASSWORD_DEFAULT),
+                'avatar' => '/assets/images/users/admin.jpg',
+                'role' => 'admin'
+            ]
+        ];
+
+        // Initialize orders
+        $this->orders = [
+            [
+                'id' => 1,
+                'user_id' => 1,
+                'product_id' => 1,
+                'size' => 'medium',
+                'sugar_level' => '50%',
+                'toppings' => ['pearl', 'cream'],
+                'price' => 5.35,
+                'status' => 'completed',
+                'created_at' => '2023-05-15 14:30:00'
+            ],
+            [
+                'id' => 2,
+                'user_id' => 2,
+                'product_id' => 2,
+                'size' => 'large',
+                'sugar_level' => '75%',
+                'toppings' => ['pearl'],
+                'price' => 6.85,
+                'status' => 'processing',
+                'created_at' => '2023-05-16 10:15:00'
             ]
         ];
     }
-    
-    // Product methods
+
+    public function getCategories() {
+        return $this->categories;
+    }
+
     public function getAllProducts() {
         return $this->products;
     }
-    
+
+    public function getFeaturedProducts() {
+        return array_filter($this->products, function($product) {
+            return $product['featured'] === true;
+        });
+    }
+
+    public function getProductsByCategory($category) {
+        if ($category === 'all') {
+            return $this->products;
+        }
+        
+        return array_filter($this->products, function($product) use ($category) {
+            return $product['category'] === $category;
+        });
+    }
+
     public function getProductById($id) {
         foreach ($this->products as $product) {
             if ($product['id'] == $id) {
@@ -285,51 +240,16 @@ class Database {
         }
         return null;
     }
-    
-    public function getProductsByCategory($category) {
-        if ($category === 'all') {
-            return $this->products;
-        }
-        
-        $result = [];
-        foreach ($this->products as $product) {
-            if ($product['category'] == $category) {
-                $result[] = $product;
-            }
-        }
-        return $result;
-    }
-    
-    public function getFeaturedProducts() {
-        $result = [];
-        foreach ($this->products as $product) {
-            if ($product['is_featured']) {
-                $result[] = $product;
-            }
-        }
-        return $result;
-    }
-    
-    // Category methods
-    public function getAllCategories() {
-        return $this->categories;
-    }
-    
-    public function getCategoryById($id) {
-        foreach ($this->categories as $category) {
-            if ($category['id'] == $id) {
-                return $category;
+
+    public function getUserByEmail($email) {
+        foreach ($this->users as $user) {
+            if ($user['email'] === $email) {
+                return $user;
             }
         }
         return null;
     }
-    
-    // Topping methods
-    public function getAllToppings() {
-        return $this->toppings;
-    }
-    
-    // User methods
+
     public function getUserById($id) {
         foreach ($this->users as $user) {
             if ($user['id'] == $id) {
@@ -338,36 +258,44 @@ class Database {
         }
         return null;
     }
-    
-    public function getUserByUsername($username) {
-        foreach ($this->users as $user) {
-            if ($user['username'] == $username) {
-                return $user;
-            }
-        }
-        return null;
-    }
-    
-    // Order methods
-    public function createOrder($data) {
-        $orderId = uniqid('ORD');
-        $data['id'] = $orderId;
-        $data['created_at'] = date('Y-m-d H:i:s');
-        $data['status'] = 'pending';
-        
-        $this->orders[] = $data;
-        return $orderId;
-    }
-    
+
     public function getOrdersByUserId($userId) {
-        $result = [];
-        foreach ($this->orders as $order) {
-            if ($order['user_id'] == $userId) {
-                $result[] = $order;
-            }
-        }
-        return $result;
+        return array_filter($this->orders, function($order) use ($userId) {
+            return $order['user_id'] == $userId;
+        });
+    }
+
+    public function addUser($name, $email, $password) {
+        $id = count($this->users) + 1;
+        $user = [
+            'id' => $id,
+            'name' => $name,
+            'email' => $email,
+            'password' => password_hash($password, PASSWORD_DEFAULT),
+            'avatar' => '/assets/images/users/user3.jpg', // Default avatar
+            'role' => 'user'
+        ];
+        
+        $this->users[] = $user;
+        return $id;
+    }
+
+    public function addOrder($userId, $productId, $size, $sugarLevel, $toppings, $price) {
+        $id = count($this->orders) + 1;
+        $order = [
+            'id' => $id,
+            'user_id' => $userId,
+            'product_id' => $productId,
+            'size' => $size,
+            'sugar_level' => $sugarLevel,
+            'toppings' => $toppings,
+            'price' => $price,
+            'status' => 'processing',
+            'created_at' => date('Y-m-d H:i:s')
+        ];
+        
+        $this->orders[] = $order;
+        return $id;
     }
 }
-?>
 

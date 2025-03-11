@@ -4,6 +4,13 @@ let bookingCount = 0
 const notifications = []
 let currentProduct = null
 
+// Add this at the top of the file, after the variable declarations
+// Make openOrderPanel available globally
+window.openOrderPanel = openOrderPanel
+
+// Also make updatePrice available globally
+window.updatePrice = updatePrice
+
 // Initialize the page
 document.addEventListener("DOMContentLoaded", () => {
     // Set up event listeners
@@ -160,22 +167,29 @@ function openOrderPanel(productId, name, price, image) {
     // Update product info
     document.getElementById("productImage").src = image
     document.getElementById("productName").textContent = name
-    document.getElementById("productPrice").textContent = `$${price}`
-    document.getElementById("basePrice").textContent = `$${price}`
-    document.getElementById("totalPrice").textContent = `$${price}`
+    document.getElementById("productPrice").textContent = `$${price.toFixed(2)}`
+    document.getElementById("basePrice").textContent = `$${price.toFixed(2)}`
+    document.getElementById("totalPrice").textContent = `$${price.toFixed(2)}`
 
     // Reset selections
     document.getElementById("drinkSize").selectedIndex = 0
-    document.getElementById("sugarLevel").selectedIndex = 0
+    document.getElementById("sugarLevel").selectedIndex = 2 // Default to 50%
     document.querySelectorAll('#toppings input[type="checkbox"]').forEach((cb) => (cb.checked = false))
 
     // Reset prices
     document.getElementById("sizePrice").textContent = "$0.00"
     document.getElementById("toppingsPrice").textContent = "$0.00"
 
-    // Show panel
-    document.getElementById("orderPanel").classList.add("active")
+    // Show panel with animation
+    const orderPanel = document.getElementById("orderPanel")
+    orderPanel.classList.add("active")
     document.getElementById("overlay").style.display = "block"
+
+    // Add animation classes to elements
+    setTimeout(() => {
+        const productInfo = orderPanel.querySelector(".product-info")
+        if (productInfo) productInfo.style.opacity = 1
+    }, 100)
 }
 
 // Function to close order panel
@@ -185,7 +199,7 @@ function closeOrderPanel() {
     currentProduct = null
 }
 
-// Function to update price
+// Function to update price with animation
 function updatePrice() {
     if (!currentProduct) return
 
@@ -201,10 +215,27 @@ function updatePrice() {
     const toppingsPrice = selectedToppings.length * 0.85
     total += toppingsPrice
 
-    // Update summary
-    document.getElementById("sizePrice").textContent = `$${sizePrice.toFixed(2)}`
-    document.getElementById("toppingsPrice").textContent = `$${toppingsPrice.toFixed(2)}`
-    document.getElementById("totalPrice").textContent = `$${total.toFixed(2)}`
+    // Update summary with animation
+    const sizePriceElement = document.getElementById("sizePrice")
+    const toppingsPriceElement = document.getElementById("toppingsPrice")
+    const totalPriceElement = document.getElementById("totalPrice")
+
+    // Apply highlight animation
+    sizePriceElement.classList.add("highlight")
+    toppingsPriceElement.classList.add("highlight")
+    totalPriceElement.classList.add("highlight")
+
+    // Update values
+    sizePriceElement.textContent = `$${sizePrice.toFixed(2)}`
+    toppingsPriceElement.textContent = `$${toppingsPrice.toFixed(2)}`
+    totalPriceElement.textContent = `$${total.toFixed(2)}`
+
+    // Remove highlight animation after a delay
+    setTimeout(() => {
+        sizePriceElement.classList.remove("highlight")
+        toppingsPriceElement.classList.remove("highlight")
+        totalPriceElement.classList.remove("highlight")
+    }, 300)
 }
 
 // Combined function to filter products by search term and/or category
@@ -536,7 +567,7 @@ function closeToast() {
     }
 }
 
-// Function to place order
+// Function to place order with improved animation
 function placeOrder() {
     // Get selected options
     const size = document.getElementById("drinkSize").value
@@ -556,12 +587,26 @@ function placeOrder() {
     }
     orderSummary += ` - ${totalPrice}`
 
-    // Add notification
-    addNotification(`Order: ${currentProduct.name}`, orderSummary, currentProduct.image)
+    // Add animation to confirm button
+    const confirmBtn = document.querySelector(".confirm-btn")
+    confirmBtn.innerHTML = '<i class="fas fa-check-circle"></i> Added to Cart!'
+    confirmBtn.style.backgroundColor = "#4CAF50"
 
-    // Close order panel
-    closeOrderPanel()
+    // Add notification with delay for better UX
+    setTimeout(() => {
+        // Add notification
+        addNotification(`Order: ${currentProduct.name}`, orderSummary, currentProduct.image)
 
-    // Show confirmation toast
-    showToast("Order Confirmed", `Your ${currentProduct.name} has been added to cart`, currentProduct.image)
+        // Close order panel
+        closeOrderPanel()
+
+        // Show confirmation toast
+        showToast("Order Confirmed", `Your ${currentProduct.name} has been added to cart`, currentProduct.image)
+
+        // Reset confirm button after panel is closed
+        setTimeout(() => {
+            confirmBtn.innerHTML = '<i class="fas fa-shopping-cart"></i> Add to Cart'
+            confirmBtn.style.backgroundColor = ""
+        }, 500)
+    }, 800)
 }

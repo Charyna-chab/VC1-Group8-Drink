@@ -1,38 +1,62 @@
 <?php
-// Entry point for the application
-// Initialize session
+// Start session
 session_start();
 
-// Define base path
-define('BASE_PATH', __DIR__);
-
-// Include router
-require_once 'router/Router.php';
-
-// Include database connection
+// Load models and controllers
 require_once 'models/Database.php';
-
-// Include controllers
 require_once 'controllers/HomeController.php';
+require_once 'controllers/AuthController.php';
 require_once 'controllers/ProductController.php';
 require_once 'controllers/OrderController.php';
-require_once 'controllers/UserController.php';
-require_once 'controllers/PageController.php'; // Include the new controller
+require_once 'controllers/SplashController.php';
 
-// Initialize router
-$router = new Router();
+// Parse URL
+$request_uri = $_SERVER['REQUEST_URI'];
+$path = parse_url($request_uri, PHP_URL_PATH);
+$path = trim($path, '/');
+
+// If path is empty, show splash screen
+if (empty($path)) {
+    $controller = new SplashController();
+    $controller->index();
+    exit;
+}
 
 // Define routes
-$router->addRoute('/', 'HomeController@index');
-$router->addRoute('/products', 'ProductController@index');
-$router->addRoute('/gift-card', 'PageController@giftCard'); // New route for Gift Card
-$router->addRoute('/locations', 'PageController@locations'); // New route for Locations
-$router->addRoute('/join-the-team', 'PageController@joinTheTeam'); // New route for Join The Team
-$router->addRoute('/order/add', 'OrderController@add');
-$router->addRoute('/order/place', 'OrderController@place');
-$router->addRoute('/user/profile', 'UserController@profile');
-$router->addRoute('/user/notifications', 'UserController@notifications');
+$routes = [
+    'home' => ['controller' => 'HomeController', 'action' => 'index'],
+    'menu' => ['controller' => 'ProductController', 'action' => 'menu'],
+    'product' => ['controller' => 'ProductController', 'action' => 'show'],
+    'login' => ['controller' => 'AuthController', 'action' => 'login'],
+    'register' => ['controller' => 'AuthController', 'action' => 'register'],
+    'logout' => ['controller' => 'AuthController', 'action' => 'logout'],
+    'forgot-password' => ['controller' => 'AuthController', 'action' => 'forgotPassword'],
+    'orders' => ['controller' => 'OrderController', 'action' => 'index'],
+    'order' => ['controller' => 'OrderController', 'action' => 'show'],
+    'favorites' => ['controller' => 'HomeController', 'action' => 'favorites'],
+    'feedback' => ['controller' => 'HomeController', 'action' => 'feedback'],
+    'settings' => ['controller' => 'HomeController', 'action' => 'settings'],
+    'about' => ['controller' => 'HomeController', 'action' => 'about'],
+    'contact' => ['controller' => 'HomeController', 'action' => 'contact'],
+    'careers' => ['controller' => 'HomeController', 'action' => 'careers'],
+    'franchise' => ['controller' => 'HomeController', 'action' => 'franchise'],
+    'blog' => ['controller' => 'HomeController', 'action' => 'blog'],
+    'faq' => ['controller' => 'HomeController', 'action' => 'faq'],
+    'splash' => ['controller' => 'SplashController', 'action' => 'index']
+];
 
-// Process the request
-$router->dispatch();
-?>
+// Route the request
+if (array_key_exists($path, $routes)) {
+    $route = $routes[$path];
+    $controller_name = $route['controller'];
+    $action = $route['action'];
+    
+    $controller = new $controller_name();
+    $controller->$action();
+} else {
+    // 404 Not Found
+    header("HTTP/1.0 404 Not Found");
+    require 'views/404.php';
+}
+
+    

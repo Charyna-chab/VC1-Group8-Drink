@@ -1,9 +1,9 @@
-<div class="toast-notification" id="toastNotification">
-    <img id="toastImage" src="/assets/images/placeholder.jpg" alt="Notification">
+<div id="toastNotification" class="toast-notification">
+    <img id="toastImage" src="/placeholder.svg?height=50&width=50" alt="Notification">
     <div class="toast-content">
-        <h4 id="toastTitle">Order Placed</h4>
-        <p id="toastMessage">Your order has been placed successfully!</p>
+        <h4 id="toastTitle">Notification Title</h4>
+        <p id="toastMessage">Notification message goes here.</p>
     </div>
-    <div class="close-toast" onclick="closeToast()">×</div>
+    <div class="close-toast">&times;</div>
 </div>
 
