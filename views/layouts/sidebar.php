@@ -1,4 +1,8 @@
+<main class="main-content"></main>
+
 <aside class="sidebar">
+
+
     <div class="user-profile-sidebar">
         <img src="<?php echo isset($_SESSION['user']) ? $_SESSION['user']['avatar'] : '/assets/image/logo/logo.png'; ?>" alt="User Profile">
     </div>

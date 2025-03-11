@@ -16,7 +16,7 @@
     <div class="auth-container">
         <div class="auth-form-container">
             <div class="auth-header">
-                <img src="/placeholder.svg?height=80&width=80" alt="XING FU CHA Logo">
+                <img src="/assets/image/logo/logo.png" alt="XING FU CHA Logo">
                 <h2>Create Account</h2>
                 <p>Join us and enjoy our delicious boba tea</p>
             </div>
