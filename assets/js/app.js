@@ -37,7 +37,7 @@ function setupEventListeners() {
         item.addEventListener("click", function() {
             // Remove active class from all items
             categoryItems.forEach((cat) => cat.classList.remove("active"))
-                // Add active class to clicked item
+            // Add active class to clicked item
             this.classList.add("active")
 
             // Get the selected category
@@ -281,7 +281,7 @@ function toggleNotificationPanel() {
 
         if (panel.classList.contains("active")) {
             if (overlay) overlay.style.display = "block"
-                // Reset notification count when panel is opened
+            // Reset notification count when panel is opened
             resetNotificationCount()
 
             // Close other menus
@@ -367,23 +367,23 @@ function changeLanguage(lang) {
         switch (lang) {
             case "en":
                 currentLanguage.textContent = "English"
-                currentLanguageFlag.src = "/assets/images/flags/en.png"
+                currentLanguageFlag.src = "/assets/image/flags/en.png"
                 break
             case "zh":
                 currentLanguage.textContent = "中文"
-                currentLanguageFlag.src = "/assets/images/flags/zh.png"
+                currentLanguageFlag.src = "/assets/image/flags/zh.png"
                 break
             case "es":
                 currentLanguage.textContent = "Español"
-                currentLanguageFlag.src = "/assets/images/flags/es.png"
+                currentLanguageFlag.src = "/assets/image/flags/es.png"
                 break
             case "fr":
                 currentLanguage.textContent = "Français"
-                currentLanguageFlag.src = "/assets/images/flags/fr.png"
+                currentLanguageFlag.src = "/assets/image/flags/fr.png"
                 break
             case "ja":
                 currentLanguage.textContent = "日本語"
-                currentLanguageFlag.src = "/assets/images/flags/ja.png"
+                currentLanguageFlag.src = "/assets/image/flags/ja.png"
                 break
         }
 
