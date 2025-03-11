@@ -1,9 +1,5 @@
 <header>
-<<<<<<< HEAD
-    <img src="./assets/image/logo/logo.png" alt="XING FU CHA Logo">
-=======
     <img src="/assets/image/logo/logo.png" alt="XING FU CHA Logo">
->>>>>>> feature/catalog
     <div class="logo">XING FU CHA</div>
     <nav>
         <ul>
