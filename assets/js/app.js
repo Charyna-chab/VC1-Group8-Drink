@@ -36,7 +36,7 @@ function setupEventListeners() {
         item.addEventListener("click", function() {
             // Remove active class from all items
             categoryItems.forEach((cat) => cat.classList.remove("active"))
-            // Add active class to clicked item
+                // Add active class to clicked item
             this.classList.add("active")
 
             // Get the selected category
@@ -280,7 +280,7 @@ function toggleNotificationPanel() {
 
         if (panel.classList.contains("active")) {
             if (overlay) overlay.style.display = "block"
-            // Reset notification count when panel is opened
+                // Reset notification count when panel is opened
             resetNotificationCount()
 
             // Close other menus
@@ -609,3 +609,36 @@ function placeOrder() {
         }, 500)
     }, 800)
 }
+// Show the order modal
+function orderDrink(drinkName) {
+    const modal = document.getElementById('order-modal');
+    const form = document.getElementById('order-form');
+    form.onsubmit = function(event) {
+        event.preventDefault();
+        // Process the order (this can be extended)
+        alert(`${drinkName} ordered! Your customizations are: 
+                Size: ${form.size.value}
+                Sugar: ${form.sugar.value}
+                Topping: ${form.topping.value}`);
+
+        // Close the modal
+        closeModal();
+        // Show notification
+        alert('Your order has been placed successfully!');
+    };
+    modal.style.display = 'block';
+}
+
+// Close the modal
+function closeModal() {
+    const modal = document.getElementById('order-modal');
+    modal.style.display = 'none';
+}
+
+// Close modal when clicking outside of it
+window.onclick = function(event) {
+    const modal = document.getElementById('order-modal');
+    if (event.target === modal) {
+        closeModal();
+    }
+};

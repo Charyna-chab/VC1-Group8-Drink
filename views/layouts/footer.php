@@ -6,5 +6,6 @@
 <script src="/assets/js/favorites.js"></script>
 <script src="/assets/js/feedback.js"></script>
 <script src="/assets/js/settings.js"></script>
+<script src="/assets/js/booking.js"></script>
 </body>
 </html>
