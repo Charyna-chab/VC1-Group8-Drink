@@ -21,6 +21,8 @@ class Database
         }
     }
 
+  
+
     /**
      * Execute a SQL query with optional parameters.
      *

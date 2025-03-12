@@ -83,4 +83,6 @@ class UserModel
         $stmt = $this->db->query("DELETE FROM users WHERE user_id = :user_id", ['user_id' => $id]);
         return $stmt->rowCount(); // Return the number of rows affected
     }
+
+    
 }
