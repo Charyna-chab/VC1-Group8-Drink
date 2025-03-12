@@ -1,42 +1,9 @@
-<?php require_once __DIR__ . '/../layouts/header.php'; ?>
-<?php require_once __DIR__ . '/../layouts/sidebar.php'; ?>
-
+<!-- This is your content section that will be inserted into layout.php -->
 <section class="content">
     <div class="page-header">
         <h2>My Favorites</h2>
         <p>Your favorite boba tea drinks and snacks</p>
     </div>
-
-    <?php 
-    // For demo purposes, we'll show some sample favorites
-    // In a real app, this would come from the database
-    $favorites = [
-        [
-            'id' => 1,
-            'name' => 'Taro Milk Tea',
-            'description' => 'Creamy taro milk tea with chewy tapioca pearls',
-            'price' => 4.50,
-            'image' => '/assets/images/products/taro-milk-tea.jpg',
-            'category' => 'milk-tea'
-        ],
-        [
-            'id' => 3,
-            'name' => 'Matcha Latte',
-            'description' => 'Premium Japanese matcha with creamy milk',
-            'price' => 5.50,
-            'image' => '/assets/images/products/matcha-latte.jpg',
-            'category' => 'milk-tea'
-        ],
-        [
-            'id' => 6,
-            'name' => 'Mango Smoothie',
-            'description' => 'Refreshing mango smoothie with popping boba',
-            'price' => 5.25,
-            'image' => '/assets/images/products/mango-smoothie.jpg',
-            'category' => 'smoothies'
-        ]
-    ];
-    ?>
 
     <?php if(empty($favorites)): ?>
         <div class="empty-state">
@@ -74,7 +41,3 @@
         </div>
     <?php endif; ?>
 </section>
-</main>
-
-
-

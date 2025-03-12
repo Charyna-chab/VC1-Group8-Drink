@@ -1,67 +1,39 @@
 /* Feedback Page Styles */
 
-.page-header {
-    background: linear-gradient(135deg, #ff9966, #ff5e62);
-    padding: 30px;
-    color: white;
-    border-radius: 16px;
-    margin-bottom: 25px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-.page-header h2 {
-    font-size: 28px;
-    margin-bottom: 10px;
-}
-
-.page-header p {
-    font-size: 16px;
-    opacity: 0.9;
-}
-
-
-/* Feedback Container */
-
 .feedback-container {
     background: white;
     border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    margin-top: 30px;
 }
-
-
-/* Feedback Tabs */
 
 .feedback-tabs {
     display: flex;
-    background: #f9f9f9;
     border-bottom: 1px solid #eee;
+    background: #f8f9fa;
 }
 
 .feedback-tab {
     padding: 15px 25px;
-    background: none;
-    border: none;
     font-size: 16px;
     font-weight: 600;
     color: #666;
+    background: transparent;
+    border: none;
     cursor: pointer;
     transition: all 0.3s;
-    border-bottom: 3px solid transparent;
-}
-
-.feedback-tab:hover {
-    color: #ff5e62;
 }
 
 .feedback-tab.active {
     color: #ff5e62;
-    border-bottom-color: #ff5e62;
+    border-bottom: 3px solid #ff5e62;
     background: white;
 }
 
-
-/* Feedback Content */
+.feedback-tab:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
 
 .feedback-content {
     display: none;
@@ -70,47 +42,29 @@
 
 .feedback-content.active {
     display: block;
-    animation: fadeIn 0.5s ease-out;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.feedback-form {
-    max-width: 800px;
 }
 
 .feedback-form h3 {
-    font-size: 24px;
+    font-size: 22px;
+    margin: 0 0 10px;
     color: #333;
-    margin-bottom: 10px;
 }
 
 .feedback-form p {
-    font-size: 16px;
+    font-size: 14px;
     color: #666;
-    margin-bottom: 25px;
+    margin: 0 0 25px;
 }
 
-
-/* Form Styles */
-
 .form-group {
-    margin-bottom: 25px;
+    margin-bottom: 20px;
 }
 
 .form-group label {
     display: block;
-    margin-bottom: 10px;
+    font-size: 14px;
     font-weight: 600;
+    margin-bottom: 8px;
     color: #333;
 }
 
@@ -122,48 +76,25 @@
     padding: 12px 15px;
     border: 1px solid #ddd;
     border-radius: 8px;
-    font-size: 16px;
+    font-size: 14px;
     transition: all 0.3s;
 }
 
-.form-group input[type="text"]:focus,
-.form-group input[type="email"]:focus,
+.form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
     border-color: #ff5e62;
-    box-shadow: 0 0 0 3px rgba(255, 94, 98, 0.2);
     outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 94, 98, 0.1);
 }
-
-.form-group textarea {
-    resize: vertical;
-    min-height: 120px;
-}
-
-
-/* Rating Stars */
 
 .rating-stars {
     display: flex;
-    gap: 10px;
+    gap: 5px;
     font-size: 24px;
-    color: #ddd;
-    margin-bottom: 10px;
-}
-
-.rating-stars i {
+    color: #ffc107;
     cursor: pointer;
-    transition: all 0.3s;
 }
-
-.rating-stars i:hover,
-.rating-stars i.active {
-    color: #ffb400;
-    transform: scale(1.2);
-}
-
-
-/* Photo Upload */
 
 .photo-upload {
     margin-top: 10px;
@@ -176,21 +107,20 @@
 .upload-btn {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
-    padding: 10px 20px;
-    background: #f0f0f0;
+    padding: 10px 15px;
+    background: #f8f9fa;
+    border: 1px dashed #ddd;
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.3s;
 }
 
 .upload-btn:hover {
-    background: #e0e0e0;
+    background: #eee;
 }
 
 .upload-btn i {
-    font-size: 18px;
-    color: #666;
+    margin-right: 10px;
 }
 
 .photo-preview {
@@ -200,66 +130,23 @@
     margin-top: 15px;
 }
 
-.photo-preview img {
+.upload-preview-img {
     width: 80px;
     height: 80px;
     object-fit: cover;
     border-radius: 8px;
 }
 
-
-/* Button Styles */
-
-.btn-primary {
-    padding: 12px 25px;
-    background: #ff5e62;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s;
-}
-
-.btn-primary:hover {
-    background: #e62e24;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-
-/* Responsive Styles */
-
 @media (max-width: 768px) {
     .feedback-tabs {
-        flex-wrap: wrap;
+        flex-direction: column;
     }
     .feedback-tab {
-        flex: 1;
+        text-align: left;
         padding: 12px 15px;
-        font-size: 14px;
-        text-align: center;
     }
-    .feedback-content {
-        padding: 20px;
-    }
-    .feedback-form h3 {
-        font-size: 20px;
-    }
-    .feedback-form p {
-        font-size: 14px;
-    }
-}
-
-@media (max-width: 576px) {
-    .page-header {
-        padding: 20px;
-    }
-    .page-header h2 {
-        font-size: 24px;
-    }
-    .rating-stars {
-        font-size: 20px;
+    .feedback-tab.active {
+        border-bottom: none;
+        border-left: 3px solid #ff5e62;
     }
 }

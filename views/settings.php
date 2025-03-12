@@ -1,10 +1,7 @@
 
 
+
       <section class="content">
-          <div class="page-header">
-              <h2>Settings</h2>
-              <p>Customize your app experience</p>
-          </div>
 
           <div class="settings-container">
               <div class="settings-sidebar">
@@ -40,7 +37,7 @@
                   </ul>
               </div>
 
-              <div class="settings-content">
+              <div class="settings-contents">
                   <!-- Account Settings -->
                   <div class="settings-tab active" id="account-tab">
                       <h3>Account Settings</h3>
@@ -331,10 +328,10 @@
       </section>
   </main>
 
-  <?php include 'views/partials/notification_panel.php'; ?>
-  <?php include 'views/partials/user_menu.php'; ?>
-  <?php include 'views/partials/toast.php'; ?>
-  <?php include 'views/partials/overlay.php'; ?>
+  <?php include 'views/notification_panel.php'; ?>
+  <?php include 'views/user_menu.php'; ?>
+  <?php include 'views/toast.php'; ?>
+  <?php include 'views/overlay.php'; ?>
 
   <script src="/assets/js/app.js"></script>
   <script src="/assets/js/settings.js"></script>

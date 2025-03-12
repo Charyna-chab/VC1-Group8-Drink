@@ -3,11 +3,21 @@ require_once "Router.php";
 require_once "Models/Database.php";
 require_once "controllers/BaseController.php";
 require_once "controllers/WelcomeController.php";
-
+require_once "controllers/FavoritesController.php";
+require_once "controllers/FeedbackController.php";
+require_once "controllers/DashboardController.php";
+require_once "controllers/SettingsController.php";
+require_once "controllers/OrdersController.php";
 
 use YourNamespace\Router;
 
 $route = new Router();
 $route->get("/", [WelcomeController::class, 'welcome']);
+$route->get("/dashboard", [DashboardController::class, 'index']);
+$route->get("/order", [OrderController::class, 'index']);
+$route->get("/order/details/{id}", [OrderController::class, 'details']);
+$route->get("/favorites", [FavoritesController::class, 'index']);
+$route->get("/feedback", [FeedbackController::class, 'index']);
+$route->get("/settings", [SettingsController::class, 'index']);
 
 $route->route();

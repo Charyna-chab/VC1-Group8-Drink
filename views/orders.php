@@ -1,68 +1,48 @@
+<?php require_once __DIR__ . '/../layouts/header.php'; ?>
+<?php require_once __DIR__ . '/../layouts/sidebar.php'; ?>
 
-
-      <section class="content">
-          <div class="page-header">
-              <h2>My Orders</h2>
-              <p>Track and manage your orders</p>
-          </div>
-
-          <?php if(empty($orders)): ?>
-              <div class="empty-state">
-                  <img src="/assets/images/empty-orders.png" alt="No Orders">
-                  <h3>No Orders Yet</h3>
-                  <p>You haven't placed any orders yet. Browse our menu and place your first order!</p>
-                  <a href="/menu" class="btn-primary">Browse Menu</a>
-              </div>
-          <?php else: ?>
-              <div class="orders-filter">
-                  <div class="filter-tabs">
-                      <button class="filter-tab active" data-status="all">All Orders</button>
-                      <button class="filter-tab" data-status="processing">Processing</button>
-                      <button class="filter-tab" data-status="completed">Completed</button>
-                      <button class="filter-tab" data-status="cancelled">Cancelled</button>
-                  </div>
-                  <div class="search-container">
-                      <input type="text" id="orderSearch" placeholder="Search orders...">
-                      <i class="fas fa-search"></i>
-                  </div>
-              </div>
-
-              <div class="orders-list">
-                  <?php foreach($orders as $order): 
-                      $product = $db->getProductById($order['product_id']);
-                  ?>
-                      <div class="order-card" data-status="<?php echo $order['status']; ?>">
-                          <div class="order-image">
-                              <img src="<?php echo $product['image']; ?>" alt="<?php echo $product['name']; ?>">
-                          </div>
-                          <div class="order-details">
-                              <div class="order-header">
-                                  <h3><?php echo $product['name']; ?></h3>
-                                  <span class="order-status <?php echo $order['status']; ?>"><?php echo ucfirst($order['status']); ?></span>
-                              </div>
-                              <div class="order-info">
-                                  <p><strong>Order ID:</strong> #<?php echo $order['id']; ?></p>
-                                  <p><strong>Date:</strong> <?php echo date('M d, Y', strtotime($order['created_at'])); ?></p>
-                                  <p><strong>Size:</strong> <?php echo ucfirst($order['size']); ?></p>
-                                  <p><strong>Sugar Level:</strong> <?php echo $order['sugar_level']; ?></p>
-                                  <?php if(!empty($order['toppings'])): ?>
-                                      <p><strong>Toppings:</strong> <?php echo implode(', ', $order['toppings']); ?></p>
-                                  <?php endif; ?>
-                                  <p><strong>Total:</strong> $<?php echo number_format($order['price'], 2); ?></p>
-                              </div>
-                          </div>
-                          <div class="order-actions">
-                              <a href="/order?id=<?php echo $order['id']; ?>" class="btn-outline">View Details</a>
-                              <?php if($order['status'] == 'processing'): ?>
-                                  <button class="btn-outline cancel-order" data-id="<?php echo $order['id']; ?>">Cancel Order</button>
-                              <?php elseif($order['status'] == 'completed'): ?>
-                                  <button class="btn-outline reorder" data-id="<?php echo $order['id']; ?>">Reorder</button>
-                              <?php endif; ?>
-                          </div>
-                      </div>
-                  <?php endforeach; ?>
-              </div>
-          <?php endif; ?>
-      </section>
-  </main>
-
+<section class="content">
+    <div class="page-header">
+        <h2>Order Drinks</h2>
+        <p>Choose from our delicious selection of boba teas and drinks</p>
+    </div>
+    
+    <div class="order-container">
+        <div class="product-filters">
+            <div class="search-filter">
+                <input type="text" id="productSearch" placeholder="Search drinks...">
+                <i class="fas fa-search"></i>
+            </div>
+            
+            <div class="category-filter">
+                <button class="filter-btn active" data-category="all">All</button>
+                <button class="filter-btn" data-category="milk-tea">Milk Tea</button>
+                <button class="filter-btn" data-category="fruit-tea">Fruit Tea</button>
+                <button class="filter-btn" data-category="smoothie">Smoothies</button>
+                <button class="filter-btn" data-category="coffee">Coffee</button>
+            </div>
+        </div>
+        
+        <div class="products-grid">
+            <?php foreach ($products as $product): ?>
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="<?php echo $product['image']; ?>" alt="<?php echo $product['name']; ?>">
+                    <button class="favorite-btn">
+                        <i class="far fa-heart"></i>
+                    </button>
+                </div>
+                <div class="product-info">
+                    <h3><?php echo $product['name']; ?></h3>
+                    <p><?php echo $product['description']; ?></p>
+                    <div class="product-price">$<?php echo number_format($product['price'], 2); ?></div>
+                </div>
+                <div class="product-actions">
+                    <a href="/order/details/<?php echo $product['id']; ?>" class="btn-primary order-btn">Order Now</a>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+</section>
+</main>
