@@ -1,5 +1,8 @@
-<?php require_once __DIR__ . '/../layouts/header.php'; ?>
-<?php require_once __DIR__ . '/../layouts/sidebar.php'; ?>
+<?php
+// views/booking.php
+require_once __DIR__ . '/layouts/header.php';
+require_once __DIR__ . '/layouts/sidebar.php';
+?>
 
 <section class="content">
     <div class="page-header">
@@ -92,3 +95,5 @@
     </div>
 </section>
 </main>
+
+<script src="/assets/js/booking.js"></script>

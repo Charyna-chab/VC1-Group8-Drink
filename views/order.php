@@ -1,11 +1,12 @@
-<?php require_once __DIR__ . '/../layouts/header.php'; ?>
-<?php require_once __DIR__ . '/../layouts/sidebar.php'; ?>
+
+<?php
+// views/order.php
+require_once __DIR__ . '/../views/layouts/header.php';
+require_once __DIR__ . '/../views/layouts/sidebar.php';
+?>
 
 <section class="content">
-    <div class="page-header">
-        <h2>Order Drinks</h2>
-        <p>Choose from our delicious selection of boba teas and drinks</p>
-    </div>
+
     
     <!-- Discount banner -->
     <div class="discount-banner">
@@ -37,7 +38,7 @@
         
         <div class="products-grid">
             <?php foreach ($products as $product): ?>
-            <div class="product-card">
+            <div class="product-card" data-category="<?php echo $product['category']; ?>">
                 <div class="product-image">
                     <img src="<?php echo $product['image']; ?>" alt="<?php echo $product['name']; ?>">
                     <button class="favorite-btn">
@@ -69,7 +70,7 @@
         </div>
         <div class="modal-body">
             <div class="product-details">
-                <img src="/placeholder.svg" alt="" class="modal-product-image">
+                <img src="/placeholder.svg?height=100&width=100" alt="" class="modal-product-image">
                 <div class="modal-product-info">
                     <h4 class="modal-product-name"></h4>
                     <p class="modal-product-description"></p>
@@ -199,7 +200,4 @@
 
 </main>
 
-<script>
-    // This will be replaced by the actual order.js file
-    // Just adding it here for completeness
-</script>
+<script src="/assets/js/order.js"></script>
