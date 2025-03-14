@@ -1,4 +1,3 @@
-
 <?php
 // views/order.php
 require_once __DIR__ . '/../views/layouts/header.php';
@@ -34,7 +33,7 @@ require_once __DIR__ . '/../views/layouts/sidebar.php';
                 <i class="fas fa-search"></i>
             </div>
         </div>
-        
+        <h3>Order Drinks & Snacks</h3>
         <div class="products-grid">
             <?php foreach ($products as $product): ?>
             <div class="product-card" data-category="<?php echo $product['category']; ?>">
@@ -197,6 +196,6 @@ require_once __DIR__ . '/../views/layouts/sidebar.php';
 <!-- Notification Toast -->
 <div class="toast-container" id="toastContainer"></div>
 
-</main>
+</section>
 
 <script src="/assets/js/order.js"></script>
