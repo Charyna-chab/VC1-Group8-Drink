@@ -4,10 +4,6 @@
 
 
 <section class="content">
-    <div class="page-header">
-        <h2>Feedback</h2>
-        <p>We value your opinion! Share your thoughts with us</p>
-    </div>
 
     <div class="feedback-container">
         <div class="feedback-tabs">
@@ -186,5 +182,6 @@
     </div>
 </section>
 </main>
+
 
 
