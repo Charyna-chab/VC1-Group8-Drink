@@ -4,7 +4,7 @@
     color: white;
     text-align: center;
     height: 28vh;
-    width: 158%;
+    width: 188%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -39,19 +39,42 @@
     background-color: #ff5e62;
 }
 
-.search-container {
+.product-filters {
     display: flex;
     justify-content: center;
-    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
-#search {
-    padding: 10px;
-    width: 250px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
+.search-filter {
     position: relative;
-    right: 200px;
+    width: 300px;
+    left: 116%;
+    bottom: 70px;
+}
+
+.search-filter input {
+    width: 100%;
+    padding: 10px 40px 10px 15px;
+    border: 2px solid #ccc;
+    border-radius: 16px;
+    font-size: 16px;
+    outline: none;
+    transition: 0.3s ease-in-out;
+}
+
+.search-filter input:focus {
+    border-color: #ff5e00;
+    box-shadow: 0 0 8px rgba(255, 94, 0, 0.5);
+}
+
+.search-filter i {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #888;
+    font-size: 18px;
+    cursor: pointer;
 }
 
 .fa-search {

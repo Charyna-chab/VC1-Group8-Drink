@@ -7,7 +7,6 @@ require_once __DIR__ . '/../views/layouts/sidebar.php';
 
 <section class="content">
 
-    
     <!-- Discount banner -->
     <div class="discount-banner">
         <div class="banner-content">
