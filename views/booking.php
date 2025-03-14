@@ -5,10 +5,17 @@ require_once __DIR__ . '/layouts/sidebar.php';
 ?>
 
 <section class="content">
-    <div class="page-header">
-        <h2>My Bookings</h2>
-        <p>View and manage your orders</p>
-    </div>
+<!-- Banner Section -->
+<div class="banner">
+    <!-- Banner Heading -->
+    <h2>Special Offer!</h2>
+
+    <!-- Banner Description -->
+    <p>Get 20% off on all drinks today. Don't miss out on this amazing deal!</p>
+
+    <!-- Call-to-Action Button -->
+    <button class="cta-button">Order Now</button>
+</div>
     
     <div class="booking-container">
         <div class="booking-filters">

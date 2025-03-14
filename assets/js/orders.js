@@ -233,6 +233,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 quantityInput.addEventListener('change', function() {
                         let quantity = parseInt(this.value);
                         if
+
                         function() {
                             let quantity = parseInt(this.value);
                             if (isNaN(quantity) || quantity < 1) {
