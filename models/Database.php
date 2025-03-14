@@ -142,7 +142,8 @@ class Database
     // Product methods
     public function getAllProducts()
     {
-        return $this->products;
+        $stmt = $this->pdo->query("SELECT * FROM products");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function getProductById($id)
