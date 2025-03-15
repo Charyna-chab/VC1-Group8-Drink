@@ -390,4 +390,56 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 300);
         });
     }
+
+    // Show Popular Drinks Section
+    document.getElementById('showPopularDrinks').addEventListener('click', function() {
+        const popularDrinksSection = document.getElementById('popularDrinksSection');
+        const popularDishesContainer = document.getElementById('popularDishesContainer');
+        const noPopularDrinksMessage = document.getElementById('noPopularDrinksMessage');
+
+        // Fetch popular drinks data (this is a placeholder, replace with actual data fetching logic)
+        const popularDrinks = [
+            {
+                id: 9,
+                name: 'Strawberry Smoothie',
+                image: '/assets/images/products/strawberry-smoothie.jpg',
+                price: '$4.99',
+                description: 'Top seller this week!'
+            },
+            // ...more popular drinks...
+        ];
+
+        // Clear existing popular drinks
+        popularDishesContainer.innerHTML = '';
+
+        if (popularDrinks.length > 0) {
+            popularDrinks.forEach(drink => {
+                const drinkCard = document.createElement('div');
+                drinkCard.className = 'product-card';
+                drinkCard.dataset.category = 'smoothie';
+                drinkCard.innerHTML = `
+                    <div class="product-image">
+                        <img src="${drink.image}" alt="${drink.name}">
+                        <button class="favorite-btn">
+                            <i class="far fa-heart"></i>
+                        </button>
+                    </div>
+                    <div class="product-info">
+                        <h4>${drink.name}</h4>
+                        <p class="description">${drink.description}</p>
+                        <div class="product-price">${drink.price}</div>
+                    </div>
+                    <div class="product-actions">
+                        <button class="btn-primary order-btn" data-product-id="${drink.id}">Add to Cart</button>
+                    </div>
+                `;
+                popularDishesContainer.appendChild(drinkCard);
+            });
+            noPopularDrinksMessage.style.display = 'none';
+        } else {
+            noPopularDrinksMessage.style.display = 'block';
+        }
+
+        popularDrinksSection.style.display = 'block';
+    });
 });

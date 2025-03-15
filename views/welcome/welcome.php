@@ -28,6 +28,38 @@
         </div>
     </div>
 
+    <!-- Popular Drinks Button -->
+    <div class="popular-drinks-button">
+        <button class="btn-primary" id="showPopularDrinks">Popular Drinks</button>
+    </div>
+
+    <!-- Popular Drinks Section -->
+    <div class="popular-drinks" id="popularDrinksSection" style="display: none;">
+        <h3>Popular Drinks</h3>
+        <div class="dishes-list" id="popularDishesContainer">
+            <!-- Dynamic Popular Drinks List -->
+            <!-- Example of a popular drink card -->
+            <div class="product-card" data-category="smoothie">
+                <div class="product-image">
+                    <img src="/assets/images/products/strawberry-smoothie.jpg" alt="Strawberry Smoothie">
+                    <button class="favorite-btn">
+                        <i class="far fa-heart"></i>
+                    </button>
+                </div>
+                <div class="product-info">
+                    <h4>Strawberry Smoothie</h4>
+                    <p class="description">Top seller this week!</p>
+                    <div class="product-price">$4.99</div>
+                </div>
+                <div class="product-actions">
+                    <button class="btn-primary order-btn" data-product-id="9">Add to Cart</button>
+                </div>
+            </div>
+            <!-- No popular drinks message -->
+            <div id="noPopularDrinksMessage" style="display: none;">No popular drinks available at the moment.</div>
+        </div>
+    </div>
+
     <!-- Popular dishes section -->
     <div class="popular-dishes">
         <h3>Popular Drinks & Snacks</h3>
@@ -142,7 +174,7 @@
                         <i class="far fa-heart"></i>
                     </button>
                 </div>
-                <div class="product-info">
+                <div class "product-info">
                     <h4>Strawberry Fruit Tea</h4>
                     <p class="description">Refreshing tea with fresh strawberry puree and fruit bits.</p>
                     <div class="product-price">$4.75</div>
