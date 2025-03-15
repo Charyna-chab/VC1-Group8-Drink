@@ -30,8 +30,9 @@ class UserModel
      */
     function createUser($data)
     {
-        $sql = "INSERT INTO users (name, phone, email, address) VALUES (:name, :phone, :email, :address)";
+        $sql = "INSERT INTO users (image,name, phone, email, address) VALUES (:image :name, :phone, :email, :address)";
         $this->db->query($sql, [
+            'image' => $data['image'],
             'name' => $data['name'],
             'phone' => $data['phone'],
             'email' => $data['email'],
@@ -61,8 +62,9 @@ class UserModel
      */
     function updateUser($id, $data)
     {
-        $sql = "UPDATE users SET name = :name, phone = :phone, email = :email, address = :address WHERE user_id = :user_id";
+        $sql = "UPDATE users SET image = :image, name = :name, phone = :phone, email = :email, address = :address WHERE user_id = :user_id";
         $stmt = $this->db->query($sql, [
+            'image' => $data['image'],
             'name' => $data['name'],
             'phone' => $data['phone'],
             'email' => $data['email'],

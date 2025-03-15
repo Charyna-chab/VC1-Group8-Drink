@@ -1,4 +1,3 @@
-<?php require_once 'views/layout/header.php' ?>
 <div class="main-panel">
     <div class="container">
         <form action="/user/store" method="POST" enctype="multipart/form-data">

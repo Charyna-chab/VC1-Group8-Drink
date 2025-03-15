@@ -1,13 +1,14 @@
-<?php '../layout/header.php'?>
-<?php '../layout/nav.php'?>
-
 <?php $users = $users ?? []; ?>
+<div class="card-body">
+  <div class="table-responsive ">
+    <h3>Customers</h3>
+    <table class="table table-bordered table-light" id="dataTable" width="100%" cellspacing="0">
+      <a href="/user/create" class="btn btn-primary">Add New</a>
 
-    <a href="/user/create" class="btn btn-primary">Add New</a>
-    <table class="table mt-3">
       <thead>
         <tr>
           <th>ID</th>
+          <th></th>
           <th>Name</th>
           <th>Phone</th>
           <th>Email</th>
@@ -18,7 +19,15 @@
         <?php foreach ($users as $index => $user): ?>
           <tr>
             <td><?= $index + 1 ?></td>
-           
+            <td>
+              <!-- Display image if available -->
+              <?php if (!empty($user['image'])): ?>
+                <img src="data:image/jpeg;base64,<?= base64_encode($user['image']) ?>"
+                  alt="Profile Image" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;">
+              <?php else: ?>
+                No image
+              <?php endif; ?>
+            </td>
             <td><?= htmlspecialchars($user['name']) ?></td>
             <td><?= htmlspecialchars($user['phone']) ?></td>
             <td><?= htmlspecialchars($user['email']) ?></td>
@@ -36,6 +45,6 @@
         <?php endforeach; ?>
       </tbody>
     </table>
-  <!-- </div>
-</div> -->
-
+  </div>
+</div>
+<?php '../layout/footer.php' ?>

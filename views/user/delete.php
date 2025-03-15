@@ -6,13 +6,11 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                I want to delete you from my Heart ?
+                Are you sure you want to delete this user?
             </div>
             <div class="modal-footer">
-                <form action="/user/delete?id=<?= $user['user_id'] ?>" method="POST">
-                    <button type="submit" class="btn btn-danger">Delete</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Discard</button>
-                </form>
+                <button type="button" class="btn btn-danger" onclick="deleteUser(<?= $user['user_id'] ?>)">Delete</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Discard</button>
             </div>
         </div>
     </div>
