@@ -11,7 +11,7 @@
     <div class="search-bar">
         <input type="text" placeholder="What do you want to eat today...">
     </div>
-    <button class="order-btn">Order Now</button>
+    <button class="order-search">Order Now</button>
     <div class="language-selector">
         <div class="selected-language">
             <img src="/assets/image/flags/en.png" alt="English" id="currentLanguageFlag">

@@ -93,7 +93,7 @@
             <!-- Product Cards (Dynamic Product List) -->
             <div class="product-card" data-category="smoothie">
                 <div class="product-image">
-                    <img src="/assets/image/products/strawberry-smoothie.png" alt="Strawberry Smoothie">
+                    <img src="/assets/images/products/strawberry-smoothie.jpg" alt="Strawberry Smoothie">
                     <button class="favorite-btn">
                         <i class="far fa-heart"></i>
                     </button>
@@ -161,7 +161,7 @@
             
             <div class="product-card" data-category="milk-tea">
                 <div class="product-image">
-                    <img src="/assets/image/products/matcha-latte.png" alt="Matcha Latte">
+                    <img src="/assets/images/products/matcha-latte.jpg" alt="Matcha Latte">
                     <button class="favorite-btn">
                         <i class="far fa-heart"></i>
                     </button>
@@ -200,7 +200,7 @@
                         <i class="far fa-heart"></i>
                     </button>
                 </div>
-                <div class "product-info">
+                <div class="product-info">
                     <h4>Strawberry Fruit Tea</h4>
                     <p class="description">Refreshing tea with fresh strawberry puree and fruit bits.</p>
                     <div class="product-price">$4.75</div>

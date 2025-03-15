@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="/assets/css/dashboard.css">
     <link rel="stylesheet" href="/assets/css/booking.css">
     <link rel="stylesheet" href="/assets/css/welcome.css">
-    <link rel="stylesheet" href="/assets/css/products.css">
+    <link rel="stylesheet" href="/assets/css/product-card.css">
     
     <link rel="apple-touch-icon" sizes="76x76" href="/assets/image/logo/logo.png">
     <link rel="icon" type="image/png" href="/assets/image/logo/logo.png">

@@ -1,4 +1,4 @@
-<main class="main-content">
+
 <aside class="sidebar">
     <!-- User logo in Sidebar -->
     <div class="branch-order-sidebar">
