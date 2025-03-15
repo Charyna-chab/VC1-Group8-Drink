@@ -35,7 +35,7 @@ require_once __DIR__ . '/layouts/sidebar.php';
         <div class="bookings-list">
             <?php if (empty($bookings)): ?>
             <div class="empty-state">
-                <img src="/assets/images/empty-orders.svg" alt="No Orders">
+                <img src="/assets/image/empty-orders.svg" alt="No Orders">
                 <h3>No Orders Yet</h3>
                 <p>You haven't placed any orders yet. Start ordering your favorite drinks!</p>
                 <a href="/order" class="btn-primary">Order Now</a>
