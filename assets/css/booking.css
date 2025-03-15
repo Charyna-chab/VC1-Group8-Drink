@@ -51,6 +51,12 @@ button {
     /* Friendly font */
     height: auto;
     /* Auto height for flexibility */
+    width: 100%;
+    /* Ensures full width */
+    max-width: 1200px;
+    /* Limits width for better readability */
+    margin: 0 auto;
+    /* Centers the banner */
     display: flex;
     flex-direction: column;
     justify-content: center;

@@ -69,3 +69,18 @@ class HomeController {
   }
 }
 
+class HomeController extends BaseController {
+    public function index() {
+        // Check if user is logged in
+        if (isset($_SESSION['user_id'])) {
+            // Redirect to order page
+            header('Location: /order');
+            exit;
+        } else {
+            // Redirect to login page
+            header('Location: /login');
+            exit;
+        }
+    }
+}
+

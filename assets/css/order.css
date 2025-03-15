@@ -5,6 +5,8 @@ body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    overflow-x: hidden;
+    /* Prevent horizontal scrolling */
 }
 
 
@@ -51,7 +53,6 @@ body {
     margin-bottom: 20px;
     align-items: center;
     margin-top: 20px;
-    /* Ensure items are aligned on the same line */
 }
 
 .category-btn {
@@ -80,16 +81,12 @@ body {
     justify-content: flex-end;
     margin-bottom: 20px;
     align-items: center;
-    /* Ensure items are aligned on the same line */
     width: 100%;
-    /* Make sure it takes the full width */
 }
 
 .search-filter {
     position: relative;
     width: 300px;
-    /* Set a fixed width for the search input */
-    bottom: 70px;
 }
 
 .search-filter input {
@@ -100,7 +97,6 @@ body {
     font-size: 16px;
     outline: none;
     transition: border-color 0.3s ease-in-out;
-    position: relative;
 }
 
 .search-filter input:focus {
@@ -117,6 +113,9 @@ body {
     font-size: 18px;
 }
 
+
+/* Order Container */
+
 .order-container h3 {
     font-size: 22px;
     font-weight: bold;
@@ -126,16 +125,12 @@ body {
     letter-spacing: 1px;
     text-transform: uppercase;
     transition: all 0.3s ease;
-    /* Smooth transition for hover effect */
 }
 
 .order-container h3:hover {
     color: #ff5e62;
-    /* Change text color on hover */
     text-decoration: underline;
-    /* Underline the text on hover */
     transform: scale(1.05);
-    /* Slightly scale the text on hover */
 }
 
 
@@ -154,8 +149,8 @@ body {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
     transition: transform 0.3s;
     width: 32%;
-    /* Adjust width for responsive layout */
     margin-bottom: 20px;
+    cursor: pointer;
 }
 
 .product-card:hover {
@@ -210,7 +205,6 @@ body {
     color: #666;
     margin: 0 0 10px;
     height: 40px;
-    /* Fixed height for consistency */
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
@@ -248,51 +242,99 @@ body {
 }
 
 
-/* Modal Styles */
+/* Order Menu (Left Side) */
 
-.modal {
-    display: none;
+.order-menu {
     position: fixed;
-    z-index: 1;
-    left: 0;
     top: 0;
-    width: 100%;
+    left: -400px;
+    /* Hidden by default */
+    width: 350px;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    justify-content: center;
+    background: white;
+    box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+    transition: left 0.3s ease-in-out;
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+.order-menu.active {
+    left: 0;
+    /* Show the menu */
+}
+
+.order-menu-header {
+    display: flex;
+    justify-content: space-between;
     align-items: center;
+    padding: 20px;
+    background: #ff5e62;
+    color: white;
 }
 
-.modal-content {
-    background-color: white;
-    padding: 30px;
-    border-radius: 10px;
-    max-width: 500px;
-    width: 100%;
+.order-menu-header h3 {
+    margin: 0;
+    font-size: 20px;
 }
 
-.close-btn {
-    color: #aaa;
-    font-size: 28px;
-    font-weight: bold;
-    position: absolute;
-    top: 10px;
-    right: 20px;
+.order-menu-header .close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
     cursor: pointer;
 }
 
-.close-btn:hover {
-    color: black;
+.order-menu-body {
+    padding: 20px;
 }
 
-.modal h3 {
-    font-size: 22px;
+.order-menu-body h4 {
+    font-size: 18px;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.order-menu-body p {
+    font-size: 14px;
+    color: #666;
     margin-bottom: 20px;
 }
 
-.modal form {
-    display: flex;
-    flex-direction: column;
+.order-menu-body .btn-primary {
+    width: 100%;
+    padding: 12px;
+    background: #ff5e62;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.order-menu-body .btn-primary:hover {
+    background: #e62e24;
+}
+
+
+/* Overlay for Order Menu */
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    display: none;
+}
+
+.overlay.active {
+    display: block;
+    /* Show overlay when menu is active */
 }
 
 
@@ -301,14 +343,12 @@ body {
 @media (max-width: 768px) {
     .product-card {
         width: 48%;
-        /* Adjust for smaller screens */
     }
 }
 
 @media (max-width: 576px) {
     .product-card {
         width: 100%;
-        /* Full width on extra small screens */
     }
     .search-filter {
         width: 100%;
@@ -316,5 +356,9 @@ body {
     .product-filters {
         flex-direction: column;
         align-items: stretch;
+    }
+    .order-menu {
+        width: 100%;
+        /* Full width on small screens */
     }
 }

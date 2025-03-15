@@ -9,6 +9,7 @@ require_once "controllers/DashboardController.php";
 require_once "controllers/SettingsController.php";
 require_once "controllers/OrdersController.php";
 require_once "controllers/BookingController.php";
+require_once "controllers/AuthController.php";
 
 use YourNamespace\Router;
 
