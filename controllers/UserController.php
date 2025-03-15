@@ -95,9 +95,6 @@ class UserController extends BaseController
             exit; // Use exit to stop further execution
         }
 
-        // Fetch notifications (assuming you have a method in the model)
-        // $notifications = $this->model->getNotifications($_SESSION['user_id']);
-        // header('Content-Type: application/json');
-        // echo json_encode($notifications);
+     
     }
 }
