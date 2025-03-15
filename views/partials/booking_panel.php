@@ -1,7 +1,7 @@
 <div class="booking-panel" id="bookingPanel">
     <button class="close-btn" onclick="closeBookingPanel()">×</button>
     <h3>Customize Your Order</h3>
-    <img id="productImage" src="/assets/images/placeholder.jpg" alt="Product">
+    <img id="productImage" src="/assets/image/placeholder.jpg" alt="Product">
     <h4 id="productName"></h4>
     <p id="productPrice"></p>
     <hr>

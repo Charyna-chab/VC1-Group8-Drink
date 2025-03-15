@@ -11,7 +11,7 @@
 <body class="splash-body">
     <div class="splash-container">
         <div class="splash-logo">
-            <img src="/assets/images/logo/logo.png" alt="XING FU CHA Logo">
+            <img src="/assets/image/logo/logo.png" alt="XING FU CHA Logo">
             <h1 class="splash-title">XING FU CHA</h1>
             <p class="splash-tagline">Premium Boba Tea Experience</p>
         </div>
@@ -54,7 +54,7 @@
         <div class="auth-modal-content">
             <span class="close-modal">&times;</span>
             <div class="auth-header">
-                <img src="/assets/images/logo/logo-small.png" alt="XING FU CHA Logo">
+                <img src="/assets/image/logo/logo.png" alt="XING FU CHA Logo">
                 <h2>Welcome Back</h2>
                 <p>Login to your account to continue</p>
             </div>
@@ -118,7 +118,7 @@
         <div class="auth-modal-content">
             <span class="close-modal">&times;</span>
             <div class="auth-header">
-                <img src="/assets/images/logo/logo-small.png" alt="XING FU CHA Logo">
+                <img src="/assets/image/logo/logo.png" alt="XING FU CHA Logo">
                 <h2>Create Account</h2>
                 <p>Join us and enjoy our delicious boba tea</p>
             </div>
@@ -189,6 +189,79 @@
             
             <div class="auth-footer">
                 <p>Already have an account? <a href="#" id="switchToLogin">Login</a></p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Forgot Password Modal -->
+    <div id="forgotPasswordModal" class="auth-modal">
+        <div class="auth-modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="auth-header">
+                <img src="/assets/image/logo/logo.png" alt="XING FU CHA Logo">
+                <h2>Forgot Password</h2>
+                <p>Enter your email to reset your password</p>
+            </div>
+            
+            <div id="forgotPasswordError" class="auth-error" style="display: none;">
+                <i class="fas fa-exclamation-circle"></i>
+                <span>Error message will appear here</span>
+            </div>
+            
+            <form id="forgotPasswordForm" class="auth-form">
+                <div class="form-group">
+                    <label for="forgotPasswordEmail">Email</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="forgotPasswordEmail" name="email" placeholder="Enter your email" required>
+                    </div>
+                </div>
+                
+                <button type="submit" class="auth-button">Reset Password</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Check Your Email Modal -->
+    <div id="checkEmailModal" class="auth-modal">
+        <div class="auth-modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="auth-header">
+                <img src="/assets/image/logo/logo.png" alt="XING FU CHA Logo">
+                <h2>Check your email</h2>
+                <p>We sent a reset link to <span id="resetEmail"></span></p>
+                <p>Enter the 6-digit code mentioned in the email</p>
+            </div>
+            
+            <form id="verifyCodeForm" class="auth-form">
+                <div class="form-group">
+                    <div class="code-inputs">
+                        <input type="text" maxlength="1" required>
+                        <input type="text" maxlength="1" required>
+                        <input type="text" maxlength="1" required>
+                        <input type="text" maxlength="1" required>
+                        <input type="text" maxlength="1" required>
+                        <input type="text" maxlength="1" required>
+                    </div>
+                </div>
+                
+                <button type="submit" class="auth-button">Verify Code</button>
+                
+                <div class="resend-email">
+                    <p>Haven't got the email yet? <a href="#" id="resendEmail">Resend email</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Complete Modal -->
+    <div id="completeModal" class="auth-modal">
+        <div class="auth-modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="auth-header">
+                <img src="/assets/image/logo/logo.png" alt="XING FU CHA Logo">
+                <h2>Success!</h2>
+                <p>Your password has been reset successfully.</p>
             </div>
         </div>
     </div>

@@ -212,3 +212,58 @@ document.addEventListener("DOMContentLoaded", () => {
         bubble.style.animationDelay = `${randomDelay}s`
     })
 })
+
+    // Show forgot password modal
+    document.addEventListener("DOMContentLoaded", function() {
+        const forgotPasswordLink = document.querySelector('.forgot-password');
+        const forgotPasswordModal = document.getElementById('forgotPasswordModal');
+        const closeForgotPasswordModal = forgotPasswordModal.querySelector('.close-modal');
+        
+        forgotPasswordLink.addEventListener('click', function(event) {
+            event.preventDefault();
+            forgotPasswordModal.style.display = 'block';
+        });
+        
+        closeForgotPasswordModal.addEventListener('click', function() {
+            forgotPasswordModal.style.display = 'none';
+        });
+
+        // Handle forgot password form submission
+        const forgotPasswordForm = document.getElementById('forgotPasswordForm');
+        const checkEmailModal = document.getElementById('checkEmailModal');
+        const resetEmail = document.getElementById('resetEmail');
+        
+        forgotPasswordForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const email = document.getElementById('forgotPasswordEmail').value;
+            resetEmail.textContent = email;
+            forgotPasswordModal.style.display = 'none';
+            checkEmailModal.style.display = 'block';
+        });
+
+        // Close check email modal
+        const closeCheckEmailModal = checkEmailModal.querySelector('.close-modal');
+        closeCheckEmailModal.addEventListener('click', function() {
+            checkEmailModal.style.display = 'none';
+        });
+
+        // Handle verify code form submission
+        const verifyCodeForm = document.getElementById('verifyCodeForm');
+        const completeModal = document.getElementById('completeModal');
+        
+        verifyCodeForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            checkEmailModal.style.display = 'none';
+            completeModal.style.display = 'block';
+            setTimeout(function() {
+                window.location.href = '/home';
+            }, 2000); // Redirect to home page after 2 seconds
+        });
+
+        // Close complete modal
+        const closeCompleteModal = completeModal.querySelector('.close-modal');
+        closeCompleteModal.addEventListener('click', function() {
+            completeModal.style.display = 'none';
+        });
+    });
+ 

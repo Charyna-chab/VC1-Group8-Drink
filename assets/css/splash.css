@@ -31,8 +31,8 @@
 }
 
 .splash-logo img {
-    width: 180px;
-    height: 180px;
+    width: 100px;
+    height: 100px;
     margin-bottom: 20px;
     filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.15));
     animation: pulse 3s infinite;
@@ -557,6 +557,34 @@
     text-decoration: underline;
 }
 
+.auth-modal .code-inputs {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.auth-modal .code-inputs input {
+    width: 10%;
+    height: 50px;
+    font-size: 18px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.auth-modal .resend-email {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.auth-modal .resend-email a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.auth-modal .resend-email a:hover {
+    text-decoration: underline;
+}
 
 /* Responsive Styles */
 

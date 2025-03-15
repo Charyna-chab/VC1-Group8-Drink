@@ -547,6 +547,7 @@ main {
 }
 
 .user-profile-sidebar img {
+<<<<<<< HEAD
     width: 80px;
     height: 80px;
     border-radius: 50%;
@@ -554,6 +555,12 @@ main {
     margin-bottom: 10px;
     border: 3px solid #ffcc00;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+=======
+    width: 140px;
+    height: 120px;
+    object-fit: cover;
+    margin-bottom: 10px;
+>>>>>>> 3fba3e96c0d806907f91a324a0ff0e492f707d04
 }
 
 .user-profile-sidebar h4 {
@@ -1441,6 +1448,7 @@ main {
     .toppings-grid {
         grid-template-columns: 1fr;
     }
+<<<<<<< HEAD
 }
 
 
@@ -1465,4 +1473,6 @@ main {
 
 .summary-item span.highlight {
     animation: highlight 0.5s ease-out;
+=======
+>>>>>>> 3fba3e96c0d806907f91a324a0ff0e492f707d04
 }
