@@ -8,6 +8,32 @@
         <p>Browse our selection of freshly baked breads and cakes</p>
     </div>
 
+    <!-- New Drinks Collection Section -->
+    <div class="new-drinks-collection">
+        <h3>New Drinks Collection</h3>
+        <div class="new-drinks-grid">
+            <?php if (empty($newDrinks)): ?>
+                <div class="no-new-drinks">
+                    <p>No new drinks available at the moment.</p>
+                </div>
+            <?php else: ?>
+                <?php foreach ($newDrinks as $drink): ?>
+                    <div class="new-drink-card" data-id="<?php echo $drink['id']; ?>">
+                        <div class="new-drink-image">
+                            <img src="<?php echo $drink['image']; ?>" alt="<?php echo $drink['name']; ?>">
+                        </div>
+                        <div class="new-drink-content">
+                            <h4><?php echo $drink['name']; ?></h4>
+                            <p class="price">$<?php echo number_format($drink['price'], 2); ?></p>
+                            <p class="description">New arrival!</p>
+                            <button class="btn-primary order-btn" data-product-id="<?php echo $drink['id']; ?>">Add to Cart</button>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </div>
+    </div>
+
     <div class="product-categories">
         <button class="category-btn" data-category="breads">Breads</button>
         <button class="category-btn" data-category="cakes">Cakes</button>
