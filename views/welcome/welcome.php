@@ -36,10 +36,10 @@
             <div class="product-card" data-category="smoothie">
                 <div class="product-image">
                     <img src="/assets/images/products/strawberry-smoothie.jpg" alt="Strawberry Smoothie">
-                    <button class="favorite-btn">
+                </div>
+                <button class="favorite-btn">
                         <i class="far fa-heart"></i>
                     </button>
-                </div>
                 <div class="product-info">
                     <h4>Strawberry Smoothie</h4>
                     <p class="description">Delicious strawberry smoothie with a creamy texture.</p>
@@ -103,7 +103,7 @@
             
             <div class="product-card" data-category="milk-tea">
                 <div class="product-image">
-                    <img src="/assets/images/products/matcha-latte.jpg" alt="Matcha Latte">
+                    <img src="/assets/image/products/Macha-drink-milk-tea.png" alt="Matcha Latte">
                     <button class="favorite-btn">
                         <i class="far fa-heart"></i>
                     </button>

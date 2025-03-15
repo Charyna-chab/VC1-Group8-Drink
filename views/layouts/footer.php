@@ -7,5 +7,6 @@
 <script src="/assets/js/feedback.js"></script>
 <script src="/assets/js/settings.js"></script>
 <script src="/assets/js/booking.js"></script>
+<script src="/assets/js/product.js"></script>
 </body>
 </html>
