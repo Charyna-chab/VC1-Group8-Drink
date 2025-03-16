@@ -25,17 +25,14 @@ class UserController extends BaseController
     function store()
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $imageData = null;
-            if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
-                $imageData = file_get_contents($_FILES['file']['tmp_name']);
-            }
+           
             $data = [
-                'image' => $imageData,
                 'name' => $_POST['name'],
                 'phone' => $_POST['phone'],
                 'email' => $_POST['email'],
                 'address' => $_POST['address'],
             ];
+            print_r($data); // Debugging: Print the data
             $this->model->createUser($data);
             $this->redirect('/user');
         }
@@ -50,13 +47,8 @@ class UserController extends BaseController
     function update($id)
 {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $user = $this->model->getUser($id);
-        $imageData = $user['image'];
-        if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
-            $imageData = file_get_contents($_FILES['file']['tmp_name']);
-        }
+       
         $data = [
-            'image' => $imageData,
             'name' => $_POST['name'],
             'phone' => $_POST['phone'],
             'email' => $_POST['email'],
@@ -67,11 +59,13 @@ class UserController extends BaseController
     }
 }
 
-    function destroy($id)
-    {
-        $this->model->deleteUser($id);
-        $this->redirect('/user');
-    }
+function destroy($id)
+{
+    $this->model->deleteUser($id);
+    $this->redirect('/user');
+}
+
+
 
     public function profile()
     {
@@ -95,6 +89,9 @@ class UserController extends BaseController
             exit; // Use exit to stop further execution
         }
 
-     
+        // Fetch notifications (assuming you have a method in the model)
+        // $notifications = $this->model->getNotifications($_SESSION['user_id']);
+        // header('Content-Type: application/json');
+        // echo json_encode($notifications);
     }
 }
