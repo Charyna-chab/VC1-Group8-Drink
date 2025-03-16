@@ -399,8 +399,8 @@ function updateTotalPrice() {
     const drinkSize = document.getElementById("drinkSize")
     if (!drinkSize) return
 
-    const basePrice = Number.parseFloat(document.getElementById("basePrice") ? .textContent ? .replace("$", "") || 0)
-    const sizePrice = Number.parseFloat(drinkSize.options[drinkSize.selectedIndex] ? .getAttribute("data-price") || 0)
+    const basePrice = Number.parseFloat(document.getElementById("basePrice") ? textContent ? replace("$", "") || 0)
+    const sizePrice = Number.parseFloat(drinkSize.options[drinkSize.selectedIndex] ? getAttribute("data-price") || 0)
 
     let toppingsPrice = 0
     const toppingCheckboxes = document.querySelectorAll('input[name="topping"]:checked, input[name="toppings"]:checked')
