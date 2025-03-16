@@ -6,96 +6,96 @@ class OrderController extends BaseController {
         $products = [
             [
                 'id' => 1,
-                'name' => 'Classic Milk Tea',
-                'description' => 'Our signature milk tea with premium black tea and creamy milk.',
-                'price' => 4.50,
-                'image' => '/assets/images/products/classic-milk-tea.jpg',
+                'name' => 'Brown Sugar',
+                'description' => 'Our signature milk tea made with premium black tea and creamy milk, sweetened with rich brown sugar.',
+                'price' => 1.75,
+                'image' => '/assets/image/products/1.png',
                 'category' => 'milk-tea'
             ],
             [
                 'id' => 2,
-                'name' => 'Taro Milk Tea',
-                'description' => 'Creamy taro flavor blended with our premium milk tea.',
-                'price' => 5.00,
-                'image' => '/assets/images/products/taro-milk-tea.jpg',
+                'name' => 'Brown Sugar & Chocolate',
+                'description' => 'A blend of creamy chocolate and brown sugar syrup, combined with our premium milk tea.',
+                'price' => 2.50,
+                'image' => '/assets/image/products/2.png',
                 'category' => 'milk-tea'
             ],
             [
                 'id' => 3,
-                'name' => 'Matcha Latte',
-                'description' => 'Premium Japanese matcha powder with fresh milk.',
-                'price' => 5.50,
-                'image' => 'assets/image/products/Macha-drink-milk-tea.png',
+                'name' => 'Passion Drink',
+                'description' => 'A refreshing blend of passion fruit flavor and our premium milk tea.',
+                'price' => 2.00,
+                'image' => 'assets/image/products/3.png',
                 'category' => 'milk-tea'
             ],
             [
                 'id' => 4,
-                'name' => 'Brown Sugar Boba Milk',
-                'description' => 'Fresh milk with brown sugar syrup and chewy boba pearls.',
-                'price' => 5.75,
-                'image' => '/assets/images/products/brown-sugar-boba.jpg',
+                'name' => 'No Name Jewels',
+                'description' => 'A creamy milk tea topped with chewy boba pearls and brown sugar syrup.',
+                'price' => 2.75,
+                'image' => '/assets/image/products/4.png',
                 'category' => 'milk-tea'
             ],
             [
                 'id' => 5,
-                'name' => 'Strawberry Fruit Tea',
-                'description' => 'Refreshing tea with fresh strawberry puree and fruit bits.',
-                'price' => 4.75,
-                'image' => '/assets/images/products/strawberry-tea.jpg',
+                'name' => 'Chocolate Cream',
+                'description' => 'Refreshing chocolate cream tea blended with fresh strawberry puree and fruit bits.',
+                'price' => 1.75,
+                'image' => '/assets/image/products/5.png',
                 'category' => 'fruit-tea'
             ],
             [
                 'id' => 6,
-                'name' => 'Mango Fruit Tea',
-                'description' => 'Tropical mango flavor blended with our premium tea.',
-                'price' => 4.75,
-                'image' => '/assets/images/products/mango-tea.jpg',
+                'name' => 'No Name White Jewels',
+                'description' => 'Tropical mango flavor blended with our premium tea, creating a refreshing experience.',
+                'price' => 2.75,
+                'image' => '/assets/image/products/6.png',
                 'category' => 'fruit-tea'
             ],
             [
                 'id' => 7,
-                'name' => 'Lychee Fruit Tea',
-                'description' => 'Sweet lychee flavor with our premium tea and fruit bits.',
+                'name' => 'True Milk Tea',
+                'description' => 'A sweet lychee flavor mixed with premium tea and fruit bits for a delightful treat.',
                 'price' => 4.75,
-                'image' => '/assets/images/products/lychee-tea.jpg',
+                'image' => '/assets/image/products/7.png',
                 'category' => 'fruit-tea'
             ],
             [
                 'id' => 8,
-                'name' => 'Passion Fruit Tea',
-                'description' => 'Tangy passion fruit with our premium tea and fruit bits.',
-                'price' => 4.75,
-                'image' => '/assets/images/products/passion-fruit-tea.jpg',
+                'name' => 'Coffee Cream',
+                'description' => 'Tangy passion fruit flavor blended with our premium tea, topped with a creamy finish.',
+                'price' => 1.75,
+                'image' => '/assets/image/products/coffee-cream.png',
                 'category' => 'fruit-tea'
             ],
             [
                 'id' => 9,
-                'name' => 'Strawberry Smoothie',
-                'description' => 'Creamy smoothie with fresh strawberries and milk.',
-                'price' => 5.50,
-                'image' => '/assets/images/products/strawberry-smoothie.jpg',
+                'name' => 'Milk Tea Matcha',
+                'description' => 'A smooth blend of creamy milk tea and Japanese matcha powder for a refreshing taste.',
+                'price' => 2.50,
+                'image' => '/assets/image/products/milk-tea-macha.png',
                 'category' => 'smoothie'
             ],
             [
                 'id' => 10,
-                'name' => 'Mango Smoothie',
-                'description' => 'Tropical mango smoothie with fresh mango puree and milk.',
-                'price' => 5.50,
-                'image' => '/assets/images/products/mango-smoothie.jpg',
+                'name' => 'Ovaltine Stick Lava',
+                'description' => 'A tropical mango smoothie made with fresh mango puree and creamy milk, topped with Ovaltine.',
+                'price' => 2.50,
+                'image' => '/assets/images/products/Ovaltine-stick-lava.png',
                 'category' => 'smoothie'
             ],
             [
                 'id' => 11,
-                'name' => 'Avocado Smoothie',
-                'description' => 'Creamy avocado smoothie with fresh avocado and milk.',
+                'name' => 'Strawberry Milk Tea',
+                'description' => 'A creamy smoothie made with fresh strawberries and milk for a rich, sweet taste.',
                 'price' => 6.00,
-                'image' => '/assets/images/products/avocado-smoothie.jpg',
+                'image' => '/assets/images/products/strawberry.png',
                 'category' => 'smoothie'
             ],
             [
                 'id' => 12,
                 'name' => 'Blueberry Smoothie',
-                'description' => 'Antioxidant-rich blueberry smoothie with fresh blueberries and milk.',
+                'description' => 'An antioxidant-rich smoothie made with fresh blueberries and milk for a deliciously healthy treat.',
                 'price' => 5.75,
                 'image' => '/assets/images/products/blueberry-smoothie.jpg',
                 'category' => 'smoothie'
@@ -103,7 +103,7 @@ class OrderController extends BaseController {
             [
                 'id' => 13,
                 'name' => 'Americano',
-                'description' => 'Classic espresso diluted with hot water.',
+                'description' => 'A classic espresso, diluted with hot water, offering a simple and strong coffee flavor.',
                 'price' => 3.50,
                 'image' => '/assets/images/products/americano.jpg',
                 'category' => 'coffee'
@@ -111,7 +111,7 @@ class OrderController extends BaseController {
             [
                 'id' => 14,
                 'name' => 'Caramel Macchiato',
-                'description' => 'Espresso with steamed milk and caramel syrup.',
+                'description' => 'Espresso combined with steamed milk and rich caramel syrup, creating a sweet, creamy coffee experience.',
                 'price' => 4.75,
                 'image' => '/assets/images/products/caramel-macchiato.jpg',
                 'category' => 'coffee'
@@ -119,7 +119,7 @@ class OrderController extends BaseController {
             [
                 'id' => 15,
                 'name' => 'Mocha',
-                'description' => 'Espresso with chocolate syrup and steamed milk.',
+                'description' => 'A delightful espresso drink with chocolate syrup and steamed milk for a sweet and smooth taste.',
                 'price' => 4.50,
                 'image' => '/assets/images/products/mocha.jpg',
                 'category' => 'coffee'
@@ -127,7 +127,7 @@ class OrderController extends BaseController {
             [
                 'id' => 16,
                 'name' => 'Vanilla Latte',
-                'description' => 'Espresso with vanilla syrup and steamed milk.',
+                'description' => 'Espresso combined with vanilla syrup and steamed milk for a sweet, comforting coffee.',
                 'price' => 4.50,
                 'image' => '/assets/images/products/vanilla-latte.jpg',
                 'category' => 'coffee'
@@ -135,7 +135,7 @@ class OrderController extends BaseController {
             [
                 'id' => 17,
                 'name' => 'Egg Waffles',
-                'description' => 'Crispy on the outside, fluffy on the inside Hong Kong style egg waffles.',
+                'description' => 'Hong Kong-style egg waffles, crispy on the outside and fluffy on the inside, served fresh.',
                 'price' => 4.00,
                 'image' => '/assets/images/products/egg-waffles.jpg',
                 'category' => 'snacks'
@@ -143,7 +143,7 @@ class OrderController extends BaseController {
             [
                 'id' => 18,
                 'name' => 'Popcorn Chicken',
-                'description' => 'Crispy Taiwanese-style popcorn chicken with special seasoning.',
+                'description' => 'Crispy Taiwanese-style popcorn chicken, seasoned with special spices for a savory snack.',
                 'price' => 5.50,
                 'image' => '/assets/images/products/popcorn-chicken.jpg',
                 'category' => 'snacks'
@@ -151,7 +151,7 @@ class OrderController extends BaseController {
             [
                 'id' => 19,
                 'name' => 'Sweet Potato Fries',
-                'description' => 'Crispy sweet potato fries with special seasoning.',
+                'description' => 'Crispy and delicious sweet potato fries, seasoned with a special blend of spices.',
                 'price' => 4.00,
                 'image' => '/assets/images/products/sweet-potato-fries.jpg',
                 'category' => 'snacks'
@@ -159,12 +159,13 @@ class OrderController extends BaseController {
             [
                 'id' => 20,
                 'name' => 'Cheese Foam Cake',
-                'description' => 'Soft sponge cake topped with our signature cheese foam.',
+                'description' => 'A soft sponge cake topped with our signature cheese foam, creating a creamy and sweet experience.',
                 'price' => 4.50,
                 'image' => '/assets/images/products/cheese-foam-cake.jpg',
                 'category' => 'snacks'
             ]
         ];
+        
         
         $toppings = [
             [
