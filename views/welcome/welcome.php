@@ -1,5 +1,5 @@
-<?php require_once __DIR__ . '/../layouts/header.php'; ?>
-<?php require_once __DIR__ . '/../layouts/sidebar.php'; ?>
+<?php '../layouts/header.php'; ?>
+<?php '../layouts/sidebar.php'; ?>
 
 <section class="content">
     <!-- Discount banner -->
@@ -9,7 +9,7 @@
             <p>Use code: <strong>BOBA20</strong> at checkout</p>
             <button class="btn-primary">Get Voucher</button>
         </div>
-        <img src="/assets/images/discount-banner.png" alt="Discount 20-50%">
+        <img src="/assets/image/discount-banner.png" alt="Discount 20-50%">
     </div>
 
     <!-- Category Section -->
@@ -35,7 +35,7 @@
             <!-- Product Cards (Dynamic Product List) -->
             <div class="product-card" data-category="smoothie">
                 <div class="product-image">
-                    <img src="/assets/images/products/strawberry-smoothie.jpg" alt="Strawberry Smoothie">
+                    <img src="/assets/image/products/milk-tea-macha.png" alt="Strawberry Smoothie">
                 </div>
                 <button class="favorite-btn">
                         <i class="far fa-heart"></i>
@@ -52,7 +52,7 @@
             
             <div class="product-card" data-category="smoothie">
                 <div class="product-image">
-                    <img src="/assets/images/products/mango-smoothie.jpg" alt="Mango Smoothie">
+                    <img src="/assets/image/products/chacolat.png" alt="Mango Smoothie">
                     <button class="favorite-btn">
                         <i class="far fa-heart"></i>
                     </button>
@@ -69,7 +69,7 @@
             
             <div class="product-card" data-category="milk-tea">
                 <div class="product-image">
-                    <img src="/assets/images/products/classic-milk-tea.jpg" alt="Classic Milk Tea">
+                    <img src="/assets/image/products/coffee-cream.png" alt="Classic Milk Tea">
                     <button class="favorite-btn">
                         <i class="far fa-heart"></i>
                     </button>
@@ -86,7 +86,7 @@
             
             <div class="product-card" data-category="milk-tea">
                 <div class="product-image">
-                    <img src="/assets/images/products/taro-milk-tea.jpg" alt="Taro Milk Tea">
+                    <img src="/assets/image/products/1.png" alt="Taro Milk Tea">
                     <button class="favorite-btn">
                         <i class="far fa-heart"></i>
                     </button>
@@ -103,7 +103,7 @@
             
             <div class="product-card" data-category="milk-tea">
                 <div class="product-image">
-                    <img src="/assets/image/products/Macha-drink-milk-tea.png" alt="Matcha Latte">
+                    <img src="/assets/image/products/8.png" alt="Matcha Latte">
                     <button class="favorite-btn">
                         <i class="far fa-heart"></i>
                     </button>
@@ -120,7 +120,7 @@
             
             <div class="product-card" data-category="milk-tea">
                 <div class="product-image">
-                    <img src="/assets/images/products/brown-sugar-boba.jpg" alt="Brown Sugar Boba Milk">
+                    <img src="/assets/image/products/brown.png" alt="Brown Sugar Boba Milk">
                     <button class="favorite-btn">
                         <i class="far fa-heart"></i>
                     </button>
@@ -137,7 +137,7 @@
             
             <div class="product-card" data-category="fruit-tea">
                 <div class="product-image">
-                    <img src="/assets/images/products/strawberry-tea.jpg" alt="Strawberry Fruit Tea">
+                    <img src="/assets/image/products/strawberry.png" alt="Strawberry Fruit Tea">
                     <button class="favorite-btn">
                         <i class="far fa-heart"></i>
                     </button>
@@ -154,7 +154,7 @@
             
             <div class="product-card" data-category="fruit-tea">
                 <div class="product-image">
-                    <img src="/assets/images/products/mango-tea.jpg" alt="Mango Fruit Tea">
+                    <img src="/assets/image/products/2.png" alt="Mango Fruit Tea">
                     <button class="favorite-btn">
                         <i class="far fa-heart"></i>
                     </button>
@@ -171,7 +171,7 @@
             
             <div class="product-card" data-category="coffee">
                 <div class="product-image">
-                    <img src="/assets/images/products/caramel-macchiato.jpg" alt="Caramel Macchiato">
+                    <img src="/assets/image/products/3.png" alt="Caramel Macchiato">
                     <button class="favorite-btn">
                         <i class="far fa-heart"></i>
                     </button>
@@ -188,7 +188,7 @@
             
             <div class="product-card" data-category="snacks">
                 <div class="product-image">
-                    <img src="/assets/images/products/egg-waffles.jpg" alt="Egg Waffles">
+                    <img src="/assets/image/products/4.png" alt="Egg Waffles">
                     <button class="favorite-btn">
                         <i class="far fa-heart"></i>
                     </button>
@@ -205,7 +205,7 @@
             
             <div class="product-card" data-category="snacks">
                 <div class="product-image">
-                    <img src="/assets/images/products/popcorn-chicken.jpg" alt="Popcorn Chicken">
+                    <img src="/assets/image/products/5.png" alt="Popcorn Chicken">
                     <button class="favorite-btn">
                         <i class="far fa-heart"></i>
                     </button>
@@ -222,7 +222,7 @@
             
             <div class="product-card" data-category="smoothie">
                 <div class="product-image">
-                    <img src="/assets/images/products/avocado-smoothie.jpg" alt="Avocado Smoothie">
+                    <img src="/assets/image/products/6.png" alt="Avocado Smoothie">
                     <button class="favorite-btn">
                         <i class="far fa-heart"></i>
                     </button>

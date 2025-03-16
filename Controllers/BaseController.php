@@ -6,7 +6,8 @@ class BaseController{
         ob_start();
         $content = ob_get_clean();
         require_once 'views/layout.php';
-        require_once 'views/'.$views;
+        // require_once 'views/layout-dashboard.php';
+        require_once 'views/'.$views . '.php';
 
     }
     

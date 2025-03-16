@@ -217,7 +217,7 @@ class OrderController extends BaseController {
             $favorites = [1, 4, 9]; // Sample favorite product IDs
         }
         
-        $this->view('order', [
+        $this->views('order', [
             'title' => 'Order Drinks',
             'products' => $products,
             'toppings' => $toppings,
@@ -316,7 +316,7 @@ class OrderController extends BaseController {
             exit;
         }
         
-        $this->view('order_details', [
+        $this->views('order_details', [
             'title' => 'Customize Your Drink',
             'product' => $product,
             'toppings' => $toppings
@@ -395,7 +395,7 @@ class OrderController extends BaseController {
             ]
         ];
         
-        $this->view('cart', [
+        $this->views('cart', [
             'title' => 'Your Cart',
             'cartItems' => $cartItems,
             'subtotal' => 19.00,
