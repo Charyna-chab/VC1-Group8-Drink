@@ -1,5 +1,5 @@
 <?php
-class Router {
+class Routers {
     private $routes = [];
     
     public function addRoute($path, $handler) {
