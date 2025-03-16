@@ -1,567 +1,463 @@
-// Variables for notifications
-let notificationCount = 0
-let bookingCount = 0
-const notifications = []
-let currentProduct = null
-
-// Initialize the page
 document.addEventListener("DOMContentLoaded", () => {
-    // Set up event listeners
-    setupEventListeners()
+    // Mobile Menu Toggle
+    const mobileMenuToggle = document.querySelector(".mobile-menu-toggle")
+    const mobileMenu = document.querySelector(".mobile-menu")
+    const mobileMenuClose = document.querySelector(".mobile-menu-close")
 
-    // Load notifications if user is logged in
-    loadNotifications()
-})
+    if (mobileMenuToggle && mobileMenu && mobileMenuClose) {
+        mobileMenuToggle.addEventListener("click", () => {
+            mobileMenu.classList.add("active")
+        })
 
-// Function to set up event listeners
-function setupEventListeners() {
-    // Search functionality
-    const searchInput = document.getElementById("search")
-    if (searchInput) {
-        searchInput.addEventListener("input", function() {
-            const searchTerm = this.value.toLowerCase()
-            filterProducts(searchTerm, null)
+        mobileMenuClose.addEventListener("click", () => {
+            mobileMenu.classList.remove("active")
         })
     }
 
-    // Category filtering
-    const categoryItems = document.querySelectorAll(".category-item")
-    categoryItems.forEach((item) => {
-        item.addEventListener("click", function() {
-            // Remove active class from all items
-            categoryItems.forEach((cat) => cat.classList.remove("active"))
-                // Add active class to clicked item
-            this.classList.add("active")
+    // DOM Elements
+    const userProfileBtn = document.getElementById("userProfileBtn")
+    const userMenu = document.getElementById("userMenu")
+    const moreMenuBtn = document.getElementById("moreMenuBtn")
+    const moreMenu = document.getElementById("moreMenu")
+    const notificationBtn = document.getElementById("notificationBtn")
+    const notificationPanel = document.getElementById("notificationPanel")
+    const overlay = document.getElementById("overlay")
+    const languageSelector = document.querySelector(".language-selector")
+    const languageDropdown = document.querySelector(".language-dropdown")
+    const languageOptions = document.querySelectorAll(".language-option")
 
-            // Get the selected category
-            const selectedCategory = this.getAttribute("data-category")
+    // Initialize notification count
+    updateNotificationCount()
 
-            // Filter products based on the selected category
-            filterProducts(null, selectedCategory)
+    // User Profile Menu Toggle
+    if (userProfileBtn && userMenu) {
+        userProfileBtn.addEventListener("click", (e) => {
+            e.stopPropagation()
+            userMenu.classList.toggle("active")
+
+            // Close other menus
+            if (moreMenu) moreMenu.classList.remove("active")
+            if (notificationPanel) notificationPanel.classList.remove("active")
+            if (languageDropdown) languageDropdown.classList.remove("active")
+
+            // Toggle overlay
+            toggleOverlay(userMenu.classList.contains("active"))
         })
+    }
+
+    // More Menu Toggle
+    if (moreMenuBtn && moreMenu) {
+        moreMenuBtn.addEventListener("click", (e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            moreMenu.classList.toggle("active")
+
+            // Close other menus
+            if (userMenu) userMenu.classList.remove("active")
+            if (notificationPanel) notificationPanel.classList.remove("active")
+            if (languageDropdown) languageDropdown.classList.remove("active")
+
+            // Toggle overlay
+            toggleOverlay(moreMenu.classList.contains("active"))
+        })
+    }
+
+    // Notification Panel Toggle
+    if (notificationBtn && notificationPanel) {
+        notificationBtn.addEventListener("click", (e) => {
+            e.stopPropagation()
+            notificationPanel.classList.toggle("active")
+
+            // Close other menus
+            if (userMenu) userMenu.classList.remove("active")
+            if (moreMenu) moreMenu.classList.remove("active")
+            if (languageDropdown) languageDropdown.classList.remove("active")
+
+            // Toggle overlay
+            toggleOverlay(notificationPanel.classList.contains("active"))
+
+            // Mark notifications as read
+            if (notificationPanel.classList.contains("active")) {
+                markNotificationsAsRead()
+            }
+        })
+    }
+
+    // Language Selector Toggle
+    if (languageSelector && languageDropdown) {
+        languageSelector.addEventListener("click", (e) => {
+            e.stopPropagation()
+            languageDropdown.classList.toggle("active")
+
+            // Close other menus
+            if (userMenu) userMenu.classList.remove("active")
+            if (moreMenu) moreMenu.classList.remove("active")
+            if (notificationPanel) notificationPanel.classList.remove("active")
+
+            // Toggle overlay
+            toggleOverlay(languageDropdown.classList.contains("active"))
+        })
+    }
+
+    // Language Selection
+    if (languageOptions) {
+        languageOptions.forEach((option) => {
+            option.addEventListener("click", function(e) {
+                e.preventDefault()
+                const lang = this.getAttribute("data-lang")
+                const langText = this.querySelector("span").textContent
+                const langFlag = this.querySelector("img").src
+
+                // Update display
+                document.getElementById("currentLanguage").textContent = langText
+                document.getElementById("currentLanguageFlag").src = langFlag
+
+                // Close dropdown
+                languageDropdown.classList.remove("active")
+                toggleOverlay(false)
+
+                // In a real app, you would update the language preference here
+                // For now, just show a toast notification
+                showToast("Language Changed", `Language changed to ${langText}`, "success")
+            })
+        })
+    }
+
+    // Close menus when clicking outside
+    document.addEventListener("click", (e) => {
+        if (
+            userMenu &&
+            userMenu.classList.contains("active") &&
+            !userMenu.contains(e.target) &&
+            !userProfileBtn.contains(e.target)
+        ) {
+            userMenu.classList.remove("active")
+            toggleOverlay(false)
+        }
+
+        if (
+            moreMenu &&
+            moreMenu.classList.contains("active") &&
+            !moreMenu.contains(e.target) &&
+            !moreMenuBtn.contains(e.target)
+        ) {
+            moreMenu.classList.remove("active")
+            toggleOverlay(false)
+        }
+
+        if (
+            notificationPanel &&
+            notificationPanel.classList.contains("active") &&
+            !notificationPanel.contains(e.target) &&
+            !notificationBtn.contains(e.target)
+        ) {
+            notificationPanel.classList.remove("active")
+            toggleOverlay(false)
+        }
+
+        if (
+            languageDropdown &&
+            languageDropdown.classList.contains("active") &&
+            !languageDropdown.contains(e.target) &&
+            !languageSelector.contains(e.target)
+        ) {
+            languageDropdown.classList.remove("active")
+            toggleOverlay(false)
+        }
     })
 
-    // Favorite buttons
-    const favButtons = document.querySelectorAll(".fav-btn")
-    favButtons.forEach((button) => {
-        button.addEventListener("click", function(event) {
-            event.stopPropagation() // Prevent triggering dish-item click event
-            this.classList.toggle("favorited")
+    // Overlay click handler
+    if (overlay) {
+        overlay.addEventListener("click", () => {
+            // Close all menus
+            if (userMenu) userMenu.classList.remove("active")
+            if (moreMenu) moreMenu.classList.remove("active")
+            if (notificationPanel) notificationPanel.classList.remove("active")
+            if (languageDropdown) languageDropdown.classList.remove("active")
 
-            // Visual feedback
-            if (this.classList.contains("favorited")) {
-                this.style.transform = "scale(1.2)"
-                setTimeout(() => {
-                    this.style.transform = "scale(1)"
-                }, 200)
+            // Hide overlay
+            toggleOverlay(false)
+        })
+    }
+
+    // Toggle overlay visibility
+    function toggleOverlay(show) {
+        if (overlay) {
+            if (show) {
+                overlay.classList.add("active")
+            } else {
+                overlay.classList.remove("active")
+            }
+        }
+    }
+
+    // Update notification count
+    function updateNotificationCount() {
+        const badge = document.getElementById("notificationBadge")
+        const bookingBadge = document.getElementById("bookingBadge")
+
+        // In a real app, you would fetch the notification count from the server
+        // For now, just use a random number
+        const count = Math.floor(Math.random() * 5)
+
+        if (badge) {
+            badge.textContent = count
+            badge.style.display = count > 0 ? "flex" : "none"
+        }
+
+        if (bookingBadge) {
+            bookingBadge.textContent = count
+            bookingBadge.style.display = count > 0 ? "flex" : "none"
+        }
+    }
+
+    // Mark notifications as read
+    function markNotificationsAsRead() {
+        const badge = document.getElementById("notificationBadge")
+
+        // In a real app, you would send a request to the server to mark notifications as read
+        // For now, just hide the badge
+        if (badge) {
+            badge.textContent = "0"
+            badge.style.display = "none"
+        }
+
+        // Update the notification list
+        const notificationList = document.getElementById("notificationList")
+        if (notificationList) {
+            // In a real app, you would fetch the notifications from the server
+            // For now, just show a message
+            notificationList.innerHTML = `
+                  <div class="empty-notification">
+                      <i class="fas fa-bell-slash"></i>
+                      <p>No new notifications</p>
+                  </div>
+              `
+        }
+    }
+
+    // Show toast notification
+    function showToast(title, message, type = "info", image = null) {
+        // Create toast container if it doesn't exist
+        let toastContainer = document.getElementById("toastContainer")
+        if (!toastContainer) {
+            toastContainer = document.createElement("div")
+            toastContainer.id = "toastContainer"
+            toastContainer.className = "toast-container"
+            document.body.appendChild(toastContainer)
+        }
+
+        // Create toast element
+        const toast = document.createElement("div")
+        toast.className = "toast"
+
+        // Set icon based on type
+        let icon = "info-circle"
+        if (type === "success") {
+            icon = "check-circle"
+            toast.style.borderLeftColor = "#4caf50"
+        } else if (type === "error") {
+            icon = "exclamation-circle"
+            toast.style.borderLeftColor = "#f44336"
+        } else if (type === "warning") {
+            icon = "exclamation-triangle"
+            toast.style.borderLeftColor = "#ff9800"
+        }
+
+        let imageElement = ""
+        if (image) {
+            imageElement = `<img src="${image}" alt="Toast Image" style="width: 30px; height: 30px; margin-right: 10px;">`
+        } else {
+            imageElement = `<div>
+                  <i class="fas fa-${icon}" style="color: ${type === "success" ? "#4caf50" : type === "error" ? "#f44336" : type === "warning" ? "#ff9800" : "#ff5e62"}; font-size: 20px; margin-right: 10px;"></i>
+              </div>`
+        }
+
+        // Set toast content
+        toast.innerHTML = `
+              ${imageElement}
+              <div style="flex: 1;">
+                  <h4>${title}</h4>
+                  <p>${message}</p>
+              </div>
+              <button class="toast-close">&times;</button>
+          `
+
+        // Add to container
+        toastContainer.appendChild(toast)
+
+        // Add close button functionality
+        const closeButton = toast.querySelector(".toast-close")
+        closeButton.addEventListener("click", () => {
+            toast.remove()
+        })
+
+        // Auto remove after 5 seconds
+        setTimeout(() => {
+            toast.style.opacity = "0"
+            setTimeout(() => {
+                toast.remove()
+            }, 300)
+        }, 5000)
+    }
+
+    // Toast Notification
+    const closeToast = document.querySelector(".close-toast")
+    const toastNotification = document.getElementById("toastNotification")
+
+    if (closeToast && toastNotification) {
+        closeToast.addEventListener("click", () => {
+            toastNotification.classList.remove("active")
+        })
+    }
+
+    // Function to show toast notification
+
+    // Order Panel
+    const orderBtn = document.querySelector(".order-btn")
+    const orderPanel = document.getElementById("orderPanel")
+    const closeOrderBtn = orderPanel ? orderPanel.querySelector(".close-btn") : null
+
+    if (orderBtn && orderPanel && closeOrderBtn) {
+        orderBtn.addEventListener("click", () => {
+            orderPanel.classList.add("active")
+            overlay.classList.add("active")
+        })
+
+        closeOrderBtn.addEventListener("click", () => {
+            orderPanel.classList.remove("active")
+            overlay.classList.remove("active")
+        })
+    }
+
+    // Product Quantity Controls
+    const quantityMinusButtons = document.querySelectorAll(".quantity-btn.minus")
+    const quantityPlusButtons = document.querySelectorAll(".quantity-btn.plus")
+
+    if (quantityMinusButtons.length > 0 && quantityPlusButtons.length > 0) {
+        quantityMinusButtons.forEach((button) => {
+            button.addEventListener("click", function() {
+                const input = this.nextElementSibling
+                let value = Number.parseInt(input.value)
+                if (value > 1) {
+                    value--
+                    input.value = value
+                }
+            })
+        })
+
+        quantityPlusButtons.forEach((button) => {
+            button.addEventListener("click", function() {
+                const input = this.previousElementSibling
+                let value = Number.parseInt(input.value)
+                if (value < 10) {
+                    value++
+                    input.value = value
+                }
+            })
+        })
+    }
+
+    // Form Validation
+    const forms = document.querySelectorAll("form")
+
+    forms.forEach((form) => {
+        form.addEventListener("submit", (e) => {
+            const requiredFields = form.querySelectorAll("[required]")
+            let isValid = true
+
+            requiredFields.forEach((field) => {
+                if (!field.value.trim()) {
+                    isValid = false
+                    field.classList.add("error")
+                } else {
+                    field.classList.remove("error")
+                }
+            })
+
+            // Password confirmation validation
+            const password = form.querySelector("#password")
+            const confirmPassword = form.querySelector("#confirm_password")
+
+            if (password && confirmPassword) {
+                if (password.value !== confirmPassword.value) {
+                    isValid = false
+                    confirmPassword.classList.add("error")
+                    alert("Passwords do not match")
+                }
+            }
+
+            if (!isValid) {
+                e.preventDefault()
             }
         })
     })
+})
 
-    // Order buttons
-    const orderButtons = document.querySelectorAll(".book-btn")
-    orderButtons.forEach((button) => {
-        button.addEventListener("click", function(event) {
-            event.stopPropagation() // Prevent triggering dish-item click event
+// Function to update total price in order panel
+function updateTotalPrice() {
+    const drinkSize = document.getElementById("drinkSize")
+    if (!drinkSize) return
 
-            // Get product data from data attributes
-            const productId = this.getAttribute("data-id")
-            const productName = this.getAttribute("data-name")
-            const productPrice = Number.parseFloat(this.getAttribute("data-price"))
-            const productImage = this.getAttribute("data-image")
+    const basePrice = Number.parseFloat(document.getElementById("basePrice") ? textContent ? replace("$", "") || 0)
+    const sizePrice = Number.parseFloat(drinkSize.options[drinkSize.selectedIndex] ? getAttribute("data-price") || 0)
 
-            // Open order panel with product data
-            openOrderPanel(productId, productName, productPrice, productImage)
-        })
-    })
+    let toppingsPrice = 0
+    const toppingCheckboxes = document.querySelectorAll('input[name="topping"]:checked, input[name="toppings"]:checked')
 
-    // Size select change
-    const sizeSelect = document.getElementById("drinkSize")
-    if (sizeSelect) {
-        sizeSelect.addEventListener("change", updatePrice)
-    }
-
-    // Topping checkboxes
-    const toppingCheckboxes = document.querySelectorAll('#toppings input[type="checkbox"]')
     toppingCheckboxes.forEach((checkbox) => {
-        checkbox.addEventListener("change", updatePrice)
+        toppingsPrice += Number.parseFloat(checkbox.getAttribute("data-price") || 0.85)
     })
 
-    // Close order panel button
-    const closeOrderBtn = document.querySelector(".order-panel .close-btn")
-    if (closeOrderBtn) {
-        closeOrderBtn.addEventListener("click", closeOrderPanel)
-    }
+    const totalPrice = basePrice + sizePrice + toppingsPrice
+    const sizePriceElement = document.getElementById("sizePrice")
+    const toppingsPriceElement = document.getElementById("toppingsPrice")
+    const totalPriceElement = document.getElementById("totalPrice")
 
-    // Confirm order button
-    const confirmBtn = document.querySelector(".confirm-btn")
-    if (confirmBtn) {
-        confirmBtn.addEventListener("click", placeOrder)
-    }
+    if (sizePriceElement) sizePriceElement.textContent = "$" + sizePrice.toFixed(2)
+    if (toppingsPriceElement) toppingsPriceElement.textContent = "$" + toppingsPrice.toFixed(2)
+    if (totalPriceElement) totalPriceElement.textContent = "$" + totalPrice.toFixed(2)
+}
 
-    // Toggle notification panel button
-    const notificationBtn = document.getElementById("notificationBtn")
-    if (notificationBtn) {
-        notificationBtn.addEventListener("click", toggleNotificationPanel)
-    }
-
-    // User profile button
-    const userProfileBtn = document.getElementById("userProfileBtn")
-    if (userProfileBtn) {
-        userProfileBtn.addEventListener("click", toggleUserMenu)
-    }
-
-    // More menu button
-    const moreMenuBtn = document.getElementById("moreMenuBtn")
-    if (moreMenuBtn) {
-        moreMenuBtn.addEventListener("click", (event) => {
-            event.preventDefault()
-            toggleMoreMenu()
-        })
-    }
-
-    // Language selector
-    const languageOptions = document.querySelectorAll(".language-option")
-    languageOptions.forEach((option) => {
-        option.addEventListener("click", function() {
-            const lang = this.getAttribute("data-lang")
-            changeLanguage(lang)
-        })
-    })
-
-    // Overlay click event
+// Function to open booking panel with product details
+function openBookingPanel(productId, productName, productPrice, productImage) {
+    const bookingPanel = document.getElementById("bookingPanel")
     const overlay = document.getElementById("overlay")
-    if (overlay) {
-        overlay.addEventListener("click", () => {
-            // Close all panels
-            closeOrderPanel()
-            closeUserMenu()
-            closeMoreMenu()
-            closeNotificationPanel()
-        })
-    }
+    const productNameElement = document.getElementById("productName")
+    const productPriceElement = document.getElementById("productPrice")
+    const productImageElement = document.getElementById("productImage")
+    const basePriceElement = document.getElementById("basePrice")
+    const totalPriceElement = document.getElementById("totalPrice")
 
-    // Close toast button
-    const closeToastBtn = document.querySelector(".close-toast")
-    if (closeToastBtn) {
-        closeToastBtn.addEventListener("click", closeToast)
-    }
-}
+    if (bookingPanel && overlay) {
+        if (productNameElement) productNameElement.textContent = productName
+        if (productPriceElement) productPriceElement.textContent = "$" + productPrice.toFixed(2)
+        if (productImageElement) productImageElement.src = productImage
+        if (basePriceElement) basePriceElement.textContent = "$" + productPrice.toFixed(2)
+        if (totalPriceElement) totalPriceElement.textContent = "$" + productPrice.toFixed(2)
 
-// Function to open order panel
-function openOrderPanel(productId, name, price, image) {
-    currentProduct = {
-        id: productId,
-        name: name,
-        price: Number.parseFloat(price),
-        image: image,
-    }
+        bookingPanel.classList.add("active")
+        overlay.classList.add("active")
 
-    // Update product info
-    document.getElementById("productImage").src = image
-    document.getElementById("productName").textContent = name
-    document.getElementById("productPrice").textContent = `$${price}`
-    document.getElementById("basePrice").textContent = `$${price}`
-    document.getElementById("totalPrice").textContent = `$${price}`
-
-    // Reset selections
-    document.getElementById("drinkSize").selectedIndex = 0
-    document.getElementById("sugarLevel").selectedIndex = 0
-    document.querySelectorAll('#toppings input[type="checkbox"]').forEach((cb) => (cb.checked = false))
-
-    // Reset prices
-    document.getElementById("sizePrice").textContent = "$0.00"
-    document.getElementById("toppingsPrice").textContent = "$0.00"
-
-    // Show panel
-    document.getElementById("orderPanel").classList.add("active")
-    document.getElementById("overlay").style.display = "block"
-}
-
-// Function to close order panel
-function closeOrderPanel() {
-    document.getElementById("orderPanel").classList.remove("active")
-    document.getElementById("overlay").style.display = "none"
-    currentProduct = null
-}
-
-// Function to update price
-function updatePrice() {
-    if (!currentProduct) return
-
-    let total = currentProduct.price
-
-    // Add size price
-    const sizeSelect = document.getElementById("drinkSize")
-    const sizePrice = Number.parseFloat(sizeSelect.options[sizeSelect.selectedIndex].dataset.price)
-    total += sizePrice
-
-    // Add toppings price
-    const selectedToppings = document.querySelectorAll('#toppings input[type="checkbox"]:checked')
-    const toppingsPrice = selectedToppings.length * 0.85
-    total += toppingsPrice
-
-    // Update summary
-    document.getElementById("sizePrice").textContent = `$${sizePrice.toFixed(2)}`
-    document.getElementById("toppingsPrice").textContent = `$${toppingsPrice.toFixed(2)}`
-    document.getElementById("totalPrice").textContent = `$${total.toFixed(2)}`
-}
-
-// Combined function to filter products by search term and/or category
-function filterProducts(searchTerm, category) {
-    const dishes = document.querySelectorAll(".dish-item")
-    let productFound = false
-    const noProductMessage = document.getElementById("no-product-message")
-
-    dishes.forEach((dish) => {
-        const dishName = dish.querySelector("h4").textContent.toLowerCase()
-        const dishDescription = dish.querySelector("p").textContent.toLowerCase()
-        const dishCategory = dish.getAttribute("data-category")
-
-        // Check if the dish matches both search term and category (if provided)
-        const matchesSearch = !searchTerm || dishName.includes(searchTerm) || dishDescription.includes(searchTerm)
-        const matchesCategory = !category || category === "all" || dishCategory === category
-
-        if (matchesSearch && matchesCategory) {
-            dish.style.display = "block"
-            productFound = true
-        } else {
-            dish.style.display = "none"
-        }
-    })
-
-    // Show "No product found" message if no products are matched
-    if (noProductMessage) {
-        if (!productFound) {
-            noProductMessage.style.display = "block"
-        } else {
-            noProductMessage.style.display = "none"
-        }
+        updateTotalPrice()
     }
 }
 
-// Function to toggle notification panel
-function toggleNotificationPanel() {
-    const panel = document.getElementById("notificationPanel")
+// Function to close booking panel
+function closeBookingPanel() {
+    const bookingPanel = document.getElementById("bookingPanel")
     const overlay = document.getElementById("overlay")
 
-    if (panel) {
-        panel.classList.toggle("active")
-
-        if (panel.classList.contains("active")) {
-            if (overlay) overlay.style.display = "block"
-                // Reset notification count when panel is opened
-            resetNotificationCount()
-
-            // Close other menus
-            closeUserMenu()
-            closeMoreMenu()
-        } else {
-            if (overlay) overlay.style.display = "none"
-        }
-    }
-}
-
-// Function to close notification panel
-function closeNotificationPanel() {
-    const panel = document.getElementById("notificationPanel")
-    if (panel) {
-        panel.classList.remove("active")
-    }
-}
-
-// Function to toggle user menu
-function toggleUserMenu() {
-    const userMenu = document.getElementById("userMenu")
-    const overlay = document.getElementById("overlay")
-
-    if (userMenu) {
-        userMenu.classList.toggle("active")
-
-        if (userMenu.classList.contains("active")) {
-            if (overlay) overlay.style.display = "block"
-
-            // Close other menus
-            closeNotificationPanel()
-            closeMoreMenu()
-        } else {
-            if (overlay) overlay.style.display = "none"
-        }
-    }
-}
-
-// Function to close user menu
-function closeUserMenu() {
-    const userMenu = document.getElementById("userMenu")
-    if (userMenu) {
-        userMenu.classList.remove("active")
-    }
-}
-
-// Function to toggle more menu
-function toggleMoreMenu() {
-    const moreMenu = document.getElementById("moreMenu")
-    const overlay = document.getElementById("overlay")
-
-    if (moreMenu) {
-        moreMenu.classList.toggle("active")
-
-        if (moreMenu.classList.contains("active")) {
-            if (overlay) overlay.style.display = "block"
-
-            // Close other menus
-            closeNotificationPanel()
-            closeUserMenu()
-        } else {
-            if (overlay) overlay.style.display = "none"
-        }
-    }
-}
-
-// Function to close more menu
-function closeMoreMenu() {
-    const moreMenu = document.getElementById("moreMenu")
-    if (moreMenu) {
-        moreMenu.classList.remove("active")
-    }
-}
-
-// Function to change language
-function changeLanguage(lang) {
-    const currentLanguage = document.getElementById("currentLanguage")
-    const currentLanguageFlag = document.getElementById("currentLanguageFlag")
-
-    if (currentLanguage && currentLanguageFlag) {
-        // Update language display
-        switch (lang) {
-            case "en":
-                currentLanguage.textContent = "English"
-                currentLanguageFlag.src = "/assets/images/flags/en.png"
-                break
-            case "zh":
-                currentLanguage.textContent = "中文"
-                currentLanguageFlag.src = "/assets/images/flags/zh.png"
-                break
-            case "es":
-                currentLanguage.textContent = "Español"
-                currentLanguageFlag.src = "/assets/images/flags/es.png"
-                break
-            case "fr":
-                currentLanguage.textContent = "Français"
-                currentLanguageFlag.src = "/assets/images/flags/fr.png"
-                break
-            case "ja":
-                currentLanguage.textContent = "日本語"
-                currentLanguageFlag.src = "/assets/images/flags/ja.png"
-                break
-        }
-
-        // In a real application, you would reload the page or fetch translations
-        // For demo purposes, we'll just show a toast
-        showToast(
-            "Language Changed",
-            `The language has been changed to ${currentLanguage.textContent}`,
-            currentLanguageFlag.src,
-        )
-    }
-}
-
-// Function to update notification badge
-function updateNotificationBadge() {
-    const badge = document.getElementById("notificationBadge")
-    if (badge) {
-        badge.textContent = notificationCount
-
-        if (notificationCount > 0) {
-            badge.classList.add("active")
-        } else {
-            badge.classList.remove("active")
-        }
-    }
-}
-
-// Function to update booking badge
-function updateBookingBadge() {
-    const badge = document.getElementById("bookingBadge")
-    if (badge) {
-        badge.textContent = bookingCount
-
-        if (bookingCount > 0) {
-            badge.classList.add("active")
-        } else {
-            badge.classList.remove("active")
-        }
-    }
-}
-
-// Function to reset notification count
-function resetNotificationCount() {
-    notificationCount = 0
-    updateNotificationBadge()
-}
-
-// Function to load notifications from server
-function loadNotifications() {
-    // For demo purposes, we'll add some sample notifications
-    addNotification("Order: Taro Milk Tea", "Medium-Size, 50% Sugar with Pearl, Cream - $5.35", "/assets/images/taro.jpg")
-
-    addNotification(
-        "Order: Brown Sugar Boba",
-        "Large-Size, 75% Sugar with Pearl - $6.85",
-        "/assets/images/brown-sugar.jpg",
-    )
-
-    /* In a real application, you would use AJAX:
-      fetch('/user/notifications')
-          .then(response => response.json())
-          .then(data => {
-              if (data.success) {
-                  notifications = data.notifications;
-                  notificationCount = notifications.length;
-                  bookingCount = notifications.length;
-                  
-                  updateNotificationBadge();
-                  updateBookingBadge();
-                  updateNotificationList();
-              }
-          })
-          .catch(error => console.error('Error loading notifications:', error));
-      */
-}
-
-// Function to add notification
-function addNotification(title, message, image) {
-    // Increment notification count
-    notificationCount++
-    bookingCount++
-
-    // Update badges
-    updateNotificationBadge()
-    updateBookingBadge()
-
-    // Create notification object
-    const notification = {
-        id: Date.now(),
-        title: title,
-        message: message,
-        image: image,
-        time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-    }
-
-    // Add to notifications array
-    notifications.unshift(notification)
-
-    // Update notification list
-    updateNotificationList()
-
-    // Show toast notification
-    showToast(title, message, image)
-}
-
-// Function to update notification list
-function updateNotificationList() {
-    const notificationList = document.getElementById("notificationList")
-    if (!notificationList) return
-
-    if (notifications.length === 0) {
-        notificationList.innerHTML = `
-        <div class="empty-notification">
-            <i class="fas fa-bell-slash"></i>
-            <p>No notifications yet</p>
-        </div>
-        `
-        return
-    }
-
-    let html = ""
-    notifications.forEach((notification) => {
-        html += `
-        <div class="notification-item" id="notification-${notification.id}">
-            <img src="${notification.image}" alt="${notification.title}">
-            <div class="notification-content">
-                <h4>${notification.title}</h4>
-                <p>${notification.message}</p>
-                <span class="time">${notification.time}</span>
-            </div>
-            <div class="close-notification" onclick="removeNotification(${notification.id})">×</div>
-        </div>
-        `
-    })
-
-    notificationList.innerHTML = html
-}
-
-// Function to remove notification
-function removeNotification(id) {
-    // Find index of notification
-    const index = notifications.findIndex((n) => n.id === id)
-
-    if (index !== -1) {
-        // Remove notification from array
-        notifications.splice(index, 1)
-
-        // Update notification list
-        updateNotificationList()
-    }
-}
-
-// Function to show toast notification
-function showToast(title, message, image) {
-    const toast = document.getElementById("toastNotification")
-    const toastTitle = document.getElementById("toastTitle")
-    const toastMessage = document.getElementById("toastMessage")
-    const toastImage = document.getElementById("toastImage")
-
-    if (!toast || !toastTitle || !toastMessage || !toastImage) return
-
-    // Set content
-    toastTitle.textContent = title
-    toastMessage.textContent = message
-    toastImage.src = image
-
-    // Show toast
-    toast.classList.add("active")
-
-    // Auto hide after 5 seconds
-    setTimeout(() => {
-        closeToast()
-    }, 5000)
-}
-
-// Function to close toast
-function closeToast() {
-    const toast = document.getElementById("toastNotification")
-    if (toast) {
-        toast.classList.remove("active")
+    if (bookingPanel && overlay) {
+        bookingPanel.classList.remove("active")
+        overlay.classList.remove("active")
     }
 }
 
 // Function to place order
 function placeOrder() {
-    // Get selected options
-    const size = document.getElementById("drinkSize").value
-    const sugarLevel = document.getElementById("sugarLevel").value
-
-    // Get selected toppings
-    const selectedToppings = document.querySelectorAll('#toppings input[type="checkbox"]:checked')
-    const toppings = Array.from(selectedToppings).map((checkbox) => checkbox.value)
-
-    // Get total price
-    const totalPrice = document.getElementById("totalPrice").textContent
-
-    // Create order summary
-    let orderSummary = `${size}, ${sugarLevel} Sugar`
-    if (toppings.length > 0) {
-        orderSummary += ` with ${toppings.join(", ")}`
-    }
-    orderSummary += ` - ${totalPrice}`
-
-    // Add notification
-    addNotification(`Order: ${currentProduct.name}`, orderSummary, currentProduct.image)
-
-    // Close order panel
-    closeOrderPanel()
-
-    // Show confirmation toast
-    showToast("Order Confirmed", `Your ${currentProduct.name} has been added to cart`, currentProduct.image)
+    // In a real app, you would send the order data to the server
+    // For now, just show a success message
+    closeBookingPanel()
+    showToast("Order Placed", "Your order has been placed successfully!", "success", "/assets/images/success.png")
 }

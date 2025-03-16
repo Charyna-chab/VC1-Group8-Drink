@@ -11,12 +11,12 @@
 </head>
 
 <body>
-    <?php include 'views/partials/header.php'; ?>
+    <?php include __DIR__ . '/../partials/header.php'; ?>
 
     <div class="auth-container">
         <div class="auth-form-container">
             <div class="auth-header">
-                <img src="/placeholder.svg?height=80&width=80" alt="XING FU CHA Logo">
+                <img src="/assets/images/logo/logo.png" alt="XING FU CHA Logo">
                 <h2>Create Account</h2>
                 <p>Join us and enjoy our delicious boba tea</p>
             </div>

@@ -89,7 +89,7 @@ nav ul li a:hover {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.order-btn {
+.order-search {
     background: #ff3b30;
     color: white;
     padding: 12px 20px;
@@ -716,14 +716,18 @@ main {
     text-align: center;
     color: white;
     font-weight: bold;
-    height: 140px;
+    height: 160px;
+    /* Full screen height */
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 20px;
-    border-radius: 16px;
-    margin-bottom: 25px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+    /* Remove border-radius for full-screen effect */
+    box-shadow: none;
+    /* Remove shadow for a cleaner look */
+    width: 180%;
+    /* Full screen width */
 }
 
 .discount-banner h2 {
@@ -781,6 +785,7 @@ main {
 .search-container {
     position: relative;
     width: 300px;
+    left: 550px;
 }
 
 #search {
@@ -806,6 +811,11 @@ main {
     transform: translateY(-50%);
     color: #aaa;
     font-size: 16px;
+}
+
+.search-container .fa-search {
+    position: absolute;
+    left: 220px;
 }
 
 
@@ -1284,7 +1294,7 @@ main {
 }
 
 .upgrade-box button {
-    background-color: #007bff;
+    background-color: #ffa600;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -1293,7 +1303,7 @@ main {
 }
 
 .upgrade-box button:hover {
-    background-color: #0056b3;
+    background-color: #ff6f00;
 }
 
 
@@ -1382,6 +1392,14 @@ main {
     }
 }
 
+
+/* Sticky Sidebar */
+
+.sidebar {
+    position: sticky;
+    top: 20px;
+}
+
 @media (max-width: 576px) {
     nav ul {
         flex-wrap: wrap;
@@ -1417,7 +1435,3 @@ main {
         grid-template-columns: 1fr;
     }
 }
-
-
-
-

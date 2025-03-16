@@ -1,4 +1,10 @@
-<?php require_once 'views/layout/header.php' ?>
-<?php require_once 'views/layout/nav.php' ?>
-<?php $content ?>
-<?php require_once 'views/layout/footer.php' ?>
+<?php require_once('layouts/header.php'); ?>
+<?php require_once('layouts/navbar.php'); ?>
+<?php require_once('layouts/sidebar.php'); ?>
+
+<main class="main-content">
+    <?= $content; ?>
+</main>
+
+<?php require_once('layouts/footer.php'); ?>
+
