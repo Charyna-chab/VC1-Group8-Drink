@@ -236,13 +236,13 @@ document.addEventListener("DOMContentLoaded", () => {
         const toast = document.createElement("div")
         toast.className = `toast ${type}`
         toast.innerHTML = `
-            <i class="toast-icon fas fa-${type === "success" ? "check-circle" : type === "error" ? "exclamation-circle" : "info-circle"}"></i>
-            <div class="toast-content">
-                <div class="toast-title">${title}</div>
-                <div class="toast-message">${message}</div>
-            </div>
-            <button class="toast-close">&times;</button>
-        `
+              <i class="toast-icon fas fa-${type === "success" ? "check-circle" : type === "error" ? "exclamation-circle" : "info-circle"}"></i>
+              <div class="toast-content">
+                  <div class="toast-title">${title}</div>
+                  <div class="toast-message">${message}</div>
+              </div>
+              <button class="toast-close">&times;</button>
+          `
 
         toastContainer.appendChild(toast)
 

@@ -1,7 +1,8 @@
-<div id="notificationPanel" class="notification-panel">
+<!-- Notification Panel -->
+<div class="notification-panel" id="notificationPanel">
+    <button class="close-btn" onclick="toggleNotificationPanel()">×</button>
     <h3>Notifications</h3>
-    <div id="notificationList" class="notification-list">
-        <!-- Notifications will be dynamically added here -->
+    <div class="notification-list" id="notificationList">
         <div class="empty-notification">
             <i class="fas fa-bell-slash"></i>
             <p>No notifications yet</p>
@@ -9,3 +10,5 @@
     </div>
 </div>
 
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>

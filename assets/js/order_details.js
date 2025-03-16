@@ -1,138 +1,145 @@
-// public/assets/js/order.js
-document.addEventListener('DOMContentLoaded', function() {
-    // Product search functionality
-    const searchInput = document.getElementById('productSearch');
-    if (searchInput) {
-        searchInput.addEventListener('input', function() {
-            const searchTerm = this.value.toLowerCase();
-            const productCards = document.querySelectorAll('.product-card');
+document.addEventListener("DOMContentLoaded", () => {
+    // DOM Elements
+    const customizeForm = document.getElementById("customizeForm")
+    const cancelOrderButton = document.getElementById("cancelOrder")
+    const quantityInput = document.querySelector('input[name="quantity"]')
+    const minusBtn = document.querySelector(".minus-btn")
+    const plusBtn = document.querySelector(".plus-btn")
 
-            productCards.forEach(card => {
-                const productName = card.querySelector('h3').textContent.toLowerCase();
-                const productDesc = card.querySelector('p').textContent.toLowerCase();
+    // Price elements
+    const priceElements = document.querySelectorAll("input[data-price]")
+    const totalPriceElement = document.querySelector(".price-value")
 
-                if (productName.includes(searchTerm) || productDesc.includes(searchTerm)) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        });
+    // Base price from the product
+    const basePrice = Number.parseFloat(totalPriceElement.textContent.replace("$", ""))
+
+    // Create toast container if it doesn't exist
+    let toastContainer = document.getElementById("toastContainer")
+    if (!toastContainer) {
+        toastContainer = document.createElement("div")
+        toastContainer.id = "toastContainer"
+        toastContainer.className = "toast-container"
+        document.body.appendChild(toastContainer)
     }
 
-    // Category filter functionality
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    if (filterButtons.length > 0) {
-        filterButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                // Remove active class from all buttons
-                filterButtons.forEach(btn => btn.classList.remove('active'));
+    // Quantity buttons
+    minusBtn.addEventListener("click", () => {
+        const quantity = Number.parseInt(quantityInput.value)
+        if (quantity > 1) {
+            quantityInput.value = quantity - 1
+            updateTotalPrice()
+        }
+    })
 
-                // Add active class to clicked button
-                this.classList.add('active');
+    plusBtn.addEventListener("click", () => {
+        const quantity = Number.parseInt(quantityInput.value)
+        if (quantity < 10) {
+            quantityInput.value = quantity + 1
+            updateTotalPrice()
+        }
+    })
 
-                // Filter products by category
-                const category = this.getAttribute('data-category');
-                const productCards = document.querySelectorAll('.product-card');
+    // Update total price when options change
+    priceElements.forEach((element) => {
+        element.addEventListener("change", updateTotalPrice)
+    })
 
-                productCards.forEach(card => {
-                    if (category === 'all') {
-                        card.style.display = 'block';
-                    } else {
-                        // In a real application, you would add data-category attributes to your product cards
-                        // For now, we'll just show all products
-                        card.style.display = 'block';
-                    }
-                });
-            });
-        });
+    quantityInput.addEventListener("change", function() {
+        // Ensure quantity is between 1 and 10
+        const quantity = Number.parseInt(this.value)
+        if (isNaN(quantity) || quantity < 1) {
+            this.value = 1
+        } else if (quantity > 10) {
+            this.value = 10
+        }
+        updateTotalPrice()
+    })
+
+    // Calculate and update total price
+    function updateTotalPrice() {
+        // Get size price
+        const selectedSize = document.querySelector('input[name="size"]:checked')
+        const sizePrice = selectedSize ? Number.parseFloat(selectedSize.dataset.price) : 0
+
+        // Get toppings price
+        let toppingsPrice = 0
+        const selectedToppings = document.querySelectorAll('input[name="toppings[]"]:checked')
+        selectedToppings.forEach((topping) => {
+            toppingsPrice += Number.parseFloat(topping.dataset.price)
+        })
+
+        // Get quantity
+        const quantity = Number.parseInt(quantityInput.value)
+
+        // Calculate total
+        const total = (basePrice + sizePrice + toppingsPrice) * quantity
+
+        // Update total price display
+        totalPriceElement.textContent = "$" + total.toFixed(2)
     }
 
-    // Favorite button functionality
-    const favoriteButtons = document.querySelectorAll('.favorite-btn');
-    favoriteButtons.forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            const icon = this.querySelector('i');
+    // Cancel order button
+    cancelOrderButton.addEventListener("click", () => {
+        window.location.href = "/order"
+    })
 
-            if (icon.classList.contains('far')) {
-                icon.classList.remove('far');
-                icon.classList.add('fas');
-                // In a real application, you would send an AJAX request to add to favorites
-            } else {
-                icon.classList.remove('fas');
-                icon.classList.add('far');
-                // In a real application, you would send an AJAX request to remove from favorites
-            }
-        });
-    });
+    // Handle form submission
+    customizeForm.addEventListener("submit", function(e) {
+        e.preventDefault()
 
-    // Order details page functionality
-    const orderForm = document.getElementById('orderForm');
-    if (orderForm) {
-        // Quantity controls
-        const minusBtn = document.querySelector('.minus-btn');
-        const plusBtn = document.querySelector('.plus-btn');
-        const quantityInput = document.querySelector('input[name="quantity"]');
+        // Get form data
+        const formData = new FormData(this)
 
-        minusBtn.addEventListener('click', function() {
-            let quantity = parseInt(quantityInput.value);
-            if (quantity > 1) {
-                quantityInput.value = quantity - 1;
-                updateTotalPrice();
-            }
-        });
+        // In a real application, you would send this data to the server
+        // For demo purposes, we'll just show a success toast
 
-        plusBtn.addEventListener('click', function() {
-            let quantity = parseInt(quantityInput.value);
-            if (quantity < 10) {
-                quantityInput.value = quantity + 1;
-                updateTotalPrice();
-            }
-        });
+        // Show success toast
+        showToast("Success", "Item added to cart!", "success")
 
-        // Update total price when options change
-        const sizeInputs = document.querySelectorAll('input[name="size"]');
-        const toppingInputs = document.querySelectorAll('input[name="toppings[]"]');
+        // Redirect to order page after a delay
+        setTimeout(() => {
+            window.location.href = "/order"
+        }, 2000)
+    })
 
-        sizeInputs.forEach(input => {
-            input.addEventListener('change', updateTotalPrice);
-        });
+    // Show toast notification
+    function showToast(title, message, type = "info") {
+        const toast = document.createElement("div")
+        toast.className = `toast ${type}`
 
-        toppingInputs.forEach(input => {
-            input.addEventListener('change', updateTotalPrice);
-        });
-
-        quantityInput.addEventListener('change', updateTotalPrice);
-
-        // Calculate and update total price
-        function updateTotalPrice() {
-            const basePrice = parseFloat(document.querySelector('.product-price').textContent.replace('$', ''));
-            const selectedSize = document.querySelector('input[name="size"]:checked');
-            const sizePrice = selectedSize ? parseFloat(selectedSize.getAttribute('data-price')) : 0;
-
-            let toppingsPrice = 0;
-            const selectedToppings = document.querySelectorAll('input[name="toppings[]"]:checked');
-            selectedToppings.forEach(topping => {
-                toppingsPrice += parseFloat(topping.getAttribute('data-price'));
-            });
-
-            const quantity = parseInt(quantityInput.value);
-
-            const totalPrice = (basePrice + sizePrice + toppingsPrice) * quantity;
-            document.querySelector('.total-value').textContent = '$' + totalPrice.toFixed(2);
+        let icon = "info-circle"
+        if (type === "success") {
+            icon = "check-circle"
+        } else if (type === "error") {
+            icon = "exclamation-circle"
         }
 
-        // Form submission
-        orderForm.addEventListener('submit', function(e) {
-            e.preventDefault();
+        toast.innerHTML = `
+              <div>
+                  <i class="fas fa-${icon} toast-icon"></i>
+              </div>
+              <div class="toast-content">
+                  <h4 class="toast-title">${title}</h4>
+                  <p class="toast-message">${message}</p>
+              </div>
+              <button class="toast-close">&times;</button>
+          `
 
-            // In a real application, you would send an AJAX request to add to cart
-            // For now, we'll just show an alert
-            alert('Item added to cart!');
+        // Add to container
+        toastContainer.appendChild(toast)
 
-            // Redirect to cart page or stay on the same page
-            // window.location.href = '/cart';
-        });
+        // Add close button functionality
+        const closeButton = toast.querySelector(".toast-close")
+        closeButton.addEventListener("click", () => {
+            toast.remove()
+        })
+
+        // Auto remove after 5 seconds
+        setTimeout(() => {
+            toast.style.opacity = "0"
+            setTimeout(() => {
+                toast.remove()
+            }, 300)
+        }, 5000)
     }
-});
+})
