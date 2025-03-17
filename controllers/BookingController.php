@@ -50,7 +50,7 @@ class BookingController extends BaseController {
             ]
         ];
         
-        $this->view('booking', [
+        $this->views('booking', [
             'title' => 'My Bookings',
             'bookings' => $bookings
         ]);
@@ -120,7 +120,7 @@ class BookingController extends BaseController {
             exit;
         }
         
-        $this->view('booking_details', [
+        $this->views('booking_details', [
             'title' => 'Booking Details',
             'booking' => $booking
         ]);
