@@ -56,7 +56,7 @@
 
     <!-- Popular Drinks Button -->
     <div class="popular-drinks-button">
-        <button class="btn-primary" id="showPopularDrinks">Popular Drinks</button>
+        <button class="btn-primary" style="width: 12%;" id="showPopularDrinks">Popular Drinks</button>
     </div>
 
     <!-- Popular Drinks Section -->
@@ -476,3 +476,63 @@
 </main>
 
 <script src="/assets/js/welcome.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const popularDrinksSection = document.getElementById('popularDrinksSection');
+        const popularDishesContainer = document.getElementById('popularDishesContainer');
+        const noPopularDrinksMessage = document.getElementById('noPopularDrinksMessage');
+
+        function updatePopularDrinks(drink) {
+            // Check if the drink is already in the popular drinks list
+            const existingDrink = popularDishesContainer.querySelector(`[data-id="${drink.id}"]`);
+            if (existingDrink) {
+                return;
+            }
+
+            // Create a new drink card
+            const drinkCard = document.createElement('div');
+            drinkCard.classList.add('product-card');
+            drinkCard.setAttribute('data-id', drink.id);
+            drinkCard.setAttribute('data-category', drink.category);
+            drinkCard.innerHTML = `
+                <div class="product-image">
+                    <img src="${drink.image}" alt="${drink.name}">
+                    <button class="favorite-btn">
+                        <i class="far fa-heart"></i>
+                    </button>
+                </div>
+                <div class="product-info">
+                    <h4>${drink.name}</h4>
+                    <p class="description">${drink.description}</p>
+                    <div class="product-price">$${drink.price.toFixed(2)}</div>
+                </div>
+                <div class="product-actions">
+                    <button class="btn-primary order-btn" data-product-id="${drink.id}">Order Now</button>
+                </div>
+            `;
+
+            // Add the new drink card to the popular drinks container
+            popularDishesContainer.appendChild(drinkCard);
+
+            // Show the popular drinks section if it was hidden
+            popularDrinksSection.style.display = 'block';
+            noPopularDrinksMessage.style.display = 'none';
+        }
+
+        // Event listeners for adding to favorites and orders
+        document.querySelectorAll('.favorite-btn, .order-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const drinkId = this.getAttribute('data-product-id');
+                const drink = {
+                    id: drinkId,
+                    name: this.closest('.product-card').querySelector('h4').textContent,
+                    image: this.closest('.product-card').querySelector('img').src,
+                    description: this.closest('.product-card').querySelector('.description').textContent,
+                    price: parseFloat(this.closest('.product-card').querySelector('.product-price').textContent.replace('$', '')),
+                    category: this.closest('.product-card').getAttribute('data-category')
+                };
+                updatePopularDrinks(drink);
+            });
+        });
+    });
+</script>
