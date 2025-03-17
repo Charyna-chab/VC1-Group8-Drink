@@ -2,21 +2,22 @@
 <?php require_once __DIR__ . '/../views/layouts/navbar.php'; ?>
 <?php require_once __DIR__ . '/../views/layouts/sidebar.php'; ?>
 
+
 <section class="content">
+
     <div class="feedback-container">
-        <!-- Tabs -->
         <div class="feedback-tabs">
             <button class="feedback-tab active" data-tab="review">Write a Review</button>
             <button class="feedback-tab" data-tab="suggestion">Suggestion Box</button>
             <button class="feedback-tab" data-tab="report">Report an Issue</button>
         </div>
 
-        <!-- Review Tab -->
         <div class="feedback-content active" id="review-tab">
             <div class="feedback-form">
                 <h3>Share Your Experience</h3>
                 <p>Let us know how we're doing! Your review helps us improve our service.</p>
 
+                <?php if(isset($_SESSION['user'])): ?>
                 <form id="reviewForm">
                     <div class="form-group">
                         <label>What would you like to review?</label>
@@ -78,15 +79,21 @@
 
                     <button type="submit" class="btn-primary">Submit Review</button>
                 </form>
+                <div id="reviewConfirmation" style="display: none;">
+                    <p>Thank you for your feedback!</p>
+                </div>
+                <?php else: ?>
+                <p>Please <a href="/login.php">log in</a> to give feedback.</p>
+                <?php endif; ?>
             </div>
         </div>
 
-        <!-- Suggestion Tab -->
         <div class="feedback-content" id="suggestion-tab">
             <div class="feedback-form">
                 <h3>Suggestion Box</h3>
                 <p>Have an idea to make our service better? We'd love to hear it!</p>
 
+                <?php if(isset($_SESSION['user'])): ?>
                 <form id="suggestionForm">
                     <div class="form-group">
                         <label>Suggestion Type</label>
@@ -112,15 +119,21 @@
 
                     <button type="submit" class="btn-primary">Submit Suggestion</button>
                 </form>
+                <div id="suggestionConfirmation" style="display: none;">
+                    <p>Thank you for your suggestion!</p>
+                </div>
+                <?php else: ?>
+                <p>Please <a href="/login.php">log in</a> to give feedback.</p>
+                <?php endif; ?>
             </div>
         </div>
 
-        <!-- Report Tab -->
         <div class="feedback-content" id="report-tab">
             <div class="feedback-form">
                 <h3>Report an Issue</h3>
                 <p>Encountered a problem? Let us know so we can fix it!</p>
 
+                <?php if(isset($_SESSION['user'])): ?>
                 <form id="reportForm">
                     <div class="form-group">
                         <label>Issue Type</label>
@@ -179,9 +192,17 @@
 
                     <button type="submit" class="btn-primary">Submit Report</button>
                 </form>
+                <div id="reportConfirmation" style="display: none;">
+                    <p>Thank you for reporting the issue!</p>
+                </div>
+                <?php else: ?>
+                <p>Please <a href="/login.php">log in</a> to give feedback.</p>
+                <?php endif; ?>
             </div>
         </div>
     </div>
 </section>
+</main>
 
-<?php require_once __DIR__ . '/../views/layouts/footer.php'; ?>
+
+

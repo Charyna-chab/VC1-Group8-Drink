@@ -31,11 +31,10 @@
     transition: var(--favorites-transition);
     position: relative;
     bottom: 16px;
-    right: 50px;
 }
 
 .favorites-header h2 {
-    font-size: 56px;
+    font-size: 54px;
     color: #FFDD57;
     /* Bright color for the heading */
     margin-bottom: 10px;
@@ -43,7 +42,7 @@
 }
 
 .favorites-header p {
-    font-size: 14px;
+    font-size: 18px;
     /* A readable font size */
     color: #EEEEEE;
     /* Light color for the paragraph */

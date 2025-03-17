@@ -329,8 +329,10 @@
   </main>
 
   <?php include 'views/notification_panel.php'; ?>
+  <?php include 'views/user_menu.php'; ?>
   <?php include 'views/toast.php'; ?>
   <?php include 'views/overlay.php'; ?>
+
   <script src="/assets/js/app.js"></script>
   <script src="/assets/js/settings.js"></script>
 </body>

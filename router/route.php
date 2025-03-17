@@ -9,12 +9,11 @@ require_once "controllers/DashboardController.php";
 require_once "controllers/SettingsController.php";
 require_once "controllers/OrdersController.php";
 require_once "controllers/BookingController.php";
-require_once "controllers/AuthController.php";
+require_once "controllers/ProductController.php";
 
 use YourNamespace\Router;
 
 $route = new Router();
-
 $route->get("/", [WelcomeController::class, 'welcome']);
 $route->get("/dashboard", [DashboardController::class, 'index']);
 $route->get("/order", [OrderController::class, 'index']);
@@ -26,5 +25,6 @@ $route->get("/orders/details/{id}", [BookingController::class, 'details']); // A
 $route->get("/favorites", [FavoritesController::class, 'index']);
 $route->get("/feedback", [FeedbackController::class, 'index']);
 $route->get("/settings", [SettingsController::class, 'index']);
+$route->get("/products", [ProductController::class, 'products']);
 
 $route->route();

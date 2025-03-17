@@ -2,6 +2,6 @@
 
 class WelcomeController extends BaseController {
     public function welcome() {
-        $this->views('welcome/welcome');
+        $this->view('welcome/welcome');
     }
 }

@@ -1,5 +1,5 @@
-<?php '../layouts/header.php'; ?>
-<?php '../layouts/sidebar.php'; ?>
+<?php require_once __DIR__ . '/../layouts/header.php'; ?>
+<?php require_once __DIR__ . '/../layouts/sidebar.php'; ?>
 
 <section class="content">
     <!-- Discount banner -->
@@ -10,6 +10,32 @@
             <button class="btn-primary">Get Voucher</button>
         </div>
         <img src="/assets/image/discount-banner.png" alt="Discount 20-50%">
+    </div>
+
+    <!-- New Drinks Collection Section -->
+    <div class="new-drinks-collection">
+        <h3>New Drinks Collection</h3>
+        <div class="new-drinks-grid">
+            <?php if (empty($newDrinks)): ?>
+                <div class="no-new-drinks">
+                    <p>No new drinks available at the moment.</p>
+                </div>
+            <?php else: ?>
+                <?php foreach ($newDrinks as $drink): ?>
+                    <div class="new-drink-card" data-id="<?php echo $drink['id']; ?>">
+                        <div class="new-drink-image">
+                            <img src="<?php echo $drink['image']; ?>" alt="<?php echo $drink['name']; ?>">
+                        </div>
+                        <div class="new-drink-content">
+                            <h4><?php echo $drink['name']; ?></h4>
+                            <p class="price">$<?php echo number_format($drink['price'], 2); ?></p>
+                            <p class="description">New arrival!</p>
+                            <button class="btn-primary order-btn" data-product-id="<?php echo $drink['id']; ?>">Add to Cart</button>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </div>
     </div>
 
     <!-- Category Section -->
@@ -28,6 +54,38 @@
         </div>
     </div>
 
+    <!-- Popular Drinks Button -->
+    <div class="popular-drinks-button">
+        <button class="btn-primary" id="showPopularDrinks">Popular Drinks</button>
+    </div>
+
+    <!-- Popular Drinks Section -->
+    <div class="popular-drinks" id="popularDrinksSection" style="display: none;">
+        <h3>Popular Drinks</h3>
+        <div class="dishes-list" id="popularDishesContainer">
+            <!-- Dynamic Popular Drinks List -->
+            <!-- Example of a popular drink card -->
+            <div class="product-card" data-category="smoothie">
+                <div class="product-image">
+                    <img src="/assets/image/products/strawberry-smoothie.png" alt="Strawberry Smoothie">
+                    <button class="favorite-btn">
+                        <i class="far fa-heart"></i>
+                    </button>
+                </div>
+                <div class="product-info">
+                    <h4>Strawberry Smoothie</h4>
+                    <p class="description">Top seller this week!</p>
+                    <div class="product-price">$4.99</div>
+                </div>
+                <div class="product-actions">
+                    <button class="btn-primary order-btn" data-product-id="9">Add to Cart</button>
+                </div>
+            </div>
+            <!-- No popular drinks message -->
+            <div id="noPopularDrinksMessage" style="display: none;">No popular drinks available at the moment.</div>
+        </div>
+    </div>
+
     <!-- Popular dishes section -->
     <div class="popular-dishes">
         <h3>Popular Drinks & Snacks</h3>
@@ -35,11 +93,11 @@
             <!-- Product Cards (Dynamic Product List) -->
             <div class="product-card" data-category="smoothie">
                 <div class="product-image">
-                    <img src="/assets/image/products/milk-tea-macha.png" alt="Strawberry Smoothie">
-                </div>
-                <button class="favorite-btn">
+                    <img src="/assets/images/products/strawberry-smoothie.jpg" alt="Strawberry Smoothie">
+                    <button class="favorite-btn">
                         <i class="far fa-heart"></i>
                     </button>
+                </div>
                 <div class="product-info">
                     <h4>Strawberry Smoothie</h4>
                     <p class="description">Delicious strawberry smoothie with a creamy texture.</p>
@@ -52,7 +110,7 @@
             
             <div class="product-card" data-category="smoothie">
                 <div class="product-image">
-                    <img src="/assets/image/products/chacolat.png" alt="Mango Smoothie">
+                    <img src="/assets/image/products/mango-smoothie.png" alt="Mango Smoothie">
                     <button class="favorite-btn">
                         <i class="far fa-heart"></i>
                     </button>
@@ -69,7 +127,7 @@
             
             <div class="product-card" data-category="milk-tea">
                 <div class="product-image">
-                    <img src="/assets/image/products/coffee-cream.png" alt="Classic Milk Tea">
+                    <img src="/assets/image/products/classic-milk-tea.png" alt="Classic Milk Tea">
                     <button class="favorite-btn">
                         <i class="far fa-heart"></i>
                     </button>
@@ -86,7 +144,7 @@
             
             <div class="product-card" data-category="milk-tea">
                 <div class="product-image">
-                    <img src="/assets/image/products/1.png" alt="Taro Milk Tea">
+                    <img src="/assets/image/products/taro-milk-tea.png" alt="Taro Milk Tea">
                     <button class="favorite-btn">
                         <i class="far fa-heart"></i>
                     </button>
@@ -103,7 +161,7 @@
             
             <div class="product-card" data-category="milk-tea">
                 <div class="product-image">
-                    <img src="/assets/image/products/8.png" alt="Matcha Latte">
+                    <img src="/assets/images/products/matcha-latte.jpg" alt="Matcha Latte">
                     <button class="favorite-btn">
                         <i class="far fa-heart"></i>
                     </button>
@@ -120,7 +178,7 @@
             
             <div class="product-card" data-category="milk-tea">
                 <div class="product-image">
-                    <img src="/assets/image/products/brown.png" alt="Brown Sugar Boba Milk">
+                    <img src="/assets/image/products/brown-sugar-boba.png" alt="Brown Sugar Boba Milk">
                     <button class="favorite-btn">
                         <i class="far fa-heart"></i>
                     </button>
@@ -137,7 +195,7 @@
             
             <div class="product-card" data-category="fruit-tea">
                 <div class="product-image">
-                    <img src="/assets/image/products/strawberry.png" alt="Strawberry Fruit Tea">
+                    <img src="/assets/image/products/strawberry-tea.png" alt="Strawberry Fruit Tea">
                     <button class="favorite-btn">
                         <i class="far fa-heart"></i>
                     </button>
@@ -154,7 +212,7 @@
             
             <div class="product-card" data-category="fruit-tea">
                 <div class="product-image">
-                    <img src="/assets/image/products/2.png" alt="Mango Fruit Tea">
+                    <img src="/assets/image/products/mango-tea.png" alt="Mango Fruit Tea">
                     <button class="favorite-btn">
                         <i class="far fa-heart"></i>
                     </button>
@@ -171,7 +229,7 @@
             
             <div class="product-card" data-category="coffee">
                 <div class="product-image">
-                    <img src="/assets/image/products/3.png" alt="Caramel Macchiato">
+                    <img src="/assets/image/products/caramel-macchiato.png" alt="Caramel Macchiato">
                     <button class="favorite-btn">
                         <i class="far fa-heart"></i>
                     </button>
@@ -188,7 +246,7 @@
             
             <div class="product-card" data-category="snacks">
                 <div class="product-image">
-                    <img src="/assets/image/products/4.png" alt="Egg Waffles">
+                    <img src="/assets/image/products/egg-waffles.png" alt="Egg Waffles">
                     <button class="favorite-btn">
                         <i class="far fa-heart"></i>
                     </button>
@@ -205,7 +263,7 @@
             
             <div class="product-card" data-category="snacks">
                 <div class="product-image">
-                    <img src="/assets/image/products/5.png" alt="Popcorn Chicken">
+                    <img src="/assets/image/products/popcorn-chicken.png" alt="Popcorn Chicken">
                     <button class="favorite-btn">
                         <i class="far fa-heart"></i>
                     </button>
@@ -222,7 +280,7 @@
             
             <div class="product-card" data-category="smoothie">
                 <div class="product-image">
-                    <img src="/assets/image/products/6.png" alt="Avocado Smoothie">
+                    <img src="/assets/image/products/avocado-smoothie.png" alt="Avocado Smoothie">
                     <button class="favorite-btn">
                         <i class="far fa-heart"></i>
                     </button>

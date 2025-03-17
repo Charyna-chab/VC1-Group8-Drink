@@ -31,6 +31,6 @@ class FavoritesController extends BaseController {
             ]
         ];
         
-        $this->views('favorites', ['favorites' => $favorites]);
+        $this->view('favorites', ['favorites' => $favorites]);
     }
 }

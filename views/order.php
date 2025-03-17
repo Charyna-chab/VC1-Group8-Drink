@@ -5,7 +5,8 @@ require_once __DIR__ . '/../views/layouts/sidebar.php';
 ?>
 
 <section class="content">
-    <!-- Discount Banner -->
+
+    <!-- Discount banner -->
     <div class="discount-banner">
         <div class="banner-content">
             <h2>Get Discount Voucher Up To 20%</h2>
@@ -14,8 +15,8 @@ require_once __DIR__ . '/../views/layouts/sidebar.php';
         </div>
         <img src="/assets/images/discount-banner.png" alt="Discount 20-50%">
     </div>
-
-    <!-- Menu Categories -->
+    
+    <!-- Menu categories -->
     <div class="menu-categories">
         <button class="category-btn active" data-category="all">All Drinks</button>
         <button class="category-btn" data-category="milk-tea">Milk Tea</button>
@@ -24,8 +25,7 @@ require_once __DIR__ . '/../views/layouts/sidebar.php';
         <button class="category-btn" data-category="coffee">Coffee</button>
         <button class="category-btn" data-category="snacks">Snacks</button>
     </div>
-
-    <!-- Order Container -->
+    
     <div class="order-container">
         <div class="product-filters">
             <div class="search-filter">
@@ -40,104 +40,158 @@ require_once __DIR__ . '/../views/layouts/sidebar.php';
                 <div class="product-image">
                     <img src="<?php echo $product['image']; ?>" alt="<?php echo $product['name']; ?>">
                     <button class="favorite-btn">
-                        <i class="<?php echo in_array($product['id'], $favorites) ? 'fas' : 'far'; ?> fa-heart"></i>
+                        <i class="far fa-heart"></i>
                     </button>
                 </div>
                 <div class="product-info">
                     <h3><?php echo $product['name']; ?></h3>
-                    <p class="product-desc"><?php echo $product['description']; ?></p>
+                    <p><?php echo $product['description']; ?></p>
                     <div class="product-price">$<?php echo number_format($product['price'], 2); ?></div>
                 </div>
                 <div class="product-actions">
-                    <button class="order-btn" data-product-id="<?php echo $product['id']; ?>">Order Now</button>
+                    <button class="btn-primary order-btn" data-product-id="<?php echo $product['id']; ?>">Order Now</button>
                 </div>
             </div>
             <?php endforeach; ?>
-            
-            <div id="no-product-message">No products found matching your criteria.</div>
         </div>
     </div>
 </section>
 
-<!-- Order Panel -->
-<div id="orderPanel" class="order-panel">
-    <div class="order-panel-content">
-        <button class="close-btn">&times;</button>
-        <h3>Customize Your Order</h3>
-        <div class="product-info">
-            <img id="productImage" src="/placeholder.svg" alt="Product Image">
-            <h4 id="productName">Product Name</h4>
-            <p id="productPrice">$0.00</p>
+<!-- Order Modal -->
+<div class="modal-overlay" id="orderModal">
+    <div class="modal-container">
+        <div class="modal-header">
+            <h3>Customize Your Drink</h3>
+            <button class="close-modal">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
-        <div class="customize-options">
-            <div class="option-group">
-                <label>Size:</label>
-                <select id="drinkSize">
-                    <option value="small" data-price="0">Small-Size</option>
-                    <option value="medium" data-price="0.50">Medium-Size (+$0.50)</option>
-                    <option value="large" data-price="1.00">Large-Size (+$1.00)</option>
-                </select>
-            </div>
-            <div class="option-group">
-                <label>Sugar Level:</label>
-                <select id="sugarLevel">
-                    <option value="no">No Sugar</option>
-                    <option value="25">25% Sugar</option>
-                    <option value="50">50% Sugar</option>
-                    <option value="75">75% Sugar</option>
-                    <option value="100">100% Sugar</option>
-                </select>
-            </div>
-            <div class="option-group">
-                <label>Ice Level:</label>
-                <select id="iceLevel">
-                    <option value="no">No Ice</option>
-                    <option value="less">Less Ice</option>
-                    <option value="normal">Normal Ice</option>
-                    <option value="extra">Extra Ice</option>
-                </select>
-            </div>
-            <div class="option-group">
-                <label>Toppings:</label>
-                <div id="toppings" class="toppings-grid">
-                    <?php foreach ($toppings as $topping): ?>
-                    <label class="topping-item">
-                        <input type="checkbox" name="topping" value="<?php echo $topping['name']; ?>" data-price="<?php echo $topping['price']; ?>">
-                        <span><?php echo $topping['name']; ?></span>
-                        <span class="topping-price">$<?php echo number_format($topping['price'], 2); ?></span>
-                    </label>
-                    <?php endforeach; ?>
-                </div>
-            </div>
+        <div class="modal-body">
+    <div class="product-details">
+        <img src="/placeholder.svg?height=100&width=100" alt="" class="modal-product-image">
+        <div class="modal-product-info">
+            <h4 class="modal-product-name"></h4>
+            <p class="modal-product-description"></p>
+            <div class="modal-product-price"></div>
         </div>
-        <div class="order-summary">
-            <h4>Order Summary</h4>
-            <div class="summary-item">
-                <span>Base Price:</span>
-                <span id="basePrice">$0.00</span>
-            </div>
-            <div class="summary-item">
-                <span>Size:</span>
-                <span id="sizePrice">$0.00</span>
-            </div>
-            <div class="summary-item">
-                <span>Toppings:</span>
-                <span id="toppingsPrice">$0.00</span>
-            </div>
-            <div class="summary-item total">
-                <span>Total:</span>
-                <span id="totalPrice">$0.00</span>
-            </div>
-        </div>
-        <button class="confirm-btn">Add to Cart</button>
     </div>
+
+    <hr class="modal-divider">
+
+    <form id="customizeForm">
+        <input type="hidden" name="product_id" id="product_id">
+
+        <div class="form-group">
+            <label for="size">Size</label>
+            <div class="option-buttons size-buttons">
+                <label class="option-button">
+                    <input type="radio" name="size" value="small" data-price="0">
+                    <span>Small</span>
+                </label>
+                <label class="option-button">
+                    <input type="radio" name="size" value="medium" data-price="0.50" checked>
+                    <span>Medium</span>
+                    <small>+$0.50</small>
+                </label>
+                <label class="option-button">
+                    <input type="radio" name="size" value="large" data-price="1.00">
+                    <span>Large</span>
+                    <small>+$1.00</small>
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Sugar Level</label>
+            <div class="option-buttons sugar-buttons">
+                <label class="option-button">
+                    <input type="radio" name="sugar" value="0">
+                    <span>0%</span>
+                </label>
+                <label class="option-button">
+                    <input type="radio" name="sugar" value="30">
+                    <span>30%</span>
+                </label>
+                <label class="option-button">
+                    <input type="radio" name="sugar" value="50" checked>
+                    <span>50%</span>
+                </label>
+                <label class="option-button">
+                    <input type="radio" name="sugar" value="70">
+                    <span>70%</span>
+                </label>
+                <label class="option-button">
+                    <input type="radio" name="sugar" value="100">
+                    <span>100%</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Ice Level</label>
+            <div class="option-buttons ice-buttons">
+                <label class="option-button">
+                    <input type="radio" name="ice" value="0">
+                    <span>No Ice</span>
+                </label>
+                <label class="option-button">
+                    <input type="radio" name="ice" value="30">
+                    <span>Less Ice</span>
+                </label>
+                <label class="option-button">
+                    <input type="radio" name="ice" value="100" checked>
+                    <span>Regular Ice</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="toppings">Toppings <span class="optional">(Optional, +$0.75 each)</span></label>
+            <div class="toppings-grid">
+                <?php foreach ($toppings as $topping): ?>
+                <label class="topping-option">
+                    <input type="checkbox" name="toppings[]" value="<?php echo $topping['id']; ?>" data-price="<?php echo $topping['price']; ?>">
+                    <span><?php echo $topping['name']; ?></span>
+                    <small>+$<?php echo number_format($topping['price'], 2); ?></small>
+                </label>
+                <?php endforeach; ?>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="instructions">Special Instructions <span class="optional">(Optional)</span></label>
+            <textarea name="instructions" id="instructions" placeholder="Any special requests?"></textarea>
+        </div>
+        <div class="quantity-control">
+            <label for="quantity">Quantity</label>
+            <div class="quantity-buttons">
+                <button type="button" class="quantity-btn minus-btn">
+                    <i class="fas fa-minus"></i>
+                </button>
+                <input type="number" name="quantity" id="quantity" value="1" min="1" max="10">
+                <button type="button" class="quantity-btn plus-btn">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="total-price">
+            <span>Total:</span>
+            <span class="price-value">$0.00</span>
+        </div>
+
+        <div class="form-actions">
+            <button type="button" class="btn-secondary" id="cancelOrder">Cancel</button>
+            <button type="submit" class="btn-primary">
+                <i class="fas fa-shopping-cart"></i>
+                Add to Cart
+            </button>
+        </div>
+    </form>
 </div>
-
-<!-- Overlay -->
-<div id="overlay"></div>
-
-<!-- Toast Container -->
+<!-- Notification Toast -->
 <div class="toast-container" id="toastContainer"></div>
 
-<script src="/assets/js/order.js"></script>
+</section>
 
+<script src="/assets/js/order.js"></script>
