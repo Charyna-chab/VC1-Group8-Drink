@@ -14,6 +14,7 @@ require_once "controllers/AuthController.php";
 use YourNamespace\Router;
 
 $route = new Router();
+
 $route->get("/", [WelcomeController::class, 'welcome']);
 $route->get("/dashboard", [DashboardController::class, 'index']);
 $route->get("/order", [OrderController::class, 'index']);
