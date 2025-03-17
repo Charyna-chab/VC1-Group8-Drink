@@ -1,2 +1,0 @@
-<div class="overlay" id="overlay"></div>
-

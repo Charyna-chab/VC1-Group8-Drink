@@ -1,4 +1,5 @@
 <?php
+
 class ProductController {
     private $db;
     
@@ -6,37 +7,36 @@ class ProductController {
         $this->db = Database::getInstance();
     }
     
-    public function index() {
+    public function menu() {
+        $categories = $this->db->getCategories();
         $products = $this->db->getAllProducts();
-        $categories = $this->db->getAllCategories();
         
-        // Include the view
-        include 'views/products.php';
+        require 'views/menu.php';
     }
     
-    public function getByCategory($category) {
-        $products = $this->db->getProductsByCategory($category);
-        $categories = $this->db->getAllCategories();
-        $currentCategory = $category;
+    public function show() {
+        // Get product ID from URL
+        $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
         
-        // Include the view
-        include 'views/products.php';
-    }
-    
-    public function show($id) {
+        // Get product details
         $product = $this->db->getProductById($id);
-        $toppings = $this->db->getAllToppings();
         
         if (!$product) {
             // Product not found
             header("HTTP/1.0 404 Not Found");
-            include 'views/404.php';
+            require 'views/404.php';
             return;
         }
         
-        // Include the view
-        include 'views/product_detail.php';
+        // Get related products
+        $relatedProducts = array_filter($this->db->getAllProducts(), function($p) use ($product) {
+            return $p['category'] === $product['category'] && $p['id'] !== $product['id'];
+        });
+        
+        // Limit to 4 related products
+        $relatedProducts = array_slice($relatedProducts, 0, 4);
+        
+        require 'views/product.php';
     }
 }
-?>
 
