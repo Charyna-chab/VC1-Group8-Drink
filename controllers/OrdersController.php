@@ -1,3 +1,4 @@
+
 <?php
 class OrderController extends BaseController {
     public function index() {
@@ -166,6 +167,166 @@ class OrderController extends BaseController {
                 'description' => 'A soft sponge cake topped with our signature cheese foam, creating a creamy and sweet experience.',
                 'price' => 4.50,
                 'image' => '/assets/image/products/Honey Lemon Green Tea.png',
+                'category' => 'snacks'
+            ],
+            [
+                'id' => 21,
+                'name' => 'Chocolate Milk tea',
+                'description' => 'A creamy matcha milk tea with sweet red beans for a unique flavor.',
+                'price' => 4.50,
+                'image' => '/assets/image/products/Chocolate Milk Tea.png',
+                'category' => 'milk-tea'
+            ],
+            [
+                'id' => 22,
+                'name' => 'Honey Lemon Tea',
+                'description' => 'A refreshing blend of honey and lemon with green tea.',
+                'price' => 3.75,
+                'image' => '/assets/image/products/honey-lemon-tea.png',
+                'category' => 'fruit-tea'
+            ],
+            [
+                'id' => 23,
+                'name' => 'Strawberry Banana Smoothie',
+                'description' => 'A sweet and creamy smoothie made with fresh strawberries and bananas.',
+                'price' => 4.25,
+                'image' => '/assets/image/products/strawberry-banana-smoothie.png',
+                'category' => 'smoothie'
+            ],
+            [
+                'id' => 24,
+                'name' => 'Caramel Macchiato',
+                'description' => 'A rich espresso drink with caramel syrup and steamed milk.',
+                'price' => 4.50,
+                'image' => '/assets/image/products/caramel-macchiato.png',
+                'category' => 'coffee'
+            ],
+            [
+                'id' => 25,
+                'name' => 'Cheese Garlic Bread',
+                'description' => 'Warm and crispy garlic bread topped with melted cheese.',
+                'price' => 3.00,
+                'image' => '/assets/image/products/cheese-garlic-bread.png',
+                'category' => 'snacks'
+            ],
+            [
+                'id' => 26,
+                'name' => 'Chocolate Lava Cake',
+                'description' => 'A warm chocolate cake with a gooey molten center.',
+                'price' => 4.75,
+                'image' => '/assets/image/products/chocolate-lava-cake.png',
+                'category' => 'snacks'
+            ],
+            [
+                'id' => 27,
+                'name' => 'Pineapple Coconut Smoothie',
+                'description' => 'A tropical blend of pineapple and coconut for a refreshing treat.',
+                'price' => 4.50,
+                'image' => '/assets/image/products/pineapple-coconut-smoothie.png',
+                'category' => 'smoothie'
+            ],
+            [
+                'id' => 28,
+                'name' => 'Iced Hazelnut Latte',
+                'description' => 'A smooth iced latte with the rich flavor of hazelnut.',
+                'price' => 4.25,
+                'image' => '/assets/image/products/iced-hazelnut-latte.png',
+                'category' => 'coffee'
+            ],
+            [
+                'id' => 29,
+                'name' => 'Tiramisu',
+                'description' => 'A classic Italian dessert with layers of coffee-soaked ladyfingers and mascarpone cream.',
+                'price' => 5.00,
+                'image' => '/assets/image/products/tiramisu.png',
+                'category' => 'snacks'
+            ],
+            [
+                'id' => 30,
+                'name' => 'Blueberry Cheesecake',
+                'description' => 'A creamy cheesecake topped with fresh blueberry compote.',
+                'price' => 5.50,
+                'image' => '/assets/image/products/blueberry-cheesecake.png',
+                'category' => 'snacks'
+            ],
+            [
+                'id' => 31,
+                'name' => 'Mango Sticky Rice',
+                'description' => 'A traditional Thai dessert with sweet mango and sticky rice.',
+                'price' => 4.75,
+                'image' => '/assets/image/products/mango-sticky-rice.png',
+                'category' => 'snacks'
+            ],
+            [
+                'id' => 32,
+                'name' => 'Green Tea Mochi',
+                'description' => 'Soft and chewy mochi filled with sweet green tea paste.',
+                'price' => 3.50,
+                'image' => '/assets/image/products/green-tea-mochi.png',
+                'category' => 'snacks'
+            ],
+            [
+                'id' => 33,
+                'name' => 'Coconut Macaroon',
+                'description' => 'A sweet and chewy coconut macaroon with a crispy exterior.',
+                'price' => 2.75,
+                'image' => '/assets/image/products/coconut-macaroon.png',
+                'category' => 'snacks'
+            ],
+            [
+                'id' => 34,
+                'name' => 'Pandan Waffle',
+                'description' => 'A fragrant pandan-flavored waffle, crispy on the outside and soft on the inside.',
+                'price' => 3.50,
+                'image' => '/assets/image/products/pandan-waffle.png',
+                'category' => 'snacks'
+            ],
+            [
+                'id' => 35,
+                'name' => 'Sesame Ball',
+                'description' => 'A traditional Chinese dessert with a crispy sesame crust and sweet filling.',
+                'price' => 2.50,
+                'image' => '/assets/image/products/sesame-ball.png',
+                'category' => 'snacks'
+            ],
+            [
+                'id' => 36,
+                'name' => 'Egg Tart',
+                'description' => 'A flaky pastry filled with a creamy egg custard.',
+                'price' => 3.00,
+                'image' => '/assets/image/products/egg-tart.png',
+                'category' => 'snacks'
+            ],
+            [
+                'id' => 37,
+                'name' => 'Matcha Cheesecake',
+                'description' => 'A creamy cheesecake with the rich flavor of matcha green tea.',
+                'price' => 5.25,
+                'image' => '/assets/image/products/matcha-cheesecake.png',
+                'category' => 'snacks'
+            ],
+            [
+                'id' => 38,
+                'name' => 'Churros',
+                'description' => 'Crispy fried dough sticks dusted with cinnamon sugar.',
+                'price' => 3.75,
+                'image' => '/assets/image/products/churros.png',
+                'category' => 'snacks'
+            ],
+            [
+                'id' => 39,
+                'name' => 'Red Bean Bun',
+                'description' => 'A soft and fluffy bun filled with sweet red bean paste.',
+                'price' => 2.50,
+                'image' => '/assets/image/products/red-bean-bun.png',
+                'category' => 'snacks'
+            ],
+            [
+                'id' => 40,
+                'name' => 'Almond Cookie',
+                'description' => 'A crunchy almond cookie with a buttery flavor.',
+                'price' => 2.00,
+                'image' => '/assets/image/products/almond-cookie.png',
                 'category' => 'snacks'
             ]
         ];
