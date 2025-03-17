@@ -45,7 +45,7 @@ class AuthController extends BaseController {
             }
         }
         
-        $this->view('login', [
+        $this->views('login', [
             'title' => 'Login - XING FU CHA',
             'error' => $error
         ]);
