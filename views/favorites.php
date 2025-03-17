@@ -21,33 +21,33 @@
         <?php else: ?>
             <!-- Favorites Grid -->
             <div class="favorites-grid">
-                <?php foreach($favorites as $item): ?>
-                    <div class="favorites-card" data-id="<?php echo $item['id']; ?>">
+                <?php foreach($favorites as $favorite): ?>
+                    <div class="favorites-card" data-id="<?php echo $favorite['id']; ?>">
                         <!-- Remove Button -->
-                        <button class="favorites-remove-btn" data-id="<?php echo $item['id']; ?>">
+                        <button class="favorites-remove-btn" data-id="<?php echo $favorite['id']; ?>">
                             <i class="fas fa-times"></i>
                             <span class="sr-only">Remove from favorites</span>
                         </button>
 
                         <!-- Product Image -->
                         <div class="favorites-image">
-                            <img src="<?php echo $item['image']; ?>" alt="<?php echo $item['name']; ?>">
+                            <img src="<?php echo $favorite['image']; ?>" alt="<?php echo $favorite['name']; ?>">
                         </div>
 
                         <!-- Product Info -->
                         <div class="favorites-content">
-                            <h3 class="favorites-title"><?php echo $item['name']; ?></h3>
-                            <p class="favorites-description"><?php echo $item['description']; ?></p>
+                            <h3 class="favorites-title"><?php echo $favorite['name']; ?></h3>
+                            <p class="favorites-description"><?php echo $favorite['description']; ?></p>
                             
                             <div class="favorites-footer">
                                 <div class="favorites-price">
-                                    $<?php echo number_format($item['price'], 2); ?>
+                                    $<?php echo number_format($favorite['price'], 2); ?>
                                 </div>
                                 <button class="favorites-order-btn" 
-                                        data-id="<?php echo $item['id']; ?>"
-                                        data-name="<?php echo htmlspecialchars($item['name']); ?>"
-                                        data-price="<?php echo $item['price']; ?>"
-                                        data-image="<?php echo htmlspecialchars($item['image']); ?>">
+                                        data-id="<?php echo $favorite['id']; ?>"
+                                        data-name="<?php echo htmlspecialchars($favorite['name']); ?>"
+                                        data-price="<?php echo $favorite['price']; ?>"
+                                        data-image="<?php echo htmlspecialchars($favorite['image']); ?>">
                                     Order Now
                                 </button>
                             </div>

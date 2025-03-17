@@ -2,8 +2,7 @@
 
 class FavoritesController extends BaseController {
     public function index() {
-        // For demo purposes, we'll show some sample favorites
-        // In a real app, this would come from the database
+        // Fetch favorites from the database (replace with your logic)
         $favorites = [
             [
                 'id' => 1,
@@ -32,5 +31,21 @@ class FavoritesController extends BaseController {
         ];
         
         $this->views('favorites', ['favorites' => $favorites]);
+    }
+
+    public function toggle() {
+        $productId = $_POST['productId'];
+        $isFavorite = $_POST['isFavorite'];
+
+        // Replace this with your database logic
+        if ($isFavorite) {
+            // Remove from favorites
+            // Example: Favorite::where('user_id', $userId)->where('product_id', $productId)->delete();
+        } else {
+            // Add to favorites
+            // Example: Favorite::create(['user_id' => $userId, 'product_id' => $productId]);
+        }
+
+        echo json_encode(['success' => true]);
     }
 }
