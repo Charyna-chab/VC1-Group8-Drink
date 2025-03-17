@@ -7,7 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
-    <?php include 'views/admin/partials/header.php'; ?>
+    <?php include 'views/partials/header.php'; ?>
     
     <main class="flex-1 p-6">
         <div class="mx-auto max-w-7xl">
@@ -20,9 +20,10 @@
                         <p class="text-sm text-gray-500">Manage user accounts</p>
                         <div class="mt-4 text-3xl font-bold">1,234</div>
                         <p class="text-xs text-gray-500">+12% from last month</p>
-                        <a href="/admin/users" class="mt-4 inline-flex w-full justify-center rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
+                        <a href="/admin/users" class="mt-4 inline-flex w-full justify-center rounded-md px-4 py-2 text-sm font-medium text-white" style="background-color: #FFB233; hover:bg-opacity-90;">
                             View Users
                         </a>
+
                     </div>
                 </div>
                 
@@ -32,7 +33,7 @@
                         <p class="text-sm text-gray-500">Manage product catalog</p>
                         <div class="mt-4 text-3xl font-bold">567</div>
                         <p class="text-xs text-gray-500">+5% from last month</p>
-                        <a href="#" class="mt-4 inline-flex w-full justify-center rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
+                        <a href="#" class="mt-4 inline-flex w-full justify-center rounded-md px-4 py-2 text-sm font-medium text-white" style="background-color: #FFB233; hover:bg-opacity-90;">
                             View Products
                         </a>
                     </div>
@@ -44,7 +45,7 @@
                         <p class="text-sm text-gray-500">Manage customer orders</p>
                         <div class="mt-4 text-3xl font-bold">892</div>
                         <p class="text-xs text-gray-500">+18% from last month</p>
-                        <a href="#" class="mt-4 inline-flex w-full justify-center rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
+                        <a href="#" class="mt-4 inline-flex w-full justify-center rounded-md px-4 py-2 text-sm font-medium text-white" style="background-color: #FFB233; hover:bg-opacity-90;">
                             View Orders
                         </a>
                     </div>
@@ -53,7 +54,7 @@
         </div>
     </main>
     
-    <?php include 'views/admin/partials/footer.php'; ?>
+    <?php include 'views/partials/footer.php'; ?>
 </body>
 </html>
 

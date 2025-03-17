@@ -40,13 +40,13 @@ class Auth {
     public function login($email, $password) {
         // In a real application, you would verify credentials against a database
         // For demo purposes, we'll just check against our mock user
-        if ($email !== 'admin@example.com') {
+        if ($email !== 'admin@email.com') {
             throw new Exception("Invalid email or password");
         }
         
         // In a real application, you would verify the password hash
         // For demo purposes, we'll just check if the password is "password"
-        if ($password !== 'password') {
+        if ($password !== 'vc-drink-08') {
             throw new Exception("Invalid email or password");
         }
         
