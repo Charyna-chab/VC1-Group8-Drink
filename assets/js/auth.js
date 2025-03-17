@@ -11,12 +11,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 this.classList.remove("fa-eye")
                 this.classList.add("fa-eye-slash")
             } else {
-                passwordField.type = "password";
-                this.classList.remove("fa-eye-slash");
-                this.classList.add("fa-eye");
+                passwordField.type = "password"
+                this.classList.remove("fa-eye-slash")
+                this.classList.add("fa-eye")
             }
-        });
-    });
+        })
+    })
 
     // Form validation
     const authForm = document.querySelector(".auth-form")

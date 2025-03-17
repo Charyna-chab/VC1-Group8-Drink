@@ -38,10 +38,5 @@ class ProductController {
         
         require 'views/product.php';
     }
-
-    public function products() {
-        $products = $this->db->getAllProducts();
-        require_once __DIR__ . '/../views/products.php';
-    }
 }
 

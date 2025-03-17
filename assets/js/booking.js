@@ -1,81 +1,175 @@
-// assets/js/main.js
-document.addEventListener('DOMContentLoaded', function() {
-    // Mobile menu toggle
-    const menuToggle = document.querySelector('.menu-toggle');
-    const sidebar = document.querySelector('.sidebar');
+document.addEventListener("DOMContentLoaded", () => {
+    // DOM Elements
+    const filterTabs = document.querySelectorAll(".filter-tab")
+    const bookingCards = document.querySelectorAll(".booking-card")
+    const searchInput = document.getElementById("bookingSearch")
+    const cancelButtons = document.querySelectorAll(".cancel-booking-btn")
 
-    if (menuToggle && sidebar) {
-        menuToggle.addEventListener('click', function() {
-            sidebar.classList.toggle('active');
-        });
+    // Create toast container if it doesn't exist
+    let toastContainer = document.getElementById("toastContainer")
+    if (!toastContainer) {
+        toastContainer = document.createElement("div")
+        toastContainer.id = "toastContainer"
+        toastContainer.className = "toast-container"
+        document.body.appendChild(toastContainer)
     }
 
-    // Close sidebar when clicking outside on mobile
-    document.addEventListener('click', function(e) {
-        if (sidebar && sidebar.classList.contains('active') && !sidebar.contains(e.target) && e.target !== menuToggle) {
-            sidebar.classList.remove('active');
+    // Filter bookings by status
+    filterTabs.forEach((tab) => {
+        tab.addEventListener("click", function() {
+            // Remove active class from all tabs
+            filterTabs.forEach((t) => t.classList.remove("active"))
+
+            // Add active class to clicked tab
+            this.classList.add("active")
+
+            const status = this.getAttribute("data-status")
+
+            // Filter bookings
+            bookingCards.forEach((card) => {
+                if (status === "all" || card.getAttribute("data-status") === status) {
+                    card.style.display = "block"
+                } else {
+                    card.style.display = "none"
+                }
+            })
+
+            // Check if any bookings are visible
+            checkEmptyState()
+        })
+    })
+
+    // Search functionality
+    searchInput.addEventListener("input", function() {
+        const searchTerm = this.value.toLowerCase().trim()
+
+        bookingCards.forEach((card) => {
+            const orderNumber = card.querySelector("h3").textContent.toLowerCase()
+
+            if (orderNumber.includes(searchTerm)) {
+                card.style.display = "block"
+            } else {
+                card.style.display = "none"
+            }
+        })
+
+        // Check if any bookings are visible
+        checkEmptyState()
+    })
+
+    // Check if any bookings are visible and show empty state if needed
+    function checkEmptyState() {
+        let visibleCount = 0
+
+        bookingCards.forEach((card) => {
+            if (card.style.display !== "none") {
+                visibleCount++
+            }
+        })
+
+        // Get or create empty state element
+        let emptyState = document.querySelector(".empty-state")
+
+        if (visibleCount === 0) {
+            if (!emptyState) {
+                emptyState = document.createElement("div")
+                emptyState.className = "empty-state"
+                emptyState.innerHTML = `
+                      <img src="/assets/images/empty-orders.svg" alt="No Orders">
+                      <h3>No Orders Found</h3>
+                      <p>No orders match your current filter. Try changing your search or filter criteria.</p>
+                      <a href="/order" class="btn-primary">Order Now</a>
+                  `
+                document.querySelector(".bookings-list").appendChild(emptyState)
+            } else {
+                emptyState.style.display = "block"
+            }
+        } else if (emptyState) {
+            emptyState.style.display = "none"
         }
-    });
-
-    // Add mobile menu toggle button if it doesn't exist
-    if (sidebar && !menuToggle) {
-        const toggle = document.createElement('button');
-        toggle.className = 'menu-toggle';
-        toggle.innerHTML = '<i class="fas fa-bars"></i>';
-        document.body.appendChild(toggle);
-
-        toggle.addEventListener('click', function() {
-            sidebar.classList.toggle('active');
-        });
     }
 
-    // Initialize tooltips if any
-    const tooltips = document.querySelectorAll('[data-tooltip]');
-    tooltips.forEach(tooltip => {
-        tooltip.addEventListener('mouseenter', function() {
-            const text = this.getAttribute('data-tooltip');
-            const tooltipEl = document.createElement('div');
-            tooltipEl.className = 'tooltip';
-            tooltipEl.textContent = text;
-            document.body.appendChild(tooltipEl);
+    // Cancel booking
+    cancelButtons.forEach((button) => {
+        button.addEventListener("click", function() {
+            const bookingId = this.getAttribute("data-id")
+            const bookingCard = this.closest(".booking-card")
 
-            const rect = this.getBoundingClientRect();
-            tooltipEl.style.top = rect.top - tooltipEl.offsetHeight - 10 + 'px';
-            tooltipEl.style.left = rect.left + (rect.width / 2) - (tooltipEl.offsetWidth / 2) + 'px';
-            tooltipEl.style.opacity = '1';
-        });
+            // Show confirmation dialog
+            if (confirm("Are you sure you want to cancel this order?")) {
+                // In a real application, you would send an AJAX request to cancel the order
+                // For demo purposes, we'll just update the UI
 
-        tooltip.addEventListener('mouseleave', function() {
-            const tooltipEl = document.querySelector('.tooltip');
-            if (tooltipEl) {
-                tooltipEl.remove();
+                // Update status
+                const statusElement = bookingCard.querySelector(".booking-status")
+                statusElement.textContent = "Cancelled"
+                statusElement.className = "booking-status cancelled"
+
+                // Remove cancel button
+                this.remove()
+
+                // Update data-status attribute
+                bookingCard.setAttribute("data-status", "cancelled")
+
+                // Show toast notification
+                showToast("Order Cancelled", "Your order has been cancelled successfully.", "success")
             }
-        });
-    });
+        })
+    })
 
-    // Add placeholder images if images fail to load
-    const images = document.querySelectorAll('img');
-    images.forEach(img => {
-        img.addEventListener('error', function() {
-            this.src = '/assets/images/placeholder.jpg';
-        });
-    });
+    // Show toast notification
+    function showToast(title, message, type = "info") {
+        const toast = document.createElement("div")
+        toast.className = "toast"
 
-    // Add smooth scrolling to anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            e.preventDefault();
+        let icon = "info-circle"
+        if (type === "success") {
+            icon = "check-circle"
+            toast.style.borderLeftColor = "#4caf50"
+        } else if (type === "error") {
+            icon = "exclamation-circle"
+            toast.style.borderLeftColor = "#f44336"
+        }
 
-            const targetId = this.getAttribute('href');
-            if (targetId === '#') return;
+        toast.innerHTML = `
+              <div>
+                  <i class="fas fa-${icon}" style="color: ${type === "success" ? "#4caf50" : type === "error" ? "#f44336" : "#ff5e62"}; font-size: 20px; margin-right: 10px;"></i>
+              </div>
+              <div style="flex: 1;">
+                  <h4>${title}</h4>
+                  <p>${message}</p>
+              </div>
+              <button class="toast-close">&times;</button>
+          `
 
-            const targetElement = document.querySelector(targetId);
-            if (targetElement) {
-                targetElement.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-            }
-        });
-    });
-});
+        // Add to container
+        toastContainer.appendChild(toast)
+
+        // Add close button functionality
+        const closeButton = toast.querySelector(".toast-close")
+        closeButton.addEventListener("click", () => {
+            toast.remove()
+        })
+
+        // Auto remove after 5 seconds
+        setTimeout(() => {
+            toast.style.opacity = "0"
+            setTimeout(() => {
+                toast.remove()
+            }, 300)
+        }, 5000)
+    }
+
+    // Initialize - check if any bookings exist
+    if (bookingCards.length === 0) {
+        const emptyState = document.createElement("div")
+        emptyState.className = "empty-state"
+        emptyState.innerHTML = `
+              <img src="/assets/images/empty-orders.svg" alt="No Orders">
+              <h3>No Orders Yet</h3>
+              <p>You haven't placed any orders yet. Start ordering your favorite drinks!</p>
+              <a href="/order" class="btn-primary">Order Now</a>
+          `
+        document.querySelector(".bookings-list").appendChild(emptyState)
+    }
+})

@@ -1,7 +1,7 @@
 <?php
 class SettingsController extends BaseController {
     public function index() {
-        $this->view('settings', [
+        $this->views('settings', [
             'title' => 'Settings'
         ]);
     }

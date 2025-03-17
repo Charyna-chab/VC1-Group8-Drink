@@ -6,6 +6,9 @@
     overflow: hidden;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
     margin-top: 30px;
+    position: relative;
+    right: 20px;
+    bottom: 30px;
 }
 
 .feedback-tabs {
@@ -149,14 +152,4 @@
         border-bottom: none;
         border-left: 3px solid #ff5e62;
     }
-}
-
-#reviewConfirmation, #suggestionConfirmation, #reportConfirmation {
-    margin-top: 20px;
-    padding: 15px;
-    background: #e0ffe0;
-    border: 1px solid #b2ffb2;
-    border-radius: 8px;
-    color: #4caf50;
-    font-size: 14px;
 }

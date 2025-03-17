@@ -1,9 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?php echo $title; ?></title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/auth.css">
+</head>
+
+<body>
+    <?php include __DIR__ . '/partials/header.php'; ?>
 
     <div class="auth-container">
         <div class="auth-form-container">
             <div class="auth-header">
-                <img src="/assets/image/logo/logo.png" alt="XING FU CHA Logo">
+                <img src="/assets/images/logo/logo.png" alt="XING FU CHA Logo">
                 <h2>Forgot Password</h2>
                 <p>Enter your email to reset your password</p>
             </div>
@@ -16,7 +29,7 @@
             <?php endif; ?>
 
             <?php if(isset($message)): ?>
-                <div class="auth-message" style="background: #e8f5e9; color: #2e7d32; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                <div class="auth-message" style="background: #e8f5e9; color: #2e7d32; padding: 15px; border-radius: 8px; margin: 0 2rem 1.5rem; display: flex; align-items: center; gap: 10px;">
                     <i class="fas fa-check-circle"></i>
                     <span><?php echo $message; ?></span>
                 </div>
@@ -40,5 +53,7 @@
         </div>
     </div>
 
+    <script src="/assets/js/auth.js"></script>
+</body>
 
-
+</html>
