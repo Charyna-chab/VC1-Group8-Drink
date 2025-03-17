@@ -2,16 +2,16 @@
 <?php require_once __DIR__ . '/../views/layouts/navbar.php'; ?>
 <?php require_once __DIR__ . '/../views/layouts/sidebar.php'; ?>
 
-
 <section class="content">
-
     <div class="feedback-container">
+        <!-- Tabs -->
         <div class="feedback-tabs">
             <button class="feedback-tab active" data-tab="review">Write a Review</button>
             <button class="feedback-tab" data-tab="suggestion">Suggestion Box</button>
             <button class="feedback-tab" data-tab="report">Report an Issue</button>
         </div>
 
+        <!-- Review Tab -->
         <div class="feedback-content active" id="review-tab">
             <div class="feedback-form">
                 <h3>Share Your Experience</h3>
@@ -81,6 +81,7 @@
             </div>
         </div>
 
+        <!-- Suggestion Tab -->
         <div class="feedback-content" id="suggestion-tab">
             <div class="feedback-form">
                 <h3>Suggestion Box</h3>
@@ -114,6 +115,7 @@
             </div>
         </div>
 
+        <!-- Report Tab -->
         <div class="feedback-content" id="report-tab">
             <div class="feedback-form">
                 <h3>Report an Issue</h3>
@@ -181,7 +183,5 @@
         </div>
     </div>
 </section>
-</main>
 
-
-
+<?php require_once __DIR__ . '/../views/layouts/footer.php'; ?>

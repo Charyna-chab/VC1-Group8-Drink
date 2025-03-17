@@ -45,7 +45,7 @@ class AuthController extends BaseController {
             }
         }
         
-        $this->view('login', [
+        $this->views('login', [
             'title' => 'Login - XING FU CHA',
             'error' => $error
         ]);
@@ -96,7 +96,7 @@ class AuthController extends BaseController {
             }
         }
         
-        $this->view('register', [
+        $this->views('register', [
             'title' => 'Register - XING FU CHA',
             'error' => $error
         ]);
@@ -109,7 +109,7 @@ class AuthController extends BaseController {
             exit;
         }
         
-        $this->view('register_success', [
+        $this->views('register_success', [
             'title' => 'Registration Successful - XING FU CHA'
         ]);
     }
@@ -132,7 +132,7 @@ class AuthController extends BaseController {
             }
         }
         
-        $this->view('forgot_password', [
+        $this->views('forgot_password', [
             'title' => 'Forgot Password - XING FU CHA',
             'error' => $error,
             'message' => $message
