@@ -5,9 +5,9 @@
     <section class="content">
         <!-- Favorites Header -->
         <div class="favorites-header">
-    <h1>My Favorites</h1>
-    <p>Your favorite Xing Fu cha drinks and snacks</p>
-</div>
+            <h2>My Favorites</h2>
+            <p>Your favorite Xing Fu cha drinks and snacks</p>
+        </div>
 
         <?php if(empty($favorites)): ?>
             <!-- Empty State -->
