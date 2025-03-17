@@ -1,6 +1,7 @@
 <main class="main-content">
 <aside class="sidebar">
-    <!-- User logo in Sidebar -->
+    <div class="children-sidebar">
+         <!-- User logo in Sidebar -->
     <div class="branch-order-sidebar">
         <img src="<?php echo isset($branchLogo) ? $branchLogo : '/assets/image/logo/logo.png'; ?>" alt="Branch Logo" class="branch-logo">
     </div>
@@ -29,6 +30,8 @@
         <hr>
         <li><a href="logout.php"><i class="fas fa-sign-out-alt logout-icon"></i> Logout</a></li>
     </ul>
+    </div>
+   
 </aside>
 <div class="user-menu" id="userMenu">
     <div class="user-menu-header">

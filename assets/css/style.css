@@ -707,6 +707,14 @@ main {
     flex-grow: 1;
 }
 
+.sidebar {
+    width: 20%;
+}
+
+.sidebar .children-sidebar {
+    margin-left: 20px;
+}
+
 
 /* Discount Banner */
 
