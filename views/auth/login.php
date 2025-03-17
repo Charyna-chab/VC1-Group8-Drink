@@ -10,6 +10,8 @@
 </head>
 <body>
     <div class="main-container">
+
+        
         <!-- Main Content -->
         <div class="auth-container">
             <div class="auth-form-container">
