@@ -3,6 +3,9 @@
 <?php require_once('layouts/navbar.php'); ?>
 <?php require_once('layouts/sidebar.php'); ?>
 
+
+<!-- dashboard -->
+
 <main class="main-content">
     <?= $content; ?>
 </main>
