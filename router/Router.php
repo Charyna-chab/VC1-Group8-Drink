@@ -1,101 +1,79 @@
 <?php
-
 namespace YourNamespace;
 
-class Router
-{
-    private $uri;
-    private $method;
+class Router {
     private $routes = [];
-
-    /**
-     * Constructor to initialize the URI and request method.
-     */
-    public function __construct()
-    {
-        $this->uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-        $this->method = $_SERVER['REQUEST_METHOD'];
+    
+    public function get($path, $callback) {
+        $this->addRoute('GET', $path, $callback);
     }
-
-    /**
-     * Registers a GET route.
-     *
-     * @param string $uri The URI of the route.
-     * @param array $action The controller class and method to be executed.
-     */
-    public function get($uri, $action)
-    {
-        $this->routes[$uri] = [
-            'method' => 'GET',
-            'action' => $action
+    
+    public function post($path, $callback) {
+        $this->addRoute('POST', $path, $callback);
+    }
+    
+    private function addRoute($method, $path, $callback) {
+        $this->routes[] = [
+            'method' => $method,
+            'path' => $path,
+            'callback' => $callback
         ];
     }
-
-    /**
-     * Registers a POST route.
-     *
-     * @param string $uri The URI of the route.
-     * @param array $action The controller class and method to be executed.
-     */
-    public function post($uri, $action)
-    {
-        $this->routes[$uri] = [
-            'method' => 'POST',
-            'action' => $action
-        ];
-    }
-
-    /**
-     * Registers a PUT route.
-     *
-     * @param string $uri The URI of the route.
-     * @param array $action The controller class and method to be executed.
-     */
-    public function put($uri, $action)
-    {
-        $this->routes[$uri] = [
-            'method' => 'PUT',
-            'action' => $action
-        ];
-    }
-
-    /**
-     * Registers a DELETE route.
-     *
-     * @param string $uri The URI of the route.
-     * @param array $action The controller class and method to be executed.
-     */
-    public function delete($uri, $action)
-    {
-        $this->routes[$uri] = [
-            'method' => 'DELETE',
-            'action' => $action
-        ];
-    }
-
-    /**
-     * Routes the request to the appropriate controller and method.
-     */
-    public function route()
-    {
-        foreach ($this->routes as $uri => $route) {
-            // Convert route pattern to a regex that matches numbers (for IDs)
-            $pattern = preg_replace('/\{[a-zA-Z0-9_]+\}/', '([0-9]+)', trim($uri, '/'));
-
-            if (preg_match("#^$pattern$#", trim($this->uri, '/'), $matches)) {
-                array_shift($matches); // Remove full match
-                $controllerClass = $route['action'][0];
-                $function = $route['action'][1];
-
-                $controller = new $controllerClass();
-                $controller->$function(...$matches); // Pass extracted parameters
-                exit;
+    
+    public function route() {
+        $path = $_SERVER['REQUEST_URI'];
+        $method = $_SERVER['REQUEST_METHOD'];
+        
+        // Remove query string if present
+        if (($pos = strpos($path, '?')) !== false) {
+            $path = substr($path, 0, $pos);
+        }
+        
+        // Remove trailing slash if present
+        $path = rtrim($path, '/');
+        
+        // If path is empty, set it to '/'
+        if (empty($path)) {
+            $path = '/';
+        }
+        
+        foreach ($this->routes as $route) {
+            // Skip if method doesn't match
+            if ($route['method'] !== $method) {
+                continue;
+            }
+            
+            // Convert route parameters to regex pattern
+            $pattern = $this->convertRouteToRegex($route['path']);
+            
+            if (preg_match($pattern, $path, $matches)) {
+                // Remove the full match
+                array_shift($matches);
+                
+                // Extract the controller and method
+                list($controller, $method) = $route['callback'];
+                
+                // Create controller instance
+                $controllerInstance = new $controller();
+                
+                // Call the method with parameters
+                call_user_func_array([$controllerInstance, $method], $matches);
+                return;
             }
         }
-
-        http_response_code(404);
-        echo "Page not found";
+        
+        // No route found
+        header("HTTP/1.0 404 Not Found");
+        echo "404 Not Found";
+    }
+    
+    private function convertRouteToRegex($route) {
+        // Replace route parameters with regex pattern
+        $pattern = preg_replace('/\{([a-zA-Z0-9_]+)\}/', '([^/]+)', $route);
+        
+        // Add start and end delimiters
+        $pattern = '#^' . $pattern . '$#';
+        
+        return $pattern;
     }
 }
-?>
-

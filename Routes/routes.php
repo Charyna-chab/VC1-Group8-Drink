@@ -1,7 +1,6 @@
 <?php
 require_once 'Router.php';
 require_once './Controllers/UserController.php';
-require_once './Controllers/DashboardController.php';
 require_once './router/Router.php';
 
 

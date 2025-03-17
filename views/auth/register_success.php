@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registration Successful - XING FU CHA</title>
+    <title><?php echo isset($title) ? $title : 'Registration Successful - XING FU CHA'; ?></title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="/assets/css/style.css">
     <link rel="stylesheet" href="/assets/css/auth.css">
@@ -57,15 +56,14 @@
         }
     </style>
 </head>
-
 <body>
     <div class="auth-container">
         <div class="auth-form-container">
             <div class="success-container">
                 <i class="fas fa-check-circle success-icon"></i>
                 <h2 class="success-message">Registration Successful!</h2>
-                <p class="redirect-message">Welcome to XING FU CHA. Redirecting to home page<span class="loading-dots"></span></p>
-                <a href="/home" class="auth-button">Go to Home Page</a>
+                <p class="redirect-message">Welcome to XING FU CHA, <?php echo isset($user) && isset($user['name']) ? htmlspecialchars($user['name']) : 'User'; ?>. Redirecting to order page<span class="loading-dots"></span></p>
+                <a href="/order" class="auth-button">Go to Order Page</a>
             </div>
         </div>
     </div>
@@ -73,10 +71,8 @@
     <script>
         // Redirect after 3 seconds
         setTimeout(() => {
-            window.location.href = '/home';
+            window.location.href = '/order';
         }, 3000);
     </script>
 </body>
-
 </html>
-

@@ -31,7 +31,7 @@
     transition: var(--favorites-transition);
     position: relative;
     bottom: 16px;
-    right: 50px;
+    left: 20px;
 }
 
 .favorites-header h2 {

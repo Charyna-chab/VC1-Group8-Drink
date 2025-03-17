@@ -1,5 +1,17 @@
 <?php
 class AuthController extends BaseController {
+    public function __construct() {
+        // Check if user is already logged in via remember me cookie
+        $this->checkRememberMe();
+    }
+    
+    // This method will be called when a user visits the root URL
+    public function index() {
+        // Redirect to login page as the first step
+        header('Location: /login');
+        exit;
+    }
+    
     public function login() {
         // Check if user is already logged in
         if (isset($_SESSION['user_id'])) {
@@ -45,7 +57,7 @@ class AuthController extends BaseController {
             }
         }
         
-        $this->views('login', [
+        $this->views('auth/login', [
             'title' => 'Login - XING FU CHA',
             'error' => $error
         ]);
@@ -96,7 +108,7 @@ class AuthController extends BaseController {
             }
         }
         
-        $this->views('register', [
+        $this->views('auth/register', [
             'title' => 'Register - XING FU CHA',
             'error' => $error
         ]);
@@ -109,8 +121,9 @@ class AuthController extends BaseController {
             exit;
         }
         
-        $this->views('register_success', [
-            'title' => 'Registration Successful - XING FU CHA'
+        $this->views('auth/register_success', [
+            'title' => 'Registration Successful - XING FU CHA',
+            'user' => $_SESSION['user']
         ]);
     }
     
@@ -132,7 +145,7 @@ class AuthController extends BaseController {
             }
         }
         
-        $this->views('forgot_password', [
+        $this->views('auth/forgot_password', [
             'title' => 'Forgot Password - XING FU CHA',
             'error' => $error,
             'message' => $message
@@ -154,10 +167,10 @@ class AuthController extends BaseController {
         exit;
     }
     
-    public function checkAuth() {
-        // Check if user is logged in via session
+    private function checkRememberMe() {
+        // If user is already logged in via session, no need to check cookie
         if (isset($_SESSION['user_id'])) {
-            return true;
+            return;
         }
         
         // Check if user has remember me cookie
@@ -172,10 +185,19 @@ class AuthController extends BaseController {
                     'email' => 'user@example.com',
                     'avatar' => '/assets/images/avatar.jpg'
                 ];
-                return true;
             }
         }
+    }
+    
+    // Middleware to check if user is authenticated
+    public function checkAuth() {
+        // Check if user is logged in via session
+        if (isset($_SESSION['user_id'])) {
+            return true;
+        }
         
-        return false;
+        // If not logged in, redirect to login page
+        header('Location: /login');
+        exit;
     }
 }

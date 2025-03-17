@@ -14,9 +14,23 @@ use YourNamespace\Router;
 
 $route = new Router();
 
-$route->get("/", [WelcomeController::class, 'welcome']);
+// Authentication routes
+$route->get("/", [AuthController::class, 'index']); // Redirect to login as first step
+$route->get("/login", [AuthController::class, 'login']);
+$route->post("/login", [AuthController::class, 'login']); // Handle login form submission
+$route->get("/register", [AuthController::class, 'register']);
+$route->post("/register", [AuthController::class, 'register']); // Handle registration form submission
+$route->get("/register-success", [AuthController::class, 'registerSuccess']);
+$route->get("/forgot-password", [AuthController::class, 'forgotPassword']);
+$route->post("/forgot-password", [AuthController::class, 'forgotPassword']); // Handle forgot password form submission
+$route->get("/logout", [AuthController::class, 'logout']);
+
+// Original routes - these should be protected by authentication
+$route->get("/welcome", [WelcomeController::class, 'welcome']); // After successful login
 $route->get("/order", [OrderController::class, 'index']);
 $route->get("/order/details/{id}", [OrderController::class, 'details']);
+$route->post("/order/add-to-cart", [OrderController::class, 'addToCart']);
+$route->get("/cart", [OrderController::class, 'cart']);
 $route->get("/booking", [BookingController::class, 'index']);
 $route->get("/orders", [BookingController::class, 'index']); // Alias for booking
 $route->get("/booking/details/{id}", [BookingController::class, 'details']);
