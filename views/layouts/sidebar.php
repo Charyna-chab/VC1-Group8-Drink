@@ -1,13 +1,14 @@
-
+<main class="main-content">
 <aside class="sidebar">
-    <!-- User logo in Sidebar -->
+    <div class="children-sidebar">
+         <!-- User logo in Sidebar -->
     <div class="branch-order-sidebar">
         <img src="<?php echo isset($branchLogo) ? $branchLogo : '/assets/image/logo/logo.png'; ?>" alt="Branch Logo" class="branch-logo">
     </div>
 
     <ul class="nav-list">
         <li><a href="/order"><i class="fas fa-mug-hot drink-icon"></i> Order drink</a></li>
-        <li><a href="/dashboard"><i class="fas fa-tachometer-alt dashboard-icon"></i> Dashboard</a></li>
+        <li><a href=""><i class="fas fa-tachometer-alt dashboard-icon"></i> Dashboard</a></li>
         <li>
             <a href="/booking">
                 <i class="fas fa-calendar-check booking-icon"></i> Booking
@@ -29,6 +30,8 @@
         <hr>
         <li><a href="logout.php"><i class="fas fa-sign-out-alt logout-icon"></i> Logout</a></li>
     </ul>
+    </div>
+   
 </aside>
 <div class="user-menu" id="userMenu">
     <div class="user-menu-header">

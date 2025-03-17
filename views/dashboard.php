@@ -58,7 +58,7 @@
                 <div class="recent-orders">
                     <div class="order-item">
                         <div class="order-image">
-                            <img src="/assets/images/products/taro-milk-tea.png" alt="Taro Milk Tea">
+                            <img src="/assets/images/products/taro-milk-tea.jpg" alt="Taro Milk Tea">
                         </div>
                         <div class="order-details">
                             <h4>Taro Milk Tea</h4>
