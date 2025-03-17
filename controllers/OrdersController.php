@@ -6,23 +6,24 @@ class OrderController extends BaseController {
         $products = [
             [
                 'id' => 1,
-                'name' => 'Brown Sugar',
-                'description' => 'Our signature milk tea made with premium black tea and creamy milk, sweetened with rich brown sugar.',
+                'name' => 'Taiwan Milk Tea',
+                'description' => 'A classic Taiwanese milk tea with a perfect blend of black tea and creamy milk, offering a smooth and rich taste.',
                 'price' => 1.75,
                 'image' => '/assets/image/products/1.png',
                 'category' => 'milk-tea'
             ],
             [
                 'id' => 2,
-                'name' => 'Brown Sugar & Chocolate',
-                'description' => 'A blend of creamy chocolate and brown sugar syrup, combined with our premium milk tea.',
+                'name' => 'Thai Tea Brown Sugar Red Bean',
+                'description' => 'A rich and creamy Thai tea with brown sugar syrup, complemented by sweet red beans for an added texture and flavor.',
                 'price' => 2.50,
                 'image' => '/assets/image/products/2.png',
                 'category' => 'milk-tea'
             ],
+            
             [
                 'id' => 3,
-                'name' => 'Passion Drink',
+                'name' => 'Oolong Passion',
                 'description' => 'A refreshing blend of passion fruit flavor and our premium milk tea.',
                 'price' => 2.00,
                 'image' => 'assets/image/products/3.png',
@@ -62,7 +63,7 @@ class OrderController extends BaseController {
             ],
             [
                 'id' => 8,
-                'name' => 'Coffee Cream',
+                'name' => 'Caramel Late Cream',
                 'description' => 'Tangy passion fruit flavor blended with our premium tea, topped with a creamy finish.',
                 'price' => 1.75,
                 'image' => '/assets/image/products/coffee-cream.png',
@@ -70,50 +71,53 @@ class OrderController extends BaseController {
             ],
             [
                 'id' => 9,
-                'name' => 'Milk Tea Matcha',
-                'description' => 'A smooth blend of creamy milk tea and Japanese matcha powder for a refreshing taste.',
+                'name' => 'Avocado Fresh milk',
+                'description' => 'A creamy and refreshing blend of ripe avocado and fresh milk, offering a smooth and nutritious drink.',
                 'price' => 2.50,
                 'image' => '/assets/image/products/milk-tea-macha.png',
                 'category' => 'smoothie'
             ],
+            
             [
                 'id' => 10,
                 'name' => 'Ovaltine Stick Lava',
                 'description' => 'A tropical mango smoothie made with fresh mango puree and creamy milk, topped with Ovaltine.',
                 'price' => 2.50,
-                'image' => '/assets/images/products/Ovaltine-stick-lava.png',
+                'image' => '/assets/image/products/Ovaltine-stick-lava.png',
                 'category' => 'smoothie'
             ],
             [
                 'id' => 11,
-                'name' => 'Strawberry Milk Tea',
+                'name' => 'Xin Fu Cha Strawberry Fresh Milk',
                 'description' => 'A creamy smoothie made with fresh strawberries and milk for a rich, sweet taste.',
-                'price' => 6.00,
-                'image' => '/assets/images/products/strawberry.png',
+                'price' => 2.00,
+                'image' => '/assets/image/products/strawberry.png',
                 'category' => 'smoothie'
             ],
             [
                 'id' => 12,
-                'name' => 'Blueberry Smoothie',
-                'description' => 'An antioxidant-rich smoothie made with fresh blueberries and milk for a deliciously healthy treat.',
+                'name' => 'Vanilla Strawberry',
+                'description' => 'A delightful smoothie made with sweet strawberries and creamy vanilla, blended to perfection for a deliciously smooth treat.',
                 'price' => 5.75,
-                'image' => '/assets/images/products/blueberry-smoothie.jpg',
+                'image' => '/assets/image/products/Vanilla Strawberry.png',
                 'category' => 'smoothie'
             ],
+            
             [
                 'id' => 13,
-                'name' => 'Americano',
-                'description' => 'A classic espresso, diluted with hot water, offering a simple and strong coffee flavor.',
+                'name' => 'Trolach Machhiato',
+                'description' => 'A rich and creamy coffee drink made with a shot of espresso, topped with frothy milk for a balanced, bold flavor.',
                 'price' => 3.50,
-                'image' => '/assets/images/products/americano.jpg',
+                'image' => '/assets/image/products/Trolach Machhiato.png',
                 'category' => 'coffee'
             ],
+            
             [
                 'id' => 14,
-                'name' => 'Caramel Macchiato',
+                'name' => 'Japan Yuzu',
                 'description' => 'Espresso combined with steamed milk and rich caramel syrup, creating a sweet, creamy coffee experience.',
                 'price' => 4.75,
-                'image' => '/assets/images/products/caramel-macchiato.jpg',
+                'image' => '/assets/image/products/japan Yuzu.png',
                 'category' => 'coffee'
             ],
             [
