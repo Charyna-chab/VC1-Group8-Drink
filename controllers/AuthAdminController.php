@@ -1,5 +1,5 @@
 <?php
-class AuthAdminController {
+class AuthController {
     private $userModel;
     private $auth;
     
@@ -56,7 +56,7 @@ class AuthAdminController {
         $csrf_token = generate_csrf_token();
         
         // Include login view
-        include 'views/login.php';
+        include 'views/adminlogin.php';
     }
     
     /**

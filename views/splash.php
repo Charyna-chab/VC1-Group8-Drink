@@ -1,7 +1,7 @@
 <body class="splash-body">
     <div class="splash-container">
         <div class="splash-logo">
-            <img src="/assets/images/logo/logo.png" alt="XING FU CHA Logo">
+            <img src="/assets/image/logo/logo.png" alt="XING FU CHA Logo">
             <h1 class="splash-title">XING FU CHA</h1>
             <p class="splash-tagline">Premium Boba Tea Experience</p>
         </div>
