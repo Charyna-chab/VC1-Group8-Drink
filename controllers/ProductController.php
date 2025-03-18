@@ -1,42 +1,68 @@
 <?php
+require_once 'Models/ProductModel.php';
+require_once 'BaseController.php';
 
-class ProductController {
-    private $db;
+class ProductController extends BaseController
+{
     
-    public function __construct() {
-        $this->db = Database::getInstance();
+    private $model;
+
+    function __construct()
+    {
+        $this->model = new ProductModel();
     }
-    
-    public function menu() {
-        $categories = $this->db->getCategories();
-        $products = $this->db->getAllProducts();
-        
-        require 'views/menu.php';
+
+    function index()
+    {
+        $products = $this->model->getProducts();
+        $this->views('product/product-list.php', ['products' => $products]);
     }
-    
-    public function show() {
-        // Get product ID from URL
-        $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
-        
-        // Get product details
-        $product = $this->db->getProductById($id);
-        
-        if (!$product) {
-            // Product not found
-            header("HTTP/1.0 404 Not Found");
-            require 'views/404.php';
-            return;
+
+    function create()
+    {
+        $this->views('product/create.php');
+    }
+
+    function store()
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+            $data = [
+            'product_name' => $_POST['product_name'],
+            'image' => $_POST['image'],
+            'product_detail' => $_POST['product_detail'],
+            'price' => $_POST['price'],
+            ];
+            print_r($data); // Debugging: Print the data
+            $this->model->createProduct($data);
+            $this->redirect('/product');
         }
-        
-        // Get related products
-        $relatedProducts = array_filter($this->db->getAllProducts(), function($p) use ($product) {
-            return $p['category'] === $product['category'] && $p['id'] !== $product['id'];
-        });
-        
-        // Limit to 4 related products
-        $relatedProducts = array_slice($relatedProducts, 0, 4);
-        
-        require 'views/product.php';
+    }
+
+    function edit($id)
+    {
+        $product = $this->model->getProduct($id);
+        $this->views('product/edit.php', ['product' => $product]);
+    }
+
+    function update($id)
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+            $data = [
+            'product_name' => $_POST['product_name'],
+            'image' => $_POST['image'],
+            'product_detail' => $_POST['product_detail'],
+            'price' => $_POST['price'],
+            ];
+            $this->model->updateProduct($id, $data); // Only call updateUser
+            $this->redirect('/product');
+        }
+    }
+
+    function destroy($id)
+    {
+        $this->model->deleteProduct($id);
+        $this->redirect('/product');
     }
 }
-

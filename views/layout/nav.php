@@ -40,7 +40,7 @@
 
     <!-- Nav Item - Pages Collapse Menu -->
     <li class="nav-item">
-        <a class="nav-link collapsed" href="#">
+        <a class="nav-link collapsed" href="/product">
             <i class="fas fa-fw fa-folder"></i>
             <span>Products</span>
         </a>
