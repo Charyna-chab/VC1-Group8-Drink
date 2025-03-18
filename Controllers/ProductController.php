@@ -3,8 +3,8 @@
 class ProductController {
     private $db;
     
-    public function __construct() {
-        $this->db = Database::getInstance();
+    public function __construct($db) {
+        $this->db = $db;
     }
     
     public function menu() {
