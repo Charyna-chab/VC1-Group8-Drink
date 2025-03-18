@@ -1,13 +1,10 @@
 <?php
-// In AuthController.php
 class AuthController extends BaseController {
-
     public function __construct() {
-        // Start the session if not already started
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
         }
-        $this->checkRememberMe(); // Check for the remember me cookie
+        $this->checkRememberMe();
     }
 
     public function index() {
@@ -15,20 +12,17 @@ class AuthController extends BaseController {
     }
 
     public function login() {
-        // If the user is already logged in, redirect to the welcome page
         if (isset($_SESSION['user_id'])) {
             $this->redirect('/welcome');
         }
 
-        $error = null; // Initialize the error variable
+        $error = null;
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Get email, password, and remember me status from the POST request
             $email = $_POST['email'] ?? '';
             $password = $_POST['password'] ?? '';
             $remember = isset($_POST['remember']);
 
-            // Check user credentials (simple hardcoded check for demo purposes)
             if ($email === 'user@example.com' && $password === 'password123') {
                 $_SESSION['user_id'] = 1;
                 $_SESSION['user'] = [
@@ -38,22 +32,18 @@ class AuthController extends BaseController {
                     'avatar' => '/assets/images/avatar.jpg'
                 ];
 
-                // If the user opted to be remembered, set a remember me cookie
                 if ($remember) {
                     setcookie('remember_token', 'demo_token', time() + (86400 * 30), '/');
                 }
-
-                $this->redirect('/welcome'); // Redirect to the welcome page upon successful login
+                $this->redirect('/welcome');
             } else {
-                $error = 'Invalid email or password.'; // Set error message if login fails
+                $error = 'Invalid email or password.';
             }
         }
 
-        // Render the login view and pass the error message
         $this->views('auth/login', ['title' => 'Login - XING FU CHA', 'error' => $error]);
     }
 
-    // Register method
     public function register() {
         if (isset($_SESSION['user_id'])) {
             $this->redirect('/welcome');
@@ -84,11 +74,9 @@ class AuthController extends BaseController {
             }
         }
 
-        // Render register view
         $this->views('auth/register', ['title' => 'Register - XING FU CHA', 'error' => $error]);
     }
 
-    // Forgot password method
     public function forgotPassword() {
         $error = null;
         $message = null;
@@ -103,11 +91,9 @@ class AuthController extends BaseController {
             }
         }
 
-        // Render forgot password view
         $this->views('auth/forgot_password', ['title' => 'Forgot Password - XING FU CHA', 'error' => $error, 'message' => $message]);
     }
 
-    // Logout method
     public function logout() {
         session_unset();
         session_destroy();
@@ -135,12 +121,9 @@ class AuthController extends BaseController {
         }
     }
 
-    // Check authentication status (e.g., for protected pages)
     public function checkAuth() {
         if (!isset($_SESSION['user_id'])) {
             $this->redirect('/login');
         }
     }
 }
-?>
-
