@@ -16,7 +16,7 @@
 
 .favorites-header {
     background: linear-gradient(135deg, var(--favorites-gradient-start), var(--favorites-gradient-end));
-    width: 164vh;
+    width: 160vh;
     height: 30vh;
     display: flex;
     justify-content: center;
@@ -31,7 +31,7 @@
     transition: var(--favorites-transition);
     position: relative;
     bottom: 16px;
-    right: 20px;
+    right: 40px;
 }
 
 .favorites-header h2 {

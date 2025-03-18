@@ -105,8 +105,8 @@
 
 .input-with-icon input:focus {
     outline: none;
-    border-color: #ff5e62;
-    box-shadow: 0 0 0 2px rgba(255, 94, 98, 0.2);
+    border-color: #ff7f50;
+    box-shadow: 0 0 0 2px rgba(255, 127, 80, 0.2);
 }
 
 .input-with-icon i {
@@ -144,14 +144,14 @@
 }
 
 .forgot-password {
-    color: #ff5e62;
+    color: #ff7f50;
     text-decoration: none;
     font-size: 14px;
     transition: color 0.3s ease;
 }
 
 .forgot-password:hover {
-    color: #ff4146;
+    color: #ff6347;
     text-decoration: underline;
 }
 
@@ -159,7 +159,7 @@
     display: block;
     width: 100%;
     padding: 12px;
-    background-color: #ff5e62;
+    background-color: #ff7f50;
     color: white;
     border: none;
     border-radius: 5px;
@@ -172,7 +172,7 @@
 }
 
 .auth-button:hover {
-    background-color: #ff4146;
+    background-color: #ff6347;
     transform: translateY(-2px);
 }
 
@@ -249,14 +249,14 @@
 }
 
 .auth-footer a {
-    color: #ff5e62;
+    color: #ff7f50;
     text-decoration: none;
     font-weight: 600;
     transition: color 0.3s ease;
 }
 
 .auth-footer a:hover {
-    color: #ff4146;
+    color: #ff6347;
     text-decoration: underline;
 }
 
