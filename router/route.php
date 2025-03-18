@@ -2,27 +2,16 @@
 require_once "Router.php";
 require_once "controllers/BaseController.php";
 require_once "controllers/WelcomeController.php";
-
 require_once "controllers/FeedbackController.php";
 require_once "controllers/SettingsController.php";
 require_once "controllers/OrdersController.php";
 require_once "controllers/BookingController.php";
-require_once "controllers/AuthController.php";
 
 use YourNamespace\Router;
 
 $route = new Router();
 
-// Authentication routes
-$route->get("/", [AuthController::class, 'index']);
-$route->get("/login", [AuthController::class, 'login']);
-$route->post("/login", [AuthController::class, 'login']);
-$route->get("/register", [AuthController::class, 'register']);
-$route->post("/register", [AuthController::class, 'register']);
-$route->get("/register-success", [AuthController::class, 'registerSuccess']);
-$route->get("/forgot-password", [AuthController::class, 'forgotPassword']);
-$route->post("/forgot-password", [AuthController::class, 'forgotPassword']);
-$route->get("/logout", [AuthController::class, 'logout']);
+
 
 // Original routes
 $route->get("/welcome", [WelcomeController::class, 'welcome']);
