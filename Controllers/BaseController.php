@@ -1,18 +1,17 @@
 <?php
-class BaseController{
+class BaseController {
 
-    public function views($views, $data = []){
-        extract($data);
-        ob_start();
-        $content = ob_get_clean();
-        require_once 'views/layout.php';
-        // require_once 'views/layout-dashboard.php';
-        require_once 'views/'.$views . '.php';
-
+    public function views($views, $data = []) {
+        extract($data); // Convert data array into variables
+        ob_start(); // Start buffering the output
+        require_once 'views/'.$views . '.php'; // Render the view
+        $content = ob_get_clean(); // Capture the output into $content
+        require_once 'views/layout.php'; // Now include the layout, passing $content
     }
-    
-    public function redirect($uri){
-        header('Location:' . $uri);
+
+    public function redirect($uri) {
+        header('Location: ' . $uri);
         exit();
     }
 }
+?>
