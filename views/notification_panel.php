@@ -3,6 +3,7 @@
     <button class="close-btn" onclick="toggleNotificationPanel()">×</button>
     <h3>Notifications</h3>
     <div class="notification-list" id="notificationList">
+        <!-- Dynamic notifications will be inserted here -->
         <div class="empty-notification">
             <i class="fas fa-bell-slash"></i>
             <p>No notifications yet</p>

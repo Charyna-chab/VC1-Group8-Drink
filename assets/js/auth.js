@@ -1,17 +1,17 @@
 document.addEventListener("DOMContentLoaded", () => {
     // Toggle password visibility
     const togglePasswordButtons = document.querySelectorAll(".toggle-password")
+
     togglePasswordButtons.forEach((button) => {
         button.addEventListener("click", function() {
-            const passwordField = this.previousElementSibling
+            const passwordInput = this.previousElementSibling
 
-            // Toggle password visibility
-            if (passwordField.type === "password") {
-                passwordField.type = "text"
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text"
                 this.classList.remove("fa-eye")
                 this.classList.add("fa-eye-slash")
             } else {
-                passwordField.type = "password"
+                passwordInput.type = "password"
                 this.classList.remove("fa-eye-slash")
                 this.classList.add("fa-eye")
             }
@@ -19,73 +19,86 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 
     // Form validation
-    const authForm = document.querySelector(".auth-form")
-    if (authForm) {
-        authForm.addEventListener("submit", (event) => {
-            // Get form type (login or register)
-            const isRegisterForm = window.location.pathname.includes("register")
+    const loginForm = document.querySelector('form[action="/login"]')
+    const registerForm = document.querySelector('form[action="/register"]')
+    const forgotPasswordForm = document.querySelector('form[action="/forgot-password"]')
 
-            if (isRegisterForm) {
-                // Validate register form
-                const password = document.getElementById("password").value
-                const confirmPassword = document.getElementById("confirm_password").value
+    if (loginForm) {
+        loginForm.addEventListener("submit", (e) => {
+            const email = document.getElementById("email").value
+            const password = document.getElementById("password").value
 
-                if (password !== confirmPassword) {
-                    event.preventDefault()
-                    showError("Passwords do not match")
-                    return
-                }
-
-                if (password.length < 8) {
-                    event.preventDefault()
-                    showError("Password must be at least 8 characters long")
-                    return
-                }
-
-                const termsCheckbox = document.querySelector('input[name="terms"]')
-                if (!termsCheckbox.checked) {
-                    event.preventDefault()
-                    showError("You must agree to the Terms of Service and Privacy Policy")
-                    return
-                }
+            if (!email || !password) {
+                e.preventDefault()
+                showError("Please fill in all required fields")
             }
         })
     }
 
-    // Social login buttons
-    const socialButtons = document.querySelectorAll(".social-button")
-    socialButtons.forEach((button) => {
-        button.addEventListener("click", function() {
-            const provider = this.classList.contains("google") ? "Google" : "Facebook"
+    if (registerForm) {
+        registerForm.addEventListener("submit", (e) => {
+            const name = document.getElementById("name").value
+            const email = document.getElementById("email").value
+            const password = document.getElementById("password").value
+            const confirmPassword = document.getElementById("confirm_password").value
+            const terms = document.querySelector('input[name="terms"]').checked
 
-            // In a real application, this would redirect to the OAuth provider
-            alert(`${provider} login is not implemented in this demo.`)
+            if (!name || !email || !password || !confirmPassword) {
+                e.preventDefault()
+                showError("Please fill in all required fields")
+            } else if (password !== confirmPassword) {
+                e.preventDefault()
+                showError("Passwords do not match")
+            } else if (password.length < 8) {
+                e.preventDefault()
+                showError("Password must be at least 8 characters long")
+            } else if (!terms) {
+                e.preventDefault()
+                showError("You must agree to the Terms of Service")
+            }
         })
-    })
+    }
 
-    // Function to show error message
+    if (forgotPasswordForm) {
+        forgotPasswordForm.addEventListener("submit", (e) => {
+            const email = document.getElementById("email").value
+
+            if (!email) {
+                e.preventDefault()
+                showError("Please enter your email address")
+            }
+        })
+    }
+
+    // Show error message
     function showError(message) {
-        // Check if error element already exists
-        let errorElement = document.querySelector(".auth-error")
+        let errorDiv = document.querySelector(".auth-error")
 
-        if (!errorElement) {
-            // Create error element
-            errorElement = document.createElement("div")
-            errorElement.className = "auth-error"
-            errorElement.innerHTML = `
+        if (!errorDiv) {
+            errorDiv = document.createElement("div")
+            errorDiv.className = "auth-error"
+            errorDiv.innerHTML = `
                   <i class="fas fa-exclamation-circle"></i>
                   <span>${message}</span>
               `
 
-            // Insert after auth-header
-            const authHeader = document.querySelector(".auth-header")
-            authHeader.insertAdjacentElement("afterend", errorElement)
+            const form = document.querySelector(".auth-form")
+            form.parentNode.insertBefore(errorDiv, form)
         } else {
-            // Update existing error message
-            errorElement.querySelector("span").textContent = message
+            errorDiv.querySelector("span").textContent = message
         }
 
         // Scroll to error
-        errorElement.scrollIntoView({ behavior: "smooth", block: "center" })
+        errorDiv.scrollIntoView({ behavior: "smooth", block: "start" })
     }
+
+    // Social login buttons (placeholder functionality)
+    const socialButtons = document.querySelectorAll(".social-button")
+
+    socialButtons.forEach((button) => {
+        button.addEventListener("click", function() {
+            const provider = this.classList.contains("google") ? "Google" : "Facebook"
+            alert(`${provider} login would be implemented here in a real application.`)
+        })
+    })
 })

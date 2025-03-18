@@ -1,8 +1,6 @@
-<?php
-// views/order.php
-require_once __DIR__ . '/../views/layouts/header.php';
-require_once __DIR__ . '/../views/layouts/sidebar.php';
-?>
+<?php require_once __DIR__ . '/layouts/header.php'; ?>
+<?php require_once __DIR__ . '/layouts/navbar.php'; ?>
+<?php require_once __DIR__ . '/layouts/sidebar.php'; ?>
 
 <section class="content">
     <!-- Discount Banner -->
@@ -12,7 +10,7 @@ require_once __DIR__ . '/../views/layouts/sidebar.php';
             <p>Use code: <strong>BOBA20</strong> at checkout</p>
             <button class="btn-primary">Get Voucher</button>
         </div>
-        <img src="/assets/images/discount-banner.png" alt="Discount 20-50%">
+        <img src="/assets/image/logo/logo.png" alt="Discount 20-50%">
     </div>
 
     <!-- Menu Categories -->
@@ -69,6 +67,17 @@ require_once __DIR__ . '/../views/layouts/sidebar.php';
             <h4 id="productName">Product Name</h4>
             <p id="productPrice">$0.00</p>
         </div>
+        
+        <!-- Quantity Control -->
+        <div class="quantity-control">
+            <label>Quantity:</label>
+            <div class="quantity-control-inner">
+                <button class="quantity-btn minus">-</button>
+                <input type="number" id="quantity" class="quantity-input" value="1" min="1" max="10">
+                <button class="quantity-btn plus">+</button>
+            </div>
+        </div>
+        
         <div class="customize-options">
             <div class="option-group">
                 <label>Size:</label>
@@ -83,7 +92,7 @@ require_once __DIR__ . '/../views/layouts/sidebar.php';
                 <select id="sugarLevel">
                     <option value="no">No Sugar</option>
                     <option value="25">25% Sugar</option>
-                    <option value="50">50% Sugar</option>
+                    <option value="50" selected>50% Sugar</option>
                     <option value="75">75% Sugar</option>
                     <option value="100">100% Sugar</option>
                 </select>
@@ -93,7 +102,7 @@ require_once __DIR__ . '/../views/layouts/sidebar.php';
                 <select id="iceLevel">
                     <option value="no">No Ice</option>
                     <option value="less">Less Ice</option>
-                    <option value="normal">Normal Ice</option>
+                    <option value="normal" selected>Normal Ice</option>
                     <option value="extra">Extra Ice</option>
                 </select>
             </div>
@@ -129,7 +138,9 @@ require_once __DIR__ . '/../views/layouts/sidebar.php';
                 <span id="totalPrice">$0.00</span>
             </div>
         </div>
-        <button class="confirm-btn">Add to Cart</button>
+        <button class="add-to-cart-btn">
+            <i class="fas fa-cart-plus"></i> Add to Cart
+        </button>
     </div>
 </div>
 
@@ -139,5 +150,14 @@ require_once __DIR__ . '/../views/layouts/sidebar.php';
 <!-- Toast Container -->
 <div class="toast-container" id="toastContainer"></div>
 
+<!-- Include CSS files -->
+<link rel="stylesheet" href="/assets/css/order-panel.css">
+<link rel="stylesheet" href="/assets/css/cart.css">
+
+<!-- Include JavaScript files -->
+<script src="/assets/js/cart.js"></script>
 <script src="/assets/js/order.js"></script>
+<script src="/assets/js/navbar.js"></script>
+
+<?php require_once __DIR__ . '/layouts/footer.php'; ?>
 
