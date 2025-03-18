@@ -41,7 +41,7 @@ class AuthController extends BaseController {
             }
         }
 
-        $this->view('auth/login', ['title' => 'Login - XING FU CHA', 'error' => $error]);
+        $this->views('auth/login', ['title' => 'Login - XING FU CHA', 'error' => $error]);
     }
 
     public function register() {
@@ -74,7 +74,7 @@ class AuthController extends BaseController {
             }
         }
 
-        $this->view('auth/register', ['title' => 'Register - XING FU CHA', 'error' => $error]);
+        $this->views('auth/register', ['title' => 'Register - XING FU CHA', 'error' => $error]);
     }
 
     public function forgotPassword() {
@@ -91,7 +91,7 @@ class AuthController extends BaseController {
             }
         }
 
-        $this->view('auth/forgot_password', ['title' => 'Forgot Password - XING FU CHA', 'error' => $error, 'message' => $message]);
+        $this->views('auth/forgot_password', ['title' => 'Forgot Password - XING FU CHA', 'error' => $error, 'message' => $message]);
     }
 
     public function logout() {
