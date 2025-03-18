@@ -1,3 +1,4 @@
+// assets/js/order.js
 document.addEventListener("DOMContentLoaded", () => {
             // DOM Elements
             const categoryButtons = document.querySelectorAll(".category-btn");
@@ -7,12 +8,17 @@ document.addEventListener("DOMContentLoaded", () => {
             const orderPanel = document.getElementById("orderPanel");
             const closeBtn = document.querySelector(".order-panel .close-btn");
             const overlay = document.getElementById("overlay");
+            const noProductMessage = document.getElementById("no-product-message");
 
             // Form Elements
             const drinkSizeSelect = document.getElementById("drinkSize");
             const sugarLevelSelect = document.getElementById("sugarLevel");
+            const iceLevelSelect = document.getElementById("iceLevel");
             const toppingCheckboxes = document.querySelectorAll('#toppings input[type="checkbox"]');
             const confirmBtn = document.querySelector(".confirm-btn");
+            const productImage = document.getElementById("productImage");
+            const productName = document.getElementById("productName");
+            const productPrice = document.getElementById("productPrice");
 
             // Create toast container if it doesn't exist
             let toastContainer = document.getElementById("toastContainer");
@@ -23,6 +29,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 document.body.appendChild(toastContainer);
             }
 
+            // Cart data
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            updateCartCount();
+
             // Current product data
             const currentProduct = {
                 id: null,
@@ -30,8 +40,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 price: 0,
                 image: "",
                 size: "small",
-                sugar: "no",
+                sugar: "50",
+                ice: "normal",
                 toppings: [],
+                quantity: 1
             };
 
             // Filter products by category
@@ -46,19 +58,29 @@ document.addEventListener("DOMContentLoaded", () => {
                     const category = this.getAttribute("data-category");
 
                     // Filter products
+                    let visibleCount = 0;
                     productCards.forEach((card) => {
                         if (category === "all" || card.getAttribute("data-category") === category) {
                             card.style.display = "block";
+                            visibleCount++;
                         } else {
                             card.style.display = "none";
                         }
                     });
+
+                    // Show/hide no products message
+                    if (visibleCount === 0) {
+                        noProductMessage.style.display = "block";
+                    } else {
+                        noProductMessage.style.display = "none";
+                    }
                 });
             });
 
             // Search functionality
             searchInput.addEventListener("input", function() {
                 const searchTerm = this.value.toLowerCase().trim();
+                let visibleCount = 0;
 
                 productCards.forEach((card) => {
                     const productName = card.querySelector("h3").textContent.toLowerCase();
@@ -66,10 +88,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     if (productName.includes(searchTerm) || productDescription.includes(searchTerm)) {
                         card.style.display = "block";
+                        visibleCount++;
                     } else {
                         card.style.display = "none";
                     }
                 });
+
+                // Show/hide no products message
+                if (visibleCount === 0) {
+                    noProductMessage.style.display = "block";
+                } else {
+                    noProductMessage.style.display = "none";
+                }
             });
 
             // Open order panel
@@ -85,14 +115,16 @@ document.addEventListener("DOMContentLoaded", () => {
                     currentProduct.image = productCard.querySelector(".product-image img").src;
 
                     // Update order panel with product details
-                    document.getElementById("productImage").src = currentProduct.image;
-                    document.getElementById("productName").textContent = currentProduct.name;
-                    document.getElementById("productPrice").textContent = "$" + currentProduct.price.toFixed(2);
+                    productImage.src = currentProduct.image;
+                    productName.textContent = currentProduct.name;
+                    productName.setAttribute("data-id", currentProduct.id);
+                    productPrice.textContent = "$" + currentProduct.price.toFixed(2);
                     document.getElementById("basePrice").textContent = "$" + currentProduct.price.toFixed(2);
 
                     // Reset form
                     drinkSizeSelect.selectedIndex = 0;
-                    sugarLevelSelect.selectedIndex = 0;
+                    sugarLevelSelect.selectedIndex = 2; // Default to 50% sugar
+                    iceLevelSelect.selectedIndex = 2; // Default to normal ice
                     toppingCheckboxes.forEach((checkbox) => (checkbox.checked = false));
 
                     // Update total price
@@ -101,6 +133,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     // Show order panel and overlay
                     orderPanel.classList.add("active");
                     overlay.classList.add("active");
+
+                    // Add animation
+                    orderPanel.style.animation = "slideIn 0.3s forwards";
                 });
             });
 
@@ -109,8 +144,11 @@ document.addEventListener("DOMContentLoaded", () => {
             overlay.addEventListener("click", closeOrderPanel);
 
             function closeOrderPanel() {
-                orderPanel.classList.remove("active");
-                overlay.classList.remove("active");
+                orderPanel.style.animation = "slideOut 0.3s forwards";
+                setTimeout(() => {
+                    orderPanel.classList.remove("active");
+                    overlay.classList.remove("active");
+                }, 300);
             }
 
             // Update price when options change
@@ -121,6 +159,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
             sugarLevelSelect.addEventListener("change", function() {
                 currentProduct.sugar = this.value;
+            });
+
+            iceLevelSelect.addEventListener("change", function() {
+                currentProduct.ice = this.value;
             });
 
             toppingCheckboxes.forEach((checkbox) => {
@@ -175,33 +217,111 @@ document.addEventListener("DOMContentLoaded", () => {
             confirmBtn.addEventListener("click", () => {
                 // Get current selections
                 const size = drinkSizeSelect.options[drinkSizeSelect.selectedIndex].text;
+                const sizeValue = drinkSizeSelect.value;
                 const sugar = sugarLevelSelect.options[sugarLevelSelect.selectedIndex].text;
+                const sugarValue = sugarLevelSelect.value;
+                const ice = iceLevelSelect.options[iceLevelSelect.selectedIndex].text;
+                const iceValue = iceLevelSelect.value;
+
+                // Calculate total price
+                const basePrice = currentProduct.price;
+                let sizePrice = 0;
+                if (sizeValue === "medium") {
+                    sizePrice = 0.5;
+                } else if (sizeValue === "large") {
+                    sizePrice = 1.0;
+                }
+
+                let toppingsPrice = 0;
+                const selectedToppings = [];
+                toppingCheckboxes.forEach((checkbox) => {
+                    if (checkbox.checked) {
+                        const toppingPrice = Number.parseFloat(checkbox.getAttribute("data-price"));
+                        toppingsPrice += toppingPrice;
+                        selectedToppings.push({
+                            name: checkbox.value,
+                            price: toppingPrice
+                        });
+                    }
+                });
+
+                const totalPrice = basePrice + sizePrice + toppingsPrice;
+
+                // Create order item
+                const orderItem = {
+                    id: Date.now(), // Unique ID for the cart item
+                    productId: currentProduct.id,
+                    name: currentProduct.name,
+                    image: currentProduct.image,
+                    basePrice: basePrice,
+                    size: {
+                        name: size,
+                        value: sizeValue,
+                        price: sizePrice
+                    },
+                    sugar: {
+                        name: sugar,
+                        value: sugarValue
+                    },
+                    ice: {
+                        name: ice,
+                        value: iceValue
+                    },
+                    toppings: selectedToppings,
+                    quantity: 1,
+                    totalPrice: totalPrice,
+                    orderDate: new Date().toISOString(),
+                    status: "processing"
+                };
+
+                // Add to cart
+                cart.push(orderItem);
+                saveCart();
+                updateCartCount();
 
                 // Create order summary
                 let toppingsText = "";
-                if (currentProduct.toppings.length > 0) {
-                    const toppingNames = currentProduct.toppings.map((t) => t.name).join(", ");
+                if (selectedToppings.length > 0) {
+                    const toppingNames = selectedToppings.map((t) => t.name).join(", ");
                     toppingsText = ` with ${toppingNames}`;
                 }
 
-                const orderSummary = `${size}, ${sugar}${toppingsText}`;
-                const totalPrice = document.getElementById("totalPrice").textContent;
+                const orderSummary = `${size}, ${sugar}, ${ice}${toppingsText}`;
+                const totalPriceText = "$" + totalPrice.toFixed(2);
 
                 // Show toast notification
-                showToast(currentProduct.name, orderSummary, totalPrice);
+                showToast(currentProduct.name, orderSummary, totalPriceText);
 
                 // Close order panel
                 closeOrderPanel();
 
-                // Redirect to booking page after a delay (simulating adding to cart)
+                // Show added to cart notification
                 setTimeout(() => {
-                    // In a real application, you would save the order to the cart first
-                    // window.location.href = '/booking';
-
-                    // For demo purposes, just show another toast
                     showToast("Order Added", "Your order has been added to cart!", "", "success");
+
+                    // Ask if user wants to go to booking page
+                    setTimeout(() => {
+                        if (confirm("Your order has been added to cart. Would you like to view your orders?")) {
+                            window.location.href = '/booking';
+                        }
+                    }, 1000);
                 }, 1500);
             });
+
+            // Save cart to localStorage
+            function saveCart() {
+                localStorage.setItem("cart", JSON.stringify(cart));
+            }
+
+            // Update cart count
+            function updateCartCount() {
+                const cartCount = cart.length;
+                const bookingBadge = document.getElementById("bookingBadge");
+                if (bookingBadge) {
+                    bookingBadge.textContent = cartCount;
+                    bookingBadge.style.display = cartCount > 0 ? "inline-block" : "none";
+                }
+            }
 
             // Show toast notification
             function showToast(title, message, price = "", type = "info") {
@@ -254,37 +374,28 @@ document.addEventListener("DOMContentLoaded", () => {
             e.preventDefault();
             e.stopPropagation();
 
+            const productCard = this.closest(".product-card");
+            const productId = productCard.querySelector(".order-btn").getAttribute("data-product-id");
+            const productName = productCard.querySelector("h3").textContent;
+            const productImage = productCard.querySelector(".product-image img").src;
+            const productPrice = productCard.querySelector(".product-price").textContent;
+            
             const icon = this.querySelector("i");
             if (icon.classList.contains("far")) {
                 icon.classList.remove("far");
                 icon.classList.add("fas");
+                saveFavorite(productId, productName, productImage, productPrice);
                 showToast("Added to Favorites", "Item added to your favorites!", "", "success");
             } else {
                 icon.classList.remove("fas");
                 icon.classList.add("far");
+                removeFavorite(productId);
                 showToast("Removed from Favorites", "Item removed from your favorites", "", "info");
             }
         });
     });
-});
-document.addEventListener("DOMContentLoaded", function () {
-    const favoriteButtons = document.querySelectorAll(".favorite-btn");
-    
-    favoriteButtons.forEach(button => {
-        button.addEventListener("click", function () {
-            const productCard = this.closest(".product-card");
-            const productId = productCard.getAttribute("data-category");
-            const productName = productCard.querySelector("h3").textContent;
-            const productImage = productCard.querySelector("img").src;
-            const productPrice = productCard.querySelector(".product-price").textContent;
-            
-            this.classList.add("red");
-            this.innerHTML = '<i class="fas fa-heart"></i>';
-            
-            saveFavorite(productId, productName, productImage, productPrice);
-        });
-    });
-    
+
+    // Save favorite to localStorage
     function saveFavorite(id, name, image, price) {
         let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
         
@@ -293,4 +404,55 @@ document.addEventListener("DOMContentLoaded", function () {
             localStorage.setItem("favorites", JSON.stringify(favorites));
         }
     }
+
+    // Remove favorite from localStorage
+    function removeFavorite(id) {
+        let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+        favorites = favorites.filter(item => item.id !== id);
+        localStorage.setItem("favorites", JSON.stringify(favorites));
+    }
+
+    // Add CSS animations
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideIn {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+        
+        @keyframes slideOut {
+            from { transform: translateX(0); }
+            to { transform: translateX(100%); }
+        }
+        
+        .order-panel {
+            transition: transform 0.3s ease;
+        }
+        
+        .product-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .order-btn {
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        
+        .order-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        .favorite-btn {
+            transition: transform 0.3s ease;
+        }
+        
+        .favorite-btn:hover {
+            transform: scale(1.2);
+        }
+    `;
+    document.head.appendChild(style);
 });

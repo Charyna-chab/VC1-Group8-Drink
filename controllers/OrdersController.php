@@ -496,17 +496,17 @@ class OrderController extends BaseController {
             echo json_encode(['success' => false, 'message' => 'Method not allowed']);
             exit;
         }
-        
+    
         // Get JSON data from request body
         $json = file_get_contents('php://input');
         $data = json_decode($json, true);
-        
+    
         if (!$data) {
             http_response_code(400); // Bad Request
             echo json_encode(['success' => false, 'message' => 'Invalid request data']);
             exit;
         }
-        
+    
         // Validate required fields
         $requiredFields = ['product_id', 'size', 'sugar', 'ice', 'quantity'];
         foreach ($requiredFields as $field) {
@@ -516,17 +516,36 @@ class OrderController extends BaseController {
                 exit;
             }
         }
-        
-        // In a real application, you would:
-        // 1. Validate the product exists
-        // 2. Calculate the correct price
-        // 3. Add the item to the user's cart in the database
-        
-        // For now, we'll just return success
+    
+        // Simulate adding the item to the cart
+        if (!isset($_SESSION['cart'])) {
+            $_SESSION['cart'] = [];
+        }
+        $_SESSION['cart'][] = $data;
+    
+        // Update notification count
+        if (!isset($_SESSION['notification_count'])) {
+            $_SESSION['notification_count'] = 0;
+        }
+        $_SESSION['notification_count'] += 1;
+    
+        // Get product name for the notification
+        $productName = 'Unknown Product';
+        $products = $this->getProducts(); // Fetch products from your data source
+        foreach ($products as $product) {
+            if ($product['id'] == $data['product_id']) {
+                $productName = $product['name'];
+                break;
+            }
+        }
+    
+        // Return success response
         echo json_encode([
             'success' => true,
             'message' => 'Item added to cart',
-            'cart_count' => isset($_SESSION['cart']) ? count($_SESSION['cart']) + 1 : 1
+            'cart_count' => count($_SESSION['cart']),
+            'notification_count' => $_SESSION['notification_count'],
+            'product_name' => $productName
         ]);
         exit;
     }

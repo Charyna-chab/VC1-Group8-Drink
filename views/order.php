@@ -10,7 +10,7 @@
             <p>Use code: <strong>BOBA20</strong> at checkout</p>
             <button class="btn-primary">Get Voucher</button>
         </div>
-        <img src="/assets/images/discount-banner.png" alt="Discount 20-50%">
+        <img src="/assets/image/logo/logo.png" alt="Discount 20-50%">
     </div>
 
     <!-- Menu Categories -->
