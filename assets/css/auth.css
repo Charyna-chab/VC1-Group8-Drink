@@ -170,8 +170,15 @@
 .input-with-icon {
     position: relative;
     border: 1px solid #ddd;
-    border-radius: 6px;
-    overflow: hidden;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+.input-with-icon input:focus {
+    outline: none;
+    border-color: #ff7f50;
+    box-shadow: 0 0 0 2px rgba(255, 127, 80, 0.2);
 }
 
 .input-with-icon i {
@@ -217,42 +224,19 @@
 }
 
 .forgot-password {
-    color: #ff6b6b;
+    color: #ff7f50;
     text-decoration: none;
 }
 
 .forgot-password:hover {
-    text-decoration: underline;
-}
-
-.terms-checkbox {
-    display: flex;
-    align-items: flex-start;
-    cursor: pointer;
-}
-
-.terms-checkbox input {
-    margin-right: 8px;
-    margin-top: 3px;
-}
-
-.terms-checkbox span {
-    font-size: 14px;
-    color: #666;
-}
-
-.terms-checkbox a {
-    color: #ff6b6b;
-    text-decoration: none;
-}
-
-.terms-checkbox a:hover {
+    color: #ff6347;
     text-decoration: underline;
 }
 
 .auth-button {
     width: 100%;
-    background-color: #ff6b6b;
+    padding: 12px;
+    background-color: #ff7f50;
     color: white;
     border: none;
     border-radius: 6px;
@@ -264,7 +248,8 @@
 }
 
 .auth-button:hover {
-    background-color: #ff5252;
+    background-color: #ff6347;
+    transform: translateY(-2px);
 }
 
 .social-login {
@@ -338,11 +323,12 @@
 }
 
 .auth-footer a {
-    color: #ff6b6b;
+    color: #ff7f50;
     text-decoration: none;
 }
 
 .auth-footer a:hover {
+    color: #ff6347;
     text-decoration: underline;
 }
 

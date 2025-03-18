@@ -1,4 +1,4 @@
-/* assets/css/cart.css */
+    /* assets/css/cart.css */
 
 
 /* Cart Panel Styles */
@@ -109,7 +109,7 @@
 
 .cart-item-price {
     font-weight: bold;
-    color: #ff5e62;
+    color: #ff7f50;
     font-size: 14px;
 }
 
@@ -235,7 +235,7 @@
 }
 
 .total-amount {
-    color: #ff5e62;
+    color: #ff7f50;
 }
 
 .checkout-btn,
@@ -252,14 +252,14 @@
 }
 
 .checkout-btn {
-    background-color: #ff5e62;
+    background-color: #ff7f50;
     color: white;
 }
 
 .checkout-btn:hover {
-    background-color: #ff4146;
+    background-color: #ff6347;
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(255, 94, 98, 0.3);
+    box-shadow: 0 5px 15px rgba(255, 99, 71, 0.3);
 }
 
 .continue-shopping-btn {
@@ -295,7 +295,7 @@
     position: absolute;
     top: -8px;
     right: -8px;
-    background-color: #ff5e62;
+    background-color: #ff7f50;
     color: white;
     border-radius: 50%;
     width: 20px;
@@ -323,68 +323,57 @@
 @keyframes slideOutRight {
     from {
         transform: translateX(0);
+        to {
+            transform: translateX(100%);
+        }
     }
-    to {
-        transform: translateX(100%);
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
     }
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
+    @keyframes fadeOut {
+        from {
+            opacity: 1;
+        }
+        to {
+            opacity: 0;
+        }
     }
-    to {
-        opacity: 1;
+    /* Toast Notifications */
+    .toast-container {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1000;
     }
-}
-
-@keyframes fadeOut {
-    from {
-        opacity: 1;
+    .toast {
+        display: flex;
+        align-items: center;
+        background-color: white;
+        border-radius: 5px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        padding: 15px;
+        margin-top: 10px;
+        min-width: 300px;
+        border-left: 4px solid #ff7f50;
+        animation: fadeIn 0.3s ease;
+        transition: opacity 0.3s ease;
     }
-    to {
-        opacity: 0;
+    .toast-close {
+        background: none;
+        border: none;
+        font-size: 16px;
+        cursor: pointer;
+        color: #999;
+        margin-left: 10px;
     }
-}
-
-
-/* Toast Notifications */
-
-.toast-container {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 1000;
-}
-
-.toast {
-    display: flex;
-    align-items: center;
-    background-color: white;
-    border-radius: 5px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    padding: 15px;
-    margin-top: 10px;
-    min-width: 300px;
-    border-left: 4px solid #ff5e62;
-    animation: fadeIn 0.3s ease;
-    transition: opacity 0.3s ease;
-}
-
-.toast-close {
-    background: none;
-    border: none;
-    font-size: 16px;
-    cursor: pointer;
-    color: #999;
-    margin-left: 10px;
-}
-
-
-/* Responsive Styles */
-
-@media (max-width: 768px) {
-    .cart-panel {
-        max-width: 100%;
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+        .cart-panel {
+            max-width: 100%;
+        }
     }
-}
