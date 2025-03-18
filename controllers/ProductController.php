@@ -15,25 +15,29 @@ class ProductController extends BaseController
     function index()
     {
         $products = $this->model->getProducts();
-        $this->views('product/product-list.php', ['products' => $products]);
+        $this->views('products/product-list.php', ['products' => $products]);
     }
 
     function create()
     {
-        $this->views('product/create.php');
+        $this->views('products/product-create.php');
     }
 
     function store()
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
+            $imageData = null;
+            if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
+             
+                $imageData = file_get_contents($_FILES['file']['tmp_name']);
+            }
             $data = [
             'product_name' => $_POST['product_name'],
-            'image' => $_POST['image'],
+            'image' => $imageData,
             'product_detail' => $_POST['product_detail'],
             'price' => $_POST['price'],
             ];
-            print_r($data); // Debugging: Print the data
             $this->model->createProduct($data);
             $this->redirect('/product');
         }
@@ -42,27 +46,29 @@ class ProductController extends BaseController
     function edit($id)
     {
         $product = $this->model->getProduct($id);
-        $this->views('product/edit.php', ['product' => $product]);
+        $this->views('products/product-edit.php', ['product' => $product]);
     }
 
     function update($id)
     {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
-            $data = [
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $data = [
             'product_name' => $_POST['product_name'],
             'image' => $_POST['image'],
             'product_detail' => $_POST['product_detail'],
             'price' => $_POST['price'],
-            ];
-            $this->model->updateProduct($id, $data); // Only call updateUser
-            $this->redirect('/product');
-        }
+        ];
+        $this->model->updateProduct($id, $data); // Only call updateProduct
+        // Remove this line: $this->model->createProduct($data);
+        $this->redirect('/product');
     }
+    }
+
 
     function destroy($id)
     {
         $this->model->deleteProduct($id);
         $this->redirect('/product');
+
     }
 }

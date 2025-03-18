@@ -2,11 +2,11 @@
 
 
 <!-- dashboard -->
-<?php require_once('layout/header.php'); ?>
-<?php require_once('layout/nav.php'); ?>
+<?php require_once('views/layout/header.php'); ?>
+<?php require_once('views/layout/nav.php'); ?>
 
-<main class="main-content">
+
     <?= $content; ?>
-</main>
 
 
+<?php require_once('views/layout/footer.php'); ?>

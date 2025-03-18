@@ -3,7 +3,7 @@ require_once 'Router.php';
 require_once './Controllers/UserController.php';
 require_once './Controllers/ProductController.php';
 require_once './Controllers/DashboardController.php';
-require_once './router/Router.php';
+// require_once './router/Router.php';
 
 
 

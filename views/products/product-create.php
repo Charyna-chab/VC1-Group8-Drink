@@ -7,14 +7,14 @@
                     <input type="product_name" id="product_name" name="product_name" class="form-control">
                 </div>
                 <div class="form-group mb-3 col">
-                    <label for="phone" class="form-label">Product Detail:</label>
-                    <input type="product_detail" id="product_detail" name="product_detail" class="form-control">
+                    <label for="phone" class="form-label">Price:</label>
+                    <input type="price" id="price" name="price" class="form-control">
                 </div>
             </div>
 
             <div class="form-group mb-3 col">
-                <label for="email" class="form-label">Price:</label>
-                <input type="price" id="price" name="price" class="form-control">
+                <label for="email" class="form-label">Product Detail:</label>
+                <input type="product_detail" id="product_detail" name="product_detail" class="form-control">
             </div>
             
             <div class="form-group mb-3 col ">

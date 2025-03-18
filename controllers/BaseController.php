@@ -1,5 +1,5 @@
 <?php
-require_once 'Database/database.php';
+
 class BaseController{
 
     
