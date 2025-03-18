@@ -1,2 +1,3 @@
 <?php require("router/route.php"); ?>
-<?php require("Routes/routes.php"); ?>
+<?php require("Router/route.php"); ?>
+
