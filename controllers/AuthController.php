@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/BaseController.php';
+
 class AuthController extends BaseController {
     public function __construct() {
         if (session_status() == PHP_SESSION_NONE) {
@@ -41,7 +43,7 @@ class AuthController extends BaseController {
             }
         }
 
-        $this->view('auth/login', ['title' => 'Login - XING FU CHA', 'error' => $error]);
+        $this->views('auth/login', ['title' => 'Login - XING FU CHA', 'error' => $error]);
     }
 
     public function register() {
@@ -67,14 +69,42 @@ class AuthController extends BaseController {
             } elseif (!$terms) {
                 $error = 'You must agree to the Terms of Service.';
             } else {
+                // Store user data in session
+                $_SESSION['user_id'] = time(); // Using timestamp as a simple ID
+                $_SESSION['user'] = [
+                    'id' => $_SESSION['user_id'],
+                    'name' => $name,
+                    'email' => $email,
+                    'avatar' => '/assets/images/default-avatar.jpg'
+                ];
+                
                 $_SESSION['register_success'] = true;
                 $_SESSION['registered_name'] = $name;
                 $_SESSION['registered_email'] = $email;
-                $this->redirect('/order');
+                
+                // Redirect to registration success page
+                $this->redirect('/register-success');
             }
         }
 
-        $this->view('auth/register', ['title' => 'Register - XING FU CHA', 'error' => $error]);
+        $this->views('auth/register', ['title' => 'Register - XING FU CHA', 'error' => $error]);
+    }
+
+    public function registerSuccess() {
+        if (!isset($_SESSION['register_success'])) {
+            $this->redirect('/register');
+        }
+        
+        $user = [
+            'name' => $_SESSION['registered_name'] ?? 'User'
+        ];
+        
+        // Clear the registration success flag but keep the user logged in
+        unset($_SESSION['register_success']);
+        unset($_SESSION['registered_name']);
+        unset($_SESSION['registered_email']);
+        
+        $this->views('auth/register_success', ['title' => 'Registration Successful - XING FU CHA', 'user' => $user]);
     }
 
     public function forgotPassword() {
@@ -91,7 +121,7 @@ class AuthController extends BaseController {
             }
         }
 
-        $this->view('auth/forgot_password', ['title' => 'Forgot Password - XING FU CHA', 'error' => $error, 'message' => $message]);
+        $this->views('auth/forgot_password', ['title' => 'Forgot Password - XING FU CHA', 'error' => $error, 'message' => $message]);
     }
 
     public function logout() {
@@ -127,3 +157,4 @@ class AuthController extends BaseController {
         }
     }
 }
+
