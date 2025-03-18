@@ -1,4 +1,3 @@
-
 <?php
 class OrderController extends BaseController {
     public function index() {
@@ -123,210 +122,50 @@ class OrderController extends BaseController {
             ],
             [
                 'id' => 15,
-                'name' => 'Sweet Potato Brown Sugar',
+                'name' => 'Mocha',
                 'description' => 'A delightful espresso drink with chocolate syrup and steamed milk for a sweet and smooth taste.',
                 'price' => 4.50,
-                'image' => '/assets/image/products/Sweet Potato Brown Sugar.png',
+                'image' => '/assets/images/products/mocha.jpg',
                 'category' => 'coffee'
             ],
             [
                 'id' => 16,
-                'name' => 'Black Tea Machhiato',
+                'name' => 'Vanilla Latte',
                 'description' => 'Espresso combined with vanilla syrup and steamed milk for a sweet, comforting coffee.',
                 'price' => 4.50,
-                'image' => '/assets/image/products/Black Tea Machhiato.png',
+                'image' => '/assets/images/products/vanilla-latte.jpg',
                 'category' => 'coffee'
             ],
             [
                 'id' => 17,
-                'name' => 'Earl Grey Brown Sugar Milk Tea',
+                'name' => 'Egg Waffles',
                 'description' => 'Hong Kong-style egg waffles, crispy on the outside and fluffy on the inside, served fresh.',
                 'price' => 4.00,
-                'image' => '/assets/image/products/Earl Grey Brown Sugar Milk Tea.png',
+                'image' => '/assets/images/products/egg-waffles.jpg',
                 'category' => 'snacks'
             ],
             [
                 'id' => 18,
-                'name' => 'Toy Machhiato',
+                'name' => 'Popcorn Chicken',
                 'description' => 'Crispy Taiwanese-style popcorn chicken, seasoned with special spices for a savory snack.',
                 'price' => 5.50,
-                'image' => '/assets/image/products/Toy Machhiato.png',
+                'image' => '/assets/images/products/popcorn-chicken.jpg',
                 'category' => 'snacks'
             ],
             [
                 'id' => 19,
-                'name' => 'Honey Latte',
+                'name' => 'Sweet Potato Fries',
                 'description' => 'Crispy and delicious sweet potato fries, seasoned with a special blend of spices.',
                 'price' => 4.00,
-                'image' => '/assets/image/products/Honey Latte.png',
+                'image' => '/assets/images/products/sweet-potato-fries.jpg',
                 'category' => 'snacks'
             ],
             [
                 'id' => 20,
-                'name' => 'Honey Lemon Green Tea',
+                'name' => 'Cheese Foam Cake',
                 'description' => 'A soft sponge cake topped with our signature cheese foam, creating a creamy and sweet experience.',
                 'price' => 4.50,
-                'image' => '/assets/image/products/Honey Lemon Green Tea.png',
-                'category' => 'snacks'
-            ],
-            [
-                'id' => 21,
-                'name' => 'Chocolate Milk tea',
-                'description' => 'A creamy matcha milk tea with sweet red beans for a unique flavor.',
-                'price' => 4.50,
-                'image' => '/assets/image/products/Chocolate Milk Tea.png',
-                'category' => 'milk-tea'
-            ],
-            [
-                'id' => 22,
-                'name' => 'Honey Lemon Tea',
-                'description' => 'A refreshing blend of honey and lemon with green tea.',
-                'price' => 3.75,
-                'image' => '/assets/image/products/honey-lemon-tea.png',
-                'category' => 'fruit-tea'
-            ],
-            [
-                'id' => 23,
-                'name' => 'Strawberry Banana Smoothie',
-                'description' => 'A sweet and creamy smoothie made with fresh strawberries and bananas.',
-                'price' => 4.25,
-                'image' => '/assets/image/products/strawberry-banana-smoothie.png',
-                'category' => 'smoothie'
-            ],
-            [
-                'id' => 24,
-                'name' => 'Caramel Macchiato',
-                'description' => 'A rich espresso drink with caramel syrup and steamed milk.',
-                'price' => 4.50,
-                'image' => '/assets/image/products/caramel-macchiato.png',
-                'category' => 'coffee'
-            ],
-            [
-                'id' => 25,
-                'name' => 'Cheese Garlic Bread',
-                'description' => 'Warm and crispy garlic bread topped with melted cheese.',
-                'price' => 3.00,
-                'image' => '/assets/image/products/cheese-garlic-bread.png',
-                'category' => 'snacks'
-            ],
-            [
-                'id' => 26,
-                'name' => 'Chocolate Lava Cake',
-                'description' => 'A warm chocolate cake with a gooey molten center.',
-                'price' => 4.75,
-                'image' => '/assets/image/products/chocolate-lava-cake.png',
-                'category' => 'snacks'
-            ],
-            [
-                'id' => 27,
-                'name' => 'Pineapple Coconut Smoothie',
-                'description' => 'A tropical blend of pineapple and coconut for a refreshing treat.',
-                'price' => 4.50,
-                'image' => '/assets/image/products/pineapple-coconut-smoothie.png',
-                'category' => 'smoothie'
-            ],
-            [
-                'id' => 28,
-                'name' => 'Iced Hazelnut Latte',
-                'description' => 'A smooth iced latte with the rich flavor of hazelnut.',
-                'price' => 4.25,
-                'image' => '/assets/image/products/iced-hazelnut-latte.png',
-                'category' => 'coffee'
-            ],
-            [
-                'id' => 29,
-                'name' => 'Tiramisu',
-                'description' => 'A classic Italian dessert with layers of coffee-soaked ladyfingers and mascarpone cream.',
-                'price' => 5.00,
-                'image' => '/assets/image/products/tiramisu.png',
-                'category' => 'snacks'
-            ],
-            [
-                'id' => 30,
-                'name' => 'Blueberry Cheesecake',
-                'description' => 'A creamy cheesecake topped with fresh blueberry compote.',
-                'price' => 5.50,
-                'image' => '/assets/image/products/blueberry-cheesecake.png',
-                'category' => 'snacks'
-            ],
-            [
-                'id' => 31,
-                'name' => 'Mango Sticky Rice',
-                'description' => 'A traditional Thai dessert with sweet mango and sticky rice.',
-                'price' => 4.75,
-                'image' => '/assets/image/products/mango-sticky-rice.png',
-                'category' => 'snacks'
-            ],
-            [
-                'id' => 32,
-                'name' => 'Green Tea Mochi',
-                'description' => 'Soft and chewy mochi filled with sweet green tea paste.',
-                'price' => 3.50,
-                'image' => '/assets/image/products/green-tea-mochi.png',
-                'category' => 'snacks'
-            ],
-            [
-                'id' => 33,
-                'name' => 'Coconut Macaroon',
-                'description' => 'A sweet and chewy coconut macaroon with a crispy exterior.',
-                'price' => 2.75,
-                'image' => '/assets/image/products/coconut-macaroon.png',
-                'category' => 'snacks'
-            ],
-            [
-                'id' => 34,
-                'name' => 'Pandan Waffle',
-                'description' => 'A fragrant pandan-flavored waffle, crispy on the outside and soft on the inside.',
-                'price' => 3.50,
-                'image' => '/assets/image/products/pandan-waffle.png',
-                'category' => 'snacks'
-            ],
-            [
-                'id' => 35,
-                'name' => 'Sesame Ball',
-                'description' => 'A traditional Chinese dessert with a crispy sesame crust and sweet filling.',
-                'price' => 2.50,
-                'image' => '/assets/image/products/sesame-ball.png',
-                'category' => 'snacks'
-            ],
-            [
-                'id' => 36,
-                'name' => 'Egg Tart',
-                'description' => 'A flaky pastry filled with a creamy egg custard.',
-                'price' => 3.00,
-                'image' => '/assets/image/products/egg-tart.png',
-                'category' => 'snacks'
-            ],
-            [
-                'id' => 37,
-                'name' => 'Matcha Cheesecake',
-                'description' => 'A creamy cheesecake with the rich flavor of matcha green tea.',
-                'price' => 5.25,
-                'image' => '/assets/image/products/matcha-cheesecake.png',
-                'category' => 'snacks'
-            ],
-            [
-                'id' => 38,
-                'name' => 'Churros',
-                'description' => 'Crispy fried dough sticks dusted with cinnamon sugar.',
-                'price' => 3.75,
-                'image' => '/assets/image/products/churros.png',
-                'category' => 'snacks'
-            ],
-            [
-                'id' => 39,
-                'name' => 'Red Bean Bun',
-                'description' => 'A soft and fluffy bun filled with sweet red bean paste.',
-                'price' => 2.50,
-                'image' => '/assets/image/products/red-bean-bun.png',
-                'category' => 'snacks'
-            ],
-            [
-                'id' => 40,
-                'name' => 'Almond Cookie',
-                'description' => 'A crunchy almond cookie with a buttery flavor.',
-                'price' => 2.00,
-                'image' => '/assets/image/products/almond-cookie.png',
+                'image' => '/assets/images/products/cheese-foam-cake.jpg',
                 'category' => 'snacks'
             ]
         ];
@@ -496,17 +335,17 @@ class OrderController extends BaseController {
             echo json_encode(['success' => false, 'message' => 'Method not allowed']);
             exit;
         }
-    
+        
         // Get JSON data from request body
         $json = file_get_contents('php://input');
         $data = json_decode($json, true);
-    
+        
         if (!$data) {
             http_response_code(400); // Bad Request
             echo json_encode(['success' => false, 'message' => 'Invalid request data']);
             exit;
         }
-    
+        
         // Validate required fields
         $requiredFields = ['product_id', 'size', 'sugar', 'ice', 'quantity'];
         foreach ($requiredFields as $field) {
@@ -516,36 +355,17 @@ class OrderController extends BaseController {
                 exit;
             }
         }
-    
-        // Simulate adding the item to the cart
-        if (!isset($_SESSION['cart'])) {
-            $_SESSION['cart'] = [];
-        }
-        $_SESSION['cart'][] = $data;
-    
-        // Update notification count
-        if (!isset($_SESSION['notification_count'])) {
-            $_SESSION['notification_count'] = 0;
-        }
-        $_SESSION['notification_count'] += 1;
-    
-        // Get product name for the notification
-        $productName = 'Unknown Product';
-        $products = $this->getProducts(); // Fetch products from your data source
-        foreach ($products as $product) {
-            if ($product['id'] == $data['product_id']) {
-                $productName = $product['name'];
-                break;
-            }
-        }
-    
-        // Return success response
+        
+        // In a real application, you would:
+        // 1. Validate the product exists
+        // 2. Calculate the correct price
+        // 3. Add the item to the user's cart in the database
+        
+        // For now, we'll just return success
         echo json_encode([
             'success' => true,
             'message' => 'Item added to cart',
-            'cart_count' => count($_SESSION['cart']),
-            'notification_count' => $_SESSION['notification_count'],
-            'product_name' => $productName
+            'cart_count' => isset($_SESSION['cart']) ? count($_SESSION['cart']) + 1 : 1
         ]);
         exit;
     }
