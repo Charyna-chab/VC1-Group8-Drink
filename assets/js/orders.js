@@ -267,3 +267,30 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 });
+document.addEventListener("DOMContentLoaded", function () {
+    const favoriteButtons = document.querySelectorAll(".favorite-btn");
+    
+    favoriteButtons.forEach(button => {
+        button.addEventListener("click", function () {
+            const productCard = this.closest(".product-card");
+            const productId = productCard.getAttribute("data-category");
+            const productName = productCard.querySelector("h3").textContent;
+            const productImage = productCard.querySelector("img").src;
+            const productPrice = productCard.querySelector(".product-price").textContent;
+            
+            this.classList.add("red");
+            this.innerHTML = '<i class="fas fa-heart"></i>';
+            
+            saveFavorite(productId, productName, productImage, productPrice);
+        });
+    });
+    
+    function saveFavorite(id, name, image, price) {
+        let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+        
+        if (!favorites.some(item => item.id === id)) {
+            favorites.push({ id, name, image, price });
+            localStorage.setItem("favorites", JSON.stringify(favorites));
+        }
+    }
+});
