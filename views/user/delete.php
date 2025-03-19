@@ -1,5 +1,3 @@
-
-
 <div class="modal fade" id="user<?= $user['user_id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">

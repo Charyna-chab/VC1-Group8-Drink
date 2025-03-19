@@ -6,11 +6,7 @@ require_once './Controllers/DashboardController.php';
 // require_once './router/Router.php';
 
 
-
-$routes = new router();
-
-// dashboard
-$routes->get('/', [DashboardController::class, 'index']);
+$routes = new Router();
 
 // user 
 $routes->get('/user', [UserController::class, 'index']);
@@ -27,7 +23,6 @@ $routes->post('/product/store', [ProductController::class, 'store']);
 $routes->get('/product/edit', [ProductController::class, 'edit']);
 $routes->put('/product/update', [ProductController::class, 'update']);
 $routes->delete('/product/delete', [ProductController::class, 'destroy']);
-
 
 
 
