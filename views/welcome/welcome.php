@@ -1,16 +1,72 @@
-<?php '../layouts/header.php'; ?>
-<?php '../layouts/sidebar.php'; ?>
 
-<section class="content">
-    <!-- Discount banner -->
-    <div class="discount-banner">
-        <div class="banner-content">
-            <h2>Get Discount Voucher Up To 20%</h2>
-            <p>Use code: <strong>BOBA20</strong> at checkout</p>
-            <button class="btn-primary">Get Voucher</button>
-        </div>
-        <img src="/assets/image/discount-banner.png" alt="Discount 20-50%">
+<header>
+    <img src="/assets/image/logo/logo.png" alt="XING FU CHA Logo">
+    <nav>
+        <ul>
+            <li><a href="/gift-card">Gift Card</a></li>
+            <li><a href="/locations">Locations</a></li>
+            <li><a href="/join-the-team">Join The Team</a></li>
+            <li><a href="#" id="moreMenuBtn">More</a></li>
+        </ul>
+    </nav>
+    <div class="search-bar">
+        <input type="text" placeholder="What do you want to eat today...">
     </div>
+    <button class="order-search">Order Now</button>
+    <div class="language-selector">
+        <div class="selected-language">
+            <img src="/assets/image/flags/en.png" alt="English" id="currentLanguageFlag">
+            <span id="currentLanguage">English</span>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="language-dropdown">
+            <a href="/lang/en" class="language-option" data-lang="en">
+                <img src="/assets/image/flags/en.png" alt="English">
+                <span>English</span>
+            </a>
+            <a href="/lang/zh" class="language-option" data-lang="zh">
+                <img src="/assets/image/flags/zh.png" alt="Chinese">
+                <span>中文</span>
+            </a>
+            <a href="/lang/es" class="language-option" data-lang="es">
+                <img src="/assets/image/flags/es.png" alt="Spanish">
+                <span>Español</span>
+            </a>
+            <a href="/lang/fr" class="language-option" data-lang="fr">
+                <img src="/assets/image/flags/fr.png" alt="French">
+                <span>Français</span>
+            </a>
+            <a href="/lang/ja" class="language-option" data-lang="ja">
+                <img src="/assets/image/flags/ja.png" alt="Japanese">
+                <span>日本語</span>
+            </a>
+        </div>
+    </div>
+    <div class="user-profile" id="userProfileBtn">
+        <img src="<?php echo isset($_SESSION['user']) ? $_SESSION['user']['avatar'] : '/assets/image/placeholder.svg?height=40&width=40'; ?>" alt="User Profile">
+    </div>
+    <div class="notification-icon" id="notificationBtn">
+        <a href="/"></a><i class="fas fa-bell"></i>
+        <span class="notification-badge" id="notificationBadge">0</span>
+    </div>
+</header>
+<section class="content">
+    
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <div class="hero-content">
+            <h1>Welcome to <span class="brand-name">XING FU CHA</span></h1>
+            <p>Experience the authentic taste of premium bubble tea and refreshing drinks</p>
+            <div class="hero-buttons">
+                <button class="btn-primary explore-btn">Explore Menu</button>
+                <button class="btn-outline order-now-btn">Order Now</button>
+            </div>
+        </div>
+        <div class="hero-image">
+            <img src="/assets/image/hero-bubble-tea.png" alt="Xing Fu Cha Bubble Tea">
+        </div>
+    </div>
+
 
     <!-- Category Section -->
     <div class="category-section">
@@ -52,13 +108,13 @@
             
             <div class="product-card" data-category="smoothie">
                 <div class="product-image">
-                    <img src="/assets/image/products/chacolat.png" alt="Mango Smoothie">
+                    <img src="/assets/image/products/Almond Puff 55baht.png" alt="Mango Smoothie">
                     <button class="favorite-btn">
                         <i class="far fa-heart"></i>
                     </button>
                 </div>
                 <div class="product-info">
-                    <h4>Mango Smoothie</h4>
+                    <h4>Almond Puff</h4>
                     <p class="description">A refreshing mango smoothie for your hot day.</p>
                     <div class="product-price">$5.50</div>
                 </div>
@@ -101,147 +157,33 @@
                 </div>
             </div>
             
-            <div class="product-card" data-category="milk-tea">
-                <div class="product-image">
-                    <img src="/assets/image/products/8.png" alt="Matcha Latte">
-                    <button class="favorite-btn">
-                        <i class="far fa-heart"></i>
-                    </button>
-                </div>
-                <div class="product-info">
-                    <h4>Matcha Latte</h4>
-                    <p class="description">Premium Japanese matcha powder with fresh milk.</p>
-                    <div class="product-price">$5.50</div>
-                </div>
-                <div class="product-actions">
-                    <button class="btn-primary order-btn" data-product-id="3">Order Now</button>
-                </div>
-            </div>
-            
-            <div class="product-card" data-category="milk-tea">
-                <div class="product-image">
-                    <img src="/assets/image/products/brown.png" alt="Brown Sugar Boba Milk">
-                    <button class="favorite-btn">
-                        <i class="far fa-heart"></i>
-                    </button>
-                </div>
-                <div class="product-info">
-                    <h4>Brown Sugar Boba Milk</h4>
-                    <p class="description">Fresh milk with brown sugar syrup and chewy boba pearls.</p>
-                    <div class="product-price">$5.75</div>
-                </div>
-                <div class="product-actions">
-                    <button class="btn-primary order-btn" data-product-id="4">Order Now</button>
-                </div>
-            </div>
-            
-            <div class="product-card" data-category="fruit-tea">
-                <div class="product-image">
-                    <img src="/assets/image/products/strawberry.png" alt="Strawberry Fruit Tea">
-                    <button class="favorite-btn">
-                        <i class="far fa-heart"></i>
-                    </button>
-                </div>
-                <div class="product-info">
-                    <h4>Strawberry Fruit Tea</h4>
-                    <p class="description">Refreshing tea with fresh strawberry puree and fruit bits.</p>
-                    <div class="product-price">$4.75</div>
-                </div>
-                <div class="product-actions">
-                    <button class="btn-primary order-btn" data-product-id="5">Order Now</button>
-                </div>
-            </div>
-            
-            <div class="product-card" data-category="fruit-tea">
-                <div class="product-image">
-                    <img src="/assets/image/products/2.png" alt="Mango Fruit Tea">
-                    <button class="favorite-btn">
-                        <i class="far fa-heart"></i>
-                    </button>
-                </div>
-                <div class="product-info">
-                    <h4>Mango Fruit Tea</h4>
-                    <p class="description">Tropical mango flavor blended with our premium tea.</p>
-                    <div class="product-price">$4.75</div>
-                </div>
-                <div class="product-actions">
-                    <button class="btn-primary order-btn" data-product-id="6">Order Now</button>
-                </div>
-            </div>
-            
-            <div class="product-card" data-category="coffee">
-                <div class="product-image">
-                    <img src="/assets/image/products/3.png" alt="Caramel Macchiato">
-                    <button class="favorite-btn">
-                        <i class="far fa-heart"></i>
-                    </button>
-                </div>
-                <div class="product-info">
-                    <h4>Caramel Macchiato</h4>
-                    <p class="description">Espresso with steamed milk and caramel syrup.</p>
-                    <div class="product-price">$4.75</div>
-                </div>
-                <div class="product-actions">
-                    <button class="btn-primary order-btn" data-product-id="14">Order Now</button>
-                </div>
-            </div>
-            
-            <div class="product-card" data-category="snacks">
-                <div class="product-image">
-                    <img src="/assets/image/products/4.png" alt="Egg Waffles">
-                    <button class="favorite-btn">
-                        <i class="far fa-heart"></i>
-                    </button>
-                </div>
-                <div class="product-info">
-                    <h4>Egg Waffles</h4>
-                    <p class="description">Crispy on the outside, fluffy on the inside Hong Kong style egg waffles.</p>
-                    <div class="product-price">$4.00</div>
-                </div>
-                <div class="product-actions">
-                    <button class="btn-primary order-btn" data-product-id="17">Order Now</button>
-                </div>
-            </div>
-            
-            <div class="product-card" data-category="snacks">
-                <div class="product-image">
-                    <img src="/assets/image/products/5.png" alt="Popcorn Chicken">
-                    <button class="favorite-btn">
-                        <i class="far fa-heart"></i>
-                    </button>
-                </div>
-                <div class="product-info">
-                    <h4>Popcorn Chicken</h4>
-                    <p class="description">Crispy Taiwanese-style popcorn chicken with special seasoning.</p>
-                    <div class="product-price">$5.50</div>
-                </div>
-                <div class="product-actions">
-                    <button class="btn-primary order-btn" data-product-id="18">Order Now</button>
-                </div>
-            </div>
-            
-            <div class="product-card" data-category="smoothie">
-                <div class="product-image">
-                    <img src="/assets/image/products/6.png" alt="Avocado Smoothie">
-                    <button class="favorite-btn">
-                        <i class="far fa-heart"></i>
-                    </button>
-                </div>
-                <div class="product-info">
-                    <h4>Avocado Smoothie</h4>
-                    <p class="description">Creamy avocado smoothie with fresh avocado and milk.</p>
-                    <div class="product-price">$6.00</div>
-                </div>
-                <div class="product-actions">
-                    <button class="btn-primary order-btn" data-product-id="11">Order Now</button>
-                </div>
-            </div>
-            
             <!-- No products found message -->
             <div id="no-product-message" style="display: none;">No products found matching your search.</div>
         </div>
     </div>
 </section>
+
+<!-- Login Redirect Modal -->
+<div class="modal-overlay" id="loginRedirectModal">
+    <div class="modal-container">
+        <div class="modal-header">
+            <h3>Login Required</h3>
+            <button class="close-modal">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="login-redirect-content">
+                <i class="fas fa-user-lock"></i>
+                <p>Please login to continue with your order</p>
+                <div class="login-redirect-buttons">
+                    <a href="/login" class="btn-primary">Login</a>
+                    <a href="/register" class="btn-outline">Register</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Order Modal -->
 <div class="modal-overlay" id="orderModal">
@@ -313,93 +255,6 @@
                     </div>
                 </div>
                 
-                <div class="form-group">
-                    <label>Ice Level</label>
-                    <div class="option-buttons ice-buttons">
-                        <label class="option-button">
-                            <input type="radio" name="ice" value="0">
-                            <span>No Ice</span>
-                        </label>
-                        <label class="option-button">
-                            <input type="radio" name="ice" value="30">
-                            <span>Less Ice</span>
-                        </label>
-                        <label class="option-button">
-                            <input type="radio" name="ice" value="100" checked>
-                            <span>Regular Ice</span>
-                        </label>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label>Toppings <span class="optional">(Optional, +$0.75 each)</span></label>
-                    <div class="toppings-grid">
-                        <label class="topping-option">
-                            <input type="checkbox" name="toppings[]" value="1" data-price="0.75">
-                            <span>Boba Pearls</span>
-                            <small>+$0.75</small>
-                        </label>
-                        <label class="topping-option">
-                            <input type="checkbox" name="toppings[]" value="2" data-price="0.75">
-                            <span>Grass Jelly</span>
-                            <small>+$0.75</small>
-                        </label>
-                        <label class="topping-option">
-                            <input type="checkbox" name="toppings[]" value="3" data-price="0.75">
-                            <span>Pudding</span>
-                            <small>+$0.75</small>
-                        </label>
-                        <label class="topping-option">
-                            <input type="checkbox" name="toppings[]" value="4" data-price="0.75">
-                            <span>Aloe Vera</span>
-                            <small>+$0.75</small>
-                        </label>
-                        <label class="topping-option">
-                            <input type="checkbox" name="toppings[]" value="5" data-price="1.00">
-                            <span>Cheese Foam</span>
-                            <small>+$1.00</small>
-                        </label>
-                        <label class="topping-option">
-                            <input type="checkbox" name="toppings[]" value="6" data-price="1.00">
-                            <span>Fresh Fruit</span>
-                            <small>+$1.00</small>
-                        </label>
-                        <label class="topping-option">
-                            <input type="checkbox" name="toppings[]" value="7" data-price="0.75">
-                            <span>Red Bean</span>
-                            <small>+$0.75</small>
-                        </label>
-                        <label class="topping-option">
-                            <input type="checkbox" name="toppings[]" value="8" data-price="0.75">
-                            <span>Coconut Jelly</span>
-                            <small>+$0.75</small>
-                        </label>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label>Special Instructions <span class="optional">(Optional)</span></label>
-                    <textarea name="instructions" placeholder="Any special requests?"></textarea>
-                </div>
-                
-                <div class="quantity-control">
-                    <label>Quantity</label>
-                    <div class="quantity-buttons">
-                        <button type="button" class="quantity-btn minus-btn">
-                            <i class="fas fa-minus"></i>
-                        </button>
-                        <input type="number" name="quantity" value="1" min="1" max="10">
-                        <button type="button" class="quantity-btn plus-btn">
-                            <i class="fas fa-plus"></i>
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="total-price">
-                    <span>Total:</span>
-                    <span class="price-value">$0.00</span>
-                </div>
-                
                 <div class="form-actions">
                     <button type="button" class="btn-secondary" id="cancelOrder">Cancel</button>
                     <button type="submit" class="btn-primary">
@@ -415,6 +270,5 @@
 <!-- Notification Toast -->
 <div class="toast-container" id="toastContainer"></div>
 
-</main>
-
 <script src="/assets/js/welcome.js"></script>
+

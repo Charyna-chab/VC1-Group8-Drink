@@ -795,3 +795,120 @@ textarea:focus {
         grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     }
 }
+
+
+/* Footer Styles */
+
+.main-footer {
+    background-color: #2c3e50;
+    /* Dark background color */
+    color: #ecf0f1;
+    /* Light text color */
+    padding: 40px 20px;
+    font-family: 'Arial', sans-serif;
+}
+
+.footer-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-section {
+    flex: 1;
+    min-width: 200px;
+    margin: 10px 20px;
+}
+
+.footer-section h3 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: #f1c40f;
+    /* Accent color for headings */
+}
+
+.footer-section p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.social-links {
+    display: flex;
+    gap: 10px;
+}
+
+.social-links a {
+    color: #ecf0f1;
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+}
+
+.social-links a:hover {
+    color: #f1c40f;
+    /* Accent color on hover */
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-section ul li {
+    margin-bottom: 10px;
+}
+
+.footer-section ul li a {
+    color: #ecf0f1;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-section ul li a:hover {
+    color: #f1c40f;
+    /* Accent color on hover */
+}
+
+.contact-info li,
+.opening-hours li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+}
+
+.contact-info i,
+.opening-hours i {
+    margin-right: 10px;
+    color: #f1c40f;
+    /* Accent color for icons */
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 10px;
+    border-top: 1px solid #34495e;
+    /* Subtle border for separation */
+    font-size: 0.8rem;
+    color: #bdc3c7;
+}
+
+
+/* Responsive Design */
+
+@media (max-width: 768px) {
+    .footer-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .footer-section {
+        margin: 10px 0;
+    }
+    .social-links {
+        justify-content: center;
+    }
+}

@@ -1,3 +1,6 @@
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,8 +13,6 @@
 </head>
 <body>
     <div class="main-container">
-
-        
         <!-- Main Content -->
         <div class="auth-container">
             <div class="auth-form-container">
@@ -81,3 +82,4 @@
     <script src="/assets/js/auth.js"></script>
 </body>
 </html>
+

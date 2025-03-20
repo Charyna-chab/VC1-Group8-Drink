@@ -1,22 +1,25 @@
 <?php
-require_once "Router.php";
-require_once "controllers/BaseController.php";
-require_once "controllers/WelcomeController.php";
-require_once "controllers/FavoritesController.php";
-require_once "controllers/FeedbackController.php";
-require_once "controllers/SettingsController.php";
-require_once "controllers/OrdersController.php";
-require_once "controllers/BookingController.php";
-require_once "controllers/AuthController.php";
+require_once __DIR__ . "/Router.php";
+require_once __DIR__ . "/../controllers/BaseController.php";
+require_once __DIR__ . "/../controllers/WelcomeController.php";
+require_once __DIR__ . "/../controllers/FavoritesController.php";
+require_once __DIR__ . "/../controllers/FeedbackController.php";
+require_once __DIR__ . "/../controllers/SettingsController.php";
+require_once __DIR__ . "/../controllers/OrdersController.php";
+require_once __DIR__ . "/../controllers/BookingController.php";
+require_once __DIR__ . "/../controllers/AuthController.php";
 
 use YourNamespace\Router;
 
 $route = new Router();
 
+// Welcome page as the default route
+$route->get("/", [WelcomeController::class, 'welcome']);
+
 // Authentication routes
-$route->get("/", [AuthController::class, 'index']);
 $route->get("/login", [AuthController::class, 'login']);
 $route->post("/login", [AuthController::class, 'login']);
+$route->get("/logout", [AuthController::class, 'logout']);
 $route->get("/register", [AuthController::class, 'register']);
 $route->post("/register", [AuthController::class, 'register']);
 $route->get("/register-success", [AuthController::class, 'registerSuccess']);
@@ -26,17 +29,18 @@ $route->get("/logout", [AuthController::class, 'logout']);
 
 // Original routes
 $route->get("/welcome", [WelcomeController::class, 'welcome']);
-$route->get("/order", [OrderController::class, 'index']);
-$route->get("/order/details/{id}", [OrderController::class, 'details']);
-$route->post("/order/add-to-cart", [OrderController::class, 'addToCart']);
-$route->get("/cart", [OrderController::class, 'cart']);
+$route->get("/order", [OrdersController::class, 'index']);
+$route->get("/order/details/{id}", [OrdersController::class, 'details']);
+$route->post("/order/add-to-cart", [OrdersController::class, 'addToCart']);
+$route->get("/cart", [OrdersController::class, 'cart']);
 $route->get("/booking", [BookingController::class, 'index']);
 $route->get("/orders", [BookingController::class, 'index']);
 $route->get("/booking/details/{id}", [BookingController::class, 'details']);
 $route->get("/orders/details/{id}", [BookingController::class, 'details']);
 $route->get("/favorites", [FavoritesController::class, 'index']);
-$route->post("/favorites/toggle", [FavoritesController::class, 'toggle']); // Add this line
+$route->post("/favorites/toggle", [FavoritesController::class, 'toggle']);
 $route->get("/feedback", [FeedbackController::class, 'index']);
 $route->get("/settings", [SettingsController::class, 'index']);
 
 $route->route();
+

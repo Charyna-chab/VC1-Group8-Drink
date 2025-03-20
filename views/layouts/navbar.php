@@ -1,4 +1,4 @@
-<header>
+<!-- <header>
     <img src="/assets/image/logo/logo.png" alt="XING FU CHA Logo">
     <nav>
         <ul>
@@ -58,4 +58,4 @@
         <a href="/blog"><i class="fas fa-blog"></i> Blog</a>
         <a href="/faq"><i class="fas fa-question-circle"></i> FAQ</a>
     </div>
-</div>
+</div> -->

@@ -16,10 +16,24 @@ class BaseController {
             require_once $viewPath;
         } else {
             // For non-auth views, use the layout
-            ob_start();
-            $content = ob_get_clean();
-            require_once 'views/layout.php';
-            require_once 'views/' . $views . '.php';
+            $viewPath = 'views/' . $views . '.php';
+            if (!file_exists($viewPath)) {
+                die("View file not found: {$viewPath}. Please create this file.");
+            }
+            
+            // Include header
+            require_once 'views/layouts/header.php';
+            
+            // Include sidebar if not welcome page
+            if (strpos($views, 'welcome/') !== 0) {
+                require_once 'views/layouts/sidebar.php';
+            }
+            
+            // Include the view
+            require_once $viewPath;
+            
+            // Include footer
+            require_once 'views/layouts/footer.php';
         }
     }
     
@@ -28,3 +42,4 @@ class BaseController {
         exit();
     }
 }
+

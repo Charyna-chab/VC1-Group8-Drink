@@ -7,20 +7,20 @@
         <!-- Favorites Header -->
         <div class="favorites-header">
             <h2>My Favorites</h2>
-            <p>Your favorite Xing Fu cha drinks and snacks</p>
+            <p>Your favorite Xing Fu Cha drinks and snacks</p>
         </div>
 
-        <?php if(empty($favorites)): ?>
-            <!-- Empty State -->
-            <div class="favorites-empty">
-                <img src="/assets/images/empty-favorites.svg" alt="No Favorites">
-                <h3>No Favorites Yet</h3>
-                <p>You haven't added any favorites yet. Browse our menu and add items to your favorites!</p>
-                <a href="/menu" class="favorites-browse-btn">Browse Menu</a>
-            </div>
-        <?php else: ?>
-            <!-- Favorites Grid -->
-            <div class="favorites-grid">
+        <!-- Empty State (initially hidden if there are favorites) -->
+        <div class="favorites-empty" style="<?php echo !empty($favorites) ? 'display: none;' : ''; ?>">
+            <img src="/assets/image/empty-favorites.svg" alt="No Favorites">
+            <h3>No Favorites Yet</h3>
+            <p>You haven't added any favorites yet. Browse our menu and add items to your favorites!</p>
+            <a href="/order" class="favorites-browse-btn">Browse Menu</a>
+        </div>
+
+        <!-- Favorites Grid (initially hidden if there are no favorites) -->
+        <div class="favorites-grid" style="<?php echo empty($favorites) ? 'display: none;' : ''; ?>">
+            <?php if(!empty($favorites)): ?>
                 <?php foreach($favorites as $favorite): ?>
                     <div class="favorites-card" data-id="<?php echo $favorite['id']; ?>">
                         <!-- Remove Button -->
@@ -54,8 +54,8 @@
                         </div>
                     </div>
                 <?php endforeach; ?>
-            </div>
-        <?php endif; ?>
+            <?php endif; ?>
+        </div>
 
         <!-- Toast Container for Notifications -->
         <div class="favorites-toast-container"></div>
@@ -63,3 +63,6 @@
 </main>
 
 <script src="/assets/js/favorites.js"></script>
+
+<?php require_once __DIR__ . '/layouts/footer.php'; ?>
+
