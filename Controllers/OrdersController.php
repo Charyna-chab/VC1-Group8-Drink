@@ -133,41 +133,42 @@ class OrderController extends BaseController {
                 'name' => 'Vanilla Latte',
                 'description' => 'Espresso combined with vanilla syrup and steamed milk for a sweet, comforting coffee.',
                 'price' => 4.50,
-                'image' => '/assets/images/products/vanilla-latte.jpg',
+                'image' => '/assets/image/products/vanilla-latte.jpg',
                 'category' => 'coffee'
             ],
             [
                 'id' => 17,
-                'name' => 'Egg Waffles',
-                'description' => 'Hong Kong-style egg waffles, crispy on the outside and fluffy on the inside, served fresh.',
+                'name' => 'Chocolate Supreme 80Baht',
+                'description' => 'A rich chocolate-infused waffle with a crispy outside and soft inside, perfect for chocolate lovers.',
                 'price' => 4.00,
-                'image' => '/assets/images/products/egg-waffles.jpg',
+                'image' => '/assets/image/products/Chocolate Supreme 80Baht.png',
                 'category' => 'snacks'
             ],
             [
                 'id' => 18,
-                'name' => 'Popcorn Chicken',
-                'description' => 'Crispy Taiwanese-style popcorn chicken, seasoned with special spices for a savory snack.',
+                'name' => 'Almond Puff 55Baht',
+                'description' => 'A light and flaky almond puff pastry with a buttery texture and nutty flavor.',
                 'price' => 5.50,
-                'image' => '/assets/images/products/popcorn-chicken.jpg',
+                'image' => '/assets/image/products/Almond Puff 55Baht.png',
                 'category' => 'snacks'
             ],
             [
                 'id' => 19,
-                'name' => 'Sweet Potato Fries',
-                'description' => 'Crispy and delicious sweet potato fries, seasoned with a special blend of spices.',
+                'name' => 'Matcha Croissant 70Baht',
+                'description' => 'A flaky croissant with a rich matcha filling, blending earthy tea flavors with buttery layers.',
                 'price' => 4.00,
-                'image' => '/assets/images/products/sweet-potato-fries.jpg',
+                'image' => '/assets/image/products/Macha Croissant 70Baht.png',
                 'category' => 'snacks'
             ],
             [
                 'id' => 20,
-                'name' => 'Cheese Foam Cake',
-                'description' => 'A soft sponge cake topped with our signature cheese foam, creating a creamy and sweet experience.',
+                'name' => 'Chocolate Almond Croissant 80Baht',
+                'description' => 'A golden, flaky croissant filled with rich chocolate and crunchy almonds for a delightful treat.',
                 'price' => 4.50,
-                'image' => '/assets/images/products/cheese-foam-cake.jpg',
+                'image' => '/assets/image/products/Chocolate Almont Croissand 80Baht.png',
                 'category' => 'snacks'
             ]
+            
         ];
         
         
