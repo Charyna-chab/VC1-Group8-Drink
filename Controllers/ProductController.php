@@ -9,8 +9,14 @@ class ProductController extends BaseController
 
     function __construct()
     {
+        // Make sure sessions are started if you're using $_SESSION
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+
         $this->model = new ProductModel();
     }
+
 
     function index()
     {
@@ -26,18 +32,45 @@ class ProductController extends BaseController
     function store()
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            // Set up the target directory for image uploads
+            $uploadDir = 'uploads/product/';
 
-            $imageData = null;
-            if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
-             
-                $imageData = file_get_contents($_FILES['file']['tmp_name']);
+            // Check if the directory exists, if not create it
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0777, true); // Creates the directory if it doesn't exist
             }
-            $data = [
-            'product_name' => $_POST['product_name'],
-            'image' => $imageData,
-            'product_detail' => $_POST['product_detail'],
-            'price' => $_POST['price'],
-            ];
+
+            // Set the image file path
+            $imageName = basename($_FILES['image']['name']);
+            $uploadFile = $uploadDir . $imageName;
+
+            // Check if file is an image
+            $imageFileType = strtolower(pathinfo($uploadFile, PATHINFO_EXTENSION));
+            $allowedTypes = ['jpg', 'jpeg', 'png', 'gif'];
+
+            if (in_array($imageFileType, $allowedTypes)) {
+                // Try to upload the file
+                if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadFile)) {
+                    $image_url = $uploadFile;  // Image URL or path saved to the database
+
+                    // Prepare the data for the user
+                    $data = [
+                        'product_name' => isset($_POST['product_name']) ? $_POST['product_name'] : null,
+                        'image' => $image_url,
+                        'product_detail' => isset($_POST['product_detail']) ? $_POST['product_detail'] : null,
+                        'price' => isset($_POST['price']) ? $_POST['price'] : null,
+                        
+                    ];
+
+                    // Validate that all required fields are present
+                    if (empty($data['product_name']) || empty($data['product_detail']) || empty($data['price'])) {
+                        $_SESSION['error'] = 'All fields except the image are required!';
+                        $this->views('product/product_create.php', ['error' => $_SESSION['error']]); // Removed .php extension
+                        return;
+                    }
+                }
+            }
+
             $this->model->createProduct($data);
             $this->redirect('/product');
         }

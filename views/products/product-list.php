@@ -3,10 +3,10 @@
 $products = $products ?? [];
 ?>
 
-<div class="card-body">
-  <div class="table-responsive">
-    <h3>Customers</h3>
-    <table class="table table-bordered table-light" id="dataTable" width="100%" cellspacing="0">
+
+  <div class="container mt-3">
+    <h3>Products List</h3>
+    <table class="table mt-3">
       <a href="/product/create" class="btn btn-primary">Add New</a>
 
       <thead>
@@ -16,6 +16,7 @@ $products = $products ?? [];
           <th>Product Name</th>
           <th>Product Detail</th>
           <th>Price</th>
+          <th>Action</th>
         </tr>
       </thead>
       <tbody>
@@ -23,13 +24,7 @@ $products = $products ?? [];
           <tr>
             <td><?= $index + 1 ?></td>
             <td>
-              <!-- Display image if available -->
-              <?php if (!empty($product['image'])): ?>
-                <img src="data:image/jpeg;base64,<?= base64_encode($product['image']) ?>"
-                  alt="Profile Image" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;">
-              <?php else: ?>
-                No image
-              <?php endif; ?>
+            <img src="<?= htmlspecialchars($product['image']) ?>" alt="" style="width: 50px; height: 50px;">
             </td>
             <td><?= htmlspecialchars($product['product_name']) ?></td>
             <td><?= htmlspecialchars($product['product_detail']) ?></td>

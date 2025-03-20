@@ -1,4 +1,6 @@
 <?php require_once 'views/layout/header.php' ?>
+<?php require_once 'views/layout/nav.php' ?>
+
 <div class="container">
     <form action="/user/update?id=<?= $user['user_id'] ?>" method="POST">
         <div class="form-group">

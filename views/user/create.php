@@ -23,7 +23,7 @@
             <div class="form-group mb-3 col ">
                 <label for="profile" class="form-label">Profile:</label>
             </div>
-            <input type="file" id="profile" name="image" class="form-control">
+            <input type="file" id="image" name="image" class="form-control">
 
             <button type="submit" class="btn btn-success">Submit</button>
         </form>

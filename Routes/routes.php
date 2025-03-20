@@ -8,6 +8,8 @@ require_once './Controllers/DashboardController.php';
 
 $routes = new Router();
 
+$routes->get('/', [DashboardController::class, 'index']);
+
 // user 
 $routes->get('/user', [UserController::class, 'index']);
 $routes->get('/user/create', [UserController::class, 'create']);

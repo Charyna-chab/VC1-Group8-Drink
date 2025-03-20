@@ -20,13 +20,25 @@ class ProductModel
    
     function createProduct($data)
     {
-        $stmt = $this->pdo->query("INSERT INTO products (product_name, image, product_detail, price) VALUES (:product_name, :image, :product_detail, :price)",
-        [
-            'product_name' => $data['product_name'],
-            'image' => $data['image'],
-            'product_detail' => $data['product_detail'],
-            'price' => $data['price']
-        ]);
+        try {
+            $query = "INSERT INTO products (product_name, image, product_detail, price)
+                      VALUES (:product_name, :image, :product_detail, :price)";
+            
+            // Use the query method from your Database class
+            $result = $this->pdo->query($query, [
+                'product_name' => $data['product_name'],
+                'image' => $data['image'],
+                'product_detail' => $data['product_detail'],
+                'price' => $data['price'],
+                
+            ]);
+            
+            // Return success or the new ID if your Database class provides a method for it
+        } catch (PDOException $e) {
+            // Handle or log the error
+            error_log("Error creating user: " . $e->getMessage());
+            return false;
+        }
 
        
     }

@@ -1,0 +1,37 @@
+/* Category Component Styles */
+
+.menu-categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+.category-btn {
+    padding: 8px 16px;
+    background-color: #f5f5f5;
+    color: #333;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.category-btn:hover,
+.category-btn.active {
+    background-color: #ff5e62;
+    color: white;
+    border-color: #ff5e62;
+    transform: translateY(-2px);
+}
+
+
+/* Responsive Styles */
+
+@media (max-width: 576px) {
+    .menu-categories {
+        justify-content: center;
+    }
+}

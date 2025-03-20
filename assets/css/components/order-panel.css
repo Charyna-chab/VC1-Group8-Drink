@@ -1,0 +1,222 @@
+/* Order Panel Component Styles */
+
+.order-panel {
+    position: fixed;
+    top: 0;
+    right: -450px;
+    width: 400px;
+    height: 100vh;
+    background: white;
+    box-shadow: -5px 0 20px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    transition: right 0.3s ease;
+    overflow-y: auto;
+}
+
+.order-panel.active {
+    right: 0;
+}
+
+.order-panel-content {
+    padding: 20px;
+}
+
+.order-panel .close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 22px;
+    color: #999;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.order-panel .close-btn:hover {
+    color: #ff5e62;
+}
+
+.order-panel h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 20px;
+    color: #333;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.order-panel .product-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding: 0;
+}
+
+.order-panel .product-info img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.order-panel .product-info h4 {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+    color: #333;
+}
+
+.order-panel .product-info p {
+    font-size: 16px;
+    font-weight: 700;
+    color: #ff5e62;
+    margin: 0;
+}
+
+.customize-options {
+    margin-bottom: 20px;
+}
+
+.option-group {
+    margin-bottom: 15px;
+}
+
+.option-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.option-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.option-group select:focus {
+    outline: none;
+    border-color: #ff5e62;
+}
+
+.toppings-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.topping-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.topping-item:hover {
+    border-color: #ff5e62;
+    background: #fff9f9;
+}
+
+.topping-item input {
+    margin-right: 8px;
+}
+
+.topping-price {
+    font-size: 12px;
+    color: #ff5e62;
+    font-weight: 600;
+}
+
+.order-summary {
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.order-summary h4 {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 10px;
+    color: #333;
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #666;
+}
+
+.summary-item.total {
+    font-weight: 700;
+    color: #333;
+    border-top: 1px solid #eee;
+    padding-top: 8px;
+    margin-top: 8px;
+}
+
+.confirm-btn {
+    width: 100%;
+    padding: 12px;
+    background: #ff5e62;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.confirm-btn:hover {
+    background: #e62e24;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(230, 46, 36, 0.2);
+}
+
+
+/* Overlay */
+
+#overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    display: none;
+}
+
+#overlay.active {
+    display: block;
+}
+
+
+/* Responsive Styles */
+
+@media (max-width: 992px) {
+    .order-panel {
+        width: 100%;
+        right: -100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .toppings-grid {
+        grid-template-columns: 1fr;
+    }
+}
