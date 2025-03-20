@@ -2,6 +2,7 @@
 require_once "Router.php";
 require_once "controllers/BaseController.php";
 require_once "controllers/WelcomeController.php";
+require_once "controllers/AuthController.php";
 require_once "controllers/FeedbackController.php";
 require_once "controllers/SettingsController.php";
 require_once "controllers/OrdersController.php";
