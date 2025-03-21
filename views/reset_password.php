@@ -38,7 +38,7 @@
             
             <?php if ($success): ?>
                 <div class="mt-8 space-y-6">
-                    <div class="rounded-md bg-green-50 p-4">
+                    <div class="rounded-md bg-blue-50 p-4">
                         <div class="text-sm text-green-700">
                             Your password has been reset successfully.
                         </div>
