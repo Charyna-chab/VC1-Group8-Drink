@@ -13,7 +13,12 @@ class AuthController extends BaseController {
 
     public function login() {
         if (isset($_SESSION['user_id'])) {
-            $this->redirect('/order');
+            // Redirect based on user role
+            if (isset($_SESSION['user']['role']) && $_SESSION['user']['role'] === 'admin') {
+                $this->redirect('/admin/dashboard');
+            } else {
+                $this->redirect('/order');
+            }
         }
 
         $error = null;
@@ -23,18 +28,40 @@ class AuthController extends BaseController {
             $password = $_POST['password'] ?? '';
             $remember = isset($_POST['remember']);
 
-            if ($email === 'user@example.com' && $password === 'password123') {
+            // Admin credentials
+            if ($email === 'admin@example.com' && $password === 'admin123') {
+                $_SESSION['user_id'] = 999;
+                $_SESSION['user'] = [
+                    'id' => 999,
+                    'name' => 'Admin User',
+                    'email' => $email,
+                    'avatar' => '/assets/images/admin-avatar.jpg',
+                    'role' => 'admin'
+                ];
+
+                if ($remember) {
+                    setcookie('remember_token', 'admin_token', time() + (86400 * 30), '/');
+                    setcookie('user_role', 'admin', time() + (86400 * 30), '/');
+                }
+                
+                $this->redirect('/admin/dashboard');
+            } 
+            // Regular user credentials
+            else if ($email === 'user@example.com' && $password === 'password123') {
                 $_SESSION['user_id'] = 1;
                 $_SESSION['user'] = [
                     'id' => 1,
                     'name' => 'Demo User',
                     'email' => $email,
-                    'avatar' => '/assets/images/avatar.jpg'
+                    'avatar' => '/assets/images/avatar.jpg',
+                    'role' => 'user'
                 ];
 
                 if ($remember) {
-                    setcookie('remember_token', 'demo_token', time() + (86400 * 30), '/');
+                    setcookie('remember_token', 'user_token', time() + (86400 * 30), '/');
+                    setcookie('user_role', 'user', time() + (86400 * 30), '/');
                 }
+                
                 $this->redirect('/order');
             } else {
                 $error = 'Invalid email or password.';
@@ -46,7 +73,12 @@ class AuthController extends BaseController {
 
     public function register() {
         if (isset($_SESSION['user_id'])) {
-            $this->redirect('/order');
+            // Redirect based on user role
+            if (isset($_SESSION['user']['role']) && $_SESSION['user']['role'] === 'admin') {
+                $this->redirect('/admin/dashboard');
+            } else {
+                $this->redirect('/order');
+            }
         }
 
         $error = null;
@@ -57,6 +89,7 @@ class AuthController extends BaseController {
             $password = $_POST['password'] ?? '';
             $confirm_password = $_POST['confirm_password'] ?? '';
             $terms = isset($_POST['terms']);
+            $role = 'user'; // Default role is user
 
             if (empty($name) || empty($email) || empty($password) || empty($confirm_password)) {
                 $error = 'Please fill in all required fields';
@@ -72,7 +105,8 @@ class AuthController extends BaseController {
                     'id' => 2,
                     'name' => $name,
                     'email' => $email,
-                    'avatar' => '/assets/images/avatar.jpg'
+                    'avatar' => '/assets/images/avatar.jpg',
+                    'role' => $role
                 ];
                 
                 $this->redirect('/register-success');
@@ -121,6 +155,10 @@ class AuthController extends BaseController {
         if (isset($_COOKIE['remember_token'])) {
             setcookie('remember_token', '', time() - 3600, '/');
         }
+        
+        if (isset($_COOKIE['user_role'])) {
+            setcookie('user_role', '', time() - 3600, '/');
+        }
 
         // Redirect to login page
         $this->redirect('/login');
@@ -131,19 +169,37 @@ class AuthController extends BaseController {
             return;
         }
 
-        if (isset($_COOKIE['remember_token']) && $_COOKIE['remember_token'] === 'demo_token') {
-            $_SESSION['user_id'] = 1;
-            $_SESSION['user'] = [
-                'id' => 1,
-                'name' => 'Demo User',
-                'email' => 'user@example.com',
-                'avatar' => '/assets/images/avatar.jpg'
-            ];
+        if (isset($_COOKIE['remember_token'])) {
+            if ($_COOKIE['remember_token'] === 'admin_token') {
+                $_SESSION['user_id'] = 999;
+                $_SESSION['user'] = [
+                    'id' => 999,
+                    'name' => 'Admin User',
+                    'email' => 'admin@example.com',
+                    'avatar' => '/assets/images/admin-avatar.jpg',
+                    'role' => 'admin'
+                ];
+            } else if ($_COOKIE['remember_token'] === 'user_token') {
+                $_SESSION['user_id'] = 1;
+                $_SESSION['user'] = [
+                    'id' => 1,
+                    'name' => 'Demo User',
+                    'email' => 'user@example.com',
+                    'avatar' => '/assets/images/avatar.jpg',
+                    'role' => 'user'
+                ];
+            }
         }
     }
 
     public function checkAuth() {
         if (!isset($_SESSION['user_id'])) {
+            $this->redirect('/login');
+        }
+    }
+    
+    public function checkAdminAuth() {
+        if (!isset($_SESSION['user_id']) || !isset($_SESSION['user']['role']) || $_SESSION['user']['role'] !== 'admin') {
             $this->redirect('/login');
         }
     }

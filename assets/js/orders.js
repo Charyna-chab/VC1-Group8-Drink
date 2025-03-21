@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // DOM Elements
     const categoryButtons = document.querySelectorAll(".category-btn")
     const productCards = document.querySelectorAll(".product-card")
+
     const searchInput = document.getElementById("productSearch")
     const orderButtons = document.querySelectorAll(".order-btn")
     const orderPanel = document.getElementById("orderPanel")
@@ -478,30 +479,30 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         confirmationCard.innerHTML = `
-                <div class="confirmation-content">
-                    <div class="confirmation-header">
-                        <h3>Added to Cart!</h3>
-                        <button class="close-confirmation">&times;</button>
-                    </div>
-                    <div class="confirmation-product">
-                        <img src="${orderItem.image}" alt="${orderItem.name}">
-                        <div class="confirmation-details">
-                            <h4>${orderItem.name}</h4>
-                            <p>Size: ${orderItem.size.name}</p>
-                            <p>Sugar: ${orderItem.sugar.name}</p>
-                            <p>Ice: ${orderItem.ice.name}</p>
-                            <p>Toppings: ${toppingsText}</p>
-                            <p>Quantity: ${orderItem.quantity}</p>
-                            <p class="confirmation-price">$${orderItem.totalPrice.toFixed(2)}</p>
-                        </div>
-                    </div>
-                    <div class="confirmation-actions">
-                        <button class="view-cart-btn">View Cart</button>
-                        <button class="checkout-btn">Checkout Now</button>
-                        <button class="continue-shopping-btn">Continue Shopping</button>
-                    </div>
-                </div>
-            `
+      <div class="confirmation-content">
+        <div class="confirmation-header">
+          <h3>Added to Cart!</h3>
+          <button class="close-confirmation">&times;</button>
+        </div>
+        <div class="confirmation-product">
+          <img src="${orderItem.image}" alt="${orderItem.name}">
+          <div class="confirmation-details">
+            <h4>${orderItem.name}</h4>
+            <p>Size: ${orderItem.size.name}</p>
+            <p>Sugar: ${orderItem.sugar.name}</p>
+            <p>Ice: ${orderItem.ice.name}</p>
+            <p>Toppings: ${toppingsText}</p>
+            <p>Quantity: ${orderItem.quantity}</p>
+            <p class="confirmation-price">$${orderItem.totalPrice.toFixed(2)}</p>
+          </div>
+        </div>
+        <div class="confirmation-actions">
+          <button class="view-cart-btn">View Cart</button>
+          <button class="checkout-btn">Checkout Now</button>
+          <button class="continue-shopping-btn">Continue Shopping</button>
+        </div>
+      </div>
+    `
 
         document.body.appendChild(confirmationCard)
 
@@ -547,139 +548,139 @@ document.addEventListener("DOMContentLoaded", () => {
             const style = document.createElement("style")
             style.id = "order-confirmation-styles"
             style.textContent = `
-                    .order-confirmation-card {
-                        position: fixed;
-                        top: 50%;
-                        left: 50%;
-                        transform: translate(-50%, -50%);
-                        width: 90%;
-                        max-width: 500px;
-                        background-color: white;
-                        border-radius: 10px;
-                        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-                        z-index: 1000;
-                        animation: fadeIn 0.3s forwards;
-                        overflow: hidden;
-                    }
-                    
-                    .confirmation-content {
-                        padding: 20px;
-                    }
-                    
-                    .confirmation-header {
-                        display: flex;
-                        justify-content: space-between;
-                        align-items: center;
-                        margin-bottom: 15px;
-                        padding-bottom: 15px;
-                        border-bottom: 1px solid #eee;
-                    }
-                    
-                    .confirmation-header h3 {
-                        margin: 0;
-                        color: #4caf50;
-                        font-size: 22px;
-                    }
-                    
-                    .close-confirmation {
-                        background: none;
-                        border: none;
-                        font-size: 24px;
-                        cursor: pointer;
-                        color: #999;
-                    }
-                    
-                    .confirmation-product {
-                        display: flex;
-                        margin-bottom: 20px;
-                        background-color: #f9f9f9;
-                        border-radius: 8px;
-                        padding: 15px;
-                    }
-                    
-                    .confirmation-product img {
-                        width: 80px;
-                        height: 80px;
-                        border-radius: 8px;
-                        object-fit: cover;
-                        margin-right: 15px;
-                    }
-                    
-                    .confirmation-details {
-                        flex: 1;
-                    }
-                    
-                    .confirmation-details h4 {
-                        margin: 0 0 10px;
-                        color: #333;
-                    }
-                    
-                    .confirmation-details p {
-                        margin: 5px 0;
-                        color: #666;
-                        font-size: 14px;
-                    }
-                    
-                    .confirmation-price {
-                        font-weight: bold;
-                        color: #ff5e62 !important;
-                        font-size: 16px !important;
-                    }
-                    
-                    .confirmation-actions {
-                        display: flex;
-                        flex-wrap: wrap;
-                        gap: 10px;
-                    }
-                    
-                    .confirmation-actions button {
-                        flex: 1;
-                        padding: 12px;
-                        border: none;
-                        border-radius: 5px;
-                        cursor: pointer;
-                        font-weight: 600;
-                        transition: all 0.3s ease;
-                        min-width: 120px;
-                    }
-                    
-                    .view-cart-btn {
-                        background-color: #f5f5f5;
-                        color: #333;
-                    }
-                    
-                    .view-cart-btn:hover {
-                        background-color: #e5e5e5;
-                    }
-                    
-                    .checkout-btn {
-                        background-color: #4caf50;
-                        color: white;
-                    }
-                    
-                    .checkout-btn:hover {
-                        background-color: #3d9140;
-                    }
-                    
-                    .continue-shopping-btn {
-                        background-color: #ff5e62;
-                        color: white;
-                    }
-                    
-                    .continue-shopping-btn:hover {
-                        background-color: #ff4146;
-                    }
-                    
-                    @keyframes fadeIn {
-                        from { opacity: 0; transform: translate(-50%, -60%); }
-                        to { opacity: 1; transform: translate(-50%, -50%); }
-                    }
-                    
-                    @keyframes fadeOut {
-                        from { opacity: 1; transform: translate(-50%, -50%); }
-                        to { opacity: 0; transform: translate(-50%, -60%); }
-                    }
-                `
+        .order-confirmation-card {
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 90%;
+          max-width: 500px;
+          background-color: white;
+          border-radius: 10px;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+          z-index: 1000;
+          animation: fadeIn 0.3s forwards;
+          overflow: hidden;
+        }
+        
+        .confirmation-content {
+          padding: 20px;
+        }
+        
+        .confirmation-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 15px;
+          padding-bottom: 15px;
+          border-bottom: 1px solid #eee;
+        }
+        
+        .confirmation-header h3 {
+          margin: 0;
+          color: #4caf50;
+          font-size: 22px;
+        }
+        
+        .close-confirmation {
+          background: none;
+          border: none;
+          font-size: 24px;
+          cursor: pointer;
+          color: #999;
+        }
+        
+        .confirmation-product {
+          display: flex;
+          margin-bottom: 20px;
+          background-color: #f9f9f9;
+          border-radius: 8px;
+          padding: 15px;
+        }
+        
+        .confirmation-product img {
+          width: 80px;
+          height: 80px;
+          border-radius: 8px;
+          object-fit: cover;
+          margin-right: 15px;
+        }
+        
+        .confirmation-details {
+          flex: 1;
+        }
+        
+        .confirmation-details h4 {
+          margin: 0 0 10px;
+          color: #333;
+        }
+        
+        .confirmation-details p {
+          margin: 5px 0;
+          color: #666;
+          font-size: 14px;
+        }
+        
+        .confirmation-price {
+          font-weight: bold;
+          color: #ff5e62 !important;
+          font-size: 16px !important;
+        }
+        
+        .confirmation-actions {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 10px;
+        }
+        
+        .confirmation-actions button {
+          flex: 1;
+          padding: 12px;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          font-weight: 600;
+          transition: all 0.3s ease;
+          min-width: 120px;
+        }
+        
+        .view-cart-btn {
+          background-color: #f5f5f5;
+          color: #333;
+        }
+        
+        .view-cart-btn:hover {
+          background-color: #e5e5e5;
+        }
+        
+        .checkout-btn {
+          background-color: #4caf50;
+          color: white;
+        }
+        
+        .checkout-btn:hover {
+          background-color: #3d9140;
+        }
+        
+        .continue-shopping-btn {
+          background-color: #ff5e62;
+          color: white;
+        }
+        
+        .continue-shopping-btn:hover {
+          background-color: #ff4146;
+        }
+        
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translate(-50%, -60%); }
+          to { opacity: 1; transform: translate(-50%, -50%); }
+        }
+        
+        @keyframes fadeOut {
+          from { opacity: 1; transform: translate(-50%, -50%); }
+          to { opacity: 0; transform: translate(-50%, -60%); }
+        }
+      `
             document.head.appendChild(style)
         }
     }
@@ -708,15 +709,15 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         toast.innerHTML = `
-                <div>
-                    <i class="fas fa-${icon}" style="color: ${type === "success" ? "#4caf50" : type === "error" ? "#f44336" : "#ff5e62"}; font-size: 20px; margin-right: 10px;"></i>
-                </div>
-                <div style="flex: 1;">
-                    <h4>${title}</h4>
-                    <p>${message}</p>
-                </div>
-                <button class="toast-close">&times;</button>
-            `
+      <div>
+        <i class="fas fa-${icon}" style="color: ${type === "success" ? "#4caf50" : type === "error" ? "#f44336" : "#ff5e62"}; font-size: 20px; margin-right: 10px;"></i>
+      </div>
+      <div style="flex: 1;">
+        <h4>${title}</h4>
+        <p>${message}</p>
+      </div>
+      <button class="toast-close">&times;</button>
+    `
 
         // Add to container
         toastContainer.appendChild(toast)
@@ -822,20 +823,20 @@ document.addEventListener("DOMContentLoaded", () => {
         prompt.className = "favorites-prompt"
 
         prompt.innerHTML = `
-        <div class="favorites-prompt-content">
-          <div class="favorites-prompt-icon">
-            <i class="fas fa-heart"></i>
-          </div>
-          <div class="favorites-prompt-text">
-            <h4>Added to Favorites!</h4>
-            <p>${productName} has been added to your favorites.</p>
-          </div>
-          <div class="favorites-prompt-actions">
-            <button class="view-favorites-btn">View Favorites</button>
-            <button class="close-prompt-btn">Continue Shopping</button>
-          </div>
+      <div class="favorites-prompt-content">
+        <div class="favorites-prompt-icon">
+          <i class="fas fa-heart"></i>
         </div>
-      `
+        <div class="favorites-prompt-text">
+          <h4>Added to Favorites!</h4>
+          <p>${productName} has been added to your favorites.</p>
+        </div>
+        <div class="favorites-prompt-actions">
+          <button class="view-favorites-btn">View Favorites</button>
+          <button class="close-prompt-btn">Continue Shopping</button>
+        </div>
+      </div>
+    `
 
         document.body.appendChild(prompt)
 
@@ -866,101 +867,101 @@ document.addEventListener("DOMContentLoaded", () => {
             const style = document.createElement("style")
             style.id = "favorites-prompt-styles"
             style.textContent = `
-          .favorites-prompt {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-            animation: slideInLeft 0.3s ease forwards;
-            transition: opacity 0.3s ease, transform 0.3s ease;
-          }
-          
-          .favorites-prompt.fade-out {
-            opacity: 0;
-            transform: translateX(-20px);
-          }
-          
-          .favorites-prompt-content {
-            display: flex;
-            padding: 15px;
-            align-items: center;
-            gap: 15px;
-          }
-          
-          .favorites-prompt-icon {
-            width: 40px;
-            height: 40px;
-            background-color: #fff0f0;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #ff5e62;
-            font-size: 20px;
-          }
-          
-          .favorites-prompt-text {
-            flex: 1;
-          }
-          
-          .favorites-prompt-text h4 {
-            margin: 0 0 5px;
-            font-size: 16px;
-            color: #333;
-          }
-          
-          .favorites-prompt-text p {
-            margin: 0;
-            font-size: 14px;
-            color: #666;
-          }
-          
-          .favorites-prompt-actions {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-          }
-          
-          .view-favorites-btn {
-            padding: 8px 12px;
-            background-color: #ff5e62;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-          }
-          
-          .view-favorites-btn:hover {
-            background-color: #ff4146;
-          }
-          
-          .close-prompt-btn {
-            padding: 8px 12px;
-            background-color: transparent;
-            color: #666;
-            border: none;
-            border-radius: 5px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-          }
-          
-          .close-prompt-btn:hover {
-            background-color: #f5f5f5;
-          }
-          
-          @keyframes slideInLeft {
-            from { transform: translateX(-100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-          }
-        `
+        .favorites-prompt {
+          position: fixed;
+          bottom: 20px;
+          left: 20px;
+          background-color: white;
+          border-radius: 10px;
+          box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+          z-index: 1000;
+          animation: slideInLeft 0.3s ease forwards;
+          transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        
+        .favorites-prompt.fade-out {
+          opacity: 0;
+          transform: translateX(-20px);
+        }
+        
+        .favorites-prompt-content {
+          display: flex;
+          padding: 15px;
+          align-items: center;
+          gap: 15px;
+        }
+        
+        .favorites-prompt-icon {
+          width: 40px;
+          height: 40px;
+          background-color: #fff0f0;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #ff5e62;
+          font-size: 20px;
+        }
+        
+        .favorites-prompt-text {
+          flex: 1;
+        }
+        
+        .favorites-prompt-text h4 {
+          margin: 0 0 5px;
+          font-size: 16px;
+          color: #333;
+        }
+        
+        .favorites-prompt-text p {
+          margin: 0;
+          font-size: 14px;
+          color: #666;
+        }
+        
+        .favorites-prompt-actions {
+          display: flex;
+          flex-direction: column;
+          gap: 5px;
+        }
+        
+        .view-favorites-btn {
+          padding: 8px 12px;
+          background-color: #ff5e62;
+          color: white;
+          border: none;
+          border-radius: 5px;
+          font-size: 12px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: background-color 0.3s ease;
+        }
+        
+        .view-favorites-btn:hover {
+          background-color: #ff4146;
+        }
+        
+        .close-prompt-btn {
+          padding: 8px 12px;
+          background-color: transparent;
+          color: #666;
+          border: none;
+          border-radius: 5px;
+          font-size: 12px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: background-color 0.3s ease;
+        }
+        
+        .close-prompt-btn:hover {
+          background-color: #f5f5f5;
+        }
+        
+        @keyframes slideInLeft {
+          from { transform: translateX(-100%); opacity: 0; }
+          to { transform: translateX(0); opacity: 1; }
+        }
+      `
             document.head.appendChild(style)
         }
     }
@@ -989,89 +990,89 @@ document.addEventListener("DOMContentLoaded", () => {
     // Add CSS animations
     const style = document.createElement("style")
     style.textContent = `
-            @keyframes slideIn {
-                from { transform: translateX(100%); }
-                to { transform: translateX(0); }
-            }
-            
-            @keyframes slideOut {
-                from { transform: translateX(0); }
-                to { transform: translateX(100%); }
-            }
-            
-            @keyframes heartBeat {
-                0% { transform: scale(1); }
-                25% { transform: scale(1.3); }
-                50% { transform: scale(1); }
-                75% { transform: scale(1.3); }
-                100% { transform: scale(1); }
-            }
-            
-            .order-panel {
-                transition: transform 0.3s ease;
-            }
-            
-            .product-card {
-                transition: transform 0.3s ease, box-shadow 0.3s ease;
-            }
-            
-            .product-card:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-            }
-            
-            .order-btn {
-                transition: background-color 0.3s ease, transform 0.3s ease;
-            }
-            
-            .order-btn:hover {
-                transform: scale(1.05);
-            }
-            
-            .favorite-btn {
-                position: absolute;
-                top: 10px;
-                right: 10px;
-                background-color: white;
-                border: none;
-                border-radius: 50%;
-                width: 36px;
-                height: 36px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                cursor: pointer;
-                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-                transition: transform 0.3s ease, box-shadow 0.3s ease;
-                z-index: 2;
-            }
-            
-            .favorite-btn:hover {
-                transform: scale(1.2);
-                box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
-            }
-            
-            .favorite-btn i {
-                color: #ff5e62;
-                font-size: 18px;
-            }
-            
-            .favorite-btn i.far {
-                color: #666;
-            }
-            
-            .favorite-btn i.fas {
-                color: #ff5e62;
-            }
-            
-            #no-product-message {
-                display: none;
-                text-align: center;
-                padding: 30px;
-                color: #666;
-                font-size: 16px;
-                grid-column: 1 / -1;
-            }
-        `
+    @keyframes slideIn {
+      from { transform: translateX(100%); }
+      to { transform: translateX(0); }
+    }
+    
+    @keyframes slideOut {
+      from { transform: translateX(0); }
+      to { transform: translateX(100%); }
+    }
+    
+    @keyframes heartBeat {
+      0% { transform: scale(1); }
+      25% { transform: scale(1.3); }
+      50% { transform: scale(1); }
+      75% { transform: scale(1.3); }
+      100% { transform: scale(1); }
+    }
+    
+    .order-panel {
+      transition: transform 0.3s ease;
+    }
+    
+    .product-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .order-btn {
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+    
+    .order-btn:hover {
+      transform: scale(1.05);
+    }
+    
+    .favorite-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: white;
+      border: none;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      z-index: 2;
+    }
+    
+    .favorite-btn:hover {
+      transform: scale(1.2);
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+    }
+    
+    .favorite-btn i {
+      color: #ff5e62;
+      font-size: 18px;
+    }
+    
+    .favorite-btn i.far {
+      color: #666;
+    }
+    
+    .favorite-btn i.fas {
+      color: #ff5e62;
+    }
+    
+    #no-product-message {
+      display: none;
+      text-align: center;
+      padding: 30px;
+      color: #666;
+      font-size: 16px;
+      grid-column: 1 / -1;
+    }
+  `
     document.head.appendChild(style)
 })
