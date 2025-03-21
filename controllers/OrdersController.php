@@ -1,16 +1,5 @@
 <?php
-class OrdersController extends BaseController {
-    public function __construct() {
-        if (session_status() == PHP_SESSION_NONE) {
-            session_start();
-        }
-        
-        // Check if user is logged in
-        if (!isset($_SESSION['user_id'])) {
-            $this->redirect('/login');
-        }
-    }
-    
+class OrderController extends BaseController {
     public function index() {
         // In a real application, you would fetch products from the database
         // For now, we'll create sample data
@@ -180,7 +169,6 @@ class OrdersController extends BaseController {
                 'category' => 'snacks'
             ]
         ];
-        
         
         $toppings = [
             [
