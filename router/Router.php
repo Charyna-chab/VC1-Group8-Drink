@@ -77,4 +77,3 @@ class Router {
         return $pattern;
     }
 }
-

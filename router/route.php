@@ -8,7 +8,6 @@ require_once __DIR__ . "/../controllers/SettingsController.php";
 require_once __DIR__ . "/../controllers/OrdersController.php";
 require_once __DIR__ . "/../controllers/BookingController.php";
 require_once __DIR__ . "/../controllers/AuthController.php";
-require_once __DIR__ . "/../controllers/AdminController.php";
 
 use YourNamespace\Router;
 
@@ -26,6 +25,7 @@ $route->post("/register", [AuthController::class, 'register']);
 $route->get("/register-success", [AuthController::class, 'registerSuccess']);
 $route->get("/forgot-password", [AuthController::class, 'forgotPassword']);
 $route->post("/forgot-password", [AuthController::class, 'forgotPassword']);
+$route->get("/logout", [AuthController::class, 'logout']);
 
 // Original routes
 $route->get("/welcome", [WelcomeController::class, 'welcome']);
@@ -42,13 +42,4 @@ $route->post("/favorites/toggle", [FavoritesController::class, 'toggle']);
 $route->get("/feedback", [FeedbackController::class, 'index']);
 $route->get("/settings", [SettingsController::class, 'index']);
 
-// Admin routes
-$route->get("/admin/dashboard", [AdminController::class, 'dashboard']);
-$route->get("/admin/users", [AdminController::class, 'users']);
-$route->get("/admin/orders", [AdminController::class, 'orders']);
-$route->get("/admin/products", [AdminController::class, 'products']);
-$route->get("/admin/settings", [AdminController::class, 'settings']);
-$route->get("/admin/reports", [AdminController::class, 'reports']);
-
 $route->route();
-
