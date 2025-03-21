@@ -1,468 +1,671 @@
-// assets/js/favorites.js
-document.addEventListener('DOMContentLoaded', function() {
-    // Load favorites from localStorage
-    loadFavorites();
+// favorites.js - Handles favorites functionality
+document.addEventListener("DOMContentLoaded", () => {
+    console.log("Favorites script loaded")
 
-    // Remove from favorites functionality
-    setupRemoveButtons();
+    // DOM Elements
+    const favoriteButtons = document.querySelectorAll(".favorite-btn")
+    const favoriteCards = document.querySelectorAll(".favorites-card")
+    const favoriteRemoveButtons = document.querySelectorAll(".favorites-remove-btn")
+    const favoriteOrderButtons = document.querySelectorAll(".favorites-order-btn")
+    const emptyFavorites = document.querySelector(".favorites-empty")
+    const favoritesGrid = document.querySelector(".favorites-grid")
 
-    // Order button functionality
-    setupOrderButtons();
+    console.log("Favorites elements:", {
+        favoriteButtons: favoriteButtons.length,
+        favoriteCards: favoriteCards.length,
+        favoriteRemoveButtons: favoriteRemoveButtons.length,
+        favoriteOrderButtons: favoriteOrderButtons.length,
+        emptyFavorites: !!emptyFavorites,
+        favoritesGrid: !!favoritesGrid,
+    })
 
-    // Function to load favorites from localStorage
-    function loadFavorites() {
-        const favorites = getFavorites();
-        const favoritesGrid = document.querySelector('.favorites-grid');
-        const emptyState = document.querySelector('.favorites-empty');
+    // Initialize favorites from localStorage
+    let favorites = JSON.parse(localStorage.getItem("favorites")) || []
 
-        // If no favorites in localStorage, show empty state
-        if (favorites.length === 0 && favoritesGrid) {
-            favoritesGrid.style.display = 'none';
-            if (emptyState) emptyState.style.display = 'block';
-            return;
-        }
+    // Add event listeners to favorite buttons on product cards
+    favoriteButtons.forEach((button) => {
+        button.addEventListener("click", function(e) {
+            e.preventDefault()
+            e.stopPropagation()
 
-        // If we have favorites but no grid (PHP didn't render any), create the grid
-        if (favorites.length > 0 && !favoritesGrid) {
-            createFavoritesGrid(favorites);
-        }
-    }
+            const productCard = this.closest(".product-card")
+            const productId = productCard.querySelector(".order-btn").getAttribute("data-product-id")
+            const productName = productCard.querySelector("h3").textContent
+            const productImage = productCard.querySelector(".product-image img").src
+            const productPrice = productCard.querySelector(".product-price").textContent
+            const productDescription = productCard.querySelector(".product-desc").textContent
 
-    // Function to create favorites grid dynamically
-    function createFavoritesGrid(favorites) {
-        const content = document.querySelector('.content');
-        const emptyState = document.querySelector('.favorites-empty');
+            const icon = this.querySelector("i")
 
-        if (emptyState) emptyState.style.display = 'none';
+            if (icon.classList.contains("far")) {
+                // Add to favorites
+                icon.classList.remove("far")
+                icon.classList.add("fas")
 
-        const grid = document.createElement('div');
-        grid.className = 'favorites-grid';
+                // Save to favorites
+                addToFavorites(productId, productName, productImage, productPrice, productDescription)
 
-        favorites.forEach(item => {
-            const card = document.createElement('div');
-            card.className = 'favorites-card';
-            card.setAttribute('data-id', item.id);
+                // Show notification
+                showToast("Added to Favorites", `${productName} has been added to your favorites!`, "success")
 
-            card.innerHTML = `
-                <button class="favorites-remove-btn" data-id="${item.id}">
-                    <i class="fas fa-times"></i>
-                    <span class="sr-only">Remove from favorites</span>
-                </button>
-                
-                <div class="favorites-image">
-                    <img src="${item.image}" alt="${item.name}">
-                </div>
-                
-                <div class="favorites-content">
-                    <h3 class="favorites-title">${item.name}</h3>
-                    <p class="favorites-description">${item.description || 'A delicious drink from Xing Fu Cha'}</p>
-                    
-                    <div class="favorites-footer">
-                        <div class="favorites-price">
-                            $${parseFloat(item.price).toFixed(2)}
-                        </div>
-                        <button class="favorites-order-btn" 
-                                data-id="${item.id}"
-                                data-name="${item.name}"
-                                data-price="${item.price}"
-                                data-image="${item.image}">
-                            Order Now
-                        </button>
-                    </div>
-                </div>
-            `;
+                // Add notification
+                if (window.addNotification) {
+                    window.addNotification("Added to Favorites", `${productName} has been added to your favorites.`, "info")
+                }
 
-            grid.appendChild(card);
-        });
-
-        content.appendChild(grid);
-
-        // Add event listeners to the new buttons
-        setupRemoveButtons();
-        setupOrderButtons();
-    }
-
-    // Setup remove buttons
-    function setupRemoveButtons() {
-        const removeButtons = document.querySelectorAll('.favorites-remove-btn');
-        removeButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const itemId = this.getAttribute('data-id');
-                removeFavorite(itemId);
-
-                // Remove the card with animation
-                const card = this.closest('.favorites-card');
-                card.style.animation = 'fadeOut 0.5s ease forwards';
-
+                // Add heart beat animation
+                icon.style.animation = "heartBeat 0.5s ease-in-out"
                 setTimeout(() => {
-                    card.remove();
+                    icon.style.animation = ""
+                }, 500)
+            } else {
+                // Remove from favorites
+                icon.classList.remove("fas")
+                icon.classList.add("far")
+
+                // Remove from favorites
+                removeFromFavorites(productId)
+
+                // Show notification
+                showToast("Removed from Favorites", `${productName} has been removed from your favorites.`, "info")
+
+                // Add notification
+                if (window.addNotification) {
+                    window.addNotification(
+                        "Removed from Favorites",
+                        `${productName} has been removed from your favorites.`,
+                        "info",
+                    )
+                }
+            }
+        })
+    })
+
+    // Add event listeners to remove buttons on favorite cards
+    favoriteRemoveButtons.forEach((button) => {
+        button.addEventListener("click", function(e) {
+            e.preventDefault()
+            e.stopPropagation()
+
+            const favoriteCard = this.closest(".favorites-card")
+            const productId = favoriteCard.getAttribute("data-id")
+            const productName = favoriteCard.querySelector(".favorites-title").textContent
+
+            // Remove from favorites
+            removeFromFavorites(productId)
+
+            // Remove card with animation
+            favoriteCard.classList.add("removing")
+            setTimeout(() => {
+                favoriteCard.remove()
+
+                // Check if there are any favorites left
+                if (document.querySelectorAll(".favorites-card").length === 0) {
+                    showEmptyState()
+                }
+            }, 300)
+
+            // Show notification
+            showToast("Removed from Favorites", `${productName} has been removed from your favorites.`, "info")
+
+            // Add notification
+            if (window.addNotification) {
+                window.addNotification("Removed from Favorites", `${productName} has been removed from your favorites.`, "info")
+            }
+        })
+    })
+
+    // Add event listeners to order buttons on favorite cards
+    favoriteOrderButtons.forEach((button) => {
+        button.addEventListener("click", function(e) {
+            e.preventDefault()
+            e.stopPropagation()
+
+            const productId = this.getAttribute("data-id")
+            const productName = this.getAttribute("data-name")
+            const productPrice = this.getAttribute("data-price")
+            const productImage = this.getAttribute("data-image")
+
+            // Redirect to order page with product ID
+            window.location.href = `/order?product_id=${productId}`
+
+            // Show notification
+            showToast("Ordering", `Preparing to order ${productName}...`, "info")
+
+            // Add notification
+            if (window.addNotification) {
+                window.addNotification("Ordering", `You're about to order ${productName}.`, "info")
+            }
+        })
+    })
+
+    // Add to favorites
+    function addToFavorites(id, name, image, price, description) {
+        // Remove price formatting
+        price = price.replace("$", "").trim()
+
+        // Check if already in favorites
+        if (!favorites.some((item) => item.id === id)) {
+            // Add to favorites
+            favorites.push({
+                id,
+                name,
+                image,
+                price,
+                description: description || "A delicious drink from Xing Fu Cha",
+            })
+
+            // Save to localStorage
+            localStorage.setItem("favorites", JSON.stringify(favorites))
+
+            // If we're on the favorites page, update the UI
+            if (window.location.pathname === "/favorites") {
+                updateFavoritesUI()
+            }
+        }
+    }
+
+    // Remove from favorites
+    function removeFromFavorites(id) {
+        // Filter out the removed item
+        favorites = favorites.filter((item) => item.id !== id)
+
+        // Save to localStorage
+        localStorage.setItem("favorites", JSON.stringify(favorites))
+
+        // Update favorite buttons on product cards
+        updateFavoriteButtons()
+
+        // If we're on the favorites page, update the UI
+        if (window.location.pathname === "/favorites") {
+            updateFavoritesUI()
+        }
+    }
+
+    // Update favorite buttons on product cards
+    function updateFavoriteButtons() {
+        favoriteButtons.forEach((button) => {
+            const productCard = button.closest(".product-card")
+            const productId = productCard.querySelector(".order-btn").getAttribute("data-product-id")
+            const icon = button.querySelector("i")
+
+            if (favorites.some((item) => item.id === productId)) {
+                icon.classList.remove("far")
+                icon.classList.add("fas")
+            } else {
+                icon.classList.remove("fas")
+                icon.classList.add("far")
+            }
+        })
+    }
+
+    // Update favorites UI
+    function updateFavoritesUI() {
+        if (!favoritesGrid) return
+
+        // Clear favorites grid
+        favoritesGrid.innerHTML = ""
+
+        // Show empty state if no favorites
+        if (favorites.length === 0) {
+            showEmptyState()
+            return
+        }
+
+        // Hide empty state
+        if (emptyFavorites) {
+            emptyFavorites.style.display = "none"
+        }
+
+        // Show favorites grid
+        if (favoritesGrid) {
+            favoritesGrid.style.display = "grid"
+        }
+
+        // Add favorite cards
+        favorites.forEach((favorite) => {
+            const favoriteCard = document.createElement("div")
+            favoriteCard.className = "favorites-card"
+            favoriteCard.setAttribute("data-id", favorite.id)
+
+            favoriteCard.innerHTML = `
+          <!-- Remove Button -->
+          <button class="favorites-remove-btn" data-id="${favorite.id}">
+            <i class="fas fa-times"></i>
+            <span class="sr-only">Remove from favorites</span>
+          </button>
+  
+          <!-- Product Image -->
+          <div class="favorites-image">
+            <img src="${favorite.image}" alt="${favorite.name}">
+          </div>
+  
+          <!-- Product Info -->
+          <div class="favorites-content">
+            <h3 class="favorites-title">${favorite.name}</h3>
+            <p class="favorites-description">${favorite.description}</p>
+            
+            <div class="favorites-footer">
+              <div class="favorites-price">
+                $${Number.parseFloat(favorite.price).toFixed(2)}
+              </div>
+              <button class="favorites-order-btn" 
+                      data-id="${favorite.id}"
+                      data-name="${favorite.name}"
+                      data-price="${favorite.price}"
+                      data-image="${favorite.image}">
+                Order Now
+              </button>
+            </div>
+          </div>
+        `
+
+            favoritesGrid.appendChild(favoriteCard)
+
+            // Add event listener to remove button
+            const removeButton = favoriteCard.querySelector(".favorites-remove-btn")
+            removeButton.addEventListener("click", function(e) {
+                e.preventDefault()
+                e.stopPropagation()
+
+                const productId = this.getAttribute("data-id")
+                const productName = favoriteCard.querySelector(".favorites-title").textContent
+
+                // Remove from favorites
+                removeFromFavorites(productId)
+
+                // Remove card with animation
+                favoriteCard.classList.add("removing")
+                setTimeout(() => {
+                    favoriteCard.remove()
 
                     // Check if there are any favorites left
-                    const remainingCards = document.querySelectorAll('.favorites-card');
-                    if (remainingCards.length === 0) {
-                        showEmptyState();
+                    if (document.querySelectorAll(".favorites-card").length === 0) {
+                        showEmptyState()
                     }
-                }, 500);
+                }, 300)
 
-                showToast('info', 'Removed from Favorites', 'Item removed from your favorites list');
-            });
-        });
-    }
+                // Show notification
+                showToast("Removed from Favorites", `${productName} has been removed from your favorites.`, "info")
 
-    // Setup order buttons
-    function setupOrderButtons() {
-        const orderButtons = document.querySelectorAll('.favorites-order-btn');
-        orderButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const itemId = this.getAttribute('data-id');
-                const itemName = this.getAttribute('data-name');
+                // Add notification
+                if (window.addNotification) {
+                    window.addNotification(
+                        "Removed from Favorites",
+                        `${productName} has been removed from your favorites.`,
+                        "info",
+                    )
+                }
+            })
 
-                showToast('success', 'Order Started', `Adding ${itemName} to your order`);
+            // Add event listener to order button
+            const orderButton = favoriteCard.querySelector(".favorites-order-btn")
+            orderButton.addEventListener("click", function(e) {
+                e.preventDefault()
+                e.stopPropagation()
+
+                const productId = this.getAttribute("data-id")
+                const productName = this.getAttribute("data-name")
 
                 // Redirect to order page with product ID
-                setTimeout(() => {
-                    window.location.href = `/order?product_id=${itemId}`;
-                }, 1000);
-            });
-        });
+                window.location.href = `/order?product_id=${productId}`
+
+                // Show notification
+                showToast("Ordering", `Preparing to order ${productName}...`, "info")
+
+                // Add notification
+                if (window.addNotification) {
+                    window.addNotification("Ordering", `You're about to order ${productName}.`, "info")
+                }
+            })
+        })
     }
 
-    // Function to show empty state
+    // Show empty state
     function showEmptyState() {
-        const content = document.querySelector('.content');
-        const grid = document.querySelector('.favorites-grid');
+        if (!emptyFavorites || !favoritesGrid) return
 
-        if (grid) grid.style.display = 'none';
+        // Show empty state
+        emptyFavorites.style.display = "block"
 
-        // Check if empty state already exists
-        let emptyState = document.querySelector('.favorites-empty');
+        // Hide favorites grid
+        favoritesGrid.style.display = "none"
+    }
 
-        if (!emptyState) {
-            emptyState = document.createElement('div');
-            emptyState.className = 'favorites-empty';
-
-            emptyState.innerHTML = `
-                <img src="/assets/images/empty-favorites.svg" alt="No Favorites">
-                <h3>No Favorites Yet</h3>
-                <p>You haven't added any favorites yet. Browse our menu and add items to your favorites!</p>
-                <a href="/order" class="favorites-browse-btn">Browse Menu</a>
-            `;
-
-            content.appendChild(emptyState);
-        } else {
-            emptyState.style.display = 'block';
+    // Show toast notification
+    function showToast(title, message, type = "info") {
+        // Create toast container if it doesn't exist
+        let toastContainer = document.querySelector(".favorites-toast-container")
+        if (!toastContainer) {
+            toastContainer = document.createElement("div")
+            toastContainer.className = "favorites-toast-container"
+            document.body.appendChild(toastContainer)
         }
-    }
 
-    // Function to remove favorite from localStorage
-    function removeFavorite(id) {
-        let favorites = getFavorites();
-        favorites = favorites.filter(fav => fav.id !== id);
-        localStorage.setItem('favorites', JSON.stringify(favorites));
-    }
+        const toast = document.createElement("div")
+        toast.className = "favorites-toast"
 
-    // Function to get favorites from localStorage
-    function getFavorites() {
-        const favorites = localStorage.getItem('favorites');
-        return favorites ? JSON.parse(favorites) : [];
-    }
-
-    // Toast notification
-    function showToast(type, title, message) {
-        const toastContainer = document.querySelector('.favorites-toast-container');
-        if (!toastContainer) return;
-
-        const toast = document.createElement('div');
-        toast.className = `favorites-toast ${type}`;
+        let icon = "info-circle"
+        if (type === "success") {
+            icon = "check-circle"
+            toast.style.borderLeftColor = "#4caf50"
+        } else if (type === "error") {
+            icon = "exclamation-circle"
+            toast.style.borderLeftColor = "#f44336"
+        }
 
         toast.innerHTML = `
-            <div class="toast-icon">
-                <i class="fas fa-${type === 'success' ? 'check' : type === 'error' ? 'times' : 'info-circle'}"></i>
-            </div>
-            <div class="toast-content">
-                <h4>${title}</h4>
-                <p>${message}</p>
-            </div>
-            <button class="toast-close">
-                <i class="fas fa-times"></i>
-            </button>
-        `;
+        <div>
+          <i class="fas fa-${icon}" style="color: ${type === "success" ? "#4caf50" : type === "error" ? "#f44336" : "#ff5e62"}; font-size: 20px; margin-right: 10px;"></i>
+        </div>
+        <div style="flex: 1;">
+          <h4>${title}</h4>
+          <p>${message}</p>
+        </div>
+        <button class="favorites-toast-close">&times;</button>
+      `
 
-        toastContainer.appendChild(toast);
+        // Add to container
+        toastContainer.appendChild(toast)
 
-        // Auto remove toast after 5 seconds
+        // Add close button functionality
+        const closeButton = toast.querySelector(".favorites-toast-close")
+        closeButton.addEventListener("click", () => {
+            toast.remove()
+        })
+
+        // Auto remove after 5 seconds
         setTimeout(() => {
-            toast.style.animation = 'slideOut 0.3s forwards';
+            toast.style.opacity = "0"
             setTimeout(() => {
-                toast.remove();
-            }, 300);
-        }, 5000);
-
-        // Close toast on click
-        const closeBtn = toast.querySelector('.toast-close');
-        closeBtn.addEventListener('click', function() {
-            toast.style.animation = 'slideOut 0.3s forwards';
-            setTimeout(() => {
-                toast.remove();
-            }, 300);
-        });
+                toast.remove()
+            }, 300)
+        }, 5000)
     }
 
-    // Add keyframes for animations if not already in the document
-    if (!document.querySelector('style#favorites-animations')) {
-        const style = document.createElement('style');
-        style.id = 'favorites-animations';
-        style.textContent = `
-            @keyframes fadeOut {
-                from {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
-                to {
-                    opacity: 0;
-                    transform: translateY(20px);
-                }
-            }
-            
-            @keyframes slideOut {
-                from {
-                    transform: translateX(0);
-                    opacity: 1;
-                }
-                to {
-                    transform: translateX(100%);
-                    opacity: 0;
-                }
-            }
-            
-            .favorites-card {
-                position: relative;
-                background-color: white;
-                border-radius: 10px;
-                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-                overflow: hidden;
-                transition: transform 0.3s ease, box-shadow 0.3s ease;
-            }
-            
-            .favorites-card:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-            }
-            
-            .favorites-remove-btn {
-                position: absolute;
-                top: 10px;
-                right: 10px;
-                background-color: white;
-                border: none;
-                border-radius: 50%;
-                width: 30px;
-                height: 30px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                cursor: pointer;
-                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-                z-index: 2;
-                transition: transform 0.3s ease;
-            }
-            
-            .favorites-remove-btn:hover {
-                transform: rotate(90deg);
-            }
-            
-            .favorites-image {
-                height: 180px;
-                overflow: hidden;
-            }
-            
-            .favorites-image img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-                transition: transform 0.5s ease;
-            }
-            
-            .favorites-card:hover .favorites-image img {
-                transform: scale(1.1);
-            }
-            
-            .favorites-content {
-                padding: 15px;
-            }
-            
-            .favorites-title {
-                margin: 0 0 10px;
-                font-size: 18px;
-                color: #333;
-            }
-            
-            .favorites-description {
-                margin: 0 0 15px;
-                font-size: 14px;
-                color: #666;
-                line-height: 1.4;
-                height: 40px;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                display: -webkit-box;
-                -webkit-line-clamp: 2;
-                -webkit-box-orient: vertical;
-            }
-            
-            .favorites-footer {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-top: 10px;
-            }
-            
-            .favorites-price {
-                font-weight: bold;
-                color: #ff5e62;
-                font-size: 18px;
-            }
-            
-            .favorites-order-btn {
-                background-color: #ff5e62;
-                color: white;
-                border: none;
-                border-radius: 5px;
-                padding: 8px 15px;
-                cursor: pointer;
-                font-weight: 600;
-                transition: background-color 0.3s ease, transform 0.3s ease;
-            }
-            
-            .favorites-order-btn:hover {
-                background-color: #ff4146;
-                transform: scale(1.05);
-            }
-            
-            .favorites-toast-container {
-                position: fixed;
-                bottom: 20px;
-                right: 20px;
-                z-index: 1000;
-            }
-            
-            .favorites-toast {
-                display: flex;
-                align-items: center;
-                background-color: white;
-                border-radius: 8px;
-                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-                padding: 15px;
-                margin-top: 10px;
-                min-width: 300px;
-                animation: slideIn 0.3s forwards;
-            }
-            
-            @keyframes slideIn {
-                from {
-                    transform: translateX(100%);
-                    opacity: 0;
-                }
-                to {
-                    transform: translateX(0);
-                    opacity: 1;
-                }
-            }
-            
-            .favorites-toast.success {
-                border-left: 4px solid #4caf50;
-            }
-            
-            .favorites-toast.error {
-                border-left: 4px solid #f44336;
-            }
-            
-            .favorites-toast.info {
-                border-left: 4px solid #2196f3;
-            }
-            
-            .toast-icon {
-                margin-right: 15px;
-                font-size: 20px;
-            }
-            
-            .favorites-toast.success .toast-icon {
-                color: #4caf50;
-            }
-            
-            .favorites-toast.error .toast-icon {
-                color: #f44336;
-            }
-            
-            .favorites-toast.info .toast-icon {
-                color: #2196f3;
-            }
-            
-            .toast-content {
-                flex: 1;
-            }
-            
-            .toast-content h4 {
-                margin: 0 0 5px;
-                font-size: 16px;
-            }
-            
-            .toast-content p {
-                margin: 0;
-                font-size: 14px;
-                color: #666;
-            }
-            
-            .toast-close {
-                background: none;
-                border: none;
-                cursor: pointer;
-                color: #999;
-                font-size: 16px;
-            }
-            
-            .favorites-empty {
-                text-align: center;
-                padding: 50px 20px;
-            }
-            
-            .favorites-empty img {
-                width: 150px;
-                margin-bottom: 20px;
-                opacity: 0.7;
-            }
-            
-            .favorites-empty h3 {
-                margin: 0 0 10px;
-                color: #333;
-                font-size: 22px;
-            }
-            
-            .favorites-empty p {
-                margin: 0 0 20px;
-                color: #666;
-                font-size: 16px;
-                max-width: 400px;
-                margin-left: auto;
-                margin-right: auto;
-            }
-            
-            .favorites-browse-btn {
-                display: inline-block;
-                background-color: #ff5e62;
-                color: white;
-                text-decoration: none;
-                padding: 12px 25px;
-                border-radius: 5px;
-                font-weight: 600;
-                transition: background-color 0.3s ease, transform 0.3s ease;
-            }
-            
-            .favorites-browse-btn:hover {
-                background-color: #ff4146;
-                transform: scale(1.05);
-            }
-        `;
-        document.head.appendChild(style);
+    // Add CSS for favorites
+    const style = document.createElement("style")
+    style.textContent = `
+      /* Favorites Page Styles */
+      .favorites-header {
+        margin-bottom: 30px;
+      }
+      
+      .favorites-header h2 {
+        font-size: 24px;
+        margin: 0 0 10px;
+        color: #333;
+      }
+      
+      .favorites-header p {
+        font-size: 16px;
+        color: #666;
+        margin: 0;
+      }
+      
+      .favorites-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+      }
+      
+      .favorites-card {
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+        position: relative;
+      }
+      
+      .favorites-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+      }
+      
+      .favorites-card.removing {
+        opacity: 0;
+        transform: scale(0.8);
+      }
+      
+      .favorites-remove-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 30px;
+        height: 30px;
+        background-color: white;
+        border: none;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        z-index: 2;
+        opacity: 0;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+      }
+      
+      .favorites-card:hover .favorites-remove-btn {
+        opacity: 1;
+      }
+      
+      .favorites-remove-btn:hover {
+        transform: scale(1.1);
+      }
+      
+      .favorites-image {
+        height: 180px;
+        overflow: hidden;
+      }
+      
+      .favorites-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+      }
+      
+      .favorites-card:hover .favorites-image img {
+        transform: scale(1.05);
+      }
+      
+      .favorites-content {
+        padding: 15px;
+      }
+      
+      .favorites-title {
+        font-size: 18px;
+        margin: 0 0 10px;
+        color: #333;
+      }
+      
+      .favorites-description {
+        font-size: 14px;
+        color: #666;
+        margin: 0 0 15px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        height: 40px;
+      }
+      
+      .favorites-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      
+      .favorites-price {
+        font-size: 18px;
+        font-weight: 700;
+        color: #ff5e62;
+      }
+      
+      .favorites-order-btn {
+        padding: 8px 15px;
+        background-color: #ff5e62;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+      }
+      
+      .favorites-order-btn:hover {
+        background-color: #ff4146;
+        transform: translateY(-2px);
+      }
+      
+      /* Empty State */
+      .favorites-empty {
+        text-align: center;
+        padding: 40px 20px;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      }
+      
+      .favorites-empty img {
+        width: 120px;
+        height: auto;
+        margin-bottom: 20px;
+        opacity: 0.7;
+      }
+      
+      .favorites-empty h3 {
+        font-size: 20px;
+        margin: 0 0 10px;
+        color: #333;
+      }
+      
+      .favorites-empty p {
+        font-size: 16px;
+        color: #666;
+        margin: 0 0 20px;
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      
+      .favorites-browse-btn {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #ff5e62;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+        text-decoration: none;
+      }
+      
+      .favorites-browse-btn:hover {
+        background-color: #ff4146;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255, 94, 98, 0.3);
+      }
+      
+      /* Toast Notifications */
+      .favorites-toast-container {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        max-width: 350px;
+      }
+      
+      .favorites-toast {
+        background-color: white;
+        border-radius: 5px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        padding: 15px;
+        display: flex;
+        align-items: flex-start;
+        border-left: 4px solid #ff5e62;
+        animation: slideIn 0.3s ease forwards;
+        opacity: 1;
+        transition: opacity 0.3s ease;
+      }
+      
+      @keyframes slideIn {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+      }
+      
+      .favorites-toast h4 {
+        margin: 0 0 5px;
+        font-size: 16px;
+        color: #333;
+      }
+      
+      .favorites-toast p {
+        margin: 0;
+        font-size: 14px;
+        color: #666;
+      }
+      
+      .favorites-toast-close {
+        background: none;
+        border: none;
+        font-size: 16px;
+        cursor: pointer;
+        color: #999;
+        margin-left: 10px;
+      }
+      
+      /* Heart Animation */
+      @keyframes heartBeat {
+        0% { transform: scale(1); }
+        25% { transform: scale(1.3); }
+        50% { transform: scale(1); }
+        75% { transform: scale(1.3); }
+        100% { transform: scale(1); }
+      }
+      
+      /* Screen Reader Only */
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border-width: 0;
+      }
+      
+      /* Responsive Styles */
+      @media (max-width: 768px) {
+        .favorites-grid {
+          grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        }
+      }
+      
+      @media (max-width: 576px) {
+        .favorites-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    `
+    document.head.appendChild(style)
+
+    // Initialize
+    updateFavoriteButtons()
+
+    // If we're on the favorites page, update the UI
+    if (window.location.pathname === "/favorites") {
+        updateFavoritesUI()
     }
-});
+})

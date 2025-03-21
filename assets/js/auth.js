@@ -108,61 +108,13 @@ document.addEventListener("DOMContentLoaded", () => {
         })
     })
 
-    // Remember me checkbox
-    const rememberCheckbox = document.querySelector('input[name="remember"]')
-    if (rememberCheckbox) {
-        // Check if user previously selected "remember me"
-        const remembered = localStorage.getItem("rememberMe") === "true"
-        rememberCheckbox.checked = remembered
-
-        rememberCheckbox.addEventListener("change", function() {
-            localStorage.setItem("rememberMe", this.checked)
+    // Handle logout button click
+    const logoutBtn = document.getElementById("logoutBtn")
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", (e) => {
+            // No need to prevent default - we want the link to work normally
+            // This is just for any additional functionality you might want to add
+            console.log("Logging out...")
         })
-    }
-
-    // Add focus styles to input fields
-    const inputContainers = document.querySelectorAll(".input-with-icon")
-    inputContainers.forEach(container => {
-        const input = container.querySelector("input")
-
-        input.addEventListener("focus", function() {
-            container.classList.add("input-focused")
-        })
-
-        input.addEventListener("blur", function() {
-            container.classList.remove("input-focused")
-        })
-    })
-
-    // Function to show error message
-    function showError(message) {
-        // Check if error element already exists
-        let errorElement = document.querySelector(".auth-error")
-
-        if (!errorElement) {
-            // Create error element
-            errorElement = document.createElement("div")
-            errorElement.className = "auth-error"
-            errorElement.innerHTML = `
-                <i class="fas fa-exclamation-circle"></i>
-                <span>${message}</span>
-            `
-
-            // Insert after auth-header
-            const authHeader = document.querySelector(".auth-header")
-            authHeader.insertAdjacentElement("afterend", errorElement)
-        } else {
-            // Update existing error message
-            errorElement.querySelector("span").textContent = message
-        }
-
-        // Scroll to error
-        errorElement.scrollIntoView({ behavior: "smooth", block: "center" })
-    }
-
-    // Function to validate email format
-    function validateEmail(email) {
-        const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-        return re.test(String(email).toLowerCase())
     }
 })
