@@ -20,6 +20,8 @@ $route->get("/", [WelcomeController::class, 'welcome']);
 $route->get("/login", [AuthController::class, 'login']);
 $route->post("/login", [AuthController::class, 'login']);
 $route->get("/logout", [AuthController::class, 'logout']);
+$route->get("/admin-login", [AuthController::class, 'adminLogin']);
+$route->post("/admin-login", [AuthController::class, 'adminLogin']);
 $route->get("/register", [AuthController::class, 'register']);
 $route->post("/register", [AuthController::class, 'register']);
 $route->get("/register-success", [AuthController::class, 'registerSuccess']);

@@ -5,10 +5,19 @@ class OrdersController extends BaseController {
             session_start();
         }
         
-        // Check if user is logged in
-        if (!isset($_SESSION['user_id'])) {
+        // Check if user is logged in - redirect to login if not
+        if (!isset($_SESSION['user_id']) && $this->requiresAuth()) {
             $this->redirect('/login');
         }
+    }
+    
+    // Method to determine if authentication is required
+    protected function requiresAuth() {
+        // Public pages like menu browsing don't require auth
+        $action = isset($_GET['action']) ? $_GET['action'] : 'index';
+        $publicActions = ['index', 'details'];
+        
+        return !in_array($action, $publicActions);
     }
     
     public function index() {
@@ -31,7 +40,6 @@ class OrdersController extends BaseController {
                 'image' => '/assets/image/products/2.png',
                 'category' => 'milk-tea'
             ],
-            
             [
                 'id' => 3,
                 'name' => 'Oolong Passion',
@@ -88,7 +96,6 @@ class OrdersController extends BaseController {
                 'image' => '/assets/image/products/milk-tea-macha.png',
                 'category' => 'smoothie'
             ],
-            
             [
                 'id' => 10,
                 'name' => 'Ovaltine Stick Lava',
@@ -113,7 +120,6 @@ class OrdersController extends BaseController {
                 'image' => '/assets/image/products/Vanilla Strawberry.png',
                 'category' => 'smoothie'
             ],
-            
             [
                 'id' => 13,
                 'name' => 'Trolach Machhiato',
@@ -122,7 +128,6 @@ class OrdersController extends BaseController {
                 'image' => '/assets/image/products/Trolach Machhiato.png',
                 'category' => 'coffee'
             ],
-            
             [
                 'id' => 14,
                 'name' => 'Japan Yuzu',
@@ -228,8 +233,9 @@ class OrdersController extends BaseController {
         $favorites = [];
         if (isset($_SESSION['user_id'])) {
             // In a real app, you would fetch favorites from the database
-            // For now, we'll use sample data
-            $favorites = [1, 4, 9]; // Sample favorite product IDs
+            // For now, we'll get from localStorage via JavaScript
+            // This is just a fallback for server-side rendering
+            $favorites = isset($_SESSION['favorites']) ? $_SESSION['favorites'] : [];
         }
         
         $this->views('order', [
@@ -246,34 +252,18 @@ class OrdersController extends BaseController {
         $products = [
             1 => [
                 'id' => 1,
-                'name' => 'Classic Milk Tea',
-                'description' => 'Our signature milk tea with premium black tea and creamy milk.',
-                'price' => 4.50,
-                'image' => '/assets/images/products/classic-milk-tea.jpg',
+                'name' => 'Taiwan Milk Tea',
+                'description' => 'A classic Taiwanese milk tea with a perfect blend of black tea and creamy milk, offering a smooth and rich taste.',
+                'price' => 1.75,
+                'image' => '/assets/image/products/1.png',
                 'category' => 'milk-tea'
             ],
             2 => [
                 'id' => 2,
-                'name' => 'Taro Milk Tea',
-                'description' => 'Creamy taro flavor blended with our premium milk tea.',
-                'price' => 5.00,
-                'image' => '/assets/images/products/taro-milk-tea.jpg',
-                'category' => 'milk-tea'
-            ],
-            3 => [
-                'id' => 3,
-                'name' => 'Matcha Latte',
-                'description' => 'Premium Japanese matcha powder with fresh milk.',
-                'price' => 5.50,
-                'image' => '/assets/images/products/matcha-latte.jpg',
-                'category' => 'milk-tea'
-            ],
-            4 => [
-                'id' => 4,
-                'name' => 'Brown Sugar Boba Milk',
-                'description' => 'Fresh milk with brown sugar syrup and chewy boba pearls.',
-                'price' => 5.75,
-                'image' => '/assets/images/products/brown-sugar-boba.jpg',
+                'name' => 'Thai Tea Brown Sugar Red Bean',
+                'description' => 'A rich and creamy Thai tea with brown sugar syrup, complemented by sweet red beans for an added texture and flavor.',
+                'price' => 2.50,
+                'image' => '/assets/image/products/2.png',
                 'category' => 'milk-tea'
             ],
             // Add more products as needed
@@ -371,51 +361,139 @@ class OrdersController extends BaseController {
         // 2. Calculate the correct price
         // 3. Add the item to the user's cart in the database
         
-        // For now, we'll just return success
+        // For now, we'll just store in session
+        if (!isset($_SESSION['cart'])) {
+            $_SESSION['cart'] = [];
+        }
+        
+        // Generate a unique ID for the cart item
+        $cartItemId = uniqid();
+        
+        // Add to cart
+        $_SESSION['cart'][] = [
+            'id' => $cartItemId,
+            'product_id' => $data['product_id'],
+            'size' => $data['size'],
+            'sugar' => $data['sugar'],
+            'ice' => $data['ice'],
+            'toppings' => isset($data['toppings']) ? $data['toppings'] : [],
+            'quantity' => $data['quantity'],
+            'price' => $data['price'],
+            'total_price' => $data['price'] * $data['quantity'],
+            'added_at' => date('Y-m-d H:i:s')
+        ];
+        
         echo json_encode([
             'success' => true,
             'message' => 'Item added to cart',
-            'cart_count' => isset($_SESSION['cart']) ? count($_SESSION['cart']) + 1 : 1
+            'cart_count' => count($_SESSION['cart'])
         ]);
         exit;
     }
     
     public function cart() {
         // In a real application, you would fetch the cart items from the database
-        // For now, we'll create sample data
-        $cartItems = [
-            [
-                'id' => 1,
-                'product_id' => 1,
-                'product_name' => 'Classic Milk Tea',
-                'size' => 'medium',
-                'sugar' => '50%',
-                'ice' => '100%',
-                'toppings' => ['Boba Pearls', 'Pudding'],
-                'quantity' => 1,
-                'price' => 6.00,
-                'image' => '/assets/images/products/classic-milk-tea.jpg'
-            ],
-            [
-                'id' => 2,
-                'product_id' => 9,
-                'product_name' => 'Strawberry Smoothie',
-                'size' => 'large',
-                'sugar' => '70%',
-                'ice' => '30%',
-                'toppings' => ['Fresh Fruit'],
-                'quantity' => 2,
-                'price' => 13.00,
-                'image' => '/assets/images/products/strawberry-smoothie.jpg'
-            ]
-        ];
+        // For now, we'll use session data
+        $cartItems = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
+        
+        // Calculate totals
+        $subtotal = 0;
+        foreach ($cartItems as $item) {
+            $subtotal += $item['total_price'];
+        }
+        
+        $tax = $subtotal * 0.08; // 8% tax
+        $total = $subtotal + $tax;
         
         $this->views('cart', [
             'title' => 'Your Cart',
             'cartItems' => $cartItems,
-            'subtotal' => 19.00,
-            'tax' => 1.52,
-            'total' => 20.52
+            'subtotal' => $subtotal,
+            'tax' => $tax,
+            'total' => $total
+        ]);
+    }
+    
+    public function checkout() {
+        // Check if cart is empty
+        if (!isset($_SESSION['cart']) || empty($_SESSION['cart'])) {
+            $_SESSION['error'] = 'Your cart is empty';
+            header('Location: /order');
+            exit;
+        }
+        
+        // In a real application, you would:
+        // 1. Validate the cart items
+        // 2. Process the payment
+        // 3. Create an order in the database
+        // 4. Clear the cart
+        
+        // For now, we'll just redirect to a success page
+        $_SESSION['success'] = 'Your order has been placed successfully';
+        
+        // Clear the cart
+        $_SESSION['cart'] = [];
+        
+        header('Location: /booking');
+        exit;
+    }
+    
+    public function booking() {
+        // In a real application, you would fetch the user's orders from the database
+        // For now, we'll create sample data
+        $orders = [
+            [
+                'id' => 'ORD123456',
+                'date' => date('Y-m-d H:i:s', strtotime('-2 days')),
+                'items' => [
+                    [
+                        'name' => 'Taiwan Milk Tea',
+                        'size' => 'Medium',
+                        'sugar' => '50%',
+                        'ice' => 'Normal',
+                        'toppings' => ['Boba Pearls', 'Pudding'],
+                        'quantity' => 2,
+                        'price' => 5.50
+                    ],
+                    [
+                        'name' => 'Thai Tea Brown Sugar Red Bean',
+                        'size' => 'Large',
+                        'sugar' => '70%',
+                        'ice' => 'Less',
+                        'toppings' => ['Red Bean'],
+                        'quantity' => 1,
+                        'price' => 3.50
+                    ]
+                ],
+                'subtotal' => 14.50,
+                'tax' => 1.16,
+                'total' => 15.66,
+                'status' => 'completed'
+            ],
+            [
+                'id' => 'ORD123457',
+                'date' => date('Y-m-d H:i:s', strtotime('-1 day')),
+                'items' => [
+                    [
+                        'name' => 'Oolong Passion',
+                        'size' => 'Large',
+                        'sugar' => '30%',
+                        'ice' => 'Normal',
+                        'toppings' => ['Aloe Vera'],
+                        'quantity' => 1,
+                        'price' => 3.00
+                    ]
+                ],
+                'subtotal' => 3.00,
+                'tax' => 0.24,
+                'total' => 3.24,
+                'status' => 'processing'
+            ]
+        ];
+        
+        $this->views('booking', [
+            'title' => 'Your Orders',
+            'orders' => $orders
         ]);
     }
 }

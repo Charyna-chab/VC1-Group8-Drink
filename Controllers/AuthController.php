@@ -147,5 +147,29 @@ class AuthController extends BaseController {
             $this->redirect('/login');
         }
     }
+    // AuthController.php
+
+    public function adminLogin()
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+            // Display the admin login form
+            return view('admin_login');
+        } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            // Handle the admin login form submission
+            $email = $_POST['email'];
+            $password = $_POST['password'];
+    
+            // Verify the admin credentials
+            if ($this->verifyAdminCredentials($email, $password)) {
+                // Login the admin
+                return redirect('/admin-dashboard');
+            } else {
+                // Display an error message
+                return view('admin_login', ['error' => 'Invalid email or password']);
+            }
+        }
+    }
+    
+
 }
 
