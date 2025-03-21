@@ -4,7 +4,7 @@ require_once 'BaseController.php';
 
 class ProductController extends BaseController
 {
-    
+
     private $model;
 
     function __construct()
@@ -59,7 +59,7 @@ class ProductController extends BaseController
                         'image' => $image_url,
                         'product_detail' => isset($_POST['product_detail']) ? $_POST['product_detail'] : null,
                         'price' => isset($_POST['price']) ? $_POST['price'] : null,
-                        
+
                     ];
 
                     // Validate that all required fields are present
@@ -84,17 +84,52 @@ class ProductController extends BaseController
 
     function update($id)
     {
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $data = [
-            'product_name' => $_POST['product_name'],
-            'image' => $_POST['image'],
-            'product_detail' => $_POST['product_detail'],
-            'price' => $_POST['price'],
-        ];
-        $this->model->updateProduct($id, $data); // Only call updateProduct
-        // Remove this line: $this->model->createProduct($data);
-        $this->redirect('/product');
-    }
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            // Handle image upload if a new image is provided
+            $uploadDir = 'uploads/product/';
+            $image_url = $_POST['existing_image']; // Default to existing image
+
+            if (!empty($_FILES['image']['name'])) {
+                // Check if the directory exists, if not create it
+                if (!is_dir($uploadDir)) {
+                    mkdir($uploadDir, 0777, true);
+                }
+
+                // Set the image file path
+                $imageName = basename($_FILES['image']['name']);
+                $uploadFile = $uploadDir . $imageName;
+
+                // Check if file is an image
+                $imageFileType = strtolower(pathinfo($uploadFile, PATHINFO_EXTENSION));
+                $allowedTypes = ['jpg', 'jpeg', 'png', 'gif'];
+
+                if (in_array($imageFileType, $allowedTypes)) {
+                    // Try to upload the file
+                    if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadFile)) {
+                        $image_url = $uploadFile;  // Update image URL if new image is uploaded
+                    }
+                }
+            }
+
+            // Prepare the data for the product
+            $data = [
+                'product_name' => isset($_POST['product_name']) ? $_POST['product_name'] : null,
+                'image' => $image_url,
+                'product_detail' => isset($_POST['product_detail']) ? $_POST['product_detail'] : null,
+                'price' => isset($_POST['price']) ? $_POST['price'] : null,
+            ];
+
+            // Validate that all required fields are present
+            if (empty($data['product_name']) || empty($data['product_detail']) || empty($data['price'])) {
+                $_SESSION['error'] = 'All fields are required!';
+                $this->redirect('/product/edit' . $id);
+                return;
+            }
+
+            // Update the product in the database
+            $this->model->updateProduct($id, $data);
+            $this->redirect('/product');
+        }
     }
 
 
@@ -102,6 +137,5 @@ class ProductController extends BaseController
     {
         $this->model->deleteProduct($id);
         $this->redirect('/product');
-
     }
 }
