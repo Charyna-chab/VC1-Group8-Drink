@@ -1,4 +1,5 @@
 <?php
+namespace GiftCardController\Controllers;
 class BaseController {
     public function views($views, $data = []) {
         // Extract data into variables
@@ -41,5 +42,18 @@ class BaseController {
         header('Location: ' . $uri);
         exit();
     }
+
+        // Define the BaseController class
+        protected function render($view) {
+            // Logic to render the view
+            echo "Rendering view: $view";
+        }
+    }
+    
+    class GiftCardController extends BaseController {
+        public function index() {
+            // Render the gift card page
+            $this->render('gift-card');
+        }
 }
 

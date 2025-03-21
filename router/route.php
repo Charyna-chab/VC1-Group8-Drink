@@ -8,6 +8,7 @@ require_once __DIR__ . "/../controllers/SettingsController.php";
 require_once __DIR__ . "/../controllers/OrdersController.php";
 require_once __DIR__ . "/../controllers/BookingController.php";
 require_once __DIR__ . "/../controllers/AuthController.php";
+require_once __DIR__ . "/../controllers/GiftCardController.php"; // Add this line
 
 use YourNamespace\Router;
 
@@ -27,6 +28,19 @@ $route->get("/forgot-password", [AuthController::class, 'forgotPassword']);
 $route->post("/forgot-password", [AuthController::class, 'forgotPassword']);
 $route->get("/logout", [AuthController::class, 'logout']);
 
+// Navbar routes
+// Gift Card
+$route->get("/gift-card", [GiftCardController::class, 'index']);
+
+// Locations
+$route->get("/locations", [LocationsController::class, 'index']);
+
+// Join The Team
+$route->get("/join-the-team", [JoinTheTeamController::class, 'index']);
+
+// More Menu
+$route->get("/more", [MoreController::class, 'index']);
+
 // Original routes
 $route->get("/welcome", [WelcomeController::class, 'welcome']);
 $route->get("/order", [OrdersController::class, 'index']);
@@ -43,4 +57,3 @@ $route->get("/feedback", [FeedbackController::class, 'index']);
 $route->get("/settings", [SettingsController::class, 'index']);
 
 $route->route();
-
