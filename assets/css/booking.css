@@ -32,12 +32,12 @@ body {
 .banner {
     width: 100%;
     /* Full width */
-    background: linear-gradient(135deg, #ff9966, #ff5e62);
+    background: linear-gradient(135deg, #ff9966, #ff7f50);
     color: white;
     padding: 25px 30px;
     border-radius: 12px;
     margin-bottom: 25px;
-    box-shadow: 0 4px 15px rgba(255, 94, 98, 0.2);
+    box-shadow: 0 4px 15px rgba(255, 127, 80, 0.2);
     position: relative;
     overflow: hidden;
 }
@@ -69,7 +69,7 @@ body {
 
 .cta-button {
     background: white;
-    color: #ff5e62;
+    color: #ff7f50;
     border: none;
     padding: 10px 20px;
     border-radius: 25px;
@@ -131,9 +131,9 @@ body {
 
 .filter-tab:hover,
 .filter-tab.active {
-    background: #ff5e62;
+    background: #ff7f50;
     color: white;
-    border-color: #ff5e62;
+    border-color: #ff7f50;
 }
 
 .search-filter {
@@ -152,8 +152,8 @@ body {
 
 .search-filter input:focus {
     outline: none;
-    border-color: #ff5e62;
-    box-shadow: 0 0 0 2px rgba(255, 94, 98, 0.1);
+    border-color: #ff7f50;
+    box-shadow: 0 0 0 2px rgba(255, 127, 80, 0.1);
 }
 
 .search-filter i {
@@ -223,7 +223,7 @@ body {
 }
 
 .booking-date i {
-    color: #ff5e62;
+    color: #ff7f50;
     font-size: 14px;
 }
 
@@ -284,7 +284,7 @@ body {
 .item-price {
     font-size: 15px;
     font-weight: 600;
-    color: #ff5e62;
+    color: #ff7f50;
     align-self: center;
 }
 
@@ -307,7 +307,7 @@ body {
 }
 
 .total-price {
-    color: #ff5e62;
+    color: #ff7f50;
     font-size: 16px;
     margin-left: 5px;
 }
@@ -398,7 +398,7 @@ body {
 
 .empty-state .btn-primary {
     padding: 10px 20px;
-    background: #ff5e62;
+    background: #ff7f50;
     color: white;
     border: none;
     border-radius: 25px;
@@ -411,9 +411,9 @@ body {
 }
 
 .empty-state .btn-primary:hover {
-    background: #e62e24;
+    background: #ff6347;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(230, 46, 36, 0.2);
+    box-shadow: 0 4px 12px rgba(255, 99, 71, 0.2);
 }
 
 

@@ -1,265 +1,297 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // Category filtering
-    const categoryItems = document.querySelectorAll(".category-item")
+    // DOM Elements
+    const exploreBtn = document.querySelector(".explore-btn")
+    const orderNowBtns = document.querySelectorAll(".order-now-btn")
     const productCards = document.querySelectorAll(".product-card")
-    const noProductMessage = document.getElementById("no-product-message")
-
-    // Search functionality
+    const categoryItems = document.querySelectorAll(".category-item")
+    const loginRedirectModal = document.getElementById("loginRedirectModal")
+    const closeModalBtn = document.querySelector(".close-modal")
+    const toastContainer = document.getElementById("toastContainer")
+    const favoriteButtons = document.querySelectorAll(".favorite-btn")
+    const orderButtons = document.querySelectorAll(".order-btn")
     const searchInput = document.getElementById("productSearch")
 
-    // Order modal elements
-    const orderModal = document.getElementById("orderModal")
-    const orderButtons = document.querySelectorAll(".order-btn")
-    const closeModalButton = document.querySelector(".close-modal")
-    const cancelOrderButton = document.getElementById("cancelOrder")
-    const customizeForm = document.getElementById("customizeForm")
-    const quantityInput = document.querySelector('input[name="quantity"]')
-    const minusBtn = document.querySelector(".minus-btn")
-    const plusBtn = document.querySelector(".plus-btn")
+    // Check if user is logged in
+    const isLoggedIn = checkUserLoggedIn()
 
-    // Favorite buttons
-    const favoriteButtons = document.querySelectorAll(".favorite-btn")
-
-    // Toast container
-    const toastContainer = document.getElementById("toastContainer")
-
-    // Filter products by category
-    function filterProducts(category) {
-        let visibleCount = 0
-
-        productCards.forEach((card) => {
-            const cardCategory = card.dataset.category
-
-            if (category === "all" || cardCategory === category) {
-                card.style.display = "block"
-                visibleCount++
-            } else {
-                card.style.display = "none"
-            }
-        })
-
-        // Show/hide no products message
-        if (visibleCount === 0) {
-            noProductMessage.style.display = "block"
-        } else {
-            noProductMessage.style.display = "none"
-        }
+    // Add event listeners to all interactive elements
+    if (exploreBtn) {
+        exploreBtn.addEventListener("click", handleInteraction)
     }
 
-    // Set active category
+    orderNowBtns.forEach((btn) => {
+        btn.addEventListener("click", handleInteraction)
+    })
+
+    productCards.forEach((card) => {
+        card.addEventListener("click", handleInteraction)
+    })
+
     categoryItems.forEach((item) => {
-        item.addEventListener("click", function() {
-            // Remove active class from all items
-            categoryItems.forEach((cat) => cat.classList.remove("active"))
-
-            // Add active class to clicked item
-            this.classList.add("active")
-
-            // Filter products
-            filterProducts(this.dataset.category)
-        })
+        item.addEventListener("click", handleInteraction)
     })
 
-    // Search functionality
-    searchInput.addEventListener("input", function() {
-        const searchTerm = this.value.toLowerCase().trim()
-        let visibleCount = 0
-
-        productCards.forEach((card) => {
-            const productName = card.querySelector("h4").textContent.toLowerCase()
-            const productDescription = card.querySelector(".description").textContent.toLowerCase()
-
-            if (productName.includes(searchTerm) || productDescription.includes(searchTerm)) {
-                card.style.display = "block"
-                visibleCount++
-            } else {
-                card.style.display = "none"
-            }
-        })
-
-        // Show/hide no products message
-        if (visibleCount === 0) {
-            noProductMessage.style.display = "block"
-        } else {
-            noProductMessage.style.display = "none"
-        }
+    favoriteButtons.forEach((button) => {
+        button.addEventListener("click", handleInteraction)
     })
 
-    // Open order modal
     orderButtons.forEach((button) => {
-        button.addEventListener("click", function(e) {
-            e.preventDefault()
-            e.stopPropagation()
-
-            const productId = this.dataset.productId
-            const productCard = this.closest(".product-card")
-            const productName = productCard.querySelector("h4").textContent
-            const productDescription = productCard.querySelector(".description").textContent
-            const productPrice = productCard.querySelector(".product-price").textContent
-            const productImage = productCard.querySelector("img").src
-
-            // Set product details in modal
-            document.getElementById("product_id").value = productId
-            document.querySelector(".modal-product-name").textContent = productName
-            document.querySelector(".modal-product-description").textContent = productDescription
-            document.querySelector(".modal-product-price").textContent = productPrice
-            document.querySelector(".modal-product-image").src = productImage
-
-            // Reset form
-            customizeForm.reset()
-            quantityInput.value = 1
-            updateTotalPrice()
-
-            // Show modal
-            orderModal.classList.add("active")
-            document.body.style.overflow = "hidden"
-        })
+        button.addEventListener("click", handleInteraction)
     })
 
     // Close modal
-    function closeModal() {
-        orderModal.classList.remove("active")
-        document.body.style.overflow = ""
-    }
-
-    closeModalButton.addEventListener("click", closeModal)
-    cancelOrderButton.addEventListener("click", closeModal)
-
-    // Close modal when clicking outside
-    orderModal.addEventListener("click", (e) => {
-        if (e.target === orderModal) {
-            closeModal()
-        }
-    })
-
-    // Quantity buttons
-    minusBtn.addEventListener("click", () => {
-        const quantity = Number.parseInt(quantityInput.value)
-        if (quantity > 1) {
-            quantityInput.value = quantity - 1
-            updateTotalPrice()
-        }
-    })
-
-    plusBtn.addEventListener("click", () => {
-        const quantity = Number.parseInt(quantityInput.value)
-        if (quantity < 10) {
-            quantityInput.value = quantity + 1
-            updateTotalPrice()
-        }
-    })
-
-    // Update total price when options change
-    const priceElements = document.querySelectorAll("input[data-price]")
-    priceElements.forEach((element) => {
-        element.addEventListener("change", updateTotalPrice)
-    })
-
-    quantityInput.addEventListener("change", function() {
-        // Ensure quantity is between 1 and 10
-        const quantity = Number.parseInt(this.value)
-        if (isNaN(quantity) || quantity < 1) {
-            this.value = 1
-        } else if (quantity > 10) {
-            this.value = 10
-        }
-        updateTotalPrice()
-    })
-
-    // Calculate and update total price
-    function updateTotalPrice() {
-        // Get base price
-        const basePrice = Number.parseFloat(document.querySelector(".modal-product-price").textContent.replace("$", ""))
-
-        // Get size price
-        const selectedSize = document.querySelector('input[name="size"]:checked')
-        const sizePrice = selectedSize ? Number.parseFloat(selectedSize.dataset.price) : 0
-
-        // Get toppings price
-        let toppingsPrice = 0
-        const selectedToppings = document.querySelectorAll('input[name="toppings[]"]:checked')
-        selectedToppings.forEach((topping) => {
-            toppingsPrice += Number.parseFloat(topping.dataset.price)
+    if (closeModalBtn) {
+        closeModalBtn.addEventListener("click", () => {
+            loginRedirectModal.classList.remove("active")
         })
-
-        // Get quantity
-        const quantity = Number.parseInt(quantityInput.value)
-
-        // Calculate total
-        const total = (basePrice + sizePrice + toppingsPrice) * quantity
-
-        // Update total price display
-        document.querySelector(".price-value").textContent = "$" + total.toFixed(2)
     }
 
-    // Handle form submission
-    customizeForm.addEventListener("submit", function(e) {
-        e.preventDefault()
-
-        // Get form data
-        const formData = new FormData(this)
-
-        // In a real application, you would send this data to the server
-        // For demo purposes, we'll just show a success toast
-
-        // Close modal
-        closeModal()
-
-        // Show success toast
-        showToast("Success", "Item added to cart!", "success")
-    })
-
-    // Toggle favorite
-    favoriteButtons.forEach((button) => {
-        button.addEventListener("click", function(e) {
-            e.preventDefault()
-            e.stopPropagation()
-
-            const icon = this.querySelector("i")
-
-            if (icon.classList.contains("far")) {
-                // Add to favorites
-                icon.classList.remove("far")
-                icon.classList.add("fas")
-                showToast("Added to Favorites", "Item added to your favorites!", "success")
-            } else {
-                // Remove from favorites
-                icon.classList.remove("fas")
-                icon.classList.add("far")
-                showToast("Removed from Favorites", "Item removed from your favorites", "info")
+    // Handle click on overlay
+    if (loginRedirectModal) {
+        loginRedirectModal.addEventListener("click", (e) => {
+            if (e.target === loginRedirectModal) {
+                loginRedirectModal.classList.remove("active")
             }
         })
-    })
+    }
 
-    // Show toast notification
-    function showToast(title, message, type = "info") {
-        const toast = document.createElement("div")
-        toast.className = `toast ${type}`
-        toast.innerHTML = `
-              <i class="toast-icon fas fa-${type === "success" ? "check-circle" : type === "error" ? "exclamation-circle" : "info-circle"}"></i>
-              <div class="toast-content">
-                  <div class="toast-title">${title}</div>
-                  <div class="toast-message">${message}</div>
-              </div>
-              <button class="toast-close">&times;</button>
-          `
+    // Search functionality
+    if (searchInput) {
+        searchInput.addEventListener("input", function() {
+            const searchTerm = this.value.toLowerCase().trim()
+            let visibleCount = 0
 
-        toastContainer.appendChild(toast)
+            productCards.forEach((card) => {
+                const productName = card.querySelector("h4").textContent.toLowerCase()
+                const productDescription = card.querySelector(".description").textContent.toLowerCase()
 
-        // Auto remove toast after 3 seconds
-        setTimeout(() => {
-            toast.style.opacity = "0"
-            setTimeout(() => {
-                toast.remove()
-            }, 300)
-        }, 3000)
+                if (productName.includes(searchTerm) || productDescription.includes(searchTerm)) {
+                    card.style.display = "block"
+                    visibleCount++
+                } else {
+                    card.style.display = "none"
+                }
+            })
 
-        // Close button
-        toast.querySelector(".toast-close").addEventListener("click", () => {
-            toast.style.opacity = "0"
-            setTimeout(() => {
-                toast.remove()
-            }, 300)
+            // Show/hide no products message
+            const noProductMessage = document.getElementById("no-product-message")
+            if (noProductMessage) {
+                if (visibleCount === 0) {
+                    noProductMessage.style.display = "block"
+                } else {
+                    noProductMessage.style.display = "none"
+                }
+            }
         })
     }
+
+    // Function to handle all interactive elements
+    function handleInteraction(e) {
+        e.preventDefault()
+        e.stopPropagation()
+
+        if (isLoggedIn) {
+            // If logged in, redirect to order page
+            window.location.href = "/order"
+        } else {
+            // If not logged in, show login redirect modal
+            showLoginRedirectModal()
+        }
+    }
+
+    // Function to show login redirect modal
+    function showLoginRedirectModal() {
+        if (loginRedirectModal) {
+            loginRedirectModal.classList.add("active")
+        }
+    }
+
+    // Function to check if user is logged in
+    function checkUserLoggedIn() {
+        // In a real app, you would check session or token
+        // For now, we'll just return false to always show the login modal
+        return false
+    }
+
+    // Add CSS for welcome page
+    const style = document.createElement("style")
+    style.textContent = `
+          /* Hero Section */
+          .hero-section {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              padding: 40px 0;
+              gap: 40px;
+              margin-bottom: 30px;
+          }
+          
+          .hero-content {
+              flex: 1;
+          }
+          
+          .hero-content h1 {
+              font-size: 2.5rem;
+              margin-bottom: 20px;
+              color: #333;
+          }
+          
+          .brand-name {
+              color: #ff5e62;
+          }
+          
+          .hero-content p {
+              font-size: 1.2rem;
+              margin-bottom: 30px;
+              color: #666;
+              line-height: 1.6;
+          }
+          
+          .hero-buttons {
+              display: flex;
+              gap: 15px;
+          }
+          
+          .hero-image {
+              flex: 1;
+              text-align: center;
+          }
+          
+          .hero-image img {
+              max-width: 100%;
+              height: auto;
+              border-radius: 10px;
+              box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+          }
+          
+          /* Login Redirect Modal */
+          .modal-overlay {
+              position: fixed;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              background-color: rgba(0, 0, 0, 0.5);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              z-index: 1000;
+              opacity: 0;
+              visibility: hidden;
+              transition: all 0.3s ease;
+          }
+          
+          .modal-overlay.active {
+              opacity: 1;
+              visibility: visible;
+          }
+          
+          .modal-container {
+              background-color: white;
+              border-radius: 10px;
+              width: 90%;
+              max-width: 500px;
+              box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+              overflow: hidden;
+              transform: scale(0.9);
+              transition: transform 0.3s ease;
+          }
+          
+          .modal-overlay.active .modal-container {
+              transform: scale(1);
+          }
+          
+          .modal-header {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              padding: 20px;
+              border-bottom: 1px solid #eee;
+          }
+          
+          .modal-header h3 {
+              margin: 0;
+              color: #333;
+          }
+          
+          .close-modal {
+              background: none;
+              border: none;
+              font-size: 20px;
+              cursor: pointer;
+              color: #999;
+          }
+          
+          .modal-body {
+              padding: 30px;
+          }
+          
+          .login-redirect-content {
+              text-align: center;
+          }
+          
+          .login-redirect-content i {
+              font-size: 60px;
+              color: #ff5e62;
+              margin-bottom: 20px;
+          }
+          
+          .login-redirect-content p {
+              font-size: 18px;
+              color: #666;
+              margin-bottom: 30px;
+          }
+          
+          .login-redirect-buttons {
+              display: flex;
+              gap: 15px;
+              justify-content: center;
+          }
+          
+          .login-redirect-buttons a {
+              flex: 1;
+              text-align: center;
+              text-decoration: none;
+              padding: 12px 0;
+              border-radius: 5px;
+              font-weight: 600;
+              transition: all 0.3s ease;
+          }
+          
+          .btn-primary {
+              background-color: #ff5e62;
+              color: white;
+              border: none;
+              padding: 12px 25px;
+              border-radius: 5px;
+              font-weight: 600;
+              cursor: pointer;
+              transition: all 0.3s ease;
+          }
+          
+          .btn-primary:hover {
+              background-color: #ff4146;
+              transform: translateY(-2px);
+              box-shadow: 0 5px 15px rgba(255, 94, 98, 0.3);
+          }
+          
+          .btn-outline {
+              background-color: transparent;
+              color: #ff5e62;
+              border: 2px solid #ff5e62;
+              padding: 12px 25px;
+              border-radius: 5px;
+              font-weight: 600;
+              cursor: pointer;
+              transition: all 0.3s ease;
+          }
+          
+          .btn-outline:hover {
+              background-color: #ff5e62;
+              color: white;
+              transform: translateY(-2px);
+              box-shadow: 0 5px 15px rgba(255, 94, 98, 0.3);
+          }
+      `
+    document.head.appendChild(style)
 })

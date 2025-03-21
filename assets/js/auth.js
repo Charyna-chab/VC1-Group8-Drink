@@ -101,4 +101,14 @@ document.addEventListener("DOMContentLoaded", () => {
             alert(`${provider} login would be implemented here in a real application.`)
         })
     })
+
+    // Handle logout button click
+    const logoutBtn = document.getElementById("logoutBtn")
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", (e) => {
+            // No need to prevent default - we want the link to work normally
+            // This is just for any additional functionality you might want to add
+            console.log("Logging out...")
+        })
+    }
 })
