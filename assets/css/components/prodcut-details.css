@@ -135,7 +135,7 @@
 }
 
 .option-button input:checked+span {
-    background: #ff8009;
+    background: #ff5e62;
     color: white;
     border-color: #ff5e62;
 }
@@ -233,7 +233,7 @@ textarea:focus {
 }
 
 .quantity-btn:hover {
-    background: #ff5500;
+    background: #ff5e62;
     color: white;
     border-color: #ff5e62;
 }
@@ -295,13 +295,13 @@ textarea:focus {
 }
 
 .btn-primary {
-    background: #ff5900;
+    background: #ff5e62;
     color: white;
     border: none;
 }
 
 .btn-primary:hover {
-    background: #ff7300;
+    background: #e62e24;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(230, 46, 36, 0.2);
 }

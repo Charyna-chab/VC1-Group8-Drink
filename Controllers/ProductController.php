@@ -1,42 +1,122 @@
 <?php
+require_once 'Models/ProductModel.php';
+require_once 'BaseController.php';
 
-class ProductController {
-    private $db;
-    
-    public function __construct() {
-        $this->db = Database::getInstance();
-    }
-    
-    public function menu() {
-        $categories = $this->db->getCategories();
-        $products = $this->db->getAllProducts();
-        
-        require 'views/menu.php';
-    }
-    
-    public function show() {
-        // Get product ID from URL
-        $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
-        
-        // Get product details
-        $product = $this->db->getProductById($id);
-        
-        if (!$product) {
-            // Product not found
-            header("HTTP/1.0 404 Not Found");
-            require 'views/404.php';
-            return;
+class ProductController extends BaseController
+{
+
+    private $model;
+
+    function __construct()
+    {
+        // Make sure sessions are started if you're using $_SESSION
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
         }
-        
-        // Get related products
-        $relatedProducts = array_filter($this->db->getAllProducts(), function($p) use ($product) {
-            return $p['category'] === $product['category'] && $p['id'] !== $product['id'];
-        });
-        
-        // Limit to 4 related products
-        $relatedProducts = array_slice($relatedProducts, 0, 4);
-        
-        require 'views/product.php';
+
+        $this->model = new ProductModel();
+    }
+
+
+    function index()
+    {
+        $products = $this->model->getProducts();
+        $this->views('products/product-list.php', ['products' => $products]);
+    }
+
+    function create()
+    {
+        $this->views('products/product-create.php');
+    }
+
+    function store()
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            // Set up the target directory for image uploads
+            $uploadDir = 'uploads/product/';
+
+            // Check if the directory exists, if not create it
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0777, true); // Creates the directory if it doesn't exist
+            }
+
+            // Set the image file path
+            $imageName = basename($_FILES['image']['name']);
+            $uploadFile = $uploadDir . $imageName;
+
+            // Check if file is an image
+            $imageFileType = strtolower(pathinfo($uploadFile, PATHINFO_EXTENSION));
+            $allowedTypes = ['jpg', 'jpeg', 'png', 'gif'];
+
+            if (in_array($imageFileType, $allowedTypes)) {
+                // Try to upload the file
+                if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadFile)) {
+                    $image_url = $uploadFile;  // Image URL or path saved to the database
+
+                    // Prepare the data for the user
+                    $data = [
+                        'product_name' => isset($_POST['product_name']) ? $_POST['product_name'] : null,
+                        'image' => $image_url,
+                        'product_detail' => isset($_POST['product_detail']) ? $_POST['product_detail'] : null,
+                        'price' => isset($_POST['price']) ? $_POST['price'] : null,
+
+                    ];
+
+                    // Validate that all required fields are present
+                    if (empty($data['product_name']) || empty($data['product_detail']) || empty($data['price'])) {
+                        $_SESSION['error'] = 'All fields except the image are required!';
+                        $this->views('product/product_create.php', ['error' => $_SESSION['error']]); // Removed .php extension
+                        return;
+                    }
+                }
+            }
+
+            $this->model->createProduct($data);
+            $this->redirect('/product');
+        }
+    }
+
+    function edit($id)
+    {
+        $product = $this->model->getProduct($id);
+        $this->views('products/product-edit.php', ['product' => $product]);
+    }
+
+    function update($id)
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $data = [
+                'product_name' => $_POST['product_name'],
+                'image' => $_POST['image'],
+                'product_detail' => $_POST['product_detail'],
+                'price' => $_POST['price'],
+            ];
+            $this->model->updateProduct($id, $data); // Only call updateProduct
+            // Remove this line: $this->model->createProduct($data);
+            $this->redirect('/product');
+        }
+    }
+
+
+    function destroy()
+    {
+
+        if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+            // Validate product ID
+            if (!isset($_GET['product_id']) || !is_numeric($_GET['product_id'])) {
+                $_SESSION['error'] = 'Invalid product ID!';
+                return $this->redirect('/product');
+            }
+
+            $id = $_GET['product_id'];
+
+            if ($this->model->deleteProduct($id)) {
+                $_SESSION['success'] = 'Product deleted successfully!';
+            } else {
+                $_SESSION['error'] = 'Failed to delete product! It may not exist.';
+            }
+
+            $this->redirect('/product');
+        }
     }
 }
-
