@@ -46,7 +46,7 @@ $products = $products ?? [];
           <td><?= htmlspecialchars($product['product_detail']) ?></td>
           <td><?= htmlspecialchars($product['price']) ?></td>
           <td>
-            <a href="/product/edit?product_id=<?= $product['product_id'] ?>" class="btn btn-warning">Edit</a>
+            <a href="/product/edit?id=<?= $product['product_id'] ?>" class="btn btn-warning">Edit</a>
             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
               Remove
             </button>
