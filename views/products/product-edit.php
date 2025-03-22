@@ -1,32 +1,25 @@
-
 <div class="card-body w-50 p-3">
     <div class="table-responsive">
         <div class="container">
-            <!-- Update the form action and method -->
-            <form action="/product/update/?id=<?= $product['product_id'] ?>" method="POST" enctype="multipart/form-data" class="border border-dark p-5">
+            <!-- Update form action and use a hidden input for ID -->
+            <form action="/product/update" method="POST" enctype="multipart/form-data" class="border border-dark p-5">
+                <input type="hidden" name="product_id" value="<?= $product['product_id'] ?>">
+
                 <div class="form-group mb-3 col">
                     <label for="name" class="form-label">Name:</label>
-                    <!-- Correct the input name -->
-                    <input type="product_name" value="<?= $product['product_name'] ?>" name="product_name" class="form-control">
+                    <input type="text" value="<?= $product['product_name'] ?>" name="product_name" class="form-control">
                 </div>
                 <div class="form-group mb-3 col">
                     <label for="product_detail" class="form-label">Product Detail:</label>
-                    <!-- Correct the input name -->
-                    <input type="product_detail" value="<?= $product['product_detail'] ?>" name="product_detail" class="form-control">
+                    <input type="text" value="<?= $product['product_detail'] ?>" name="product_detail" class="form-control">
                 </div>
                 <div class="form-group mb-3 col">
                     <label for="price" class="form-label">Price:</label>
-                    <!-- Correct the input type and name -->
                     <input type="number" value="<?= $product['price'] ?>" name="price" class="form-control">
                 </div>
                 <div class="form-group mb-3 col">
-                  
-                </div>
-                <div class="form-group mb-3 col">
-
-                    <!-- Input for uploading a new image -->
+                    <label for="image" class="form-label">Product Image:</label>
                     <input type="file" name="image" class="form-control">
-                    <!-- Hidden input to store the existing image path -->
                     <input type="hidden" name="existing_image" value="<?= $product['image'] ?>">
                 </div>
                 <button type="submit" class="btn btn-success mt-3">Update</button>
