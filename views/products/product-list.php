@@ -55,30 +55,6 @@ $products = $products ?? [];
           <?php endforeach; ?>
     </tbody>
   </table>
-  <?php
-  if (isset($_SESSION['success'])) {
-    echo '<div class="alert alert-success">' . $_SESSION['success'] . '</div>';
-    unset($_SESSION['success']); // Clear message after displaying
-  }
 
-  if (isset($_SESSION['error'])) {
-    echo '<div class="alert alert-danger">' . $_SESSION['error'] . '</div>';
-    unset($_SESSION['error']); // Clear message after displaying
-  }
-  ?>
-</div>
-<script>
-  $(document).ready(function() {
-    <?php if (isset($_SESSION['success'])) { ?>
-      $.notify("<?= $_SESSION['success'] ?>", "success");
-      <?php unset($_SESSION['success']); ?>
-    <?php } ?>
-
-    <?php if (isset($_SESSION['error'])) { ?>
-      $.notify("<?= $_SESSION['error'] ?>", "error");
-      <?php unset($_SESSION['error']); ?>
-    <?php } ?>
-  });
-</script>
 
 <?php '../layout/footer.php'; ?>
