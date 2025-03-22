@@ -1,39 +1,3 @@
-
-
-<?php
-
-// admin_login.php
-
-// Check if the admin has submitted the login form
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Get the admin's email and password
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-
-    // Generate a verification code
-    $verification_code = rand(100000, 999999);
-
-    // Send the verification code to the admin's email
-    $to = $email;
-    $subject = 'Verification Code for Admin Login';
-    $message = 'Your verification code is: ' . $verification_code;
-    $headers = 'From: your_email@example.com' . "\r\n" .
-        'Reply-To: your_email@example.com' . "\r\n" .
-        'X-Mailer: PHP/' . phpversion();
-
-    mail($to, $subject, $message, $headers);
-
-    // Store the verification code in the session
-    $_SESSION['verification_code'] = $verification_code;
-
-    // Redirect the admin to the verification code page
-    header('Location: admin_login_verification.php');
-    exit;
-}
-?>
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -67,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <label for="email">Email</label>
                         <div class="input-with-icon">
                             <i class="fas fa-envelope"></i>
-                            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                            <input type="email" id="email" name="email" placeholder="Enter your admin email" required>
                         </div>
                     </div>
 
@@ -80,33 +44,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="verification_code">Verification Code</label>
-                        <div class="input-with-icon">
-                            <i class="fas fa-lock"></i>
-                            <input type="text" id="verification_code" name="verification_code" placeholder="Enter verification code" required>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="auth-button">Login</button>
-
-                    <div class="social-login">
-                        <p>Or login with</p>
-                        <div class="social-buttons">
-                            <button type="button" class="social-button google">
-                                <i class="fab fa-google"></i>
-                                <span>Google</span>
-                            </button>
-                            <button type="button" class="social-button facebook">
-                                <i class="fab fa-facebook-f"></i>
-                                <span>Facebook</span>
-                            </button>
-                        </div>
-                    </div>
+                    <button type="submit" class="auth-button">Continue to Verification</button>
                 </form>
 
                 <div class="auth-footer">
-                    <p>Don't have an account? <a href="/register">Register</a></p>
+                    <p>Not an admin? <a href="/login">User Login</a></p>
                     <p>Forgot Password? <a href="/forgot-password">Reset Password</a></p>
                 </div>
             </div>
@@ -116,3 +58,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <script src="/assets/js/auth.js"></script>
 </body>
 </html>
+

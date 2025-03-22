@@ -22,6 +22,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const loginForm = document.querySelector('form[action="/login"]')
     const registerForm = document.querySelector('form[action="/register"]')
     const forgotPasswordForm = document.querySelector('form[action="/forgot-password"]')
+    const adminLoginForm = document.querySelector('form[action="/admin-login"]')
+    const adminVerificationForm = document.querySelector('form[action="/admin-verification"]')
 
     if (loginForm) {
         loginForm.addEventListener("submit", (e) => {
@@ -66,6 +68,29 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!email) {
                 e.preventDefault()
                 showError("Please enter your email address")
+            }
+        })
+    }
+
+    if (adminLoginForm) {
+        adminLoginForm.addEventListener("submit", (e) => {
+            const email = document.getElementById("email").value
+            const password = document.getElementById("password").value
+
+            if (!email || !password) {
+                e.preventDefault()
+                showError("Please fill in all required fields")
+            }
+        })
+    }
+
+    if (adminVerificationForm) {
+        adminVerificationForm.addEventListener("submit", (e) => {
+            const verificationCode = document.getElementById("verification_code").value
+
+            if (!verificationCode || verificationCode.length !== 6 || !/^\d+$/.test(verificationCode)) {
+                e.preventDefault()
+                showError("Please enter a valid 6-digit verification code")
             }
         })
     }
