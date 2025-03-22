@@ -61,6 +61,13 @@ class ProductModel
                 'product_id' => $id
             ]
         );
+        $stmt = $this->pdo->query("UPDATE products SET product_name = :product_name, product_detail = :product_detail, price = :price WHERE product_id = :product_id",
+            [
+                'product_name' => $data['product_name'],
+                'product_detail' => $data['product_detail'],
+                'price' => $data['price'],
+                'product_id' => $id
+            ]);
     }
 
 
@@ -91,3 +98,6 @@ class ProductModel
     
     
 }
+
+
+
