@@ -1302,7 +1302,7 @@ main {
 }
 
 .upgrade-box button {
-    background-color: #ffa600;
+    background-color: #ff5e62;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -1311,7 +1311,7 @@ main {
 }
 
 .upgrade-box button:hover {
-    background-color: #ff6f00;
+    background-color: #ff0000;
 }
 
 
