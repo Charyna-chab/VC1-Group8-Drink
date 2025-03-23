@@ -1,5 +1,4 @@
 <?php
-namespace GiftCardController\Controllers;
 class BaseController {
     public function views($views, $data = []) {
         // Extract data into variables
