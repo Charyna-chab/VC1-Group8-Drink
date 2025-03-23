@@ -1,7 +1,6 @@
 <?php
 require_once __DIR__ . "/Router.php";
 require_once __DIR__ . "/../controllers/BaseController.php";
-require_once __DIR__ . "/../controllers/WelcomeController.php";
 require_once __DIR__ . "/../controllers/FavoritesController.php";
 require_once __DIR__ . "/../controllers/FeedbackController.php";
 require_once __DIR__ . "/../controllers/SettingsController.php";
@@ -13,22 +12,25 @@ use YourNamespace\Router;
 
 $route = new Router();
 
-// Welcome page as the default route
-$route->get("/", [WelcomeController::class, 'welcome']);
+
 
 // Authentication routes
 $route->get("/login", [AuthController::class, 'login']);
 $route->post("/login", [AuthController::class, 'login']);
 $route->get("/logout", [AuthController::class, 'logout']);
+
+$route->get("/admin-login", [AuthController::class, 'adminLogin']);
+$route->post("/admin-login", [AuthController::class, 'adminLogin']);
+$route->get("/admin-verification", [AuthController::class, 'adminVerification']);
+$route->post("/admin-verification", [AuthController::class, 'adminVerification']);
+
 $route->get("/register", [AuthController::class, 'register']);
 $route->post("/register", [AuthController::class, 'register']);
 $route->get("/register-success", [AuthController::class, 'registerSuccess']);
 $route->get("/forgot-password", [AuthController::class, 'forgotPassword']);
 $route->post("/forgot-password", [AuthController::class, 'forgotPassword']);
-$route->get("/logout", [AuthController::class, 'logout']);
 
 // Original routes
-$route->get("/welcome", [WelcomeController::class, 'welcome']);
 $route->get("/order", [OrdersController::class, 'index']);
 $route->get("/order/details/{id}", [OrdersController::class, 'details']);
 $route->post("/order/add-to-cart", [OrdersController::class, 'addToCart']);

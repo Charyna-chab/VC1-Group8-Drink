@@ -28,7 +28,7 @@
         <div class="product-filters">
             <div class="search-filter">
                 <input type="text" id="productSearch" placeholder="Search drinks...">
-                <i class="fas fa-search"></i>
+                <i class="fas fa-search"></i>   
             </div>
         </div>
         <h3>Order Drinks & Snacks</h3>
