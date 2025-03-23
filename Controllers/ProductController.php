@@ -82,21 +82,51 @@ class ProductController extends BaseController
         $this->views('products/product-edit.php', ['product' => $product]);
     }
 
-    function update($id)
+    // function update($id)
+    // {
+    //     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    //         $data = [
+    //             'product_name' => $_POST['product_name'],
+    //             'image' => $_POST['image'],
+    //             'product_detail' => $_POST['product_detail'],
+    //             'price' => $_POST['price'],
+    //         ];
+    //         $this->model->updateProduct($id, $data); // Only call updateProduct
+    //         // Remove this line: $this->model->createProduct($data);
+    //         $this->redirect('/product');
+    //     }
+    // }
+    function update()
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $id = $_POST['product_id'];
+    
+            // Handle file upload
+            if (!empty($_FILES['image']['name'])) {
+                $image = 'uploads/' . basename($_FILES['image']['name']);
+                move_uploaded_file($_FILES['image']['tmp_name'], $image);
+            } else {
+                $image = $_POST['existing_image'];
+            }
+    
             $data = [
                 'product_name' => $_POST['product_name'],
-                'image' => $_POST['image'],
                 'product_detail' => $_POST['product_detail'],
                 'price' => $_POST['price'],
+                'image' => $image,
+                'existing_image' => $_POST['existing_image']
             ];
-            $this->model->updateProduct($id, $data); // Only call updateProduct
-            // Remove this line: $this->model->createProduct($data);
+    
+            if ($this->model->updateProduct($id, $data)) {
+                $_SESSION['success'] = 'Product updated successfully!';
+            } else {
+                $_SESSION['error'] = 'Failed to update product!';
+            }
+    
             $this->redirect('/product');
         }
     }
-
+    
 
     function destroy()
     {
