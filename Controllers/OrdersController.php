@@ -1,5 +1,25 @@
 <?php
-class OrderController extends BaseController {
+class OrdersController extends BaseController {
+    public function __construct() {
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+        
+        // Check if user is logged in - redirect to login if not
+        if (!isset($_SESSION['user_id']) && $this->requiresAuth()) {
+            $this->redirect('/login');
+        }
+    }
+    
+    // Method to determine if authentication is required
+    protected function requiresAuth() {
+        // Public pages like menu browsing don't require auth
+        $action = isset($_GET['action']) ? $_GET['action'] : 'index';
+        $publicActions = ['index', 'details'];
+        
+        return !in_array($action, $publicActions);
+    }
+    
     public function index() {
         // In a real application, you would fetch products from the database
         // For now, we'll create sample data
