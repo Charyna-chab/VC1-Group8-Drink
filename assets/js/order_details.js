@@ -1,3 +1,4 @@
+// Enhanced order_details.js with improved functionality
 document.addEventListener("DOMContentLoaded", () => {
     // DOM Elements
     const customizeForm = document.getElementById("customizeForm")
@@ -23,37 +24,45 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Quantity buttons
-    minusBtn.addEventListener("click", () => {
-        const quantity = Number.parseInt(quantityInput.value)
-        if (quantity > 1) {
-            quantityInput.value = quantity - 1
-            updateTotalPrice()
-        }
-    })
+    if (minusBtn) {
+        minusBtn.addEventListener("click", () => {
+            const quantity = Number.parseInt(quantityInput.value)
+            if (quantity > 1) {
+                quantityInput.value = quantity - 1
+                updateTotalPrice()
+            }
+        })
+    }
 
-    plusBtn.addEventListener("click", () => {
-        const quantity = Number.parseInt(quantityInput.value)
-        if (quantity < 10) {
-            quantityInput.value = quantity + 1
-            updateTotalPrice()
-        }
-    })
+    if (plusBtn) {
+        plusBtn.addEventListener("click", () => {
+            const quantity = Number.parseInt(quantityInput.value)
+            if (quantity < 10) {
+                quantityInput.value = Number(quantity) + 1
+                updateTotalPrice()
+            }
+        })
+    }
 
     // Update total price when options change
-    priceElements.forEach((element) => {
-        element.addEventListener("change", updateTotalPrice)
-    })
+    if (priceElements && priceElements.length > 0) {
+        priceElements.forEach((element) => {
+            element.addEventListener("change", updateTotalPrice)
+        })
+    }
 
-    quantityInput.addEventListener("change", function() {
-        // Ensure quantity is between 1 and 10
-        const quantity = Number.parseInt(this.value)
-        if (isNaN(quantity) || quantity < 1) {
-            this.value = 1
-        } else if (quantity > 10) {
-            this.value = 10
-        }
-        updateTotalPrice()
-    })
+    if (quantityInput) {
+        quantityInput.addEventListener("change", function() {
+            // Ensure quantity is between 1 and 10
+            const quantity = Number.parseInt(this.value)
+            if (isNaN(quantity) || quantity < 1) {
+                this.value = 1
+            } else if (quantity > 10) {
+                this.value = 10
+            }
+            updateTotalPrice()
+        })
+    }
 
     // Calculate and update total price
     function updateTotalPrice() {
@@ -79,28 +88,95 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Cancel order button
-    cancelOrderButton.addEventListener("click", () => {
-        window.location.href = "/order"
-    })
+    if (cancelOrderButton) {
+        cancelOrderButton.addEventListener("click", () => {
+            window.location.href = "/order"
+        })
+    }
 
     // Handle form submission
-    customizeForm.addEventListener("submit", function(e) {
-        e.preventDefault()
+    if (customizeForm) {
+        customizeForm.addEventListener("submit", function(e) {
+            e.preventDefault()
 
-        // Get form data
-        const formData = new FormData(this)
+            // Disable the submit button to prevent multiple submissions
+            const submitButton = this.querySelector('button[type="submit"]')
+            submitButton.disabled = true
+            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Adding...'
 
-        // In a real application, you would send this data to the server
-        // For demo purposes, we'll just show a success toast
+            // Get form data
+            const formData = new FormData(this)
 
-        // Show success toast
-        showToast("Success", "Item added to cart!", "success")
+            // Create product object from form data
+            const product = {
+                id: Date.now(), // Unique ID for the cart item
+                productId: formData.get("product_id"),
+                name: document.querySelector(".product-details-info h3").textContent,
+                price: basePrice,
+                image: document.querySelector(".product-details-image img").src,
+                description: document.querySelector(".product-description").textContent,
+                size: {
+                    name: document.querySelector('input[name="size"]:checked').nextElementSibling.textContent,
+                    value: formData.get("size"),
+                    price: Number.parseFloat(document.querySelector('input[name="size"]:checked').dataset.price || "0"),
+                },
+                sugar: {
+                    name: document.querySelector('input[name="sugar"]:checked').nextElementSibling.textContent,
+                    value: formData.get("sugar"),
+                },
+                ice: {
+                    name: document.querySelector('input[name="ice"]:checked').nextElementSibling.textContent,
+                    value: formData.get("ice"),
+                },
+                toppings: [],
+                quantity: Number.parseInt(formData.get("quantity")),
+                instructions: formData.get("instructions"),
+                orderDate: new Date().toISOString(),
+                status: "processing",
+            }
 
-        // Redirect to order page after a delay
-        setTimeout(() => {
-            window.location.href = "/order"
-        }, 2000)
-    })
+            // Get selected toppings
+            const selectedToppings = document.querySelectorAll('input[name="toppings[]"]:checked')
+            selectedToppings.forEach((topping) => {
+                product.toppings.push({
+                    name: topping.nextElementSibling.textContent,
+                    price: Number.parseFloat(topping.dataset.price),
+                })
+            })
+
+            // Calculate total price
+            const sizePrice = product.size.price || 0
+            let toppingsPrice = 0
+            product.toppings.forEach((topping) => {
+                toppingsPrice += topping.price
+            })
+
+            const itemPrice = basePrice + sizePrice + toppingsPrice
+            product.basePrice = itemPrice
+            product.totalPrice = itemPrice * product.quantity
+
+            // Add to cart (if cart.js is loaded)
+            if (window.addToCart) {
+                window.addToCart(product)
+            } else {
+                // Store in localStorage as fallback
+                const cart = JSON.parse(localStorage.getItem("cart")) || []
+                cart.push(product)
+                localStorage.setItem("cart", JSON.stringify(cart))
+
+                // Dispatch custom event for cart update
+                document.dispatchEvent(new CustomEvent("cartUpdated"))
+            }
+
+            // Show success toast
+            showToast("Success", "Item added to cart!", "success")
+
+            // Redirect to order page after a short delay
+            setTimeout(() => {
+                window.location.href = "/order"
+            }, 1000)
+        })
+    }
 
     // Show toast notification
     function showToast(title, message, type = "info") {
@@ -115,15 +191,15 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         toast.innerHTML = `
-              <div>
-                  <i class="fas fa-${icon} toast-icon"></i>
-              </div>
-              <div class="toast-content">
-                  <h4 class="toast-title">${title}</h4>
-                  <p class="toast-message">${message}</p>
-              </div>
-              <button class="toast-close">&times;</button>
-          `
+        <div>
+          <i class="fas fa-${icon} toast-icon"></i>
+        </div>
+        <div class="toast-content">
+          <h4 class="toast-title">${title}</h4>
+          <p class="toast-message">${message}</p>
+        </div>
+        <button class="toast-close">&times;</button>
+      `
 
         // Add to container
         toastContainer.appendChild(toast)
@@ -142,4 +218,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }, 300)
         }, 5000)
     }
+
+    // Initialize total price on page load
+    updateTotalPrice()
 })

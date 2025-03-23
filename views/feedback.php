@@ -2,17 +2,21 @@
 <?php require_once __DIR__ . '/../views/layouts/navbar.php'; ?>
 <?php require_once __DIR__ . '/../views/layouts/sidebar.php'; ?>
 
-<section class="content">
-    <div class="feedback-container">
-        <div class="feedback-tabs">
+
+
+
+
+
+<div class="feedback-container">
+    <div class="feedback-tabs">
         <button class="feedback-tab active" data-tab="review">Write a Review</button>
         <button class="feedback-tab" data-tab="suggestion">Suggestion Box</button>
         <button class="feedback-tab" data-tab="report">Report an Issue</button>
     </div>
 
-            <div class="feedback-content active" id="review-tab">
-                <!-- Review Form Content -->
-                <div class="feedback-form">
+    <div class="feedback-content active" id="review-tab">
+                        <!-- Review Form Content -->
+                        <div class="feedback-form">
                             <h3>Share Your Experience</h3>
                             <p>Let us know how we're doing! Your review helps us improve our service.</p>
 
@@ -78,11 +82,12 @@
                                 <button type="submit" class="btn-primary">Submit Review</button>
                             </form>
                         </div>
-            </div>
+      
+    </div>
 
-            <div class="feedback-content" id="suggestion-tab">
-                <!-- Suggestion Form Content -->
-                <div class="feedback-form">
+    <div class="feedback-content" id="suggestion-tab">
+         <!-- Suggestion Form Content -->
+         <div class="feedback-form">
                             <h3>Suggestion Box</h3>
                             <p>Have an idea to make our service better? We'd love to hear it!</p>
 
@@ -112,11 +117,12 @@
                                 <button type="submit" class="btn-primary">Submit Suggestion</button>
                             </form>
                         </div>
-            </div>
+       
+    </div>
 
-            <div class="feedback-content" id="report-tab">
-                <!-- Report Form Content -->
-                <div class="feedback-form">
+    <div class="feedback-content" id="report-tab">
+                        <!-- Report Form Content -->
+                        <div class="feedback-form">
                             <h3>Report an Issue</h3>
                             <p>Encountered a problem? Let us know so we can fix it!</p>
 
@@ -182,6 +188,31 @@
                     </div>
             </div>
         <!-- Report Tab -->
-</section>
+    
+    </div>
+</div>
+
+
+
+
+<!-- <section class="content">
+    <div class="feedback-container">
+        <div class="feedback-tabs">
+        <button class="feedback-tab active" data-tab="review">Write a Review</button>
+        <button class="feedback-tab" data-tab="suggestion">Suggestion Box</button>
+        <button class="feedback-tab" data-tab="report">Report an Issue</button>
+    </div>
+
+            <div class="feedback-content active" id="review-tab">
+
+            </div>
+
+            <div class="feedback-content" id="suggestion-tab">
+               
+            </div>
+
+            <div class="feedback-content" id="report-tab">
+
+</section> -->
 
 <?php require_once __DIR__ . '/../views/layouts/footer.php'; ?>

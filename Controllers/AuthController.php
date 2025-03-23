@@ -22,14 +22,23 @@ class AuthController extends BaseController {
             $email = $_POST['email'] ?? '';
             $password = $_POST['password'] ?? '';
             $remember = isset($_POST['remember']);
+            $isAdmin = isset($_POST['admin_login']);
 
+            if ($isAdmin) {
+                // Redirect to admin login page if user wants to login as admin
+                $this->redirect('/admin-login');
+                return;
+            }
+
+            // In a real application, you would validate against a database
             if ($email === 'user@example.com' && $password === 'password123') {
                 $_SESSION['user_id'] = 1;
                 $_SESSION['user'] = [
                     'id' => 1,
                     'name' => 'Demo User',
                     'email' => $email,
-                    'avatar' => '/assets/images/avatar.jpg'
+                    'avatar' => '/assets/images/avatar.jpg',
+                    'role' => 'user'
                 ];
 
                 if ($remember) {
@@ -67,12 +76,14 @@ class AuthController extends BaseController {
             } elseif (!$terms) {
                 $error = 'You must agree to the Terms of Service.';
             } else {
+                // In a real application, you would save the user to the database
                 $_SESSION['user_id'] = 2; // New user ID
                 $_SESSION['user'] = [
                     'id' => 2,
                     'name' => $name,
                     'email' => $email,
-                    'avatar' => '/assets/images/avatar.jpg'
+                    'avatar' => '/assets/images/avatar.jpg',
+                    'role' => 'user'
                 ];
                 
                 $this->redirect('/register-success');
@@ -103,7 +114,8 @@ class AuthController extends BaseController {
             if (empty($email)) {
                 $error = 'Please enter your email address';
             } else {
-                $message = 'Password reset instructions have been sent.';
+                // In a real application, you would send a password reset email
+                $message = 'Password reset instructions have been sent to your email.';
             }
         }
 
@@ -126,6 +138,98 @@ class AuthController extends BaseController {
         $this->redirect('/login');
     }
 
+    public function adminLogin() {
+        if (isset($_SESSION['user_id']) && isset($_SESSION['user']['role']) && $_SESSION['user']['role'] === 'admin') {
+            $this->redirect('/admin-dashboard');
+        }
+
+        $error = null;
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $email = $_POST['email'] ?? '';
+            $password = $_POST['password'] ?? '';
+
+            // In a real application, you would validate against a database
+            if ($email === 'admin@example.com' && $password === 'admin123') {
+                // Generate verification code
+                $verification_code = rand(100000, 999999);
+                
+                // In a real application, you would send this code via email
+                // For demo purposes, we'll store it in the session
+                $_SESSION['admin_email'] = $email;
+                $_SESSION['verification_code'] = $verification_code;
+                $_SESSION['verification_time'] = time();
+                
+                // For demo purposes, display the code (in a real app, this would be sent via email)
+                $_SESSION['demo_code'] = $verification_code;
+                
+                $this->redirect('/admin-verification');
+            } else {
+                $error = 'Invalid email or password.';
+            }
+        }
+
+        $this->views('auth/admin_login', ['title' => 'Admin Login - XING FU CHA', 'error' => $error]);
+    }
+    
+    public function adminVerification() {
+        // Check if admin email is set in session
+        if (!isset($_SESSION['admin_email']) || !isset($_SESSION['verification_code'])) {
+            $this->redirect('/admin-login');
+        }
+        
+        $error = null;
+        $demo_code = $_SESSION['demo_code'] ?? null; // For demo purposes only
+        
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $verification_code = $_POST['verification_code'] ?? '';
+            
+            // Check if verification code is correct and not expired (10 minutes)
+            if ($verification_code == $_SESSION['verification_code'] && 
+                (time() - $_SESSION['verification_time']) < 600) {
+                
+                // Set admin session
+                $_SESSION['user_id'] = 999; // Admin ID
+                $_SESSION['user'] = [
+                    'id' => 999,
+                    'name' => 'Admin User',
+                    'email' => $_SESSION['admin_email'],
+                    'avatar' => '/assets/images/admin-avatar.jpg',
+                    'role' => 'admin'
+                ];
+                
+                // Clear verification data
+                unset($_SESSION['admin_email']);
+                unset($_SESSION['verification_code']);
+                unset($_SESSION['verification_time']);
+                unset($_SESSION['demo_code']);
+                
+                // Redirect to admin dashboard
+                $this->redirect('/admin-dashboard');
+            } else {
+                if ((time() - $_SESSION['verification_time']) >= 600) {
+                    $error = 'Verification code has expired. Please try again.';
+                    // Clear verification data
+                    unset($_SESSION['admin_email']);
+                    unset($_SESSION['verification_code']);
+                    unset($_SESSION['verification_time']);
+                    unset($_SESSION['demo_code']);
+                    
+                    // Redirect back to admin login
+                    $this->redirect('/admin-login');
+                } else {
+                    $error = 'Invalid verification code. Please try again.';
+                }
+            }
+        }
+        
+        $this->views('auth/admin_verification', [
+            'title' => 'Admin Verification - XING FU CHA', 
+            'error' => $error,
+            'demo_code' => $demo_code // For demo purposes only
+        ]);
+    }
+
     private function checkRememberMe() {
         if (isset($_SESSION['user_id'])) {
             return;
@@ -137,7 +241,8 @@ class AuthController extends BaseController {
                 'id' => 1,
                 'name' => 'Demo User',
                 'email' => 'user@example.com',
-                'avatar' => '/assets/images/avatar.jpg'
+                'avatar' => '/assets/images/avatar.jpg',
+                'role' => 'user'
             ];
         }
     }
@@ -145,6 +250,12 @@ class AuthController extends BaseController {
     public function checkAuth() {
         if (!isset($_SESSION['user_id'])) {
             $this->redirect('/login');
+        }
+    }
+    
+    public function checkAdminAuth() {
+        if (!isset($_SESSION['user_id']) || !isset($_SESSION['user']['role']) || $_SESSION['user']['role'] !== 'admin') {
+            $this->redirect('/admin-login');
         }
     }
 }
