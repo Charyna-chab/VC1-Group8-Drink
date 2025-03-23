@@ -1,14 +1,28 @@
 /* Feedback Page Styles */
 
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
 .feedback-container {
     background: white;
     border-radius: 16px;
     overflow: hidden;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-    margin-top: 30px;
+    margin: 0 auto;
+    width: 90%;
+    max-width: 1200px;
+    height: calc(110vh - 120px);
+    /* Adjust based on header and footer height */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     position: relative;
-    right: 20px;
-    bottom: 30px;
+    top: 20px;
+    /* Adjust based on header height */
 }
 
 .feedback-tabs {
@@ -41,6 +55,8 @@
 .feedback-content {
     display: none;
     padding: 30px;
+    flex-grow: 1;
+    overflow-y: auto;
 }
 
 .feedback-content.active {

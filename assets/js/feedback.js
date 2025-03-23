@@ -15,7 +15,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Show corresponding content
             const tabId = this.getAttribute("data-tab")
-            document.getElementById(`${tabId}-tab`).classList.add("active")
+            const contentToShow = document.getElementById(`${tabId}-tab`)
+
+            if (contentToShow) {
+                contentToShow.classList.add("active")
+            } else {
+                console.error(`Tab content with ID "${tabId}-tab" not found`)
+            }
         })
     })
 
@@ -160,7 +166,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 .then((response) => response.json())
                 .then((data) => {
                     if (data.success) {
-                        showFormSuccess(this, data.message)
+                        showFormSuccess(this, data.message || "Review submitted successfully!")
                         this.reset()
                             // Reset stars
                         stars.forEach((s) => {
@@ -173,10 +179,8 @@ document.addEventListener("DOMContentLoaded", () => {
                             photoPreview.innerHTML = ""
                         }
                     } else {
-                        showForm
-                        photoPreview.innerHTML = ""
-                    } else
                         showFormError(this, data.message || "An error occurred. Please try again.")
+                    }
                 })
                 .catch((error) => {
                     console.error("Error submitting review:", error)
@@ -209,7 +213,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 .then((response) => response.json())
                 .then((data) => {
                     if (data.success) {
-                        showFormSuccess(this, data.message)
+                        showFormSuccess(this, data.message || "Suggestion submitted successfully!")
                         this.reset()
                     } else {
                         showFormError(this, data.message || "An error occurred. Please try again.")
@@ -255,7 +259,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 .then((response) => response.json())
                 .then((data) => {
                     if (data.success) {
-                        showFormSuccess(this, data.message)
+                        showFormSuccess(this, data.message || "Report submitted successfully!")
                         this.reset()
                             // Reset photo preview
                         const photoPreview = this.querySelector(".photo-preview")
@@ -324,6 +328,38 @@ document.addEventListener("DOMContentLoaded", () => {
             }, 300)
         }, 5000)
     }
+
+    // Add animation for tab switching
+    function addTabSwitchAnimation() {
+        const tabContents = document.querySelectorAll(".feedback-content")
+
+        tabContents.forEach((content) => {
+            content.addEventListener("transitionend", function(e) {
+                if (e.propertyName === "opacity" && !this.classList.contains("active")) {
+                    this.style.display = "none"
+                }
+            })
+        })
+
+        // Add CSS for animations
+        const animationStyle = document.createElement("style")
+        animationStyle.textContent = `
+            .feedback-content {
+                opacity: 0;
+                transition: opacity 0.3s ease;
+                display: none;
+            }
+            
+            .feedback-content.active {
+                opacity: 1;
+                display: block;
+            }
+        `
+        document.head.appendChild(animationStyle)
+    }
+
+    // Call the animation function
+    addTabSwitchAnimation()
 
     // Add CSS for feedback forms
     const style = document.createElement("style")
@@ -551,6 +587,42 @@ document.addEventListener("DOMContentLoaded", () => {
           width: 100%;
           text-align: center;
         }
+      }
+      
+      /* Additional animations */
+      .feedback-tab {
+        position: relative;
+        overflow: hidden;
+      }
+      
+      .feedback-tab::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background-color: #ff5e62;
+        transition: width 0.3s ease;
+      }
+      
+      .feedback-tab:hover::after {
+        width: 100%;
+      }
+      
+      .feedback-tab.active::after {
+        width: 100%;
+      }
+      
+      /* Pulse animation for submit buttons */
+      @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+      }
+      
+      .btn-primary:focus {
+        animation: pulse 1s infinite;
       }
     `
     document.head.appendChild(style)
