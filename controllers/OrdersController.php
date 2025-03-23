@@ -12,8 +12,7 @@ class OrdersController extends BaseController {
     }
     
     public function index() {
-        // In a real application, you would fetch products from the database
-        // For now, we'll create sample data
+    
         $products = [
             [
                 'id' => 1,
