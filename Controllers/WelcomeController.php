@@ -1,4 +1,5 @@
 <?php
+
 require_once __DIR__ . '/BaseController.php';
 class WelcomeController extends BaseController {
     public function welcome() {

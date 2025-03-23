@@ -158,8 +158,8 @@ class OrderController extends BaseController {
             ],
             [
                 'id' => 20,
-                'name' => 'Cheese Foam Cake',
-                'description' => 'A soft sponge cake topped with our signature cheese foam, creating a creamy and sweet experience.',
+                'name' => 'Chocolate Almond Croissant 80Baht',
+                'description' => 'A golden, flaky croissant filled with rich chocolate and crunchy almonds for a delightful treat.',
                 'price' => 4.50,
                 'image' => '/assets/images/products/cheese-foam-cake.jpg',
                 'category' => 'snacks'
