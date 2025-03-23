@@ -5,7 +5,7 @@ $users = $users ?? [];
 
 <div class="card shadow mb-4 ml-3 mr-3">
     <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Customer List</h6>
+        <h6 class="m-0 font-weight-bold text-primary">Customers List</h6>
     </div>
     <div class="card-body">
         <div class="table-responsive">
