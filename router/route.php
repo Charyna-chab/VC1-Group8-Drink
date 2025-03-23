@@ -32,16 +32,25 @@ $route->get("/register-success", [AuthController::class, 'registerSuccess']);
 $route->get("/forgot-password", [AuthController::class, 'forgotPassword']);
 $route->post("/forgot-password", [AuthController::class, 'forgotPassword']);
 
+// Profile update routes
+$route->post("/update-profile", [AuthController::class, 'updateProfile']);
+$route->post("/update-password", [AuthController::class, 'updatePassword']);
+
 // Original routes
 $route->get("/welcome", [WelcomeController::class, 'welcome']);
 $route->get("/order", [OrdersController::class, 'index']);
 $route->get("/order/details/{id}", [OrdersController::class, 'details']);
 $route->post("/order/add-to-cart", [OrdersController::class, 'addToCart']);
 $route->get("/cart", [OrdersController::class, 'cart']);
+
+// New checkout and payment routes
+$route->get("/checkout", [OrdersController::class, 'checkout']);
+$route->post("/process-payment", [OrdersController::class, 'processPayment']);
+
 $route->get("/booking", [BookingController::class, 'index']);
 $route->get("/orders", [BookingController::class, 'index']);
 $route->get("/booking/details/{id}", [BookingController::class, 'details']);
-$route->get("/orders/details/{id}", [BookingController::class, 'details']);
+$route->get("/orders/details/{id}", [OrdersController::class, 'details']);
 $route->get("/favorites", [FavoritesController::class, 'index']);
 $route->post("/favorites/toggle", [FavoritesController::class, 'toggle']);
 $route->get("/feedback", [FeedbackController::class, 'index']);

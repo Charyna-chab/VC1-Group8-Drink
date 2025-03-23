@@ -665,41 +665,6 @@ main {
     color: #16a085;
 }
 
-.upgrade-box {
-    margin-top: 30px;
-    padding: 20px;
-    background-color: #fff8e1;
-    border-radius: 12px;
-    text-align: center;
-    border: 1px dashed #ffcc00;
-}
-
-.upgrade-box p {
-    margin-bottom: 15px;
-    font-weight: 600;
-    color: #333;
-    font-size: 14px;
-    line-height: 1.4;
-}
-
-.upgrade-box button {
-    padding: 10px 20px;
-    background-color: #ff6f61;
-    border-radius: 20px;
-    color: white;
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s;
-    font-weight: 600;
-    font-size: 14px;
-}
-
-.upgrade-box button:hover {
-    background-color: #ff5b4a;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
 
 /* Content Area */
 

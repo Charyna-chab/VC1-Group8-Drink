@@ -19,19 +19,14 @@
         <li><a href="/settings"><i class="fas fa-cogs setting-icon"></i> Setting</a></li>
     </ul>
 
-    <div class="upgrade-box">
-        <p>Upgrade your Account to Get Free Voucher</p>
-        <button>Upgrade</button>
-    </div>
+<!-- Logout & User/Admin Section -->
+<ul class="nav-list">
+    <hr>
+    <li><a href="/logout"><i class="fas fa-sign-out-alt logout-icon"></i> Logout</a></li>
+    <hr>
+    <li><a href="/admin"><i class="fas fa-sign-out-alt logout-icon"></i>Admin</a></li>
+</ul>
 
-    <!-- Logout Option -->
-    <ul class="nav-list">
-        <hr>
-        <li><a href="/logout"><i class="fas fa-sign-out-alt logout-icon"></i> Logout</a></li>
-
-
-    </ul>
-    </div>
    
 </aside>
 <div class="user-menu" id="userMenu">
