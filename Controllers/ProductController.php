@@ -4,7 +4,7 @@ require_once 'BaseController.php';
 
 class ProductController extends BaseController
 {
-    
+
     private $model;
 
     function __construct()
@@ -59,7 +59,7 @@ class ProductController extends BaseController
                         'image' => $image_url,
                         'product_detail' => isset($_POST['product_detail']) ? $_POST['product_detail'] : null,
                         'price' => isset($_POST['price']) ? $_POST['price'] : null,
-                        
+
                     ];
 
                     // Validate that all required fields are present
@@ -84,24 +84,39 @@ class ProductController extends BaseController
 
     function update($id)
     {
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $data = [
-            'product_name' => $_POST['product_name'],
-            'image' => $_POST['image'],
-            'product_detail' => $_POST['product_detail'],
-            'price' => $_POST['price'],
-        ];
-        $this->model->updateProduct($id, $data); // Only call updateProduct
-        // Remove this line: $this->model->createProduct($data);
-        $this->redirect('/product');
-    }
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $data = [
+                'product_name' => $_POST['product_name'],
+                'image' => $_POST['image'],
+                'product_detail' => $_POST['product_detail'],
+                'price' => $_POST['price'],
+            ];
+            $this->model->updateProduct($id, $data); // Only call updateProduct
+            // Remove this line: $this->model->createProduct($data);
+            $this->redirect('/product');
+        }
     }
 
 
-    function destroy($id)
+    function destroy()
     {
-        $this->model->deleteProduct($id);
-        $this->redirect('/product');
 
+        if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+            // Validate product ID
+            if (!isset($_GET['product_id']) || !is_numeric($_GET['product_id'])) {
+                $_SESSION['error'] = 'Invalid product ID!';
+                return $this->redirect('/product');
+            }
+
+            $id = $_GET['product_id'];
+
+            if ($this->model->deleteProduct($id)) {
+                $_SESSION['success'] = 'Product deleted successfully!';
+            } else {
+                $_SESSION['error'] = 'Failed to delete product! It may not exist.';
+            }
+
+            $this->redirect('/product');
+        }
     }
 }

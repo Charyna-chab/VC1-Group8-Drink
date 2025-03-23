@@ -88,4 +88,27 @@ document.addEventListener("DOMContentLoaded", () => {
         // Scroll to error
         errorElement.scrollIntoView({ behavior: "smooth", block: "center" })
     }
+<<<<<<< HEAD
+
+    // Social login buttons (placeholder functionality)
+    const socialButtons = document.querySelectorAll(".social-button")
+
+    socialButtons.forEach((button) => {
+        button.addEventListener("click", function() {
+            const provider = this.classList.contains("google") ? "Google" : "Facebook"
+            alert(`${provider} login would be implemented here in a real application.`)
+        })
+    })
+
+    // Handle logout button click
+    const logoutBtn = document.getElementById("logoutBtn")
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", (e) => {
+            // No need to prevent default - we want the link to work normally
+            // This is just for any additional functionality you might want to add
+            console.log("Logging out...")
+        })
+    }
+=======
+>>>>>>> e1afa46761f16fc7671bbd4993a2db1bab8276b4
 })

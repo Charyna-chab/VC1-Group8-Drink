@@ -26,7 +26,7 @@ class OrderController extends BaseController {
                 'name' => 'Oolong Passion',
                 'description' => 'A refreshing blend of passion fruit flavor and our premium milk tea.',
                 'price' => 2.00,
-                'image' => 'assets/image/products/3.png',
+                'image' => '/assets/image/products/3.png',
                 'category' => 'milk-tea'
             ],
             [
@@ -170,7 +170,6 @@ class OrderController extends BaseController {
             ]
             
         ];
-        
         
         $toppings = [
             [

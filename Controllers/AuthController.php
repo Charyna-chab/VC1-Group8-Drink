@@ -13,7 +13,7 @@ class AuthController extends BaseController {
 
     public function login() {
         if (isset($_SESSION['user_id'])) {
-            $this->redirect('/welcome');
+            $this->redirect('/order');
         }
 
         $error = null;
@@ -35,7 +35,7 @@ class AuthController extends BaseController {
                 if ($remember) {
                     setcookie('remember_token', 'demo_token', time() + (86400 * 30), '/');
                 }
-                $this->redirect('/welcome');
+                $this->redirect('/order');
             } else {
                 $error = 'Invalid email or password.';
             }
@@ -46,7 +46,7 @@ class AuthController extends BaseController {
 
     public function register() {
         if (isset($_SESSION['user_id'])) {
-            $this->redirect('/welcome');
+            $this->redirect('/order');
         }
 
         $error = null;
@@ -67,14 +67,30 @@ class AuthController extends BaseController {
             } elseif (!$terms) {
                 $error = 'You must agree to the Terms of Service.';
             } else {
-                $_SESSION['register_success'] = true;
-                $_SESSION['registered_name'] = $name;
-                $_SESSION['registered_email'] = $email;
-                $this->redirect('/order');
+                $_SESSION['user_id'] = 2; // New user ID
+                $_SESSION['user'] = [
+                    'id' => 2,
+                    'name' => $name,
+                    'email' => $email,
+                    'avatar' => '/assets/images/avatar.jpg'
+                ];
+                
+                $this->redirect('/register-success');
             }
         }
 
         $this->views('auth/register', ['title' => 'Register - XING FU CHA', 'error' => $error]);
+    }
+    
+    public function registerSuccess() {
+        if (!isset($_SESSION['user_id'])) {
+            $this->redirect('/login');
+        }
+        
+        $this->views('auth/register_success', [
+            'title' => 'Registration Successful - XING FU CHA',
+            'user' => $_SESSION['user']
+        ]);
     }
 
     public function forgotPassword() {
@@ -95,13 +111,18 @@ class AuthController extends BaseController {
     }
 
     public function logout() {
-        session_unset();
+        // Unset all session variables
+        $_SESSION = array();
+        
+        // Destroy the session
         session_destroy();
 
+        // Delete the remember me cookie if it exists
         if (isset($_COOKIE['remember_token'])) {
             setcookie('remember_token', '', time() - 3600, '/');
         }
 
+        // Redirect to login page
         $this->redirect('/login');
     }
 
@@ -127,3 +148,4 @@ class AuthController extends BaseController {
         }
     }
 }
+

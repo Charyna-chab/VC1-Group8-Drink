@@ -1,26 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Favorites - XING FU CHA</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-  <link rel="stylesheet" href="/assets/css/style.css">
-  <link rel="stylesheet" href="/assets/css/favorites.css">
-</head>
+<main class="main-content">
+    <section class="content">
+        <!-- Favorites Header -->
+        <div class="favorites-header">
+            <h2>My Favorites</h2>
+            <p>Your favorite Xing Fu Cha drinks and snacks</p>
+        </div>
 
-<body>
-  <?php include 'views/partials/header.php'; ?>
+        <!-- Empty State (initially hidden if there are favorites) -->
+        <div class="favorites-empty" style="<?php echo !empty($favorites) ? 'display: none;' : ''; ?>">
+            <img src="/assets/image/empty-favorites.svg" alt="No Favorites">
+            <h3>No Favorites Yet</h3>
+            <p>You haven't added any favorites yet. Browse our menu and add items to your favorites!</p>
+            <a href="/order" class="favorites-browse-btn">Browse Menu</a>
+        </div>
+
+        <!-- Favorites Grid (initially hidden if there are no favorites) -->
+        <div class="favorites-grid" style="<?php echo empty($favorites) ? 'display: none;' : ''; ?>">
+            <?php if(!empty($favorites)): ?>
+                <?php foreach($favorites as $favorite): ?>
+                    <div class="favorites-card" data-id="<?php echo $favorite['id']; ?>">
+                        <!-- Remove Button -->
+                        <button class="favorites-remove-btn" data-id="<?php echo $favorite['id']; ?>">
+                            <i class="fas fa-times"></i>
+                            <span class="sr-only">Remove from favorites</span>
+                        </button>
 
   <main>
       <?php include 'views/partials/sidebar.php'; ?>
 
-      <section class="content">
-          <div class="page-header">
-              <h2>My Favorites</h2>
-              <p>Your favorite boba tea drinks and snacks</p>
-          </div>
+                        <!-- Product Info -->
+                        <div class="favorites-content">
+                            <h3 class="favorites-title"><?php echo $favorite['name']; ?></h3>
+                            <p class="favorites-description"><?php echo $favorite['description']; ?></p>
+                            
+                            <div class="favorites-footer">
+                                <div class="favorites-price">
+                                    $<?php echo number_format($favorite['price'], 2); ?>
+                                </div>
+                                <button class="favorites-order-btn" 
+                                        data-id="<?php echo $favorite['id']; ?>"
+                                        data-name="<?php echo htmlspecialchars($favorite['name']); ?>"
+                                        data-price="<?php echo $favorite['price']; ?>"
+                                        data-image="<?php echo htmlspecialchars($favorite['image']); ?>">
+                                    Order Now
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </div>
 
           <?php 
           // For demo purposes, we'll show some sample favorites
@@ -102,4 +134,8 @@
 </body>
 
 </html>
+
+<script src="/assets/js/favorites.js"></script>
+
+<?php require_once __DIR__ . '/layouts/footer.php'; ?>
 

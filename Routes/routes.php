@@ -24,7 +24,7 @@ $routes->get('/product/create', [ProductController::class, 'create']);
 $routes->post('/product/store', [ProductController::class, 'store']);
 $routes->get('/product/edit', [ProductController::class, 'edit']);
 $routes->put('/product/update', [ProductController::class, 'update']);
-$routes->delete('/product/delete', [ProductController::class, 'destroy']);
+$routes->get('/product/delete', [ProductController::class, 'destroy']);
 
 
 
