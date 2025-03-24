@@ -32,7 +32,7 @@ $_SESSION['product_total'] = $total;
         <tbody>
           <div class="d-flex justify-content-end">
             <form class="form-inline">
-              <div class="input-group" style="max-width: 250px;">
+              <div class="input-group mb-3 border" style="max-width: 250px;">
                 <input type="text" class="form-control form-control-sm bg-light border-0" placeholder="Search...">
                 <div class="input-group-append">
                   <button class="btn btn-primary btn-sm" type="button">
