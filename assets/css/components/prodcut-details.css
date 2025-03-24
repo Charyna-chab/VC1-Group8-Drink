@@ -373,7 +373,11 @@ textarea:focus {
 }
 
 .btn-primary:hover {
+<<<<<<< HEAD
     background: #ff4146;
+=======
+    background: #e62e24;
+>>>>>>> feature/dashboad
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(255, 94, 98, 0.2);
 }

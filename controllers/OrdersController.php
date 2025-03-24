@@ -1,4 +1,5 @@
 <?php
+<<<<<<< HEAD
 class OrdersController extends BaseController {
     public function __construct() {
         if (session_status() == PHP_SESSION_NONE) {
@@ -20,6 +21,9 @@ class OrdersController extends BaseController {
         return !in_array($action, $publicActions);
     }
     
+=======
+class OrderController extends BaseController {
+>>>>>>> feature/dashboad
     public function index() {
         // In a real application, you would fetch products from the database
         // For now, we'll create sample data
@@ -184,6 +188,7 @@ class OrdersController extends BaseController {
                 'image' => '/assets/image/products/Chocolate Almont Croissand 80Baht.png',
                 'category' => 'snacks'
             ]
+            
         ];
         
         $toppings = [

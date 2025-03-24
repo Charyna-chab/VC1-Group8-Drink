@@ -7,8 +7,8 @@
 @import url("components/toast.css");
 @import url("components/search.css");
 :root {
-    --order-primary: #ff8307;
-    --order-primary-hover: #ff6200;
+    --order-primary: #ff5e62;
+    --order-primary-hover: #e62e24;
     --order-text: #333333;
     --order-text-light: #666666;
     --order-border: #eeeeee;
@@ -93,6 +93,7 @@ body {
     background: #eee;
 }
 
+<<<<<<< HEAD
 .notification-panel {
     position: fixed;
     top: 0;
@@ -206,6 +207,8 @@ body {
     font-size: 16px;
 }
 
+=======
+>>>>>>> feature/dashboad
 
 /* Responsive Styles */
 

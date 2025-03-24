@@ -184,6 +184,7 @@ class OrdersController extends BaseController {
                 'image' => '/assets/image/products/Chocolate Almont Croissand 80Baht.png',
                 'category' => 'snacks'
             ]
+            
         ];
         
         $toppings = [
