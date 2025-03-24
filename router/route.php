@@ -1,6 +1,5 @@
 <?php
 require_once __DIR__ . "/Router.php";
-
 require_once __DIR__ . "/../controllers/BaseController.php";
 require_once __DIR__ . "/../controllers/FavoritesController.php";
 require_once __DIR__ . "/../controllers/FeedbackController.php";
@@ -27,20 +26,8 @@ $route->get("/register-success", [AuthController::class, 'registerSuccess']);
 $route->get("/forgot-password", [AuthController::class, 'forgotPassword']);
 $route->post("/forgot-password", [AuthController::class, 'forgotPassword']);
 
-// Navbar routes
-// Gift Card
-$route->get("/gift-card", [GiftCardController::class, 'index']);
-
-// Locations
-$route->get("/locations", [LocationsController::class, 'index']);
-
-// Join The Team
-$route->get("/join-the-team", [JoinTheTeamController::class, 'index']);
-
-// More Menu
-$route->get("/more", [MoreController::class, 'index']);
-
 // Original routes
+$route->get("/welcome", [WelcomeController::class, 'welcome']);
 $route->get("/order", [OrdersController::class, 'index']);
 $route->get("/order/details/{id}", [OrdersController::class, 'details']);
 $route->post("/order/add-to-cart", [OrdersController::class, 'addToCart']);
@@ -55,3 +42,4 @@ $route->get("/feedback", [FeedbackController::class, 'index']);
 $route->get("/settings", [SettingsController::class, 'index']);
 
 $route->route();
+
