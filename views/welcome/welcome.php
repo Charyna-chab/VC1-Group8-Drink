@@ -56,15 +56,34 @@
     <div class="hero-section">
         <div class="hero-content">
             <h1>Welcome to <span class="brand-name">XING FU CHA</span></h1>
-            <p>Experience the authentic taste of premium bubble tea and refreshing drinks</p>
+            <p>
+    Experience the authentic taste of premium bubble tea and refreshing drinks. 
+    Our handcrafted beverages are made with the finest ingredients, offering a perfect 
+    balance of sweetness, creaminess, and chewiness in every sip. Whether you love 
+    classic milk tea, fruity blends, or unique toppings, we have something special for you. 
+    Come and indulge in the ultimate bubble tea experience!
+</p>
+
+            
+            <div class="wave-text">Sip Happiness in Every Cup! </div> <!-- New animated text -->
+
             <div class="hero-buttons">
                 <button class="btn-primary explore-btn">Explore Menu</button>
                 <button class="btn-outline order-now-btn">Order Now</button>
             </div>
+
+            <div class="social-media">  <!-- New social media section -->
+                <a href="#" class="social-btn"></a>
+                <a href="#" class="social-btn"></a>
+                <a href="#" class="social-btn"></a>
+            </div>
+
         </div>
-        <div class="hero-image">
-            <img src="/assets/image/hero-bubble-tea.png" alt="Xing Fu Cha Bubble Tea">
+
+        <div class="header-banner">
+            <img src="/assets/image/Header-banner.png" alt="Xing Fu Cha Bubble Tea">
         </div>
+
     </div>
 
 
