@@ -15,8 +15,13 @@
 }
 
 .favorites-header {
+<<<<<<< HEAD
+    background: linear-gradient(105deg, var(--favorites-primary), var( --favorites-primary));
+    width: 160vh;
+=======
     background: linear-gradient(135deg, var(--favorites-gradient-start), var(--favorites-gradient-end));
     width: 164vh;
+>>>>>>> feature/dashboad
     height: 30vh;
     display: flex;
     justify-content: center;
@@ -71,7 +76,7 @@
 /* Hover Effect - Darker Orange */
 
 .favorites-header:hover {
-    background: linear-gradient(135deg, #ff6600, #ff9933);
+    background: linear-gradient(135deg, #ff0000, #ff5500);
     /* Deeper orange */
     transform: scale(1.02);
     box-shadow: 0 6px 20px rgba(255, 119, 0, 0.3);

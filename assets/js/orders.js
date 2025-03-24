@@ -1,4 +1,19 @@
 <<<<<<< HEAD
+// Enhanced order.js with improved functionality
+document.addEventListener("DOMContentLoaded", () => {
+    // DOM Elements
+    const categoryButtons = document.querySelectorAll(".category-btn")
+    const productCards = document.querySelectorAll(".product-card")
+    const searchInput = document.getElementById("productSearch")
+    const orderButtons = document.querySelectorAll(".order-btn")
+    const orderPanel = document.getElementById("orderPanel")
+    const closeBtn = document.querySelector(".order-panel .close-btn")
+    const overlay = document.getElementById("overlay") || createOverlay()
+    const noProductMessage = document.getElementById("no-product-message")
+    const addToCartBtn = document.querySelector(".add-to-cart-btn")
+    const confirmBtn = document.querySelector(".confirm-btn")
+=======
+<<<<<<< HEAD
 // order.js - Enhanced with notifications and cart functionality
 =======
 >>>>>>> e1afa46761f16fc7671bbd4993a2db1bab8276b4
@@ -11,6 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const orderPanel = document.getElementById("orderPanel");
             const closeBtn = document.querySelector(".order-panel .close-btn");
             const overlay = document.getElementById("overlay");
+>>>>>>> feature/dashboad
 
 <<<<<<< HEAD
     console.log("Order elements:", {
@@ -26,6 +42,14 @@ document.addEventListener("DOMContentLoaded", () => {
         confirmBtn: !!confirmBtn,
     })
 
+    // Create overlay if it doesn't exist
+    function createOverlay() {
+        const overlayElement = document.createElement("div")
+        overlayElement.id = "overlay"
+        document.body.appendChild(overlayElement)
+        return overlayElement
+    }
+
     // Form Elements
     const drinkSizeSelect = document.getElementById("drinkSize")
     const sugarLevelSelect = document.getElementById("sugarLevel")
@@ -35,6 +59,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const productName = document.getElementById("productName")
     const productPrice = document.getElementById("productPrice")
     const quantityInput = document.getElementById("quantity")
+<<<<<<< HEAD
+    const basePrice = document.getElementById("basePrice")
+    const sizePrice = document.getElementById("sizePrice")
+    const toppingsPrice = document.getElementById("toppingsPrice")
+    const totalPrice = document.getElementById("totalPrice")
+=======
 =======
             // Form Elements
             const drinkSizeSelect = document.getElementById("drinkSize");
@@ -42,6 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const toppingCheckboxes = document.querySelectorAll('#toppings input[type="checkbox"]');
             const confirmBtn = document.querySelector(".confirm-btn");
 >>>>>>> e1afa46761f16fc7671bbd4993a2db1bab8276b4
+>>>>>>> feature/dashboad
 
             // Create toast container if it doesn't exist
             let toastContainer = document.getElementById("toastContainer");
@@ -245,11 +276,48 @@ document.addEventListener("DOMContentLoaded", () => {
         })
     }
 
+    // Close all panels function
+    function closeAllPanels() {
+        // Close order panel
+        if (orderPanel && orderPanel.classList.contains("active")) {
+            orderPanel.classList.remove("active")
+            orderPanel.style.display = "none"
+        }
+
+        // Close cart panel
+        const cartPanel = document.getElementById("cartPanel")
+        if (cartPanel && cartPanel.classList.contains("active")) {
+            cartPanel.classList.remove("active")
+            cartPanel.style.display = "none"
+        }
+
+        // Close notification panel
+        const notificationPanel = document.getElementById("notificationPanel")
+        if (notificationPanel && notificationPanel.classList.contains("active")) {
+            notificationPanel.classList.remove("active")
+        }
+
+        // Hide overlay
+        if (overlay) {
+            overlay.style.display = "none"
+            overlay.classList.remove("active")
+        }
+
+        // Remove any confirmation cards
+        const confirmationCards = document.querySelectorAll(".order-confirmation-card")
+        confirmationCards.forEach((card) => card.remove())
+    }
+
     // Open order panel
     orderButtons.forEach((button) => {
         button.addEventListener("click", function(e) {
             e.preventDefault()
             e.stopPropagation()
+
+            console.log("Order button clicked")
+
+            // Close all other panels first
+            closeAllPanels()
 
             const productCard = this.closest(".product-card")
             if (!productCard) {
@@ -272,8 +340,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 productName.setAttribute("data-id", currentProduct.productId)
             }
             if (productPrice) productPrice.textContent = "$" + currentProduct.price.toFixed(2)
-
-            const basePrice = document.getElementById("basePrice")
             if (basePrice) basePrice.textContent = "$" + currentProduct.price.toFixed(2)
 
             // Reset quantity
@@ -292,11 +358,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Show order panel and overlay
             if (orderPanel) {
+                // Make sure the panel is visible
+                orderPanel.style.display = "block"
                 orderPanel.classList.add("active")
-                if (overlay) overlay.classList.add("active")
 
-                // Add animation
-                orderPanel.style.animation = "slideIn 0.3s forwards"
+                // Make sure the toppings section is visible
+                const toppingsSection = document.getElementById("toppings")
+                if (toppingsSection) {
+                    toppingsSection.style.display = "block"
+                }
+
+                if (overlay) {
+                    overlay.style.display = "block"
+                    overlay.classList.add("active")
+                }
             }
 
             // Add notification for starting an order
@@ -316,16 +391,23 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (overlay && orderPanel) {
-        overlay.addEventListener("click", closeOrderPanel)
+        overlay.addEventListener("click", closeAllPanels)
     }
 
     function closeOrderPanel() {
         if (!orderPanel) return
 
+        // Add closing animation
         orderPanel.style.animation = "slideOut 0.3s forwards"
+
         setTimeout(() => {
             orderPanel.classList.remove("active")
-            if (overlay) overlay.classList.remove("active")
+            orderPanel.style.display = "none"
+            orderPanel.style.animation = ""
+            if (overlay) {
+                overlay.style.display = "none"
+                overlay.classList.remove("active")
+            }
         }, 300)
     }
 
@@ -442,12 +524,15 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    toppingCheckboxes.forEach((checkbox) => {
-        checkbox.addEventListener("change", () => {
-            updateToppings()
-            updateTotalPrice()
+    // Add event listeners to topping checkboxes
+    if (toppingCheckboxes && toppingCheckboxes.length > 0) {
+        toppingCheckboxes.forEach((checkbox) => {
+            checkbox.addEventListener("change", () => {
+                updateToppings()
+                updateTotalPrice()
+            })
         })
-    })
+    }
 
     // Update toppings array
     function updateToppings() {
@@ -465,27 +550,23 @@ document.addEventListener("DOMContentLoaded", () => {
     // Calculate and update total price
     function updateTotalPrice() {
         // Base price
-        const basePrice = currentProduct.price
+        const baseItemPrice = currentProduct.price
 
         // Size price
-        const sizePrice = currentProduct.size.price || 0
+        const sizeItemPrice = currentProduct.size.price || 0
 
         // Toppings price
-        let toppingsPrice = 0
+        let toppingsItemPrice = 0
         currentProduct.toppings.forEach((topping) => {
-            toppingsPrice += topping.price
+            toppingsItemPrice += topping.price
         })
 
         // Update price displays
-        const sizePriceElement = document.getElementById("sizePrice")
-        const toppingsPriceElement = document.getElementById("toppingsPrice")
-        const totalPriceElement = document.getElementById("totalPrice")
-
-        if (sizePriceElement) sizePriceElement.textContent = "$" + sizePrice.toFixed(2)
-        if (toppingsPriceElement) toppingsPriceElement.textContent = "$" + toppingsPrice.toFixed(2)
+        if (sizePrice) sizePrice.textContent = "$" + sizeItemPrice.toFixed(2)
+        if (toppingsPrice) toppingsPrice.textContent = "$" + toppingsItemPrice.toFixed(2)
 
         // Calculate total for one item
-        const itemTotal = basePrice + sizePrice + toppingsPrice
+        const itemTotal = baseItemPrice + sizeItemPrice + toppingsItemPrice
 
         // Calculate total with quantity
         const total = itemTotal * currentProduct.quantity
@@ -494,7 +575,7 @@ document.addEventListener("DOMContentLoaded", () => {
         currentProduct.totalPrice = total
 
         // Update display
-        if (totalPriceElement) totalPriceElement.textContent = "$" + total.toFixed(2)
+        if (totalPrice) totalPrice.textContent = "$" + total.toFixed(2)
     }
 
     // Add to cart
@@ -511,6 +592,12 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!drinkSizeSelect || !sugarLevelSelect || !iceLevelSelect) {
             console.error("Form elements not found")
             return
+        }
+
+        // Disable the button to prevent multiple clicks
+        if (addToCartBtn) {
+            addToCartBtn.disabled = true
+            addToCartBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Adding...'
         }
 
         // Get current selections
@@ -576,6 +663,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Add to cart using the cart.js function
         if (window.addToCart) {
+            console.log("Adding to cart via window.addToCart")
             window.addToCart(orderItem)
 
             // Add notification
@@ -590,6 +678,13 @@ document.addEventListener("DOMContentLoaded", () => {
             // Fallback if cart.js is not loaded
             console.error("addToCart function not found")
             showToast("Error", "Cart functionality not available. Please refresh the page and try again.", "error")
+
+            // Re-enable the button
+            if (addToCartBtn) {
+                addToCartBtn.disabled = false
+                addToCartBtn.innerHTML = '<i class="fas fa-cart-plus"></i> Add to Cart'
+            }
+            return
         }
 =======
                 const orderSummary = `${size}, ${sugar}${toppingsText}`;
@@ -598,6 +693,23 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Show toast notification
                 showToast(currentProduct.name, orderSummary, totalPrice);
 
+<<<<<<< HEAD
+        // Show order confirmation card after a short delay
+        setTimeout(() => {
+            showOrderConfirmation(orderItem)
+        }, 300)
+    }
+
+    // Show order confirmation card
+    function showOrderConfirmation(orderItem) {
+        // Remove any existing confirmation cards first
+        const existingCards = document.querySelectorAll(".order-confirmation-card")
+        existingCards.forEach((card) => card.remove())
+
+        // Create confirmation card
+        const confirmationCard = document.createElement("div")
+        confirmationCard.className = "order-confirmation-card"
+=======
                 // Close order panel
                 closeOrderPanel();
 
@@ -606,6 +718,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     // In a real application, you would save the order to the cart first
                     // window.location.href = '/booking';
 >>>>>>> e1afa46761f16fc7671bbd4993a2db1bab8276b4
+>>>>>>> feature/dashboad
 
                     // For demo purposes, just show another toast
                     showToast("Order Added", "Your order has been added to cart!", "", "success");
@@ -634,37 +747,37 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         confirmationCard.innerHTML = `
-                <div class="confirmation-content">
-                    <div class="confirmation-header">
-                        <h3>Added to Cart!</h3>
-                        <button class="close-confirmation">&times;</button>
-                    </div>
-                    <div class="confirmation-product">
-                        <img src="${orderItem.image}" alt="${orderItem.name}">
-                        <div class="confirmation-details">
-                            <h4>${orderItem.name}</h4>
-                            <p>Size: ${orderItem.size.name}</p>
-                            <p>Sugar: ${orderItem.sugar.name}</p>
-                            <p>Ice: ${orderItem.ice.name}</p>
-                            <p>Toppings: ${toppingsText}</p>
-                            <p>Quantity: ${orderItem.quantity}</p>
-                            <p class="confirmation-price">$${orderItem.totalPrice.toFixed(2)}</p>
-                        </div>
-                    </div>
-                    <div class="confirmation-actions">
-                        <button class="view-cart-btn">View Cart</button>
-                        <button class="checkout-btn">Checkout Now</button>
-                        <button class="continue-shopping-btn">Continue Shopping</button>
-                    </div>
-                </div>
-            `
+        <div class="confirmation-content">
+          <div class="confirmation-header">
+            <h3>Added to Cart!</h3>
+            <button class="close-confirmation">&times;</button>
+          </div>
+          <div class="confirmation-product">
+            <img src="${orderItem.image}" alt="${orderItem.name}">
+            <div class="confirmation-details">
+              <h4>${orderItem.name}</h4>
+              <p>Size: ${orderItem.size.name}</p>
+              <p>Sugar: ${orderItem.sugar.name}</p>
+              <p>Ice: ${orderItem.ice.name}</p>
+              <p>Toppings: ${toppingsText}</p>
+              <p>Quantity: ${orderItem.quantity}</p>
+              <p class="confirmation-price">$${orderItem.totalPrice.toFixed(2)}</p>
+            </div>
+          </div>
+          <div class="confirmation-actions">
+            <button class="view-cart-btn">View Cart</button>
+            <button class="checkout-btn">Checkout Now</button>
+            <button class="continue-shopping-btn">Continue Shopping</button>
+          </div>
+        </div>
+      `
 
         document.body.appendChild(confirmationCard)
 
         // Add event listeners
         const closeBtn = confirmationCard.querySelector(".close-confirmation")
         closeBtn.addEventListener("click", () => {
-            confirmationCard.style.animation = "fadeOut 0.3s forwards"
+            confirmationCard.classList.add("fade-out")
             setTimeout(() => {
                 confirmationCard.remove()
             }, 300)
@@ -674,10 +787,15 @@ document.addEventListener("DOMContentLoaded", () => {
         viewCartBtn.addEventListener("click", () => {
             confirmationCard.remove()
                 // Open cart panel if it exists
-            if (document.getElementById("cartPanel")) {
-                const cartPanel = document.getElementById("cartPanel")
-                if (overlay) overlay.classList.add("active")
+            const cartPanel = document.getElementById("cartPanel")
+            if (cartPanel) {
+                closeAllPanels() // Close any other panels first
+                cartPanel.style.display = "block"
                 cartPanel.classList.add("active")
+                if (overlay) {
+                    overlay.style.display = "block"
+                    overlay.classList.add("active")
+                }
             } else {
                 console.error("Cart panel not found")
             }
@@ -686,13 +804,16 @@ document.addEventListener("DOMContentLoaded", () => {
         const checkoutBtn = confirmationCard.querySelector(".checkout-btn")
         checkoutBtn.addEventListener("click", () => {
             confirmationCard.remove()
+            console.log("Checkout button clicked, redirecting to booking page")
+                // Set flag to create booking on page load
+            sessionStorage.setItem("justCheckedOut", "true")
                 // Redirect to booking page
             window.location.href = "/booking"
         })
 
         const continueShoppingBtn = confirmationCard.querySelector(".continue-shopping-btn")
         continueShoppingBtn.addEventListener("click", () => {
-            confirmationCard.style.animation = "fadeOut 0.3s forwards"
+            confirmationCard.classList.add("fade-out")
             setTimeout(() => {
                 confirmationCard.remove()
             }, 300)
@@ -703,139 +824,143 @@ document.addEventListener("DOMContentLoaded", () => {
             const style = document.createElement("style")
             style.id = "order-confirmation-styles"
             style.textContent = `
-                    .order-confirmation-card {
-                        position: fixed;
-                        top: 50%;
-                        left: 50%;
-                        transform: translate(-50%, -50%);
-                        width: 90%;
-                        max-width: 500px;
-                        background-color: white;
-                        border-radius: 10px;
-                        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-                        z-index: 1000;
-                        animation: fadeIn 0.3s forwards;
-                        overflow: hidden;
-                    }
-                    
-                    .confirmation-content {
-                        padding: 20px;
-                    }
-                    
-                    .confirmation-header {
-                        display: flex;
-                        justify-content: space-between;
-                        align-items: center;
-                        margin-bottom: 15px;
-                        padding-bottom: 15px;
-                        border-bottom: 1px solid #eee;
-                    }
-                    
-                    .confirmation-header h3 {
-                        margin: 0;
-                        color: #4caf50;
-                        font-size: 22px;
-                    }
-                    
-                    .close-confirmation {
-                        background: none;
-                        border: none;
-                        font-size: 24px;
-                        cursor: pointer;
-                        color: #999;
-                    }
-                    
-                    .confirmation-product {
-                        display: flex;
-                        margin-bottom: 20px;
-                        background-color: #f9f9f9;
-                        border-radius: 8px;
-                        padding: 15px;
-                    }
-                    
-                    .confirmation-product img {
-                        width: 80px;
-                        height: 80px;
-                        border-radius: 8px;
-                        object-fit: cover;
-                        margin-right: 15px;
-                    }
-                    
-                    .confirmation-details {
-                        flex: 1;
-                    }
-                    
-                    .confirmation-details h4 {
-                        margin: 0 0 10px;
-                        color: #333;
-                    }
-                    
-                    .confirmation-details p {
-                        margin: 5px 0;
-                        color: #666;
-                        font-size: 14px;
-                    }
-                    
-                    .confirmation-price {
-                        font-weight: bold;
-                        color: #ff5e62 !important;
-                        font-size: 16px !important;
-                    }
-                    
-                    .confirmation-actions {
-                        display: flex;
-                        flex-wrap: wrap;
-                        gap: 10px;
-                    }
-                    
-                    .confirmation-actions button {
-                        flex: 1;
-                        padding: 12px;
-                        border: none;
-                        border-radius: 5px;
-                        cursor: pointer;
-                        font-weight: 600;
-                        transition: all 0.3s ease;
-                        min-width: 120px;
-                    }
-                    
-                    .view-cart-btn {
-                        background-color: #f5f5f5;
-                        color: #333;
-                    }
-                    
-                    .view-cart-btn:hover {
-                        background-color: #e5e5e5;
-                    }
-                    
-                    .checkout-btn {
-                        background-color: #4caf50;
-                        color: white;
-                    }
-                    
-                    .checkout-btn:hover {
-                        background-color: #3d9140;
-                    }
-                    
-                    .continue-shopping-btn {
-                        background-color: #ff5e62;
-                        color: white;
-                    }
-                    
-                    .continue-shopping-btn:hover {
-                        background-color: #ff4146;
-                    }
-                    
-                    @keyframes fadeIn {
-                        from { opacity: 0; transform: translate(-50%, -60%); }
-                        to { opacity: 1; transform: translate(-50%, -50%); }
-                    }
-                    
-                    @keyframes fadeOut {
-                        from { opacity: 1; transform: translate(-50%, -50%); }
-                        to { opacity: 0; transform: translate(-50%, -60%); }
-                    }
-                `
+          .order-confirmation-card {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 500px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            animation: fadeIn 0.3s forwards;
+            overflow: hidden;
+          }
+          
+          .order-confirmation-card.fade-out {
+            animation: fadeOut 0.3s forwards;
+          }
+          
+          .confirmation-content {
+            padding: 20px;
+          }
+          
+          .confirmation-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+          }
+          
+          .confirmation-header h3 {
+            margin: 0;
+            color: #4caf50;
+            font-size: 22px;
+          }
+          
+          .close-confirmation {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+          }
+          
+          .confirmation-product {
+            display: flex;
+            margin-bottom: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 15px;
+          }
+          
+          .confirmation-product img {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            object-fit: cover;
+            margin-right: 15px;
+          }
+          
+          .confirmation-details {
+            flex: 1;
+          }
+          
+          .confirmation-details h4 {
+            margin: 0 0 10px;
+            color: #333;
+          }
+          
+          .confirmation-details p {
+            margin: 5px 0;
+            color: #666;
+            font-size: 14px;
+          }
+          
+          .confirmation-price {
+            font-weight: bold;
+            color: #ff5e62 !important;
+            font-size: 16px !important;
+          }
+          
+          .confirmation-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+          }
+          
+          .confirmation-actions button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            min-width: 120px;
+          }
+          
+          .view-cart-btn {
+            background-color: #f5f5f5;
+            color: #333;
+          }
+          
+          .view-cart-btn:hover {
+            background-color: #e5e5e5;
+          }
+          
+          .checkout-btn {
+            background-color: #4caf50;
+            color: white;
+          }
+          
+          .checkout-btn:hover {
+            background-color: #3d9140;
+          }
+          
+          .continue-shopping-btn {
+            background-color: #ff5e62;
+            color: white;
+          }
+          
+          .continue-shopping-btn:hover {
+            background-color: #ff4146;
+          }
+          
+          @keyframes fadeIn {
+            from { opacity: 0; transform: translate(-50%, -60%); }
+            to { opacity: 1; transform: translate(-50%, -50%); }
+          }
+          
+          @keyframes fadeOut {
+            from { opacity: 1; transform: translate(-50%, -50%); }
+            to { opacity: 0; transform: translate(-50%, -60%); }
+          }
+        `
             document.head.appendChild(style)
         }
     }
@@ -861,9 +986,31 @@ document.addEventListener("DOMContentLoaded", () => {
         } else if (type === "error") {
             icon = "exclamation-circle"
             toast.style.borderLeftColor = "#f44336"
+        } else if (type === "cart") {
+            icon = "shopping-cart"
+            toast.style.borderLeftColor = "#ff9800"
         }
 
         toast.innerHTML = `
+<<<<<<< HEAD
+              <div>
+                  <i class="fas fa-${icon}" style="color: ${
+                    type === "success"
+                      ? "#4caf50"
+                      : type === "error"
+                        ? "#f44336"
+                        : type === "cart"
+                          ? "#ff9800"
+                          : "#ff5e62"
+                  }; font-size: 20px; margin-right: 10px;"></i>
+              </div>
+              <div style="flex: 1;">
+                  <h4>${title}</h4>
+                  <p>${message}</p>
+              </div>
+              <button class="toast-close">&times;</button>
+          `
+=======
                 <div>
                     <i class="fas fa-${icon}" style="color: ${type === "success" ? "#4caf50" : type === "error" ? "#f44336" : "#ff5e62"}; font-size: 20px; margin-right: 10px;"></i>
                 </div>
@@ -886,6 +1033,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <button class="toast-close">&times;</button>
         `;
 >>>>>>> e1afa46761f16fc7671bbd4993a2db1bab8276b4
+>>>>>>> feature/dashboad
 
         // Add to container
         toastContainer.appendChild(toast);
@@ -1152,90 +1300,118 @@ document.addEventListener("DOMContentLoaded", () => {
     // Add CSS animations
     const style = document.createElement("style")
     style.textContent = `
-            @keyframes slideIn {
-                from { transform: translateX(100%); }
-                to { transform: translateX(0); }
-            }
-            
-            @keyframes slideOut {
-                from { transform: translateX(0); }
-                to { transform: translateX(100%); }
-            }
-            
-            @keyframes heartBeat {
-                0% { transform: scale(1); }
-                25% { transform: scale(1.3); }
-                50% { transform: scale(1); }
-                75% { transform: scale(1.3); }
-                100% { transform: scale(1); }
-            }
-            
-            .order-panel {
-                transition: transform 0.3s ease;
-            }
-            
-            .product-card {
-                transition: transform 0.3s ease, box-shadow 0.3s ease;
-            }
-            
-            .product-card:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-            }
-            
-            .order-btn {
-                transition: background-color 0.3s ease, transform 0.3s ease;
-            }
-            
-            .order-btn:hover {
-                transform: scale(1.05);
-            }
-            
-            .favorite-btn {
-                position: absolute;
-                top: 10px;
-                right: 10px;
-                background-color: white;
-                border: none;
-                border-radius: 50%;
-                width: 36px;
-                height: 36px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                cursor: pointer;
-                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-                transition: transform 0.3s ease, box-shadow 0.3s ease;
-                z-index: 2;
-            }
-            
-            .favorite-btn:hover {
-                transform: scale(1.2);
-                box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
-            }
-            
-            .favorite-btn i {
-                color: #ff5e62;
-                font-size: 18px;
-            }
-            
-            .favorite-btn i.far {
-                color: #666;
-            }
-            
-            .favorite-btn i.fas {
-                color: #ff5e62;
-            }
-            
-            #no-product-message {
-                display: none;
-                text-align: center;
-                padding: 30px;
-                color: #666;
-                font-size: 16px;
-                grid-column: 1 / -1;
-            }
-        `
+      @keyframes slideIn {
+        from { transform: translateX(100%); }
+        to { transform: translateX(0); }
+      }
+      
+      @keyframes slideOut {
+        from { transform: translateX(0); }
+        to { transform: translateX(100%); }
+      }
+      
+      @keyframes heartBeat {
+        0% { transform: scale(1); }
+        25% { transform: scale(1.3); }
+        50% { transform: scale(1); }
+        75% { transform: scale(1.3); }
+        100% { transform: scale(1); }
+      }
+      
+      .order-panel {
+        transition: right 0.3s ease;
+        display: block !important; /* Ensure panel is always visible */
+      }
+      
+      .product-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      
+      .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      }
+      
+      .order-btn {
+        transition: background-color 0.3s ease, transform 0.3s ease;
+      }
+      
+      .order-btn:hover {
+        transform: scale(1.05);
+      }
+      
+      .favorite-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background-color: white;
+        border: none;
+        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        z-index: 2;
+      }
+      
+      .favorite-btn:hover {
+        transform: scale(1.2);
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+      }
+      
+      .favorite-btn i {
+        color: #ff5e62;
+        font-size: 18px;
+      }
+      
+      .favorite-btn i.far {
+        color: #666;
+      }
+      
+      .favorite-btn i.fas {
+        color: #ff5e62;
+      }
+      
+      #no-product-message {
+        display: none;
+        text-align: center;
+        padding: 30px;
+        color: #666;
+        font-size: 16px;
+        grid-column: 1 / -1;
+      }
+      
+      /* Make sure toppings section is visible */
+      #toppings {
+        display: block !important;
+      }
+      
+      /* Ensure the order panel is properly styled */
+      .order-panel.active {
+        right: 0;
+        display: block !important;
+      }
+  
+      /* Overlay styling */
+      #overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+        display: none;
+      }
+      
+      #overlay.active {
+        display: block;
+      }
+    `
     document.head.appendChild(style)
 })
 =======

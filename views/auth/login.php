@@ -75,6 +75,7 @@
 
                 <div class="auth-footer">
                     <p>Don't have an account? <a href="/register">Register</a></p>
+                    <p>Are you an admin? <a href="/admin-login">Admin Login</a></p>
                 </div>
             </div>
         </div>

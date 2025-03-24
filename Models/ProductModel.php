@@ -47,29 +47,30 @@ class ProductModel
         $stmt = $this->pdo->query("SELECT * FROM products WHERE product_id = :product_id", ['product_id' => $id]);
         return $stmt->fetch();
     }
-
-
     function updateProduct($id, $data)
     {
-        $stmt =  $this->pdo->query(
-            "UPDATE products SET  product_name = :product_name, image = :image, product_detail = :product_detail, price = :price WHERE product_id = :product_id",
-            [
-                'product_name' => $data['product_name'],
-                'image' => $data['image'],
-                'product_detail' => $data['product_detail'],
-                'price' => $data['price'],
-                'product_id' => $id
-            ]
-        );
-        $stmt = $this->pdo->query("UPDATE products SET product_name = :product_name, product_detail = :product_detail, price = :price WHERE product_id = :product_id",
-            [
-                'product_name' => $data['product_name'],
-                'product_detail' => $data['product_detail'],
-                'price' => $data['price'],
-                'product_id' => $id
-            ]);
+        try {
+            // Check if an image was uploaded, otherwise keep the existing one
+            $image = isset($data['image']) && !empty($data['image']) ? $data['image'] : $data['existing_image'];
+    
+            $stmt = $this->pdo->query(
+                "UPDATE products SET product_name = :product_name, image = :image, product_detail = :product_detail, price = :price WHERE product_id = :product_id",
+                [
+                    'product_name' => $data['product_name'],
+                    'image' => $image,
+                    'product_detail' => $data['product_detail'],
+                    'price' => $data['price'],
+                    'product_id' => $id
+                ]
+            );
+    
+            return $stmt->rowCount() > 0;
+        } catch (PDOException $e) {
+            error_log("Error updating product: " . $e->getMessage());
+            return false;
+        }
     }
-
+    
 
     
     function deleteProduct($id) {
@@ -98,6 +99,3 @@ class ProductModel
     
     
 }
-
-
-

@@ -23,27 +23,53 @@ document.addEventListener("DOMContentLoaded", () => {
     // Initialize notification count
     updateNotificationCount()
 
+    // Close all panels function
+    function closeAllPanels() {
+        // Close notification panel
+        if (notificationPanel && notificationPanel.classList.contains("active")) {
+            notificationPanel.classList.remove("active")
+        }
+
+        // Close order panel
+        const orderPanel = document.getElementById("orderPanel")
+        if (orderPanel && orderPanel.classList.contains("active")) {
+            orderPanel.classList.remove("active")
+        }
+
+        // Close cart panel
+        const cartPanel = document.getElementById("cartPanel")
+        if (cartPanel && cartPanel.classList.contains("active")) {
+            cartPanel.classList.remove("active")
+        }
+
+        // Hide overlay
+        if (overlay) {
+            overlay.classList.remove("active")
+        }
+
+        // Remove any confirmation cards
+        const confirmationCards = document.querySelectorAll(".order-confirmation-card")
+        confirmationCards.forEach((card) => card.remove())
+    }
+
     // Open notification panel
     if (notificationBtn && notificationPanel) {
         notificationBtn.addEventListener("click", (e) => {
             e.preventDefault()
             e.stopPropagation()
 
-            notificationPanel.classList.toggle("active")
+            // Close all other panels first
+            closeAllPanels()
+
+            notificationPanel.classList.add("active")
 
             // Toggle overlay
             if (overlay) {
-                if (notificationPanel.classList.contains("active")) {
-                    overlay.classList.add("active")
-                } else {
-                    overlay.classList.remove("active")
-                }
+                overlay.classList.add("active")
             }
 
             // Mark notifications as read
-            if (notificationPanel.classList.contains("active")) {
-                markNotificationsAsRead()
-            }
+            markNotificationsAsRead()
 
             // Render notifications
             renderNotifications()
@@ -60,10 +86,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Close notification panel when clicking on overlay
     if (overlay && notificationPanel) {
-        overlay.addEventListener("click", () => {
-            notificationPanel.classList.remove("active")
-            overlay.classList.remove("active")
-        })
+        overlay.addEventListener("click", closeAllPanels)
     }
 
     // Update notification count
@@ -101,11 +124,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (notifications.length === 0) {
             notificationList.innerHTML = `
-                <div class="empty-notification">
-                    <i class="fas fa-bell-slash"></i>
-                    <p>No notifications yet</p>
-                </div>
-            `
+            <div class="empty-notification">
+              <i class="fas fa-bell-slash"></i>
+              <p>No notifications yet</p>
+            </div>
+          `
             return
         }
 
@@ -123,18 +146,18 @@ document.addEventListener("DOMContentLoaded", () => {
             const formattedDate = formatDate(date)
 
             notificationItem.innerHTML = `
-                <div class="notification-icon ${notification.type}">
-                    <i class="fas fa-${getIconForType(notification.type)}"></i>
-                </div>
-                <div class="notification-content">
-                    <h4>${notification.title}</h4>
-                    <p>${notification.message}</p>
-                    <div class="notification-time">${formattedDate}</div>
-                </div>
-                <button class="delete-notification" data-id="${notification.id}">
-                    <i class="fas fa-times"></i>
-                </button>
-            `
+            <div class="notification-icon ${notification.type}">
+              <i class="fas fa-${getIconForType(notification.type)}"></i>
+            </div>
+            <div class="notification-content">
+              <h4>${notification.title}</h4>
+              <p>${notification.message}</p>
+              <div class="notification-time">${formattedDate}</div>
+            </div>
+            <button class="delete-notification" data-id="${notification.id}">
+              <i class="fas fa-times"></i>
+            </button>
+          `
 
             notificationList.appendChild(notificationItem)
         })
@@ -283,14 +306,14 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         toast.innerHTML = `
-            <div>
-                <i class="fas fa-${icon}" style="color: ${type === "success" || type === "order" || type === "booking" ? "#4caf50" : type === "error" ? "#f44336" : type === "cart" ? "#ff9800" : type === "promotion" ? "#9c27b0" : "#ff5e62"}; font-size: 20px; margin-right: 10px;"></i>
-            </div>
-            <div style="flex: 1;">
-                <h4>${title}</h4>
-                <p>${message}</p>
-            </div>
-            <button class="toast-close">&times;</button>
+          <div>
+            <i class="fas fa-${icon}" style="color: ${type === "success" || type === "order" || type === "booking" ? "#4caf50" : type === "error" ? "#f44336" : type === "cart" ? "#ff9800" : type === "promotion" ? "#9c27b0" : "#ff5e62"}; font-size: 20px; margin-right: 10px;"></i>
+          </div>
+          <div style="flex: 1;">
+            <h4>${title}</h4>
+            <p>${message}</p>
+          </div>
+          <button class="toast-close">&times;</button>
         `
 
         // Add to container
@@ -315,233 +338,185 @@ document.addEventListener("DOMContentLoaded", () => {
     const style = document.createElement("style")
     style.textContent = `
         .notification-panel {
-            position: fixed;
-            top: 0;
-            right: -350px;
-            width: 100%;
-            max-width: 350px;
-            height: 100vh;
-            background-color: white;
-            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-            transition: right 0.3s ease;
-            display: flex;
-            flex-direction: column;
+          position: fixed;
+          top: 0;
+          right: -350px;
+          width: 100%;
+          max-width: 350px;
+          height: 100vh;
+          background-color: white;
+          box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+          z-index: 1000;
+          transition: right 0.3s ease;
+          display: flex;
+          flex-direction: column;
         }
         
         .notification-panel.active {
-            right: 0;
+          right: 0;
         }
         
         .notification-panel h3 {
-            margin: 0;
-            padding: 20px;
-            border-bottom: 1px solid #eee;
-            font-size: 1.2rem;
-            color: #333;
+          margin: 0;
+          padding: 20px;
+          border-bottom: 1px solid #eee;
+          font-size: 1.2rem;
+          color: #333;
         }
         
         .notification-panel .close-btn {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: none;
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
-            color: #999;
+          position: absolute;
+          top: 15px;
+          right: 15px;
+          background: none;
+          border: none;
+          font-size: 20px;
+          cursor: pointer;
+          color: #999;
         }
         
         .notification-list {
-            flex: 1;
-            overflow-y: auto;
-            padding: 10px;
+          flex: 1;
+          overflow-y: auto;
+          padding: 10px;
         }
         
         .empty-notification {
-            text-align: center;
-            padding: 30px;
-            color: #999;
+          text-align: center;
+          padding: 30px;
+          color: #999;
         }
         
         .empty-notification i {
-            font-size: 50px;
-            margin-bottom: 10px;
-            color: #ddd;
+          font-size: 50px;
+          margin-bottom: 10px;
+          color: #ddd;
         }
         
         .notification-item {
-            display: flex;
-            padding: 15px;
-            border-bottom: 1px solid #eee;
-            position: relative;
-            transition: background-color 0.3s ease;
+          display: flex;
+          padding: 15px;
+          border-bottom: 1px solid #eee;
+          position: relative;
+          transition: background-color 0.3s ease;
         }
         
         .notification-item:hover {
-            background-color: #f9f9f9;
+          background-color: #f9f9f9;
         }
         
         .notification-item.unread {
-            background-color: #f0f7ff;
+          background-color: #f0f7ff;
         }
         
         .notification-item.unread:hover {
-            background-color: #e5f1ff;
+          background-color: #e5f1ff;
         }
         
         .notification-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 15px;
-            flex-shrink: 0;
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-right: 15px;
+          flex-shrink: 0;
         }
         
         .notification-icon.order {
-            background-color: #e8f5e9;
-            color: #4caf50;
+          background-color: #e8f5e9;
+          color: #4caf50;
         }
         
         .notification-icon.cart {
-            background-color: #fff3e0;
-            color: #ff9800;
+          background-color: #fff3e0;
+          color: #ff9800;
         }
         
         .notification-icon.booking {
-            background-color: #e3f2fd;
-            color: #2196f3;
+          background-color: #e3f2fd;
+          color: #2196f3;
         }
         
         .notification-icon.payment {
-            background-color: #e8eaf6;
-            color: #3f51b5;
+          background-color: #e8eaf6;
+          color: #3f51b5;
         }
         
         .notification-icon.delivery {
-            background-color: #fce4ec;
-            color: #e91e63;
+          background-color: #fce4ec;
+          color: #e91e63;
         }
         
         .notification-icon.promotion {
-            background-color: #f3e5f5;
-            color: #9c27b0;
+          background-color: #f3e5f5;
+          color: #9c27b0;
         }
         
         .notification-icon.info {
-            background-color: #e0f7fa;
-            color: #00bcd4;
+          background-color: #e0f7fa;
+          color: #00bcd4;
         }
         
         .notification-content {
-            flex: 1;
+          flex: 1;
         }
         
         .notification-content h4 {
-            margin: 0 0 5px;
-            font-size: 1rem;
-            color: #333;
+          margin: 0 0 5px;
+          font-size: 1rem;
+          color: #333;
         }
         
         .notification-content p {
-            margin: 0 0 5px;
-            font-size: 0.9rem;
-            color: #666;
-            line-height: 1.4;
+          margin: 0 0 5px;
+          font-size: 0.9rem;
+          color: #666;
+          line-height: 1.4;
         }
         
         .notification-time {
-            font-size: 0.8rem;
-            color: #999;
+          font-size: 0.8rem;
+          color: #999;
         }
         
         .delete-notification {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: none;
-            border: none;
-            color: #ccc;
-            cursor: pointer;
-            font-size: 0.8rem;
-            opacity: 0;
-            transition: opacity 0.3s ease;
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          background: none;
+          border: none;
+          color: #ccc;
+          cursor: pointer;
+          font-size: 0.8rem;
+          opacity: 0;
+          transition: opacity 0.3s ease;
         }
         
         .notification-item:hover .delete-notification {
-            opacity: 1;
+          opacity: 1;
         }
         
         .delete-notification:hover {
-            color: #f44336;
+          color: #f44336;
         }
         
         /* Notification Badge Animation */
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
+          0% { transform: scale(1); }
+          50% { transform: scale(1.2); }
+          100% { transform: scale(1); }
         }
         
         .pulse {
-            animation: pulse 0.5s ease-in-out;
+          animation: pulse 0.5s ease-in-out;
         }
-        
-        /* Toast Container */
-        .toast-container {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            max-width: 350px;
-        }
-        
-        .toast {
-            background-color: white;
-            border-radius: 5px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            padding: 15px;
-            display: flex;
-            align-items: flex-start;
-            border-left: 4px solid #ff5e62;
-            animation: slideIn 0.3s ease forwards;
-            opacity: 1;
-            transition: opacity 0.3s ease;
-        }
-        
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        
-        .toast h4 {
-            margin: 0 0 5px;
-            font-size: 1rem;
-            color: #333;
-        }
-        
-        .toast p {
-            margin: 0;
-            font-size: 0.9rem;
-            color: #666;
-        }
-        
-        .toast-close {
-            background: none;
-            border: none;
-            font-size: 16px;
-            cursor: pointer;
-            color: #999;
-            margin-left: 10px;
-        }
-    `
+      `
     document.head.appendChild(style)
+
+    // Make addNotification available globally
+    window.addNotification = addNotification
 
     // Add some default notifications if none exist
     if (notifications.length === 0) {
