@@ -1,4 +1,4 @@
-<?php '../layout/header.php'?>
+<?php '../layout/header.php' ?>
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
@@ -20,7 +20,7 @@
     </li>
 
     <!-- Divider -->
-    
+
 
     <hr class="sidebar-divider">
 
@@ -31,7 +31,7 @@
             <i class="fa fa-user" aria-hidden="true"></i>
             <span>Customers</span>
         </a>
-       
+
     </li>
 
     <!-- Divider -->
@@ -44,26 +44,26 @@
             <i class="fas fa-fw fa-folder"></i>
             <span>Products</span>
         </a>
-       
+
     </li>
     <hr class="sidebar-divider">
 
-   
 
-   
+
+
 
     <!-- Nav Item - Charts -->
     <li class="nav-item">
         <a class="nav-link" href="#">
-            <i class="fas fa-fw fa-chart-area"></i>
+            <i class="fas fa-comment-alt feedback-icon"></i>
             <span>Feedback</span></a>
     </li>
 
-     <!-- Nav Item - Pages Collapse Menu -->
-     <li class="nav-item">
+    <!-- Nav Item - Pages Collapse Menu -->
+    <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
             aria-expanded="true" aria-controls="collapsePages">
-            <i class="fas fa-fw fa-cog"></i>
+            <i class="fas fa-cogs setting-icon"></i>
 
             <span>Sitting</span>
         </a>
@@ -80,8 +80,8 @@
             </div>
         </div>
     </li>
-   
-    
+
+
 
 </ul>
 
@@ -94,17 +94,17 @@
     <div id="content">
 
         <!-- Topbar -->
-        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+        <nav class="navbar navbar-expand navbar-light bg-warning topbar mb-4 static-top shadow ">
 
             <!-- Sidebar Toggle (Topbar) -->
-            <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+            <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3 ">
                 <i class="fa fa-bars"></i>
             </button>
 
 
 
             <!-- Topbar Navbar -->
-            <ul class="navbar-nav ml-auto">
+            <ul class="navbar-nav ml-auto ">
 
                 <!-- Nav Item - Search Dropdown (Visible Only XS) -->
                 <li class="nav-item dropdown no-arrow d-sm-none">
@@ -253,7 +253,7 @@
                 <li class="nav-item dropdown no-arrow">
                     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="mr-2 d-none d-lg-inline text-gray-600 small">Charyna Chab</span>
+                        <span class="mr-2 d-none d-lg-inline text-light small">Charyna Chab</span>
                         <img class="img-profile rounded-circle"
                             src="/assets/image/07.jpg">
                     </a>
@@ -283,8 +283,11 @@
             </ul>
 
         </nav>
+        <style>
+            .fas {
+                color: #f0f0f0;
+                /* Light color */
+            }
+        </style>
         <!-- End of Topbar -->
-<?php '../layout/footer.php'?>
-
-
-        
+        <?php '../layout/footer.php' ?>

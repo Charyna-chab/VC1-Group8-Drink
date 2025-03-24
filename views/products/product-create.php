@@ -26,5 +26,5 @@
         </form>
 
     </div>
-    <?php require_once 'views/layout/footer.php' ?>
+    <?php require_once 'views/layouts/admin/footer.php' ?>
 </div>
