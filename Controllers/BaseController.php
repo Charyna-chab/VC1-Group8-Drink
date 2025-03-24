@@ -55,4 +55,3 @@ class BaseController {
             $this->views('gift-card');
         }
 }
-
