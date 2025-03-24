@@ -44,33 +44,13 @@ $_SESSION['product_total'] = $total;
           </div>
           <?php foreach ($products as $index => $product): ?>
             <tr>
-              <td><?= $index + 1 ?></td>
+              <td><?= 1 + $index ?></td>
               <td>
-                <img src="<?= htmlspecialchars($product['image']) ?>" alt="" style="width: 50px; height: 50px;">
+                <img src="<?= htmlspecialchars($product['image']) ?>" alt="" style="width: 50px; height: 50px; border-radius: 10px; object-fit: cover;">
               </td>
               <td><?= htmlspecialchars($product['product_name']) ?></td>
               <td><?= htmlspecialchars($product['product_detail']) ?></td>
-              <td class="price"><?= htmlspecialchars($product['price']) ?></td>
-              <!-- Add this at the bottom of your PHP file, before the closing </body> tag -->
-              <script>
-                document.addEventListener("DOMContentLoaded", function() {
-                  // Get all price elements from the table
-                  const priceElements = document.querySelectorAll(".price");
-
-                  // Calculate the total price
-                  let total = 0;
-                  priceElements.forEach((element) => {
-                    const price = parseFloat(element.textContent);
-                    if (!isNaN(price)) {
-                      total += price;
-                    }
-                  });
-
-                  // Update the "Totals" card with the calculated total
-                  const totalPriceElement = document.getElementById("total-price");
-                  totalPriceElement.textContent = total.toFixed(2); // Display with 2 decimal places
-                });
-              </script>
+              <td><?= htmlspecialchars($product['price']) ?></td>
               <td>
                 <a href="/product/edit?id=<?= $product['product_id'] ?>" class="btn btn-warning">Edit</a>
                 <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
@@ -197,3 +177,54 @@ $_SESSION['product_total'] = $total;
           });
         });
       </script>
+      <!-- Add some styling to improve the layout -->
+      <style>
+        /* Ensure flexbox is applied to each of the columns for centering */
+        .name-user,
+        .phone-user,
+        .email-user,
+        .address-user {
+          text-align: center;
+        }
+
+        .table {
+          width: 100%;
+        }
+
+        th,
+        td {
+          text-align: center;
+        }
+
+        /* Ensure that the images are circles with object-fit */
+        td img {
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+          object-fit: cover;
+        }
+
+        /* Style the search bar */
+        .input-group {
+          max-width: 250px;
+        }
+
+        .input-group-append button {
+          background-color: #007bff;
+          color: white;
+        }
+
+        .input-group-append button i {
+          font-size: 14px;
+        }
+
+        /* Optional: Add some spacing between the button and the table */
+        .d-flex {
+          margin-bottom: 15px;
+        }
+
+        /* Style the modal */
+        .modal-content {
+          padding: 20px;
+        }
+      </style>

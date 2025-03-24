@@ -1,5 +1,5 @@
-<?php require_once 'views/layout/header.php' ?>
-<?php require_once 'views/layout/nav.php' ?>
+<?php require_once 'views/layouts/admin/header.php' ?>
+<?php require_once 'views/layouts/admin/nav.php' ?>
 
 <div class="container">
     <form action="/user/update?id=<?= $user['user_id'] ?>" method="POST">
@@ -22,4 +22,4 @@
         <button type="submit" class="btn btn-success mt-3">Update</button>
     </form>
 </div>
-<?php require_once 'views/layout/footer.php' ?>
+<?php require_once 'views/layouts/admin/footer.php' ?>
