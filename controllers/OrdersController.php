@@ -1,25 +1,5 @@
 <?php
-class OrdersController extends BaseController {
-    public function __construct() {
-        if (session_status() == PHP_SESSION_NONE) {
-            session_start();
-        }
-        
-        // Check if user is logged in - redirect to login if not
-        if (!isset($_SESSION['user_id']) && $this->requiresAuth()) {
-            $this->redirect('/login');
-        }
-    }
-    
-    // Method to determine if authentication is required
-    protected function requiresAuth() {
-        // Public pages like menu browsing don't require auth
-        $action = isset($_GET['action']) ? $_GET['action'] : 'index';
-        $publicActions = ['index', 'details'];
-        
-        return !in_array($action, $publicActions);
-    }
-    
+class OrderController extends BaseController {
     public function index() {
         // In a real application, you would fetch products from the database
         // For now, we'll create sample data
@@ -120,6 +100,7 @@ class OrdersController extends BaseController {
                 'image' => '/assets/image/products/Vanilla Strawberry.png',
                 'category' => 'smoothie'
             ],
+            
             [
                 'id' => 13,
                 'name' => 'Trolach Machhiato',
@@ -128,6 +109,7 @@ class OrdersController extends BaseController {
                 'image' => '/assets/image/products/Trolach Machhiato.png',
                 'category' => 'coffee'
             ],
+            
             [
                 'id' => 14,
                 'name' => 'Japan Yuzu',
@@ -149,42 +131,44 @@ class OrdersController extends BaseController {
                 'name' => 'Vanilla Latte',
                 'description' => 'Espresso combined with vanilla syrup and steamed milk for a sweet, comforting coffee.',
                 'price' => 4.50,
-                'image' => '/assets/image/products/vanilla-latte.jpg',
+                'image' => '/assets/images/products/vanilla-latte.jpg',
                 'category' => 'coffee'
             ],
             [
                 'id' => 17,
-                'name' => 'Chocolate Supreme 80Baht',
-                'description' => 'A rich chocolate-infused waffle with a crispy outside and soft inside, perfect for chocolate lovers.',
+                'name' => 'Egg Waffles',
+                'description' => 'Hong Kong-style egg waffles, crispy on the outside and fluffy on the inside, served fresh.',
                 'price' => 4.00,
-                'image' => '/assets/image/products/Chocolate Supreme 80Baht.png',
+                'image' => '/assets/images/products/egg-waffles.jpg',
                 'category' => 'snacks'
             ],
             [
                 'id' => 18,
-                'name' => 'Almond Puff 55Baht',
-                'description' => 'A light and flaky almond puff pastry with a buttery texture and nutty flavor.',
+                'name' => 'Popcorn Chicken',
+                'description' => 'Crispy Taiwanese-style popcorn chicken, seasoned with special spices for a savory snack.',
                 'price' => 5.50,
-                'image' => '/assets/image/products/Almond Puff 55Baht.png',
+                'image' => '/assets/images/products/popcorn-chicken.jpg',
                 'category' => 'snacks'
             ],
             [
                 'id' => 19,
-                'name' => 'Matcha Croissant 70Baht',
-                'description' => 'A flaky croissant with a rich matcha filling, blending earthy tea flavors with buttery layers.',
+                'name' => 'Sweet Potato Fries',
+                'description' => 'Crispy and delicious sweet potato fries, seasoned with a special blend of spices.',
                 'price' => 4.00,
-                'image' => '/assets/image/products/Macha Croissant 70Baht.png',
+                'image' => '/assets/images/products/sweet-potato-fries.jpg',
                 'category' => 'snacks'
             ],
             [
                 'id' => 20,
-                'name' => 'Chocolate Almond Croissant 80Baht',
-                'description' => 'A golden, flaky croissant filled with rich chocolate and crunchy almonds for a delightful treat.',
+                'name' => 'Cheese Foam Cake',
+                'description' => 'A soft sponge cake topped with our signature cheese foam, creating a creamy and sweet experience.',
                 'price' => 4.50,
-                'image' => '/assets/image/products/Chocolate Almont Croissand 80Baht.png',
+                'image' => '/assets/images/products/cheese-foam-cake.jpg',
                 'category' => 'snacks'
             ]
         ];
+        
+        
         $toppings = [
             [
                 'id' => 1,
@@ -196,7 +180,6 @@ class OrdersController extends BaseController {
                 'name' => 'Grass Jelly',
                 'price' => 0.75
             ],
-
             [
                 'id' => 3,
                 'name' => 'Pudding',
