@@ -4,12 +4,13 @@ require_once __DIR__ . "/../Controllers/BaseController.php";
 require_once __DIR__ . "/../Controllers/WelcomeController.php";
 require_once __DIR__ . "/../Controllers/FavoritesController.php";
 require_once __DIR__ . "/../Controllers/FeedbackController.php";
-// require_once __DIR__ . "/../Controllers/SettingsController.php";
+require_once __DIR__ . "/../Controllers/SettingsController.php";
 require_once __DIR__ . "/../Controllers/OrdersController.php";
-// require_once __DIR__ . "/../Controllers/BookingController.php";
+require_once __DIR__ . "/../Controllers/BookingController.php";
 require_once __DIR__ . "/../Controllers/AuthController.php";
 require_once __DIR__ . "/../Controllers/GiftCardController.php"; // Add this line
 require_once __DIR__ . "/../Controllers/LocationsController.php"; // Add this line
+require_once __DIR__ . "/../Controllers/MoreController.php"; 
 
 use YourNamespace\Router;
     
@@ -49,10 +50,10 @@ $route->get("/more", [MoreController::class, 'index']);
 
 // Original routes
 $route->get("/welcome", [WelcomeController::class, 'welcome']);
-$route->get("/order", [OrdersController::class, 'index']);
-$route->get("/order/details/{id}", [OrdersController::class, 'details']);
-$route->post("/order/add-to-cart", [OrdersController::class, 'addToCart']);
-$route->get("/cart", [OrdersController::class, 'cart']);
+$route->get("/order", [OrderController::class, 'index']);
+$route->get("/order/details/{id}", [OrderController::class, 'details']);
+$route->post("/order/add-to-cart", [OrderController::class, 'addToCart']);
+$route->get("/cart", [OrderController::class, 'cart']);
 $route->get("/booking", [BookingController::class, 'index']);
 $route->get("/orders", [BookingController::class, 'index']);
 $route->get("/booking/details/{id}", [BookingController::class, 'details']);
