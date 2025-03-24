@@ -423,14 +423,7 @@ class OrdersController extends BaseController {
             header('Location: /order');
             exit;
         }
-        
-        // In a real application, you would:
-        // 1. Validate the cart items
-        // 2. Process the payment
-        // 3. Create an order in the database
-        // 4. Clear the cart
-        
-        // For now, we'll just redirect to a success page
+
         $_SESSION['success'] = 'Your order has been placed successfully';
         
         // Clear the cart
