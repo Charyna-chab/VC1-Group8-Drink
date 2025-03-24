@@ -65,7 +65,7 @@
                                     </div>
                                     <div class="row no-gutters align-items-center">
                                         <div class="col-auto">
-                                            <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
+                                            <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">30%</div>
                                         </div>
                                         <div class="col">
                                             <div class="progress progress-sm mr-2">
@@ -197,6 +197,9 @@
     <!-- Page level custom scripts -->
     <script src="/assets/js/demo/chart-area-demo.js"></script>
     <script src="/assets/js/demo/chart-pie-demo.js"></script>
+    <script src="/assets/js/product.js"></script>
+    <script src="/assets/views/product-store.js"></script>
+    <script src="/assets/views/product-list.js"></script>
 
 
     
