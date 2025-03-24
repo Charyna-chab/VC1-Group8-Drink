@@ -25,6 +25,6 @@
                 <button type="submit" class="btn btn-success">Submit</button>
             </form>
 
-        </div>
-        <?php require_once 'views/layout/footer.php' ?>
     </div>
+    <?php require_once 'views/layouts/admin/footer.php' ?>
+</div>
