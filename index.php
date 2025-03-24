@@ -4,8 +4,19 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// ✅ Include the controller file
-require_once __DIR__ . '/controllers/LocationsController.php';
-
-// Main entry point - only require the router
+// ✅ Include router and controller files
 require_once __DIR__ . '/router/route.php';
+require_once __DIR__ . '/Controllers/LocationsController.php';
+
+use LocationsController\Controllers\Router;
+use LocationsController\Controllers\LocationsController;
+
+// // Create a new Router instance
+// $router = new Router();
+
+// ✅ Register the route correctly
+// $router->get('/locations', [LocationsController::class, 'index']);
+
+// Route the request
+// $router->route();
+?>

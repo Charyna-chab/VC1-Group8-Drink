@@ -1,10 +1,10 @@
 <?php
-namespace YourNamespace\Controllers;
+namespace MoreController\Controllers;
 
 class MoreController {
     public function index() {
-        // Render the more menu page
-        include __DIR__ . '/../more.php';
+        echo "MoreController loaded successfully!";
     }
 }
+
 
