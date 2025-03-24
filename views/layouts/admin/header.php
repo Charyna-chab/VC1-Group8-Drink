@@ -10,6 +10,9 @@
     <meta name="author" content="">
 
     <title>Dashboard</title>
+    <link rel="apple-touch-icon" sizes="76x76" href="/assets/image/logo/logo.png">
+    <link rel="icon" type="image/png" href="/assets/image/logo/logo.png">
+    <meta name="description" content="XING FU CHA - Your favorite place for delicious Boba Tea.">
 
     <!-- Custom fonts for this template-->
     <link href="/assets/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
