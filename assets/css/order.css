@@ -17,20 +17,12 @@
     --order-transition: all 0.3s ease;
 }
 
-body {
-    font-family: "Poppins", sans-serif;
-    background: #f9f9f9;
-    color: var(--order-text);
-    margin: 0;
-    padding: 0;
-}
-
 .content {
     padding: 20px;
     max-width: 1200px;
     margin: 0 auto;
     position: relative;
-    right: 30px;
+    left: 140px;
 }
 
 

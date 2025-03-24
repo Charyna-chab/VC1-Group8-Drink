@@ -8,6 +8,10 @@ require_once __DIR__ . "/../controllers/SettingsController.php";
 require_once __DIR__ . "/../controllers/OrdersController.php";
 require_once __DIR__ . "/../controllers/BookingController.php";
 require_once __DIR__ . "/../controllers/AuthController.php";
+require_once __DIR__ . "/../controllers/AdminController.php";
+require_once __DIR__ . "/../controllers/ProductController.php";
+require_once __DIR__ . "/../controllers/UserController.php";
+require_once __DIR__ . "/../controllers/DashboardController.php";
 
 use YourNamespace\Router;
 
@@ -55,6 +59,25 @@ $route->get("/favorites", [FavoritesController::class, 'index']);
 $route->post("/favorites/toggle", [FavoritesController::class, 'toggle']);
 $route->get("/feedback", [FeedbackController::class, 'index']);
 $route->get("/settings", [SettingsController::class, 'index']);
+
+// Admin routes
+$route->get("/admin-dashboard", [DashboardController::class, 'index']);
+
+// Admin Product Management
+$route->get("/admin/products", [ProductController::class, 'index']);
+$route->get("/admin/products/create", [ProductController::class, 'create']);
+$route->post("/admin/products/store", [ProductController::class, 'store']);
+$route->get("/admin/products/edit/{id}", [ProductController::class, 'edit']);
+$route->post("/admin/products/update/{id}", [ProductController::class, 'update']);
+$route->post("/admin/products/delete/{id}", [ProductController::class, 'delete']);
+
+// Admin User Management
+$route->get("/admin/users", [UserController::class, 'index']);
+$route->get("/admin/users/create", [UserController::class, 'create']);
+$route->post("/admin/users/store", [UserController::class, 'store']);
+$route->get("/admin/users/edit/{id}", [UserController::class, 'edit']);
+$route->post("/admin/users/update/{id}", [UserController::class, 'update']);
+$route->post("/admin/users/delete/{id}", [UserController::class, 'delete']);
 
 $route->route();
 
