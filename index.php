@@ -1,3 +1,4 @@
 <?php
 // Main entry point - only require the router
-require_once __DIR__ . '/router/route.php';
+require_once "router/route.php";
+
