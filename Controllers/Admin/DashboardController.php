@@ -1,5 +1,5 @@
 <?php
-require_once 'BaseController.php';
+require_once './Controllers/BaseController.php';
 class DashboardController extends BaseController{
     function index()
     {
