@@ -4,6 +4,7 @@ session_start();
 
 // Retrieve the total from the session, default to 0 if not set
 $total = isset($_SESSION['product_total']) ? $_SESSION['product_total'] : 0;
+$product_count = $_SESSION['product_count'] ?? 0;
 ?>
 
 <body id="page-top">
@@ -46,7 +47,7 @@ $total = isset($_SESSION['product_total']) ? $_SESSION['product_total'] : 0;
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                        Total Product</div>
+                                        Total Price Product</div>
                                     <div class="h5 mb-0 font-weight-bold text-gray-800">
 
                                     $<span id="total-price"><?= number_format($total, 2) ?></span>
@@ -65,19 +66,13 @@ $total = isset($_SESSION['product_total']) ? $_SESSION['product_total'] : 0;
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
-                                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">product
+                                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Total Product
                                     </div>
                                     <div class="row no-gutters align-items-center">
-                                        <div class="col-auto">
-                                            <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            <span><?= $product_count ?></span>
                                         </div>
-                                        <div class="col">
-                                            <div class="progress progress-sm mr-2">
-                                                <div class="progress-bar bg-info" role="progressbar"
-                                                    style="width: 50%" aria-valuenow="50" aria-valuemin="0"
-                                                    aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
+                                       
                                     </div>
                                 </div>
                                 <div class="col-auto">
