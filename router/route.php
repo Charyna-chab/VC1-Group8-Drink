@@ -1,17 +1,18 @@
 <?php
 require_once __DIR__ . "/Router.php";
-require_once __DIR__ . "/../controllers/BaseController.php";
-require_once __DIR__ . "/../controllers/WelcomeController.php";
-require_once __DIR__ . "/../controllers/FavoritesController.php";
-require_once __DIR__ . "/../controllers/FeedbackController.php";
-require_once __DIR__ . "/../controllers/SettingsController.php";
-require_once __DIR__ . "/../controllers/OrdersController.php";
-require_once __DIR__ . "/../controllers/BookingController.php";
-require_once __DIR__ . "/../controllers/AuthController.php";
-require_once __DIR__ . "/../controllers/GiftCardController.php"; // Add this line
+require_once __DIR__ . "/../Controllers/BaseController.php";
+require_once __DIR__ . "/../Controllers/WelcomeController.php";
+require_once __DIR__ . "/../Controllers/FavoritesController.php";
+require_once __DIR__ . "/../Controllers/FeedbackController.php";
+require_once __DIR__ . "/../Controllers/SettingsController.php";
+require_once __DIR__ . "/../Controllers/OrdersController.php";
+require_once __DIR__ . "/../Controllers/BookingController.php";
+require_once __DIR__ . "/../Controllers/AuthController.php";
+require_once __DIR__ . "/../Controllers/GiftCardController.php"; // Add this line
+require_once __DIR__ . "/../Controllers/LocationsController.php"; // Add this line
 
 use YourNamespace\Router;
-
+    
 $route = new Router();
 
 // Welcome page as the default route

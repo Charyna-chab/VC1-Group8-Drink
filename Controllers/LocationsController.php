@@ -1,9 +1,8 @@
 <?php
 namespace LocationsController\Controllers;
 
-class LocationsController extends BaseController {
+class LocationsController {
     public function index() {
-        // Render the locations page
-        $this->render('locations');
+        echo "LocationsController loaded!";
     }
 }

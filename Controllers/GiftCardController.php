@@ -1,9 +1,10 @@
 <?php
-namespace GiftCardController\Controllers;
+namespace YourNamespace\Controllers;
 
-class GiftCardController extends BaseController {
+class GiftCardController {
     public function index() {
         // Render the gift card page
-        $this->render('gift-card');
+        include __DIR__ . '/../gift-card.php';
     }
 }
+

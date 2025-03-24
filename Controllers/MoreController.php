@@ -1,9 +1,10 @@
 <?php
-namespace MoreController\Controllers;
+namespace YourNamespace\Controllers;
 
-class MoreController extends BaseController {
+class MoreController {
     public function index() {
         // Render the more menu page
-        $this->render('more');
+        include __DIR__ . '/../more.php';
     }
 }
+

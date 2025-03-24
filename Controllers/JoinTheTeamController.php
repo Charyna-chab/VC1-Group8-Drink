@@ -1,9 +1,10 @@
 <?php
-namespace JoinTheTeamController\Controllers;
+namespace YourNamespace\Controllers;
 
-class JoinTheTeamController extends BaseController {
+class JoinTheTeamController {
     public function index() {
         // Render the join the team page
-        $this->render('join-the-team');
+        include __DIR__ . '/../views/join-the-team.php';
     }
 }
+
