@@ -6,7 +6,7 @@
             <li><a href="/gift-card">Gift Card</a></li>
             <li><a href="/locations">Locations</a></li>
             <li><a href="/join-the-team">Join The Team</a></li>
-            <li><a href="#" id="moreMenuBtn">More</a></li>
+            <li><a href="/more">More</a></li>
         </ul>
     </nav>
     <div class="search-bar">

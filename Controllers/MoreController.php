@@ -3,8 +3,7 @@ namespace MoreController\Controllers;
 
 class MoreController {
     public function index() {
-        echo "MoreController loaded successfully!";
+        // Render the gift card page
+        include __DIR__ . '/../more.php';
     }
 }
-
-

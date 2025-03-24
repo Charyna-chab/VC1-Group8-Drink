@@ -71,7 +71,7 @@ class JoinTheTeamController extends BaseController {  // Fixed class declaration
 }
 class MoreController extends BaseController {  // Fixed class declaration here
     public function index() {
-        // Render the join-the-team page
+        // Render the more page
         $this->views('more');
     }
 }
