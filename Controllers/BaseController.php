@@ -1,40 +1,20 @@
 <?php
+
 class BaseController {
+    
     public function views($views, $data = []) {
-        // Extract data into variables
+        // Extract data to make variables available in the view
         extract($data);
         
-        // Check if the view is an auth view
-        $isAuthView = strpos($views, 'auth/') === 0;
+        // Start output buffering to capture the view content
+        ob_start();
+        // Include the specific view file (with .php extension)
+        require_once 'views/' . $views ;
+        // Get the buffered content
+        $content = ob_get_clean();
         
-        if ($isAuthView) {
-            // For auth views, include the view file directly without layout
-            $viewPath = 'views/' . $views . '.php';
-            if (!file_exists($viewPath)) {
-                die("View file not found: {$viewPath}. Please create this file.");
-            }
-            require_once $viewPath;
-        } else {
-            // For non-auth views, use the layout
-            $viewPath = 'views/' . $views . '.php';
-            if (!file_exists($viewPath)) {
-                die("View file not found: {$viewPath}. Please create this file.");
-            }
-            
-            // Include header
-            require_once 'views/layouts/header.php';
-            
-            // Include sidebar if not welcome page
-            if (strpos($views, 'welcome/') !== 0) {
-                require_once 'views/layouts/sidebar.php';
-            }
-            
-            // Include the view
-            require_once $viewPath;
-            
-            // Include footer
-            require_once 'views/layouts/footer.php';
-        }
+        // Now include the layout file, which can use $content
+        require_once 'views/layout.php';
     }
     
     public function redirect($uri) {
