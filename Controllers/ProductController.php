@@ -45,4 +45,3 @@ class ProductController {
         require 'views/product.php';
     }
 }
-

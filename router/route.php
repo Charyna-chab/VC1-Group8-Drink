@@ -45,4 +45,3 @@ $route->get("/feedback", [FeedbackController::class, 'index']);
 $route->get("/settings", [SettingsController::class, 'index']);
 
 $route->route();
-

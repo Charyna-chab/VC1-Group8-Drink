@@ -21,7 +21,7 @@ header {
     justify-content: space-between;
     align-items: center;
     padding: 14px 5%;
-    background: #ff6769;
+    background: #ff7174;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     position: sticky;
     top: 0;
@@ -1319,7 +1319,7 @@ main {
 }
 
 .upgrade-box button:hover {
-    background-color: #ff0000;
+    background-color: #ff0004;
 }
 
 

@@ -41,38 +41,4 @@ class BaseController {
         header('Location: ' . $uri);
         exit();
     }
-
-    // Define the BaseController class
-    protected function render($view) {
-        // Logic to render the view
-        echo "Rendering view: $view";
-    }
 }
-
-class GiftCardController extends BaseController {
-    public function index() {
-        // Render the gift card page
-        $this->views('gift-card');
-    }
-}
-
-class LocationsController extends BaseController {
-    public function index() {
-        // Render the locations page
-        $this->views('locations');
-    }
-}
-
-class JoinTheTeamController extends BaseController {  // Fixed class declaration here
-    public function index() {
-        // Render the join-the-team page
-        $this->views('join-the-team');
-    }
-}
-class MoreController extends BaseController {  // Fixed class declaration here
-    public function index() {
-        // Render the more page
-        $this->views('more');
-    }
-}
-?>
