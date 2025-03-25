@@ -152,6 +152,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 setTimeout(() => {
                     icon.style.animation = ""
                 }, 500)
+
+                // Show alert for favorites
+                alert(`${productName} has been added to your favorites!`)
             } else {
                 // Remove from favorites
                 icon.classList.remove("fas")
@@ -171,6 +174,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         "info",
                     )
                 }
+
+                // Show alert for removing from favorites
+                alert(`${productName} has been removed from your favorites.`)
             }
         })
     })
@@ -256,6 +262,36 @@ document.addEventListener('DOMContentLoaded', function() {
             if (window.location.pathname === "/favorites") {
                 updateFavoritesUI()
             }
+
+            // Send to server if user is logged in
+            sendFavoritesToServer(id, name, image, price, description)
+        }
+    }
+
+    // Send favorites to server
+    function sendFavoritesToServer(id, name, image, price, description) {
+        // Check if user is logged in
+        if (document.body.classList.contains("logged-in")) {
+            fetch("/favorites/add", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        id,
+                        name,
+                        image,
+                        price,
+                        description,
+                    }),
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log("Favorite saved to server:", data)
+                })
+                .catch((error) => {
+                    console.error("Error saving favorite to server:", error)
+                })
         }
     }
 
@@ -273,6 +309,32 @@ document.addEventListener('DOMContentLoaded', function() {
         // If we're on the favorites page, update the UI
         if (window.location.pathname === "/favorites") {
             updateFavoritesUI()
+        }
+
+        // Send to server if user is logged in
+        removeFavoriteFromServer(id)
+    }
+
+    // Remove favorite from server
+    function removeFavoriteFromServer(id) {
+        // Check if user is logged in
+        if (document.body.classList.contains("logged-in")) {
+            fetch("/favorites/remove", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        id,
+                    }),
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log("Favorite removed from server:", data)
+                })
+                .catch((error) => {
+                    console.error("Error removing favorite from server:", error)
+                })
         }
     }
 
@@ -323,36 +385,36 @@ document.addEventListener('DOMContentLoaded', function() {
             favoriteCard.setAttribute("data-id", favorite.id)
 
             favoriteCard.innerHTML = `
-          <!-- Remove Button -->
-          <button class="favorites-remove-btn" data-id="${favorite.id}">
-            <i class="fas fa-times"></i>
-            <span class="sr-only">Remove from favorites</span>
-          </button>
-  
-          <!-- Product Image -->
-          <div class="favorites-image">
-            <img src="${favorite.image}" alt="${favorite.name}">
-          </div>
-  
-          <!-- Product Info -->
-          <div class="favorites-content">
-            <h3 class="favorites-title">${favorite.name}</h3>
-            <p class="favorites-description">${favorite.description}</p>
-            
-            <div class="favorites-footer">
-              <div class="favorites-price">
-                $${Number.parseFloat(favorite.price).toFixed(2)}
-              </div>
-              <button class="favorites-order-btn" 
-                      data-id="${favorite.id}"
-                      data-name="${favorite.name}"
-                      data-price="${favorite.price}"
-                      data-image="${favorite.image}">
-                Order Now
-              </button>
+        <!-- Remove Button -->
+        <button class="favorites-remove-btn" data-id="${favorite.id}">
+          <i class="fas fa-times"></i>
+          <span class="sr-only">Remove from favorites</span>
+        </button>
+
+        <!-- Product Image -->
+        <div class="favorites-image">
+          <img src="${favorite.image}" alt="${favorite.name}">
+        </div>
+
+        <!-- Product Info -->
+        <div class="favorites-content">
+          <h3 class="favorites-title">${favorite.name}</h3>
+          <p class="favorites-description">${favorite.description}</p>
+          
+          <div class="favorites-footer">
+            <div class="favorites-price">
+              $${Number.parseFloat(favorite.price).toFixed(2)}
             </div>
+            <button class="favorites-order-btn" 
+                    data-id="${favorite.id}"
+                    data-name="${favorite.name}"
+                    data-price="${favorite.price}"
+                    data-image="${favorite.image}">
+              Order Now
+            </button>
           </div>
-        `
+        </div>
+      `
 
             favoritesGrid.appendChild(favoriteCard)
 
@@ -478,15 +540,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         toast.innerHTML = `
-        <div>
-          <i class="fas fa-${icon}" style="color: ${type === "success" ? "#4caf50" : type === "error" ? "#f44336" : "#ff5e62"}; font-size: 20px; margin-right: 10px;"></i>
-        </div>
-        <div style="flex: 1;">
-          <h4>${title}</h4>
-          <p>${message}</p>
-        </div>
-        <button class="favorites-toast-close">&times;</button>
-      `
+      <div>
+        <i class="fas fa-${icon}" style="color: ${type === "success" ? "#4caf50" : type === "error" ? "#f44336" : "#ff5e62"}; font-size: 20px; margin-right: 10px;"></i>
+      </div>
+      <div style="flex: 1;">
+        <h4>${title}</h4>
+        <p>${message}</p>
+      </div>
+      <button class="favorites-toast-close">&times;</button>
+    `
 
         // Add to container
         toastContainer.appendChild(toast)
@@ -510,279 +572,287 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add CSS for favorites
     const style = document.createElement("style")
     style.textContent = `
-      /* Favorites Page Styles */
-      .favorites-header {
-        margin-bottom: 30px;
-      }
+    /* Favorites Page Styles */
+    .favorites-header {
+      margin-bottom: 200px;
+      position: relative;
+      left:30px;
       
-      .favorites-header h2 {
-        font-size: 24px;
-        margin: 0 0 10px;
-        color: #333;
-      }
-      
-      .favorites-header p {
-        font-size: 16px;
-        color: #666;
-        margin: 0;
-      }
-      
+    }
+    
+    .favorites-header h2 {
+      font-size: 24px;
+      margin: 0 0 10px;
+      color: #333;
+    }
+    
+    .favorites-header p {
+      font-size: 16px;
+      color: #666;
+      margin: 0;
+    }
+    
+    .favorites-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    
+    .favorites-card {
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+      position: relative;
+      left:230px;
+    }
+    
+    .favorites-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    }
+    
+    .favorites-card.removing {
+      opacity: 0;
+      transform: scale(0.8);
+    }
+    
+    .favorites-remove-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 30px;
+      height: 30px;
+      background-color: white;
+      border: none;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      z-index: 2;
+      opacity: 0;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    
+    .favorites-card:hover .favorites-remove-btn {
+      opacity: 1;
+    }
+    
+    .favorites-remove-btn:hover {
+      transform: scale(1.1);
+    }
+    
+.favorites-image {
+    height: 250px;
+    width: 100%; /* Ensures it takes full container width */
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.favorites-image img {
+    width: 100%; /* Makes sure image scales properly */
+    height: 100%;
+    object-fit: cover; /* Ensures it fills the space nicely */
+}
+
+    
+    .favorites-card:hover .favorites-image img {
+      transform: scale(1.05);
+    }
+    
+    .favorites-content {
+      padding: 15px;
+    }
+    
+    .favorites-title {
+      font-size: 18px;
+      margin: 0 0 10px;
+      color: #333;
+    }
+    
+    .favorites-description {
+      font-size: 14px;
+      color: #666;
+      margin: 0 0 15px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      height: 40px;
+    }
+    
+    .favorites-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .favorites-price {
+      font-size: 18px;
+      font-weight: 700;
+      color: #ff5e62;
+    }
+    
+    .favorites-order-btn {
+      padding: 8px 15px;
+      background-color: #ff5e62;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+    
+    .favorites-order-btn:hover {
+      background-color: #ff4146;
+      transform: translateY(-2px);
+    }
+    
+    /* Empty State */
+    .favorites-empty {
+      text-align: center;
+      padding: 40px 20px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    }
+    
+    .favorites-empty img {
+      width: 120px;
+      height: auto;
+      margin-bottom: 20px;
+      opacity: 0.7;
+    }
+    
+    .favorites-empty h3 {
+      font-size: 20px;
+      margin: 0 0 10px;
+      color: #333;
+    }
+    
+    .favorites-empty p {
+      font-size: 16px;
+      color: #666;
+      margin: 0 0 20px;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .favorites-browse-btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #ff5e62;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      text-decoration: none;
+    }
+    
+    .favorites-browse-btn:hover {
+      background-color: #ff4146;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(255, 94, 98, 0.3);
+    }
+    
+    /* Toast Notifications */
+    .favorites-toast-container {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-width: 350px;
+    }
+    
+    .favorites-toast {
+      background-color: white;
+      border-radius: 5px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      padding: 15px;
+      display: flex;
+      align-items: flex-start;
+      border-left: 4px solid #ff5e62;
+      animation: slideIn 0.3s ease forwards;
+      opacity: 1;
+      transition: opacity 0.3s ease;
+    }
+    
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    
+    .favorites-toast h4 {
+      margin: 0 0 5px;
+      font-size: 16px;
+      color: #333;
+    }
+    
+    .favorites-toast p {
+      margin: 0;
+      font-size: 14px;
+      color: #666;
+    }
+    
+    .favorites-toast-close {
+      background: none;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      color: #999;
+      margin-left: 10px;
+    }
+    
+    /* Heart Animation */
+    @keyframes heartBeat {
+      0% { transform: scale(1); }
+      25% { transform: scale(1.3); }
+      50% { transform: scale(1); }
+      75% { transform: scale(1.3); }
+      100% { transform: scale(1); }
+    }
+    
+    /* Screen Reader Only */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border-width: 0;
+    }
+    
+    /* Responsive Styles */
+    @media (max-width: 768px) {
       .favorites-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-        gap: 20px;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
       }
-      
-      .favorites-card {
-        background-color: white;
-        border-radius: 10px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-        overflow: hidden;
-        transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
-        position: relative;
+    }
+    
+    @media (max-width: 576px) {
+      .favorites-grid {
+        grid-template-columns: 1fr;
       }
-      
-      .favorites-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
-      }
-      
-      .favorites-card.removing {
-        opacity: 0;
-        transform: scale(0.8);
-      }
-      
-      .favorites-remove-btn {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        width: 30px;
-        height: 30px;
-        background-color: white;
-        border: none;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        z-index: 2;
-        opacity: 0;
-        transition: opacity 0.3s ease, transform 0.3s ease;
-      }
-      
-      .favorites-card:hover .favorites-remove-btn {
-        opacity: 1;
-      }
-      
-      .favorites-remove-btn:hover {
-        transform: scale(1.1);
-      }
-      
-      .favorites-image {
-        height: 180px;
-        overflow: hidden;
-      }
-      
-      .favorites-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 0.3s ease;
-      }
-      
-      .favorites-card:hover .favorites-image img {
-        transform: scale(1.05);
-      }
-      
-      .favorites-content {
-        padding: 15px;
-      }
-      
-      .favorites-title {
-        font-size: 18px;
-        margin: 0 0 10px;
-        color: #333;
-      }
-      
-      .favorites-description {
-        font-size: 14px;
-        color: #666;
-        margin: 0 0 15px;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        height: 40px;
-      }
-      
-      .favorites-footer {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-      
-      .favorites-price {
-        font-size: 18px;
-        font-weight: 700;
-        color: #ff5e62;
-      }
-      
-      .favorites-order-btn {
-        padding: 8px 15px;
-        background-color: #ff5e62;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        font-size: 14px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background-color 0.3s ease, transform 0.3s ease;
-      }
-      
-      .favorites-order-btn:hover {
-        background-color: #ff4146;
-        transform: translateY(-2px);
-      }
-      
-      /* Empty State */
-      .favorites-empty {
-        text-align: center;
-        padding: 40px 20px;
-        background-color: white;
-        border-radius: 10px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-      }
-      
-      .favorites-empty img {
-        width: 120px;
-        height: auto;
-        margin-bottom: 20px;
-        opacity: 0.7;
-      }
-      
-      .favorites-empty h3 {
-        font-size: 20px;
-        margin: 0 0 10px;
-        color: #333;
-      }
-      
-      .favorites-empty p {
-        font-size: 16px;
-        color: #666;
-        margin: 0 0 20px;
-        max-width: 400px;
-        margin-left: auto;
-        margin-right: auto;
-      }
-      
-      .favorites-browse-btn {
-        display: inline-block;
-        padding: 10px 20px;
-        background-color: #ff5e62;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        font-size: 16px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background-color 0.3s ease, transform 0.3s ease;
-        text-decoration: none;
-      }
-      
-      .favorites-browse-btn:hover {
-        background-color: #ff4146;
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(255, 94, 98, 0.3);
-      }
-      
-      /* Toast Notifications */
-      .favorites-toast-container {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        z-index: 9999;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        max-width: 350px;
-      }
-      
-      .favorites-toast {
-        background-color: white;
-        border-radius: 5px;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        padding: 15px;
-        display: flex;
-        align-items: flex-start;
-        border-left: 4px solid #ff5e62;
-        animation: slideIn 0.3s ease forwards;
-        opacity: 1;
-        transition: opacity 0.3s ease;
-      }
-      
-      @keyframes slideIn {
-        from { transform: translateX(100%); opacity: 0; }
-        to { transform: translateX(0); opacity: 1; }
-      }
-      
-      .favorites-toast h4 {
-        margin: 0 0 5px;
-        font-size: 16px;
-        color: #333;
-      }
-      
-      .favorites-toast p {
-        margin: 0;
-        font-size: 14px;
-        color: #666;
-      }
-      
-      .favorites-toast-close {
-        background: none;
-        border: none;
-        font-size: 16px;
-        cursor: pointer;
-        color: #999;
-        margin-left: 10px;
-      }
-      
-      /* Heart Animation */
-      @keyframes heartBeat {
-        0% { transform: scale(1); }
-        25% { transform: scale(1.3); }
-        50% { transform: scale(1); }
-        75% { transform: scale(1.3); }
-        100% { transform: scale(1); }
-      }
-      
-      /* Screen Reader Only */
-      .sr-only {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        padding: 0;
-        margin: -1px;
-        overflow: hidden;
-        clip: rect(0, 0, 0, 0);
-        white-space: nowrap;
-        border-width: 0;
-      }
-      
-      /* Responsive Styles */
-      @media (max-width: 768px) {
-        .favorites-grid {
-          grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-        }
-      }
-      
-      @media (max-width: 576px) {
-        .favorites-grid {
-          grid-template-columns: 1fr;
-        }
-      }
-    `
+    }
+  `
     document.head.appendChild(style)
 
     // Initialize
@@ -821,5 +891,36 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
         document.head.appendChild(style);
 >>>>>>> e1afa46761f16fc7671bbd4993a2db1bab8276b4
+    }
+
+    // Load favorites from server if user is logged in
+    if (document.body.classList.contains("logged-in")) {
+        fetch("/favorites/getAll")
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.success && data.favorites.length > 0) {
+                    // Merge server favorites with local favorites
+                    const serverFavorites = data.favorites
+
+                    // Add any server favorites not in local storage
+                    serverFavorites.forEach((serverFav) => {
+                        if (!favorites.some((localFav) => localFav.id === serverFav.id)) {
+                            favorites.push(serverFav)
+                        }
+                    })
+
+                    // Save merged favorites to localStorage
+                    localStorage.setItem("favorites", JSON.stringify(favorites))
+
+                    // Update UI
+                    updateFavoriteButtons()
+                    if (window.location.pathname === "/favorites") {
+                        updateFavoritesUI()
+                    }
+                }
+            })
+            .catch((error) => {
+                console.error("Error loading favorites from server:", error)
+            })
     }
 })

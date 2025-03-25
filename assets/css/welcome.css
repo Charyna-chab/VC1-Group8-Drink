@@ -84,6 +84,57 @@
     transform: translateY(-2px);
 }
 
+.header-banner img {
+    width: 200%;
+    /* Make the image bigger */
+    max-width: 500px;
+    display: block;
+    margin: auto;
+    border-radius: 20px;
+    transition: transform 0.3s ease-in-out, filter 0.3s ease-in-out;
+}
+
+.header-banner img:hover {
+    transform: scale(1.1);
+    /* Zoom effect */
+    filter: brightness(1.1);
+    /* Make it slightly brighter */
+}
+
+.wave-text {
+    font-size: 28px;
+    font-weight: bold;
+    color: #ff6363;
+    animation: waveEffect 1.5s infinite alternate;
+    margin: 10px 0;
+}
+
+@keyframes waveEffect {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-5px);
+    }
+}
+
+.social-media {
+    margin-top: 15px;
+}
+
+.social-icon {
+    display: inline-block;
+    margin-right: 10px;
+    text-decoration: none;
+    font-weight: bold;
+    color: #ff6363;
+    transition: color 0.3s ease-in-out;
+}
+
+.social-icon:hover {
+    color: #ff2a2a;
+}
+
 
 /* Category Section */
 

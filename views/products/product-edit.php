@@ -1,10 +1,9 @@
-<div class="card-body w-50 p-3">
-    <div class="table-responsive">
-        <div class="container">
-            <!-- Update form action and use a hidden input for ID -->
-            <form action="/product/update" method="POST" enctype="multipart/form-data" class="border border-dark p-5">
-                <input type="hidden" name="product_id" value="<?= $product['product_id'] ?>">
 
+<div class="card shadow mb-4 ml-3 mr-3" style="width:50%;">
+  <div class="card-body ">
+        <div class="container ">
+            <!-- Update the form action and method -->
+            <form action="/product/update/?id=<?= $product['product_id'] ?>" method="POST" enctype="multipart/form-data" >
                 <div class="form-group mb-3 col">
                     <label for="name" class="form-label">Name:</label>
                     <input type="text" value="<?= $product['product_name'] ?>" name="product_name" class="form-control">
