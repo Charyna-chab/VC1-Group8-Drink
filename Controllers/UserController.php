@@ -2,6 +2,10 @@
 require_once 'Models/UserModel.php';
 require_once 'BaseController.php';
 
+
+
+use YourNamespace\BaseController;
+
 class UserController extends BaseController
 {
     private $model;

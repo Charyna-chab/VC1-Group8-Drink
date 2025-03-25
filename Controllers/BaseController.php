@@ -1,4 +1,6 @@
 <?php
+namespace YourNamespace;
+
 class BaseController {
     public function views($views, $data = []) {
         // Extract data into variables
@@ -42,4 +44,3 @@ class BaseController {
         exit();
     }
 }
-

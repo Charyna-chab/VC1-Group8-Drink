@@ -92,4 +92,3 @@ class Router {
         return $pattern;
     }
 }
-

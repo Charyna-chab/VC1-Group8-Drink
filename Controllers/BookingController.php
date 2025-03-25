@@ -1,4 +1,9 @@
 <?php
+
+namespace YourNamespace\Controllers;
+
+use YourNamespace\BaseController;
+
 class BookingController extends BaseController {
     public function index() {
         // In a real application, you would fetch bookings from the database

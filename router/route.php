@@ -14,6 +14,17 @@ require_once __DIR__ . "/../controllers/UserController.php";
 require_once __DIR__ . "/../controllers/DashboardController.php";
 
 use YourNamespace\Router;
+use YourNamespace\Controllers\WelcomeController;
+use YourNamespace\Controllers\OrdersController;
+use YourNamespace\Controllers\BookingController;
+use YourNamespace\Controllers\FavoritesController;
+use YourNamespace\Controllers\FeedbackController;
+use YourNamespace\Controllers\SettingsController;
+use YourNamespace\Controllers\AuthController;
+use YourNamespace\Controllers\AdminController;
+use YourNamespace\Controllers\ProductController;
+use YourNamespace\Controllers\UserController;
+use YourNamespace\Controllers\DashboardController;
 
 $route = new Router();
 
@@ -52,7 +63,7 @@ $route->get("/checkout", [OrdersController::class, 'checkout']);
 $route->post("/process-payment", [OrdersController::class, 'processPayment']);
 
 $route->get("/booking", [BookingController::class, 'index']);
-$route->get("/orders", [BookingController::class, 'index']);
+$route->get("/orders", [OrdersController::class, 'index']);
 $route->get("/booking/details/{id}", [BookingController::class, 'details']);
 $route->get("/orders/details/{id}", [OrdersController::class, 'details']);
 $route->get("/favorites", [FavoritesController::class, 'index']);
@@ -80,4 +91,3 @@ $route->post("/admin/users/update/{id}", [UserController::class, 'update']);
 $route->post("/admin/users/delete/{id}", [UserController::class, 'delete']);
 
 $route->route();
-

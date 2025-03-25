@@ -1,6 +1,9 @@
 <?php
 require_once 'BaseController.php';
 
+
+use YourNamespace\BaseController;
+
 class DashboardController extends BaseController {
     public function __construct() {
         if (session_status() == PHP_SESSION_NONE) {

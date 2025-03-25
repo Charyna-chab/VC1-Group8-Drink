@@ -1,4 +1,7 @@
 <?php
+namespace YourNamespace\Controllers;
+use YourNamespace\BaseController;
+
 class AuthController extends BaseController {
     public function __construct() {
         if (session_status() == PHP_SESSION_NONE) {
