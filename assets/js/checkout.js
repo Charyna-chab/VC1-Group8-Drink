@@ -1,4 +1,3 @@
-// checkout.js - Handles payment processing
 document.addEventListener("DOMContentLoaded", () => {
     // DOM Elements
     const paymentOptions = document.querySelectorAll(".payment-option")
@@ -147,44 +146,44 @@ document.addEventListener("DOMContentLoaded", () => {
         // In a real app, this would make an API call to process the payment
         // For demo, we'll simulate a payment processing delay
         setTimeout(() => {
-            // Generate a random order number
-            const orderNumber = "ORD" + Math.floor(Math.random() * 900000 + 100000)
+                // Generate a random order number
+                const orderNumber = "ORD" + Math.floor(Math.random() * 900000 + 100000)
 
-            // Update order number in success modal
-            if (orderNumberElement) {
-                orderNumberElement.textContent = "#" + orderNumber
-            }
+                // Update order number in success modal
+                if (orderNumberElement) {
+                    orderNumberElement.textContent = "#" + orderNumber
+                }
 
-            // Set success message based on payment method
-            let successMessage = ""
-            switch (method) {
-                case "card":
-                    successMessage = "Your card payment has been processed successfully."
-                    break
-                case "qr":
-                    successMessage = "Your QR code payment has been verified successfully."
-                    break
-                case "cash":
-                    successMessage = "Your cash on delivery order has been confirmed."
-                    break
-                default:
-                    successMessage = "Your payment has been processed successfully."
-            }
+                // Set success message based on payment method
+                let successMessage = ""
+                switch (method) {
+                    case "card":
+                        successMessage = "Your card payment has been processed successfully."
+                        break
+                    case "qr":
+                        successMessage = "Your QR code payment has been verified successfully."
+                        break
+                    case "cash":
+                        successMessage = "Your cash on delivery order has been confirmed."
+                        break
+                    default:
+                        successMessage = "Your payment has been processed successfully."
+                }
 
-            if (paymentSuccessMessage) {
-                paymentSuccessMessage.textContent = successMessage
-            }
+                if (paymentSuccessMessage) {
+                    paymentSuccessMessage.textContent = successMessage
+                }
 
-            // Show success modal
-            showPaymentSuccessModal()
+                // Show success modal
+                showPaymentSuccessModal()
 
-            // Create a booking from the cart
-            createBookingFromCart(method, orderNumber)
+                // Create a booking from the cart
+                createBookingFromCart(method, orderNumber)
 
-            // Reset button state
-            completePaymentBtn.disabled = false
-            completePaymentBtn.innerHTML = '<i class="fas fa-lock"></i> Complete Payment'
-        }, 2000) // 2 second delay to simulate payment processing
+                // Reset button state
+                completePaymentBtn.disabled = false
+                completePaymentBtn.innerHTML = '<i class="fas fa-lock"></i> Complete Payment'
+            }, 2000) // 2 second delay to simulate payment processing
     }
 
     // Show payment success modal
@@ -235,16 +234,8 @@ document.addEventListener("DOMContentLoaded", () => {
         // Clear cart
         localStorage.setItem("cart", JSON.stringify([]))
 
-        // Set flag to redirect to booking page
-        sessionStorage.setItem("justCheckedOut", "true")
-
         // Add notification
         addNotification("Order Placed", `Your order #${orderNumber} has been placed successfully.`, "order")
-
-        // Redirect to booking page after 3 seconds
-        setTimeout(() => {
-            window.location.href = "/booking"
-        }, 3000)
     }
 
     // Show toast notification
@@ -270,14 +261,14 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         toast.innerHTML = `
-            <div class="toast-icon">
-                <i class="fas fa-${icon}"></i>
-            </div>
-            <div class="toast-content">
-                <p>${message}</p>
-            </div>
-            <button class="toast-close">&times;</button>
-        `
+              <div class="toast-icon">
+                  <i class="fas fa-${icon}"></i>
+              </div>
+              <div class="toast-content">
+                  <p>${message}</p>
+              </div>
+              <button class="toast-close">&times;</button>
+          `
 
         // Add to container
         toastContainer.appendChild(toast)

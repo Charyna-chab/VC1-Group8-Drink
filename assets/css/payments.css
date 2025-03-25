@@ -39,7 +39,9 @@
     }
 }
 
+
 /* Order Summary Section */
+
 .order-summary-section {
     background-color: #f9f9f9;
     border-radius: 10px;
@@ -138,7 +140,9 @@
     color: #ff5e62;
 }
 
+
 /* Payment Methods Section */
+
 .payment-methods-section {
     background-color: #fff;
     border-radius: 10px;
@@ -208,7 +212,9 @@
     animation: fadeIn 0.3s ease;
 }
 
+
 /* Card Payment Form */
+
 .card-payment-form {
     display: flex;
     flex-direction: column;
@@ -249,7 +255,9 @@
     flex: 1;
 }
 
+
 /* QR Code Payment */
+
 .qr-code-container {
     display: flex;
     flex-direction: column;
@@ -277,7 +285,9 @@
     margin-top: 10px;
 }
 
+
 /* Cash Payment */
+
 .cash-payment-info {
     padding: 10px;
 }
@@ -288,7 +298,9 @@
     color: #666;
 }
 
+
 /* Payment Actions */
+
 .payment-actions {
     display: flex;
     justify-content: space-between;
@@ -342,7 +354,9 @@
     cursor: not-allowed;
 }
 
+
 /* Payment Success Modal */
+
 .payment-success-modal {
     position: fixed;
     top: 0;
@@ -397,7 +411,8 @@
     margin-bottom: 20px;
 }
 
-.order-number, .order-total {
+.order-number,
+.order-total {
     display: flex;
     justify-content: space-between;
     margin-bottom: 10px;
@@ -414,7 +429,9 @@
     justify-content: center;
 }
 
+
 /* Overlay */
+
 #overlay {
     position: fixed;
     top: 0;
@@ -426,18 +443,32 @@
     z-index: 999;
 }
 
+
 /* Animations */
+
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 @keyframes scaleIn {
-    from { transform: scale(0.8); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 
+
 /* Toast Notifications */
+
 .toast-container {
     position: fixed;
     top: 20px;
@@ -508,17 +539,24 @@
 }
 
 @keyframes slideIn {
-    from { transform: translateX(20px); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
+    from {
+        transform: translateX(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
 }
 
+
 /* Responsive Styles */
+
 @media (max-width: 768px) {
     .form-row {
         flex-direction: column;
         gap: 10px;
     }
-    
     .payment-success-content {
         width: 95%;
         padding: 20px 15px;
