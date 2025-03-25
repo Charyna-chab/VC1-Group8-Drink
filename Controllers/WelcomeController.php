@@ -1,4 +1,5 @@
 <?php
+
 class WelcomeController extends BaseController {
     public function welcome() {
         // Check if user is logged in

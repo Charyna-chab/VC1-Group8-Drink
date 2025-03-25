@@ -1,10 +1,9 @@
 <?php
-
 class ProductController {
     private $db;
     
-    public function __construct() {
-        $this->db = Database::getInstance();
+    public function __construct($db) {
+        $this->db = $db;
     }
     
     public function menu() {
@@ -15,8 +14,15 @@ class ProductController {
     }
     
     public function show() {
-        // Get product ID from URL
-        $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+        // Get product ID from URL with validation
+        $id = isset($_GET['id']) ? filter_var($_GET['id'], FILTER_VALIDATE_INT) : 0;
+        
+        if ($id <= 0) {
+            // Invalid ID
+            header("HTTP/1.0 400 Bad Request");
+            require 'views/400.php';
+            return;
+        }
         
         // Get product details
         $product = $this->db->getProductById($id);
