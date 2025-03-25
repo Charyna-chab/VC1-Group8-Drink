@@ -12,6 +12,9 @@ require_once __DIR__ . "/../controllers/AdminController.php";
 require_once __DIR__ . "/../controllers/ProductController.php";
 require_once __DIR__ . "/../controllers/UserController.php";
 require_once __DIR__ . "/../controllers/DashboardController.php";
+require_once __DIR__ . "/../controllers/PaymentController.php";
+require_once __DIR__ . "/../controllers/CashController.php";
+
 
 use YourNamespace\Router;
 use YourNamespace\Controllers\WelcomeController;
@@ -25,6 +28,8 @@ use YourNamespace\Controllers\AdminController;
 use YourNamespace\Controllers\ProductController;
 use YourNamespace\Controllers\UserController;
 use YourNamespace\Controllers\DashboardController;
+use YourNamespace\Controllers\PaymentController;
+use YourNamespace\Controllers\CashController;
 
 $route = new Router();
 
@@ -62,6 +67,15 @@ $route->get("/cart", [OrdersController::class, 'cart']);
 $route->get("/checkout", [OrdersController::class, 'checkout']);
 $route->post("/process-payment", [OrdersController::class, 'processPayment']);
 
+// New payment routes
+$route->get("/payment", [PaymentController::class, 'index']);
+$route->get("/payment/{id}", [PaymentController::class, 'show']);
+$route->post("/payment/process", [PaymentController::class, 'process']);
+// Add these routes to your router
+$route->get("/cash", [CashController::class, 'index']);
+$route->post("/cash/process", [CashController::class, 'process']);
+$route->get("/cash/confirm/{id}", [CashController::class, 'confirm']);
+
 $route->get("/booking", [BookingController::class, 'index']);
 $route->get("/orders", [OrdersController::class, 'index']);
 $route->get("/booking/details/{id}", [BookingController::class, 'details']);
@@ -91,3 +105,9 @@ $route->post("/admin/users/update/{id}", [UserController::class, 'update']);
 $route->post("/admin/users/delete/{id}", [UserController::class, 'delete']);
 
 $route->route();
+
+// First, add the require statement at the top with the other requires
+
+// Then add this to the use statements
+
+
