@@ -1,10 +1,10 @@
 <?php '../layout/header.php' ?>
-<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+<ul class="navbar-nav shadow sidebar sidebar-light accordion" id="accordionSidebar" style="background-color: white;">
 
     <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="list.php">
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
         <div class="sidebar-brand-icon rotate-n-15">
-            <img src="" alt="">
+            <img src="#" alt="">
         </div>
         <div class="sidebar-brand-text mx-3">XING FU CHA</div>
     </a>
@@ -15,7 +15,7 @@
     <!-- Nav Item - Dashboard -->
     <li class="nav-item active">
         <a class="nav-link" href="/">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <i class="fas fa-fw fa-tachometer-alt text-dark"></i>
             <span>Dashboard</span></a>
     </li>
 
@@ -94,7 +94,7 @@
     <div id="content">
 
         <!-- Topbar -->
-        <nav class="navbar navbar-expand navbar-light bg-warning topbar mb-4 static-top shadow ">
+        <nav class="navbar navbar-expand navbar-light bg- topbar mb-4 static-top shadow ">
 
             <!-- Sidebar Toggle (Topbar) -->
             <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3 ">
