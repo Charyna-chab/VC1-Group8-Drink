@@ -124,58 +124,58 @@ class OrdersController extends BaseController {
             ],
             [
                 'id' => 15,
-                'name' => 'Mocha',
+                'name' => 'Black Tea Macha',
                 'description' => 'A delightful espresso drink with chocolate syrup and steamed milk for a sweet and smooth taste.',
                 'price' => 4.50,
-                'image' => '/assets/images/products/mocha.jpg',
+                'image' => '/assets/image/products/Black Tea Machhiato.png',
                 'category' => 'coffee'
             ],
             [
                 'id' => 16,
-                'name' => 'Vanilla Latte',
+                'name' => 'Chocolate Milk Tea',
                 'description' => 'Espresso combined with vanilla syrup and steamed milk for a sweet, comforting coffee.',
                 'price' => 4.50,
-                'image' => '/assets/images/products/vanilla-latte.jpg',
+                'image' => '/assets/image/products/Chocolate Milk Tea.png',
                 'category' => 'coffee'
             ],
             [
                 'id' => 17,
-                'name' => 'Egg Waffles',
+                'name' => 'Chocolate Almont Croissand 80Baht',
                 'description' => 'Hong Kong-style egg waffles, crispy on the outside and fluffy on the inside, served fresh.',
                 'price' => 4.00,
-                'image' => '/assets/images/products/egg-waffles.jpg',
+                'image' => '/assets/image/products/Chocolate Almont Croissand 80Baht.png',
                 'category' => 'snacks'
             ],
             [
                 'id' => 18,
-                'name' => 'Popcorn Chicken',
+                'name' => 'Chocolate Supreme 80Baht',
                 'description' => 'Crispy Taiwanese-style popcorn chicken, seasoned with special spices for a savory snack.',
                 'price' => 5.50,
-                'image' => '/assets/images/products/popcorn-chicken.jpg',
+                'image' => '/assets/image/products/Chocolate Supreme 80Baht.png',
                 'category' => 'snacks'
             ],
             [
                 'id' => 19,
-                'name' => 'Sweet Potato Fries',
+                'name' => 'Macha Croissant 70Baht',
                 'description' => 'Crispy and delicious sweet potato fries, seasoned with a special blend of spices.',
                 'price' => 4.00,
-                'image' => '/assets/images/products/sweet-potato-fries.jpg',
+                'image' => '/assets/image/products/Macha Croissant 70Baht.png',
                 'category' => 'snacks'
             ],
             [
                 'id' => 20,
-                'name' => 'Cheese Foam Cake',
+                'name' => 'Almond Puff 55baht',
                 'description' => 'A soft sponge cake topped with our signature cheese foam, creating a creamy and sweet experience.',
                 'price' => 4.50,
-                'image' => '/assets/images/products/cheese-foam-cake.jpg',
+                'image' => '/assets/image/products/Almond Puff 55baht.png',
                 'category' => 'snacks'
             ],
             [
                 'id' => 21,
-                'name' => 'Cheese Foam Cake',
+                'name' => 'Sweet Potato Brown Sugar',
                 'description' => 'A soft sponge cake topped with our signature cheese foam, creating a creamy and sweet experience.',
                 'price' => 4.50,
-                'image' => '/assets/images/products/cheese-foam-cake.jpg',
+                'image' => '/assets/image/products/Sweet Potato Brown Sugar.png',
                 'category' => 'snacks'
             ]
         ];
