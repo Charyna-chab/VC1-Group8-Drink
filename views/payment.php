@@ -168,6 +168,15 @@
         </div>
     </div>
 </section>
+<!-- Update the button in the payment actions section -->
+<div class="payment-actions">
+    <a href="/booking" class="btn-outline">
+        <i class="fas fa-arrow-left"></i> Back to Orders
+    </a>
+    <button id="complete-payment" class="btn-primary" disabled>
+        <i class="fas fa-check-circle"></i> Completed
+    </button>
+</div>
 
 <!-- Overlay -->
 <div id="overlay"></div>

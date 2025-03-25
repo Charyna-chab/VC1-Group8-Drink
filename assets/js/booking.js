@@ -1,3 +1,29 @@
+// Sample booking data (replace with your actual data source)
+let bookings = [
+    { id: "1", name: "John Doe", date: "2024-07-15", time: "10:00", service: "Haircut", status: "pending" },
+    { id: "2", name: "Jane Smith", date: "2024-07-16", time: "14:00", service: "Manicure", status: "confirmed" },
+    { id: "3", name: "Peter Jones", date: "2024-07-17", time: "11:00", service: "Facial", status: "cancelled" },
+    { id: "4", name: "Alice Brown", date: "2024-07-18", time: "16:00", service: "Massage", status: "pending" },
+    { id: "5", name: "Bob Williams", date: "2024-07-19", time: "09:00", service: "Pedicure", status: "confirmed" },
+]
+
+// Check if localStorage is supported
+if (typeof Storage !== "undefined") {
+    // Retrieve bookings from localStorage if available
+    const storedBookings = localStorage.getItem("bookings")
+    if (storedBookings) {
+        bookings = JSON.parse(storedBookings)
+    }
+} else {
+    console.log("localStorage is not supported in this browser.")
+}
+
+// Get DOM elements
+const bookingsContainer = document.getElementById("bookings")
+const searchInput = document.getElementById("search")
+const filterTabs = document.querySelectorAll(".filter-tab")
+const modal = document.getElementById("bookingModal")
+
 // booking.js - Handles booking functionality
 document.addEventListener("DOMContentLoaded", () => {
             // DOM Elements
@@ -133,36 +159,36 @@ document.addEventListener("DOMContentLoaded", () => {
   <a href="/order" class="btn-primary">Order Now</a>
 </div>
 `
-return
-}
+      return
+    }
 
-// Render each booking
-filteredBookings.forEach((booking) => {
-const bookingCard = document.createElement("div")
-bookingCard.className = "booking-card"
-bookingCard.setAttribute("data-id", booking.id)
-bookingCard.setAttribute("data-status", booking.status)
+    // Render each booking
+    filteredBookings.forEach((booking) => {
+      const bookingCard = document.createElement("div")
+      bookingCard.className = "booking-card"
+      bookingCard.setAttribute("data-id", booking.id)
+      bookingCard.setAttribute("data-status", booking.status)
 
-// Format date
-const date = new Date(booking.date)
-const formattedDate = date.toLocaleDateString() + " " + date.toLocaleTimeString()
+      // Format date
+      const date = new Date(booking.date)
+      const formattedDate = date.toLocaleDateString() + " " + date.toLocaleTimeString()
 
-// Get status class
-let statusClass = ""
-switch (booking.status) {
-case "processing":
-  statusClass = "processing"
-  break
-case "completed":
-  statusClass = "completed"
-  break
-case "cancelled":
-  statusClass = "cancelled"
-  break
-}
+      // Get status class
+      let statusClass = ""
+      switch (booking.status) {
+        case "processing":
+          statusClass = "processing"
+          break
+        case "completed":
+          statusClass = "completed"
+          break
+        case "cancelled":
+          statusClass = "cancelled"
+          break
+      }
 
-// Create booking card HTML
-bookingCard.innerHTML = `
+      // Create booking card HTML
+      bookingCard.innerHTML = `
 <div class="booking-header">
   <div class="booking-info">
     <h3>Order #${booking.id}</h3>
@@ -205,8 +231,8 @@ bookingCard.innerHTML = `
         <button class="btn-outline-danger cancel-booking" data-id="${booking.id}">
           <i class="fas fa-times"></i> Cancel
         </button>
-        <button class="btn-primary edit-booking" data-id="${booking.id}">
-          <i class="fas fa-edit"></i> Edit Order
+        <button class="btn-primary complete-booking" data-id="${booking.id}">
+          <i class="fas fa-check"></i> Complete
         </button>
       `
         : ""
@@ -215,65 +241,65 @@ bookingCard.innerHTML = `
 </div>
 `
 
-bookingsList.appendChild(bookingCard)
-})
+      bookingsList.appendChild(bookingCard)
+    })
 
-// Add event listeners to buttons
-const viewDetailsButtons = document.querySelectorAll(".view-details")
-const cancelButtons = document.querySelectorAll(".cancel-booking")
-const editButtons = document.querySelectorAll(".edit-booking")
+    // Add event listeners to buttons
+    const viewDetailsButtons = document.querySelectorAll(".view-details")
+    const cancelButtons = document.querySelectorAll(".cancel-booking")
+    const completeButtons = document.querySelectorAll(".complete-booking")
 
-viewDetailsButtons.forEach((button) => {
-button.addEventListener("click", function (e) {
-e.preventDefault()
-const id = this.getAttribute("data-id")
-showBookingDetails(id)
-})
-})
+    viewDetailsButtons.forEach((button) => {
+      button.addEventListener("click", function (e) {
+        e.preventDefault()
+        const id = this.getAttribute("data-id")
+        showBookingDetails(id)
+      })
+    })
 
-cancelButtons.forEach((button) => {
-button.addEventListener("click", function () {
-const id = this.getAttribute("data-id")
-cancelBooking(id)
-})
-})
+    cancelButtons.forEach((button) => {
+      button.addEventListener("click", function () {
+        const id = this.getAttribute("data-id")
+        cancelBooking(id)
+      })
+    })
 
-editButtons.forEach((button) => {
-button.addEventListener("click", function () {
-const id = this.getAttribute("data-id")
-editBooking(id)
-})
-})
-}
+    completeButtons.forEach((button) => {
+      button.addEventListener("click", function () {
+        const id = this.getAttribute("data-id")
+        completeBooking(id)
+      })
+    })
+  }
 
-// Show booking details
-function showBookingDetails(id) {
-const booking = bookings.find((b) => b.id === id)
-if (!booking) return
+  // Show booking details
+  function showBookingDetails(id) {
+    const booking = bookings.find((b) => b.id === id)
+    if (!booking) return
 
-// Create modal
-const modal = document.createElement("div")
-modal.className = "booking-details-modal"
+    // Create modal
+    const modal = document.createElement("div")
+    modal.className = "booking-details-modal"
 
-// Format date
-const date = new Date(booking.date)
-const formattedDate = date.toLocaleDateString() + " " + date.toLocaleTimeString()
+    // Format date
+    const date = new Date(booking.date)
+    const formattedDate = date.toLocaleDateString() + " " + date.toLocaleTimeString()
 
-// Get status class
-let statusClass = ""
-switch (booking.status) {
-case "processing":
-statusClass = "processing"
-break
-case "completed":
-statusClass = "completed"
-break
-case "cancelled":
-statusClass = "cancelled"
-break
-}
+    // Get status class
+    let statusClass = ""
+    switch (booking.status) {
+      case "processing":
+        statusClass = "processing"
+        break
+      case "completed":
+        statusClass = "completed"
+        break
+      case "cancelled":
+        statusClass = "cancelled"
+        break
+    }
 
-modal.innerHTML = `
+    modal.innerHTML = `
 <div class="modal-content">
 <div class="modal-header">
   <h3>Order Details</h3>
@@ -338,7 +364,7 @@ modal.innerHTML = `
     booking.status === "processing"
       ? `
       <button class="btn-outline-danger cancel-booking-modal" data-id="${booking.id}">Cancel Order</button>
-      <button class="btn-primary edit-booking-modal" data-id="${booking.id}">Edit Order</button>
+      <button class="btn-primary complete-booking-modal" data-id="${booking.id}">Complete Order</button>
     `
       : ""
   }
@@ -346,75 +372,75 @@ modal.innerHTML = `
 </div>
 `
 
-document.body.appendChild(modal)
+    document.body.appendChild(modal)
 
-// Add event listeners
-const closeButtons = modal.querySelectorAll(".close-modal, .close-details")
-closeButtons.forEach((button) => {
-button.addEventListener("click", () => {
-modal.remove()
-})
-})
+    // Add event listeners
+    const closeButtons = modal.querySelectorAll(".close-modal, .close-details")
+    closeButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        modal.remove()
+      })
+    })
 
-const cancelButton = modal.querySelector(".cancel-booking-modal")
-if (cancelButton) {
-cancelButton.addEventListener("click", function () {
-const id = this.getAttribute("data-id")
-cancelBooking(id)
-modal.remove()
-})
-}
+    const cancelButton = modal.querySelector(".cancel-booking-modal")
+    if (cancelButton) {
+      cancelButton.addEventListener("click", function () {
+        const id = this.getAttribute("data-id")
+        cancelBooking(id)
+        modal.remove()
+      })
+    }
 
-const editButton = modal.querySelector(".edit-booking-modal")
-if (editButton) {
-editButton.addEventListener("click", function () {
-const id = this.getAttribute("data-id")
-editBooking(id)
-modal.remove()
-})
-}
+    const completeButton = modal.querySelector(".complete-booking-modal")
+    if (completeButton) {
+      completeButton.addEventListener("click", function () {
+        const id = this.getAttribute("data-id")
+        completeBooking(id)
+        modal.remove()
+      })
+    }
 
-// Close when clicking outside
-modal.addEventListener("click", (e) => {
-if (e.target === modal) {
-modal.remove()
-}
-})
-}
+    // Close when clicking outside
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) {
+        modal.remove()
+      }
+    })
+  }
 
-// Cancel booking
-function cancelBooking(id) {
-const bookingIndex = bookings.findIndex((b) => b.id === id)
-if (bookingIndex === -1) return
+  // Cancel booking
+  function cancelBooking(id) {
+    const bookingIndex = bookings.findIndex((b) => b.id === id)
+    if (bookingIndex === -1) return
 
-// Update booking status
-bookings[bookingIndex].status = "cancelled"
+    // Update booking status
+    bookings[bookingIndex].status = "cancelled"
 
-// Save to localStorage
-localStorage.setItem("bookings", JSON.stringify(bookings))
+    // Save to localStorage
+    localStorage.setItem("bookings", JSON.stringify(bookings))
 
-// Add notification
-if (window.addNotification) {
-window.addNotification("Order Cancelled", `Your order #${bookings[bookingIndex].id} has been cancelled.`, "order")
-}
+    // Add notification
+    if (window.addNotification) {
+      window.addNotification("Order Cancelled", `Your order #${bookings[bookingIndex].id} has been cancelled.`, "order")
+    }
 
-// Find and remove the booking card from the DOM if in "all" tab
-const activeTab = document.querySelector(".filter-tab.active")
-if (activeTab && activeTab.getAttribute("data-status") === "all") {
-const bookingCard = document.querySelector(`.booking-card[data-id="${id}"]`)
-if (bookingCard) {
-// Add fade-out animation
-bookingCard.style.transition = "opacity 0.3s ease, transform 0.3s ease"
-bookingCard.style.opacity = "0"
-bookingCard.style.transform = "translateX(20px)"
+    // Find and remove the booking card from the DOM if in "all" tab
+    const activeTab = document.querySelector(".filter-tab.active")
+    if (activeTab && activeTab.getAttribute("data-status") === "all") {
+      const bookingCard = document.querySelector(`.booking-card[data-id="${id}"]`)
+      if (bookingCard) {
+        // Add fade-out animation
+        bookingCard.style.transition = "opacity 0.3s ease, transform 0.3s ease"
+        bookingCard.style.opacity = "0"
+        bookingCard.style.transform = "translateX(20px)"
 
-// Remove after animation completes
-setTimeout(() => {
-  bookingCard.remove()
+        // Remove after animation completes
+        setTimeout(() => {
+          bookingCard.remove()
 
-  // Check if there are no more bookings and show empty state if needed
-  if (bookingsList.children.length === 0) {
-    bookingsList.innerHTML = `
+          // Check if there are no more bookings and show empty state if needed
+          if (bookingsList.children.length === 0) {
+            bookingsList.innerHTML = `
       <div class="empty-state">
         <img src="/assets/image/empty-orders.svg" alt="No Orders">
         <h3>No Orders Found</h3>
@@ -422,49 +448,47 @@ setTimeout(() => {
         <a href="/order" class="btn-primary">Order Now</a>
       </div>
     `
+          }
+        }, 300)
+      }
+    } else {
+      // Re-render bookings for other tabs
+      const status = activeTab ? activeTab.getAttribute("data-status") : "all"
+      const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : ""
+      renderBookings(status, searchTerm)
+    }
   }
-}, 300)
-}
-} else {
-// Re-render bookings for other tabs
-const status = activeTab ? activeTab.getAttribute("data-status") : "all"
-const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : ""
-renderBookings(status, searchTerm)
-}
-}
 
-// Edit booking
-function editBooking(id) {
-const booking = bookings.find((b) => b.id === id)
-if (!booking) return
+  // Complete booking
+  function completeBooking(id) {
+    const bookingIndex = bookings.findIndex((b) => b.id === id)
+    if (bookingIndex === -1) return
 
-// Add items back to cart
-localStorage.setItem("cart", JSON.stringify(booking.items))
+    // Update booking status
+    bookings[bookingIndex].status = "completed"
 
-// Remove the booking
-const updatedBookings = bookings.filter((b) => b.id !== id)
-localStorage.setItem("bookings", JSON.stringify(updatedBookings))
+    // Save to localStorage
+    localStorage.setItem("bookings", JSON.stringify(bookings))
 
-// Add notification
-if (window.addNotification) {
-window.addNotification(
-"Order Editing",
-`Your order #${booking.id} has been moved back to your cart for editing.`,
-"cart",
-)
-}
+    // Add notification
+    if (window.addNotification) {
+      window.addNotification("Order Completed", `Your order #${bookings[bookingIndex].id} has been completed.`, "order")
+    }
 
-// Redirect to order page
-window.location.href = "/order"
-}
+    // Redirect to order page
+    const activeTab = document.querySelector(".filter-tab.active")
+    const status = activeTab ? activeTab.getAttribute("data-status") : "all"
+    const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : ""
+    renderBookings(status, searchTerm)
+  }
 
-// Show order success message
-function showOrderSuccessMessage(booking) {
-// Create success message
-const successMessage = document.createElement("div")
-successMessage.className = "order-success-message"
+  // Show order success message
+  function showOrderSuccessMessage(booking) {
+    // Create success message
+    const successMessage = document.createElement("div")
+    successMessage.className = "order-success-message"
 
-successMessage.innerHTML = `
+    successMessage.innerHTML = `
 <div class="success-content">
 <div class="success-icon">
   <i class="fas fa-check-circle"></i>
@@ -485,28 +509,28 @@ successMessage.innerHTML = `
 </div>
 `
 
-document.body.appendChild(successMessage)
+    document.body.appendChild(successMessage)
 
-// Add event listener to view details button
-const viewDetailsButton = successMessage.querySelector(".view-order-details")
-viewDetailsButton.addEventListener("click", function () {
-const id = this.getAttribute("data-id")
-successMessage.remove()
-showBookingDetails(id)
-})
+    // Add event listener to view details button
+    const viewDetailsButton = successMessage.querySelector(".view-order-details")
+    viewDetailsButton.addEventListener("click", function () {
+      const id = this.getAttribute("data-id")
+      successMessage.remove()
+      showBookingDetails(id)
+    })
 
-// Auto remove after 5 seconds
-setTimeout(() => {
-successMessage.classList.add("fade-out")
-setTimeout(() => {
-successMessage.remove()
-}, 500)
-}, 5000)
-}
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+      successMessage.classList.add("fade-out")
+      setTimeout(() => {
+        successMessage.remove()
+      }, 500)
+    }, 5000)
+  }
 
-// Add CSS for booking
-const style = document.createElement("style")
-style.textContent = `
+  // Add CSS for booking
+  const style = document.createElement("style")
+  style.textContent = `
 /* Booking Card Styles */
 .booking-card {
 background-color: white;
@@ -970,16 +994,214 @@ to { opacity: 1; transform: translate(-50%, -50%); }
 }
 }
 `
-document.head.appendChild(style)
+  document.head.appendChild(style)
 
-// Check if we need to create a booking from cart
-if (window.location.pathname === "/booking" && cartItems.length > 0) {
-// Set flag to create booking on page load
-sessionStorage.setItem("justCheckedOut", "true")
+  // Check if we need to create a booking from cart
+  if (window.location.pathname === "/booking" && cartItems.length > 0) {
+    // Set flag to create booking on page load
+    sessionStorage.setItem("justCheckedOut", "true")
 
-// Reload page to trigger booking creation
-if (!justCheckedOut) {
-window.location.reload()
-}
-}
+    // Reload page to trigger booking creation
+    if (!justCheckedOut) {
+      window.location.reload()
+    }
+  }
 })
+
+// Event listeners for filter tabs
+// filterTabs.forEach((tab) => {
+//   tab.addEventListener("click", function () {
+//     // Remove active class from other tabs
+//     filterTabs.forEach((t) => t.classList.remove("active"))
+
+//     // Add active class to current tab
+//     this.classList.add("active")
+
+//     // Get status from data attribute
+//     const status = this.getAttribute("data-status")
+
+//     // Get search term
+//     const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : ""
+
+//     // Render bookings based on status
+//     renderBookings(status, searchTerm)
+//   })
+// })
+
+// Event listener for search input
+// if (searchInput) {
+//   searchInput.addEventListener("input", function () {
+//     const searchTerm = this.value.toLowerCase().trim()
+//     const activeTab = document.querySelector(".filter-tab.active")
+//     const status = activeTab ? activeTab.getAttribute("data-status") : "all"
+//     renderBookings(status, searchTerm)
+//   })
+// }
+
+// Render bookings
+// function renderBookings(status = "all", searchTerm = "") {
+//   let filteredBookings = [...bookings]
+
+//   // Filter by status
+//   if (status !== "all") {
+//     filteredBookings = filteredBookings.filter((booking) => booking.status === status)
+//   }
+
+//   // Filter by search term
+//   if (searchTerm) {
+//     filteredBookings = filteredBookings.filter((booking) => {
+//       return (
+//         booking.name.toLowerCase().includes(searchTerm) ||
+//         booking.service.toLowerCase().includes(searchTerm) ||
+//         booking.date.includes(searchTerm)
+//       )
+//     })
+//   }
+
+//   // Sort bookings by date and time
+//   filteredBookings.sort((a, b) => {
+//     const dateA = new Date(a.date + " " + a.time)
+//     const dateB = new Date(b.date + " " + b.time)
+//     return dateA - dateB
+//   })
+
+//   // Generate HTML
+//   let html = ""
+//   if (filteredBookings.length === 0) {
+//     html = "<p>No bookings found.</p>"
+//   } else {
+//     filteredBookings.forEach((booking) => {
+//       html += `
+//         <div class="booking-card">
+//           <div class="booking-details">
+//             <h3>${booking.name}</h3>
+//             <p>Date: ${booking.date}</p>
+//             <p>Time: ${booking.time}</p>
+//             <p>Service: ${booking.service}</p>
+//             <p>Status: ${booking.status}</p>
+//           </div>
+//           <div class="booking-actions">
+//             <button class="btn-primary view-booking" data-id="${booking.id}">
+//               <i class="fas fa-eye"></i> View Details
+//             </button>
+//             <button class="btn-success complete-booking" data-id="${booking.id}">
+//               <i class="fas fa-check"></i> Complete
+//             </button>
+//           </div>
+//         </div>
+//       `
+//     })
+//   }
+
+//   // Update bookings container
+//   bookingsContainer.innerHTML = html
+
+//   // Add event listeners to view buttons
+//   const viewButtons = document.querySelectorAll(".view-booking")
+
+//   viewButtons.forEach((button) => {
+//     button.addEventListener("click", function () {
+//       const id = this.getAttribute("data-id")
+//       showBookingDetails(id)
+//     })
+//   })
+
+//   const completeButtons = document.querySelectorAll(".complete-booking")
+
+//   completeButtons.forEach((button) => {
+//     button.addEventListener("click", function () {
+//       const id = this.getAttribute("data-id")
+//       completeBooking(id)
+//     })
+//   })
+// }
+
+// // Show booking details in modal
+// function showBookingDetails(id) {
+//   const booking = bookings.find((b) => b.id === id)
+//   if (!booking) return
+
+//   // Create modal content
+//   const modalContent = `
+//     <div class="modal-content">
+//       <div class="modal-header">
+//         <h2>Booking Details</h2>
+//         <span class="close">&times;</span>
+//       </div>
+//       <div class="modal-body">
+//         <p><strong>Name:</strong> ${booking.name}</p>
+//         <p><strong>Date:</strong> ${booking.date}</p>
+//         <p><strong>Time:</strong> ${booking.time}</p>
+//         <p><strong>Service:</strong> ${booking.service}</p>
+//         <p><strong>Status:</strong> ${booking.status}</p>
+//       </div>
+//       <div class="modal-footer">
+//         <button class="btn-success complete-booking-modal" data-id="${booking.id}">Complete</button>
+//       </div>
+//     </div>
+//   `
+
+//   // Add modal content to modal
+//   modal.innerHTML = modalContent
+
+//   // Show modal
+//   modal.style.display = "block"
+
+//   // Close modal button
+//   const closeButton = modal.querySelector(".close")
+//   closeButton.addEventListener("click", () => {
+//     modal.style.display = "none"
+//   })
+
+//   // Close modal when clicking outside
+//   window.addEventListener("click", (event) => {
+//     if (event.target == modal) {
+//       modal.style.display = "none"
+//     }
+//   })
+
+//   const completeButton = modal.querySelector(".complete-booking-modal")
+//   if (completeButton) {
+//     completeButton.addEventListener("click", function () {
+//       const id = this.getAttribute("data-id")
+//       completeBooking(id)
+//       modal.remove()
+//     })
+//   }
+// }
+
+// // Edit booking (Placeholder function)
+// function editBooking(id) {
+//   alert(`Editing booking with id ${id}`)
+// }
+
+// // Complete booking
+// function completeBooking(id) {
+//   const bookingIndex = bookings.findIndex((b) => b.id === id)
+//   if (bookingIndex === -1) return
+
+//   // Update booking status
+//   bookings[bookingIndex].status = "completed"
+
+//   // Save to localStorage
+//   localStorage.setItem("bookings", JSON.stringify(bookings))
+
+//   // Add notification
+//   if (window.addNotification) {
+//     window.addNotification("Order Completed", `Your order #${bookings[bookingIndex].id} has been completed.`, "order")
+//   }
+
+//   // Re-render bookings
+//   const activeTab = document.querySelector(".filter-tab.active")
+//   const status = activeTab ? activeTab.getAttribute("data-status") : "all"
+//   const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : ""
+//   renderBookings(status, searchTerm)
+// }
+
+// // Initial render
+// renderBookings()
+
+// // Example addNotification function (replace with your actual implementation)
+// window.addNotification = (title, message, type) => {
+//   alert(`${title}: ${message} (Type: ${type})`)
+// }

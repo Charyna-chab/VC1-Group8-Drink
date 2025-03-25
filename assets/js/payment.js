@@ -20,6 +20,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const urlParams = new URLSearchParams(window.location.search)
     const orderId = urlParams.get("order_id")
 
+    // Update the button text to "Completed" initially
+    if (completePaymentBtn) {
+        completePaymentBtn.innerHTML = '<i class="fas fa-check-circle"></i> Completed'
+    }
+
     // Load order data from localStorage
     loadOrderData(orderId)
 
@@ -119,8 +124,54 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             }
 
+            // Show payment interface alert before processing
+            showPaymentAlert("Payment interface activated. Your order will be processed.")
+
             // Process the payment
             processPayment(paymentMethod)
+        })
+    }
+
+    // Custom payment alert function
+    function showPaymentAlert(message) {
+        // Create overlay
+        const alertOverlay = document.createElement("div")
+        alertOverlay.className = "payment-alert-overlay"
+
+        // Create alert box
+        const alertBox = document.createElement("div")
+        alertBox.className = "payment-alert-box"
+
+        // Add content
+        alertBox.innerHTML = `
+              <div class="payment-alert-icon">
+                  <i class="fas fa-credit-card"></i>
+              </div>
+              <h3>Payment Notification</h3>
+              <p>${message}</p>
+              <button id="alert-ok" class="btn-primary">Proceed</button>
+          `
+
+        // Add to DOM
+        alertOverlay.appendChild(alertBox)
+        document.body.appendChild(alertOverlay)
+
+        // Add event listener to OK button
+        document.getElementById("alert-ok").addEventListener("click", () => {
+            alertOverlay.classList.add("fade-out")
+            setTimeout(() => {
+                alertOverlay.remove()
+            }, 300)
+        })
+
+        // Also close when clicking outside the alert box
+        alertOverlay.addEventListener("click", (e) => {
+            if (e.target === alertOverlay) {
+                alertOverlay.classList.add("fade-out")
+                setTimeout(() => {
+                    alertOverlay.remove()
+                }, 300)
+            }
         })
     }
 
@@ -169,19 +220,19 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             itemElement.innerHTML = `
-        <div class="item-image">
-          <img src="${item.image || "/assets/images/default-product.png"}" alt="${item.name}">
-        </div>
-        <div class="item-details">
-          <h4>${item.name}</h4>
-          <p>Size: ${item.size.name} | Sugar: ${item.sugar.name} | Ice: ${item.ice.name}</p>
-          <p>Toppings: ${toppingsText}</p>
-          <div class="item-quantity-price">
-            <span>Qty: ${item.quantity}</span>
-            <span>$${item.totalPrice.toFixed(2)}</span>
+          <div class="item-image">
+            <img src="${item.image || "/assets/images/default-product.png"}" alt="${item.name}">
           </div>
-        </div>
-      `
+          <div class="item-details">
+            <h4>${item.name}</h4>
+            <p>Size: ${item.size.name} | Sugar: ${item.sugar.name} | Ice: ${item.ice.name}</p>
+            <p>Toppings: ${toppingsText}</p>
+            <div class="item-quantity-price">
+              <span>Qty: ${item.quantity}</span>
+              <span>$${item.totalPrice.toFixed(2)}</span>
+            </div>
+          </div>
+        `
 
             orderItemsContainer.appendChild(itemElement)
         })
@@ -271,7 +322,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 // Reset button state
                 completePaymentBtn.disabled = false
-                completePaymentBtn.innerHTML = '<i class="fas fa-lock"></i> Complete Payment'
+                completePaymentBtn.innerHTML = '<i class="fas fa-check-circle"></i> Completed'
 
                 // Add notification
                 if (window.addNotification) {
@@ -344,15 +395,15 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         toast.innerHTML = `
-      <div class="toast-icon">
-        <i class="fas fa-${icon}"></i>
-      </div>
-      <div class="toast-content">
-        <h4>${title}</h4>
-        <p>${message}</p>
-      </div>
-      <button class="toast-close">&times;</button>
-    `
+        <div class="toast-icon">
+          <i class="fas fa-${icon}"></i>
+        </div>
+        <div class="toast-content">
+          <h4>${title}</h4>
+          <p>${message}</p>
+        </div>
+        <button class="toast-close">&times;</button>
+      `
 
         // Add to container
         toastContainer.appendChild(toast)
