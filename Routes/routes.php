@@ -3,8 +3,7 @@ require_once 'Router.php';
 require_once './Controllers/UserController.php';
 require_once './Controllers/Products/ProductController.php';
 require_once './Controllers/Admin/DashboardController.php';
-// require_once './router/Router.php';
-
+require_once './Controllers/Admin/FeedbackController.php'; // Add this line
 
 $routes = new Router();
 
@@ -26,8 +25,13 @@ $routes->get('/product/edit', [ProductController::class, 'edit']);
 $routes->put('/product/update', [ProductController::class, 'update']);
 $routes->get('/product/delete', [ProductController::class, 'destroy']);
 
-
-
+// feedback
+$routes->get('/feedback', [FeedbackController::class, 'index']);
+// $routes->get('/admin/feedback/create', [FeedbackController::class, 'create']);
+// $routes->post('/admin/feedback/store', [FeedbackController::class, 'store']);
+// $routes->get('/admin/feedback/edit', [FeedbackController::class, 'edit']);
+// $routes->put('/admin/feedback/update', [FeedbackController::class, 'update']);
+// $routes->delete('/admin/feedback/delete', [FeedbackController::class, 'destroy']);
 
 // dispatch
 $routes->dispatch();

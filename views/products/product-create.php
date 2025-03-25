@@ -1,12 +1,12 @@
-<div class="card shadow mb-4 ml-3 mr-3" style="width:50%;">
-    <div class="card-body ">
-        <div class="container">
-            <form action="/product/store" method="POST" enctype="multipart/form-data">
-                <div class="form-group">
+<div class="main-panel ">
+    <div class="container w-50 p-3 ">
+        <form action="/product/store" method="POST" enctype="multipart/form-data" class="border border-dark p-5">
+            <div class="row">
+                <div class="form-group mb-3 col">
                     <label for="name" class="form-label">Product Name:</label>
                     <input type="product_name" id="product_name" name="product_name" class="form-control">
                 </div>
-                <div class="form-group">
+                <div class="form-group mb-3 col">
                     <label for="phone" class="form-label">Price:</label>
                     <input type="price" id="price" name="price" class="form-control">
                 </div>
