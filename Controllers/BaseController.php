@@ -24,7 +24,7 @@ class BaseController {
             // Include header
             require_once 'views/layouts/header.php';
             
-            // // Include sidebar if not welcome page
+            // Include sidebar if not welcome page
             // if (strpos($views, 'welcome/') !== 0) {
             //     require_once 'views/layouts/sidebar.php';
             // }
@@ -41,17 +41,4 @@ class BaseController {
         header('Location: ' . $uri);
         exit();
     }
-
-        // Define the BaseController class
-        protected function render($view) {
-            // Logic to render the view
-            echo "Rendering view: $view";
-        }
-    }
-    
-    class GiftCardController extends BaseController {
-        public function index() {
-            // Render the gift card page
-            $this->views('gift-card');
-        }
 }

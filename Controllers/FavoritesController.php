@@ -212,4 +212,3 @@ class FavoritesController extends BaseController {
         exit;
     }
 }
-
