@@ -169,6 +169,14 @@ class OrdersController extends BaseController {
                 'price' => 4.50,
                 'image' => '/assets/images/products/cheese-foam-cake.jpg',
                 'category' => 'snacks'
+            ],
+            [
+                'id' => 21,
+                'name' => 'Cheese Foam Cake',
+                'description' => 'A soft sponge cake topped with our signature cheese foam, creating a creamy and sweet experience.',
+                'price' => 4.50,
+                'image' => '/assets/images/products/cheese-foam-cake.jpg',
+                'category' => 'snacks'
             ]
         ];
         
