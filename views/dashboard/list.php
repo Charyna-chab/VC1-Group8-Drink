@@ -205,11 +205,6 @@ $product_count = $_SESSION['product_count'] ?? 0;
                     <script src="/assets/js/demo/chart-area-demo.js"></script>
                     <script src="/assets/js/demo/chart-pie-demo.js"></script>
 
-        <!-- Page level custom scripts -->
-        <script src="/assets/js/demo/chart-area-demo.js"></script>
-        <script src="/assets/js/demo/chart-pie-demo.js"></script>
-        
-
 
 
 </body>
