@@ -1,5 +1,9 @@
 <?php
-class OrderController extends BaseController {
+namespace YourNamespace\Controllers;
+
+use YourNamespace\BaseController;
+
+class OrdersController extends BaseController {
     public function index() {
         // In a real application, you would fetch products from the database
         // For now, we'll create sample data
