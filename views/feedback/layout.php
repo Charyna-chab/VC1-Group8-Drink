@@ -1,159 +1,210 @@
-<?php 
-include '../layout/header.php';
-require_once '../config/db.php'; // Database connection
-require_once '../auth/check_auth.php'; // Authentication check
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drink Shop Admin</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .main-content {
+            min-height: 100vh;
+        }
+        
+        .page-container {
+            display: flex;
+        }
+        
+        .content-wrapper {
+            flex: 1;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+        
+        .sidebar-wrapper {
+            width: 280px;
+            transition: all 0.3s;
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #E91E63;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #D81B60;
+        }
+        
+        /* Responsive sidebar */
+        @media (max-width: 768px) {
+            .sidebar-wrapper {
+                width: 70px;
+            }
+            
+            .sidebar-wrapper .nav-link span,
+            .sidebar-wrapper .sidebar-header h3,
+            .sidebar-wrapper .sidebar-header p,
+            .sidebar-wrapper .admin-profile div,
+            .sidebar-wrapper .text-uppercase {
+                display: none;
+            }
+            
+            .sidebar-wrapper .logo-circle {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .content-wrapper {
+                margin-left: 0;
+            }
+            
+            .sidebar-wrapper .badge {
+                position: absolute;
+                top: 5px;
+                right: 5px;
+                font-size: 0.6rem;
+            }
+        }
+        
+        /* Toast notification */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1050;
+        }
+    </style>
+</head>
+<body>
+    <!-- Toast notification container -->
+    <div class="toast-container"></div>
 
-// Log admin access to feedback page
-$admin_id = $_SESSION['admin_id'] ?? 0;
-$stmt = $conn->prepare("INSERT INTO access_logs (admin_id, page_accessed, access_time) VALUES (?, 'feedback', NOW())");
-$stmt->execute([$admin_id]);
-
-// Handle filters
-$search = $_GET['search'] ?? '';
-$date_from = $_GET['date_from'] ?? '';
-$date_to = $_GET['date_to'] ?? '';
-
-// Build query with filters
-$query = "SELECT f.*, u.name as customer_name 
-          FROM feedback f 
-          LEFT JOIN users u ON f.user_id = u.id 
-          WHERE 1=1";
-
-$params = [];
-
-if (!empty($search)) {
-    $query .= " AND (u.name LIKE ? OR f.message LIKE ?)";
-    $params[] = "%$search%";
-    $params[] = "%$search%";
-}
-
-if (!empty($date_from)) {
-    $query .= " AND f.created_at >= ?";
-    $params[] = $date_from;
-}
-
-if (!empty($date_to)) {
-    $query .= " AND f.created_at <= ?";
-    $params[] = $date_to . ' 23:59:59';
-}
-
-$query .= " ORDER BY f.created_at DESC";
-
-$stmt = $conn->prepare($query);
-$stmt->execute($params);
-$feedback = $stmt->fetchAll(PDO::FETCH_ASSOC);
-?>
-
-<!-- Begin Page Content -->
-<div class="container-fluid">
-
-    <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Customer Feedback</h1>
-    <p class="mb-4">View and manage customer feedback submissions.</p>
-
-    <!-- Feedback Filters -->
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Filters</h6>
+    <div class="page-container">
+        <!-- Sidebar -->
+        <div class="sidebar-wrapper">
+            <?php if (isset($content) && strpos($content, 'sidebar') !== false): ?>
+                <!-- The sidebar is already included in the content -->
+            <?php else: ?>
+                <?php include 'views/feedback/sidebar.php'; ?>
+            <?php endif; ?>
         </div>
-        <div class="card-body">
-            <form method="get" action="">
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="search">Search (Name or Message)</label>
-                            <input type="text" class="form-control" id="search" name="search" 
-                                   value="<?= htmlspecialchars($search) ?>" placeholder="Search...">
+        
+        <!-- Main Content -->
+        <div class="content-wrapper">
+            <!-- Top Navigation -->
+            <nav class="navbar navbar-expand-lg navbar-light bg-white mb-4 shadow-sm rounded">
+                <div class="container-fluid">
+                    <button class="navbar-toggler border-0" type="button" id="sidebarToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    
+                    <div class="d-flex align-items-center">
+                        <div class="dropdown">
+                            <button class="btn btn-link text-dark dropdown-toggle" type="button" id="notificationsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-bell"></i>
+                                <span class="badge rounded-pill" style="background-color: #E91E63;">3</span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationsDropdown">
+                                <li><h6 class="dropdown-header">Notifications</h6></li>
+                                <li><a class="dropdown-item" href="#">New order received</a></li>
+                                <li><a class="dropdown-item" href="#">New feedback submitted</a></li>
+                                <li><a class="dropdown-item" href="#">System update available</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-center" href="#">View all</a></li>
+                            </ul>
                         </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label for="date_from">From Date</label>
-                            <input type="date" class="form-control" id="date_from" name="date_from" 
-                                   value="<?= htmlspecialchars($date_from) ?>">
+                        
+                        <div class="dropdown ms-3">
+                            <button class="btn btn-link text-dark dropdown-toggle d-flex align-items-center" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <div class="avatar-circle me-2" style="background-color: #E91E63; width: 30px; height: 30px; font-size: 12px;">
+                                    A
+                                </div>
+                                <span>Admin</span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i> Profile</a></li>
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i> Settings</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
+                            </ul>
                         </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label for="date_to">To Date</label>
-                            <input type="date" class="form-control" id="date_to" name="date_to" 
-                                   value="<?= htmlspecialchars($date_to) ?>">
-                        </div>
-                    </div>
-                    <div class="col-md-2 d-flex align-items-end">
-                        <button type="submit" class="btn btn-primary mb-3">Apply</button>
-                        <a href="/feedback" class="btn btn-secondary mb-3 ml-2">Reset</a>
                     </div>
                 </div>
-            </form>
+            </nav>
+            
+            <?php echo $content; ?>
         </div>
     </div>
+    
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script>
+        // Toggle sidebar
+        document.getElementById('sidebarToggle').addEventListener('click', function() {
+            document.querySelector('.sidebar-wrapper').classList.toggle('collapsed');
+            document.querySelector('.content-wrapper').classList.toggle('expanded');
+        });
+        
+        // Initialize tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        });
+        
+        // Show toast notification on page load (demo)
+        window.addEventListener('DOMContentLoaded', (event) => {
+            // Create toast element
+            const toastEl = document.createElement('div');
+            toastEl.className = 'toast show';
+            toastEl.setAttribute('role', 'alert');
+            toastEl.setAttribute('aria-live', 'assertive');
+            toastEl.setAttribute('aria-atomic', 'true');
+            
+            toastEl.innerHTML = `
+                <div class="toast-header">
+                    <strong class="me-auto" style="color: #E91E63;">
+                        <i class="fas fa-info-circle me-1"></i> Notification
+                    </strong>
+                    <small>Just now</small>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    Welcome to the Feedback Management System!
+                </div>
+            `;
+            
+            // Add to container
+            document.querySelector('.toast-container').appendChild(toastEl);
+            
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                const toast = new bootstrap.Toast(toastEl);
+                toast.hide();
+            }, 5000);
+        });
+    </script>
+</body>
+</html>
 
-    <!-- Feedback Table -->
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">All Feedback</h6>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                    <thead>
-                        <tr>
-                            <th>Customer</th>
-                            <th>Date</th>
-                            <th>Message</th>
-                            <th>Rating</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($feedback as $item): ?>
-                        <tr>
-                            <td><?= !empty($item['customer_name']) ? htmlspecialchars($item['customer_name']) : 'Guest' ?></td>
-                            <td><?= date('M j, Y g:i a', strtotime($item['created_at'])) ?></td>
-                            <td><?= nl2br(htmlspecialchars($item['message'])) ?></td>
-                            <td>
-                                <?php if (!empty($item['rating'])): ?>
-                                    <?php for ($i = 1; $i <= 5; $i++): ?>
-                                        <?php if ($i <= $item['rating']): ?>
-                                            <i class="fas fa-star text-warning"></i>
-                                        <?php else: ?>
-                                            <i class="far fa-star text-warning"></i>
-                                        <?php endif; ?>
-                                    <?php endfor; ?>
-                                <?php else: ?>
-                                    N/A
-                                <?php endif; ?>
-                            </td>
-                        </tr>
-                        <?php endforeach; ?>
-                        <?php if (empty($feedback)): ?>
-                        <tr>
-                            <td colspan="4" class="text-center">No feedback found</td>
-                        </tr>
-                        <?php endif; ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-</div>
-<!-- /.container-fluid -->
-
-<?php include '../layout/footer.php'; ?>
-
-<!-- Page level plugins -->
-<script src="/assets/vendor/jquery.dataTables.min.js"></script>
-<script src="/assets/vendor/dataTables.bootstrap4.min.js"></script>
-
-<!-- Page level custom scripts -->
-<script>
-$(document).ready(function() {
-    $('#dataTable').DataTable({
-        "order": [[1, "desc"]], // Default sort by date descending
-        "columnDefs": [
-            { "orderable": false, "targets": [2, 3] } // Disable sorting for message and rating columns
-        ]
-    });
-});
-</script>
