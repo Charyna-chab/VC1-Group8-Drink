@@ -1,4 +1,3 @@
-// Sample booking data (replace with your actual data source)
 let bookings = [
     { id: "1", name: "John Doe", date: "2024-07-15", time: "10:00", service: "Haircut", status: "pending" },
     { id: "2", name: "Jane Smith", date: "2024-07-16", time: "14:00", service: "Manicure", status: "confirmed" },
@@ -155,10 +154,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (filteredBookings.length === 0) {
                     bookingsList.innerHTML = `
 <div class="empty-state">
-  <img src="/assets/image/empty-orders.svg" alt="No Orders">
-  <h3>No Orders Found</h3>
-  <p>${status === "all" ? "You haven't placed any orders yet." : `You don't have any ${status} orders.`}</p>
-  <a href="/order" class="btn-primary">Order Now</a>
+<img src="/assets/image/empty-orders.svg" alt="No Orders">
+<h3>No Orders Found</h3>
+<p>${status === "all" ? "You haven't placed any orders yet." : `You don't have any ${status} orders.`}</p>
+<a href="/order" class="btn-primary">Order Now</a>
 </div>
 `
       return
@@ -192,54 +191,54 @@ document.addEventListener("DOMContentLoaded", () => {
       // Create booking card HTML
       bookingCard.innerHTML = `
 <div class="booking-header">
-  <div class="booking-info">
-    <h3>Order #${booking.id}</h3>
-    <div class="booking-date">
-      <i class="fas fa-calendar-alt"></i>
-      <span>${formattedDate}</span>
-    </div>
+<div class="booking-info">
+  <h3>Order #${booking.id}</h3>
+  <div class="booking-date">
+    <i class="fas fa-calendar-alt"></i>
+    <span>${formattedDate}</span>
   </div>
-  <div class="booking-status ${statusClass}">
-    ${booking.status}
-  </div>
+</div>
+<div class="booking-status ${statusClass}">
+  ${booking.status}
+</div>
 </div>
 <div class="booking-items">
-  ${booking.items
-    .map(
-      (item) => `
-      <div class="booking-item">
-        <div class="item-details">
-          <h4>${item.name}</h4>
-          <p>Size: ${item.size.name} | Sugar: ${item.sugar.name} | Ice: ${item.ice.name}</p>
-          <p>Quantity: ${item.quantity}</p>
-        </div>
-        <div class="item-price">$${item.totalPrice.toFixed(2)}</div>
+${booking.items
+  .map(
+    (item) => `
+    <div class="booking-item">
+      <div class="item-details">
+        <h4>${item.name}</h4>
+        <p>Size: ${item.size.name} | Sugar: ${item.sugar.name} | Ice: ${item.ice.name}</p>
+        <p>Quantity: ${item.quantity}</p>
       </div>
-    `,
-    )
-    .join("")}
+      <div class="item-price">$${item.totalPrice.toFixed(2)}</div>
+    </div>
+  `,
+  )
+  .join("")}
 </div>
 <div class="booking-footer">
-  <div class="booking-total">
-    Total: <span class="total-price">$${booking.total.toFixed(2)}</span>
-  </div>
-  <div class="booking-actions">
-    <a href="#" class="btn-secondary view-details" data-id="${booking.id}">
-      <i class="fas fa-eye"></i> View Details
-    </a>
-    ${
-      booking.status === "processing"
-        ? `
-        <button class="btn-outline-danger cancel-booking" data-id="${booking.id}">
-          <i class="fas fa-times"></i> Cancel
-        </button>
-        <button class="btn-primary complete-booking" data-id="${booking.id}">
-          <i class="fas fa-check"></i> Complete
-        </button>
-      `
-        : ""
-    }
-  </div>
+<div class="booking-total">
+  Total: <span class="total-price">$${booking.total.toFixed(2)}</span>
+</div>
+<div class="booking-actions">
+  <a href="#" class="btn-secondary view-details" data-id="${booking.id}">
+    <i class="fas fa-eye"></i> View Details
+  </a>
+  ${
+    booking.status === "processing"
+      ? `
+      <button class="btn-outline-danger cancel-booking" data-id="${booking.id}">
+        <i class="fas fa-times"></i> Cancel
+      </button>
+      <button class="btn-primary complete-booking" data-id="${booking.id}">
+        <i class="fas fa-check"></i> Complete
+      </button>
+    `
+      : ""
+  }
+</div>
 </div>
 `
 
@@ -308,86 +307,86 @@ document.addEventListener("DOMContentLoaded", () => {
     modal.innerHTML = `
 <div class="modal-content">
 <div class="modal-header">
-  <h3>Order Details</h3>
-  <button class="close-modal">&times;</button>
+<h3>Order Details</h3>
+<button class="close-modal">&times;</button>
 </div>
 <div class="modal-body">
-  <div class="order-info">
-    <div class="order-header">
-      <div>
-        <h4>Order #${booking.id}</h4>
-        <p><i class="fas fa-calendar-alt"></i> ${formattedDate}</p>
-      </div>
-      <div class="order-status-container">
-        <div class="order-status ${statusClass}">
-          ${booking.status}
-        </div>
-        <div class="payment-status ${paymentStatusClass}">
-          Payment: ${paymentStatus}
-        </div>
-      </div>
+<div class="order-info">
+  <div class="order-header">
+    <div>
+      <h4>Order #${booking.id}</h4>
+      <p><i class="fas fa-calendar-alt"></i> ${formattedDate}</p>
     </div>
-    
-    <div class="order-items">
-      <h4>Items</h4>
-      ${booking.items
-        .map(
-          (item) => `
-          <div class="order-item">
-            <div class="item-image">
-              <img src="${item.image}" alt="${item.name}">
-            </div>
-            <div class="item-details">
-              <h5>${item.name}</h5>
-              <p>Size: ${item.size.name} | Sugar: ${item.sugar.name} | Ice: ${item.ice.name}</p>
-              <p>Toppings: ${item.toppings && item.toppings.length > 0 ? item.toppings.map((t) => t.name).join(", ") : "None"}</p>
-              <div class="item-quantity-price">
-                <span>Qty: ${item.quantity}</span>
-                <span>$${item.totalPrice.toFixed(2)}</span>
-              </div>
-            </div>
-          </div>
-        `,
-        )
-        .join("")}
-    </div>
-    
-    <div class="order-summary">
-      <h4>Order Summary</h4>
-      <div class="summary-row">
-        <span>Subtotal:</span>
-        <span>$${booking.subtotal.toFixed(2)}</span>
+    <div class="order-status-container">
+      <div class="order-status ${statusClass}">
+        ${booking.status}
       </div>
-      <div class="summary-row">
-        <span>Tax (8%):</span>
-        <span>$${booking.tax.toFixed(2)}</span>
-      </div>
-      <div class="summary-row total">
-        <span>Total:</span>
-        <span>$${booking.total.toFixed(2)}</span>
+      <div class="payment-status ${paymentStatusClass}">
+        Payment: ${paymentStatus}
       </div>
     </div>
   </div>
+  
+  <div class="order-items">
+    <h4>Items</h4>
+    ${booking.items
+      .map(
+        (item) => `
+        <div class="order-item">
+          <div class="item-image">
+            <img src="${item.image}" alt="${item.name}">
+          </div>
+          <div class="item-details">
+            <h5>${item.name}</h5>
+            <p>Size: ${item.size.name} | Sugar: ${item.sugar.name} | Ice: ${item.ice.name}</p>
+            <p>Toppings: ${item.toppings && item.toppings.length > 0 ? item.toppings.map((t) => t.name).join(", ") : "None"}</p>
+            <div class="item-quantity-price">
+              <span>Qty: ${item.quantity}</span>
+              <span>$${item.totalPrice.toFixed(2)}</span>
+            </div>
+          </div>
+        </div>
+      `,
+      )
+      .join("")}
+  </div>
+  
+  <div class="order-summary">
+    <h4>Order Summary</h4>
+    <div class="summary-row">
+      <span>Subtotal:</span>
+      <span>$${booking.subtotal.toFixed(2)}</span>
+    </div>
+    <div class="summary-row">
+      <span>Tax (8%):</span>
+      <span>$${booking.tax.toFixed(2)}</span>
+    </div>
+    <div class="summary-row total">
+      <span>Total:</span>
+      <span>$${booking.total.toFixed(2)}</span>
+    </div>
+  </div>
+</div>
 </div>
 <div class="modal-footer">
-  <button class="btn-secondary close-details">Close</button>
-  ${
-    booking.status === "processing"
-      ? `
-      <button class="btn-outline-danger cancel-booking-modal" data-id="${booking.id}">Cancel Order</button>
-      <button class="btn-primary complete-booking-modal" data-id="${booking.id}">Complete Order</button>
-    `
-      : ""
-  }
-  ${
-    (booking.status === "processing" && booking.paymentStatus === "pending") || !booking.paymentStatus
-      ? `
-      <button class="btn-success pay-now-modal" data-id="${booking.id}">
-        <i class="fas fa-credit-card"></i> Pay Now
-      </button>
-    `
-      : ""
-  }
+<button class="btn-secondary close-details">Close</button>
+${
+  booking.status === "processing"
+    ? `
+    <button class="btn-outline-danger cancel-booking-modal" data-id="${booking.id}">Cancel Order</button>
+    <button class="btn-primary complete-booking-modal" data-id="${booking.id}">Complete Order</button>
+  `
+    : ""
+}
+${
+  (booking.status === "processing" && booking.paymentStatus === "pending") || !booking.paymentStatus
+    ? `
+    <button class="btn-success pay-now-modal" data-id="${booking.id}">
+      <i class="fas fa-credit-card"></i> Pay Now
+    </button>
+  `
+    : ""
+}
 </div>
 </div>
 `
@@ -425,7 +424,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (payNowButton) {
       payNowButton.addEventListener("click", function () {
         const id = this.getAttribute("data-id")
-        redirectToPayment(id)
+        showPaymentModal(id)
         modal.remove()
       })
     }
@@ -471,13 +470,13 @@ document.addEventListener("DOMContentLoaded", () => {
           // Check if there are no more bookings and show empty state if needed
           if (bookingsList.children.length === 0) {
             bookingsList.innerHTML = `
-      <div class="empty-state">
-        <img src="/assets/image/empty-orders.svg" alt="No Orders">
-        <h3>No Orders Found</h3>
-        <p>You haven't placed any orders yet.</p>
-        <a href="/order" class="btn-primary">Order Now</a>
-      </div>
-    `
+    <div class="empty-state">
+      <img src="/assets/image/empty-orders.svg" alt="No Orders">
+      <h3>No Orders Found</h3>
+      <p>You haven't placed any orders yet.</p>
+      <a href="/order" class="btn-primary">Order Now</a>
+    </div>
+  `
           }
         }, 300)
       }
@@ -496,29 +495,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const booking = bookings[bookingIndex]
 
-    // Check if payment is pending and not cash on delivery
-    if ((booking.paymentStatus === "pending" || !booking.paymentStatus) && booking.paymentMethod !== "cash") {
-      // Show payment confirmation dialog
-      showPaymentConfirmation(id)
-      return
-    }
-
-    // Update booking status
-    bookings[bookingIndex].status = "completed"
-
-    // Save to localStorage
-    localStorage.setItem("bookings", JSON.stringify(bookings))
-
-    // Add notification
-    if (window.addNotification) {
-      window.addNotification("Order Completed", `Your order #${bookings[bookingIndex].id} has been completed.`, "order")
-    }
-
-    // Re-render bookings
-    const activeTab = document.querySelector(".filter-tab.active")
-    const status = activeTab ? activeTab.getAttribute("data-status") : "all"
-    const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : ""
-    renderBookings(status, searchTerm)
+    // Always show payment modal when complete button is clicked
+    showPaymentModal(id)
   }
 
   // Show payment confirmation dialog
@@ -532,13 +510,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     confirmationDialog.innerHTML = `
 <div class="confirmation-content">
-  <h3>Payment Required</h3>
-  <p>This order requires payment before it can be completed.</p>
-  <p>Would you like to make a payment now?</p>
-  <div class="confirmation-actions">
-    <button class="btn-secondary cancel-payment">Not Now</button>
-    <button class="btn-primary proceed-payment" data-id="${booking.id}">Pay Now</button>
-  </div>
+<h3>Payment Required</h3>
+<p>This order requires payment before it can be completed.</p>
+<p>Would you like to make a payment now?</p>
+<div class="confirmation-actions">
+  <button class="btn-secondary cancel-payment">Not Now</button>
+  <button class="btn-primary proceed-payment" data-id="${booking.id}">Pay Now</button>
+</div>
 </div>
 `
 
@@ -553,18 +531,444 @@ document.addEventListener("DOMContentLoaded", () => {
     const proceedButton = confirmationDialog.querySelector(".proceed-payment")
     proceedButton.addEventListener("click", function () {
       const id = this.getAttribute("data-id")
-      redirectToPayment(id)
+      showPaymentModal(id)
       confirmationDialog.remove()
     })
   }
 
-  // Redirect to payment page
-  function redirectToPayment(id) {
-    // Store the booking ID in sessionStorage for the payment page
-    sessionStorage.setItem("paymentOrderId", id)
+  // Show payment modal
+  function showPaymentReceipt(bookingId) {
+    const booking = bookings.find((b) => b.id === bookingId)
+    if (!booking) return
 
-    // Redirect to payment page
-    window.location.href = `/payment?order_id=${id}`
+    // Create receipt modal
+    const receiptModal = document.createElement("div")
+    receiptModal.className = "receipt-modal"
+
+    // Format date
+    const date = new Date()
+    const formattedDate = date.toLocaleDateString() + " " + date.toLocaleTimeString()
+
+    // Generate receipt ID
+    const receiptId = "RCP" + Date.now().toString().slice(-6)
+
+    receiptModal.innerHTML = `
+      <div class="receipt-modal-content">
+          <div class="receipt-modal-header">
+              <h3>Payment Receipt</h3>
+              <button class="close-receipt-modal">&times;</button>
+          </div>
+          <div class="receipt-modal-body" id="receipt-content">
+              <div class="receipt-header">
+                  <div class="receipt-logo">
+                      <i class="fas fa-receipt"></i>
+                  </div>
+                  <h4>Payment Successful</h4>
+                  <p class="receipt-date">${formattedDate}</p>
+                  <p class="receipt-number">Receipt #${receiptId}</p>
+              </div>
+              
+              <div class="receipt-details">
+                  <div class="receipt-row">
+                      <span>Order ID:</span>
+                      <span>#${booking.id}</span>
+                  </div>
+                  <div class="receipt-row">
+                      <span>Payment Method:</span>
+                      <span>${
+                        booking.paymentMethod === "credit-card"
+                          ? "Credit/Debit Card"
+                          : booking.paymentMethod === "qr-code"
+                            ? "QR Code Payment"
+                            : booking.paymentMethod === "apple-pay"
+                              ? "Apple Pay"
+                              : "Cash on Delivery"
+                      }</span>
+                  </div>
+                  <div class="receipt-row">
+                      <span>Payment Status:</span>
+                      <span class="status-completed">Completed</span>
+                  </div>
+                  <div class="receipt-row">
+                      <span>Payment Date:</span>
+                      <span>${formattedDate}</span>
+                  </div>
+              </div>
+              
+              <div class="receipt-items">
+                  <h5>Order Summary</h5>
+                  ${booking.items
+                    .map(
+                      (item) => `
+                      <div class="receipt-item">
+                          <div class="receipt-item-details">
+                              <div class="item-image-small">
+                                  <img src="${item.image}" alt="${item.name}">
+                              </div>
+                              <div class="item-info">
+                                  <h6>${item.name}</h6>
+                                  <p>Size: ${item.size.name} | Sugar: ${item.sugar.name} | Ice: ${item.ice.name}</p>
+                                  ${
+                                    item.toppings && item.toppings.length > 0
+                                      ? `<p>Toppings: ${item.toppings.map((t) => t.name).join(", ")}</p>`
+                                      : ""
+                                  }
+                              </div>
+                          </div>
+                          <div class="item-price-qty">
+                              <span>x${item.quantity}</span>
+                              <span>$${item.totalPrice.toFixed(2)}</span>
+                          </div>
+                      </div>
+                  `,
+                    )
+                    .join("")}
+              </div>
+              
+              <div class="receipt-total">
+                  <div class="receipt-row">
+                      <span>Subtotal:</span>
+                      <span>$${booking.subtotal.toFixed(2)}</span>
+                  </div>
+                  <div class="receipt-row">
+                      <span>Tax (8%):</span>
+                      <span>$${booking.tax.toFixed(2)}</span>
+                  </div>
+                  <div class="receipt-row total">
+                      <span>Total Paid:</span>
+                      <span>$${booking.total.toFixed(2)}</span>
+                  </div>
+              </div>
+              
+              <div class="receipt-thank-you">
+                  <p>Thank you for your order!</p>
+                  <div class="receipt-barcode">
+                      <img src="/placeholder.svg?height=50&width=200" alt="Barcode">
+                      <p>${receiptId}</p>
+                  </div>
+              </div>
+          </div>
+          <div class="receipt-modal-footer">
+              <div class="receipt-actions">
+                  <button class="btn-secondary download-receipt">
+                      <i class="fas fa-download"></i> Download PDF
+                  </button>
+                  <button class="btn-secondary print-receipt">
+                      <i class="fas fa-print"></i> Print Receipt
+                  </button>
+                  <button class="btn-primary close-receipt">Done</button>
+              </div>
+          </div>
+      </div>
+  `
+
+    document.body.appendChild(receiptModal)
+
+    // Add event listeners
+    receiptModal.querySelector(".close-receipt-modal").addEventListener("click", () => {
+      receiptModal.remove()
+    })
+
+    receiptModal.querySelector(".close-receipt").addEventListener("click", () => {
+      receiptModal.remove()
+    })
+
+    receiptModal.querySelector(".print-receipt").addEventListener("click", () => {
+      // Print the receipt
+      const receiptContent = document.getElementById("receipt-content")
+      const originalContents = document.body.innerHTML
+
+      document.body.innerHTML = `
+      <div class="print-only">
+        <div class="print-header">
+          <h2>Order Receipt</h2>
+        </div>
+        ${receiptContent.innerHTML}
+      </div>
+    `
+
+      window.print()
+      document.body.innerHTML = originalContents
+
+      // Recreate the receipt modal after printing
+      showPaymentReceipt(bookingId)
+    })
+
+    receiptModal.querySelector(".download-receipt").addEventListener("click", () => {
+      // Create a virtual link to download the receipt as HTML
+      const receiptContent = document.getElementById("receipt-content")
+      const receiptHTML = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Receipt #${receiptId}</title>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+          }
+          .receipt-header {
+            text-align: center;
+            margin-bottom: 20px;
+          }
+          .receipt-details, .receipt-items, .receipt-total {
+            margin-bottom: 20px;
+          }
+          .receipt-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+          }
+          .receipt-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #eee;
+          }
+          .receipt-total {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+          }
+          .receipt-thank-you {
+            text-align: center;
+            margin: 20px 0;
+          }
+          .status-completed {
+            color: #4caf50;
+            font-weight: bold;
+          }
+          .total {
+            font-weight: bold;
+            font-size: 18px;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="print-header">
+          <h2>Order Receipt</h2>
+        </div>
+        ${receiptContent.innerHTML}
+      </body>
+      </html>
+    `
+
+      const blob = new Blob([receiptHTML], { type: "text/html" })
+      const url = URL.createObjectURL(blob)
+
+      const downloadLink = document.createElement("a")
+      downloadLink.href = url
+      downloadLink.download = `Receipt-${booking.id}.html`
+      document.body.appendChild(downloadLink)
+      downloadLink.click()
+      document.body.removeChild(downloadLink)
+    })
+  }
+
+  // Show payment modal
+  function showPaymentModal(bookingId) {
+    const booking = bookings.find((b) => b.id === bookingId)
+    if (!booking) return
+
+    // Create payment modal
+    const paymentModal = document.createElement("div")
+    paymentModal.className = "payment-modal"
+
+    paymentModal.innerHTML = `
+<div class="payment-modal-content">
+<div class="payment-modal-header">
+    <h3>Payment for Order #${booking.id}</h3>
+    <button class="close-payment-modal">&times;</button>
+</div>
+<div class="payment-modal-body">
+    <div class="payment-amount">
+        <h4>Amount to Pay:</h4>
+        <div class="amount">$${booking.total.toFixed(2)}</div>
+    </div>
+    
+    <div class="payment-methods">
+        <h4>Select Payment Method:</h4>
+        <div class="method-options">
+            <div class="method-option" data-method="credit-card">
+                <input type="radio" id="credit-card" name="payment-method" checked>
+                <label for="credit-card">
+                    <i class="fas fa-credit-card"></i> Credit/Debit Card
+                </label>
+            </div>
+            <div class="method-option" data-method="qr-code">
+                <input type="radio" id="qr-code" name="payment-method">
+                <label for="qr-code">
+                    <i class="fas fa-qrcode"></i> QR Code Payment
+                </label>
+            </div>
+            <div class="method-option" data-method="apple-pay">
+                <input type="radio" id="apple-pay" name="payment-method">
+                <label for="apple-pay">
+                    <i class="fab fa-apple-pay"></i> Apple Pay
+                </label>
+            </div>
+            <div class="method-option" data-method="cash">
+                <input type="radio" id="cash" name="payment-method">
+                <label for="cash">
+                    <i class="fas fa-money-bill-wave"></i> Cash on Delivery
+                </label>
+            </div>
+        </div>
+    </div>
+    
+    <div class="payment-details credit-card-details">
+        <h4>Card Details</h4>
+        <div class="form-group">
+            <label for="card-number">Card Number</label>
+            <input type="text" id="card-number" placeholder="1234 5678 9012 3456">
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="expiry-date">Expiry Date</label>
+                <input type="text" id="expiry-date" placeholder="MM/YY">
+            </div>
+            <div class="form-group">
+                <label for="cvv">CVV</label>
+                <input type="text" id="cvv" placeholder="123">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="card-name">Name on Card</label>
+            <input type="text" id="card-name" placeholder="John Doe">
+        </div>
+    </div>
+    
+    <div class="payment-details qr-code-details" style="display: none;">
+        <div class="qr-code-container">
+            <div class="qr-code-image">
+                <img src="/placeholder.svg?height=200&width=200" alt="QR Code">
+            </div>
+            <p>Scan this QR code with your mobile payment app to complete the payment.</p>
+            <div class="qr-code-timer">
+                <p>This QR code will expire in <span class="timer">05:00</span></p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="payment-details apple-pay-details" style="display: none;">
+        <div class="apple-pay-container">
+            <div class="apple-pay-logo">
+                <i class="fab fa-apple-pay"></i>
+            </div>
+            <button class="apple-pay-button">
+                <span>Pay with</span>
+                <i class="fab fa-apple"></i> Pay
+            </button>
+            <p>Click the button above to pay with Apple Pay.</p>
+        </div>
+    </div>
+    
+    <div class="payment-details cash-details" style="display: none;">
+        <div class="cash-icon">
+            <i class="fas fa-money-bill-wave"></i>
+        </div>
+        <p>Pay with cash when your order is delivered.</p>
+        <div class="cash-instructions">
+            <p>Please have the exact amount ready: <strong>$${booking.total.toFixed(2)}</strong></p>
+            <p>Our delivery person will provide you with a receipt upon payment.</p>
+        </div>
+    </div>
+</div>
+<div class="payment-modal-footer">
+    <button class="btn-secondary cancel-payment">Cancel</button>
+    <button class="process-payment" data-id="${booking.id}">
+        <i class="fas fa-lock"></i> Pay Now
+    </button>
+</div>
+</div>
+`
+
+    document.body.appendChild(paymentModal)
+
+    // Add event listeners for payment method selection
+    const methodOptions = paymentModal.querySelectorAll(".method-option")
+    methodOptions.forEach((option) => {
+      option.addEventListener("click", function () {
+        // Update radio button
+        const radio = this.querySelector("input[type='radio']")
+        radio.checked = true
+
+        // Add selected class to the clicked option and remove from others
+        methodOptions.forEach((opt) => opt.classList.remove("selected"))
+        this.classList.add("selected")
+
+        // Update border color for selected option
+        this.style.borderColor = "#ff5e62"
+        this.style.borderWidth = "2px"
+
+        // Hide all payment details
+        paymentModal.querySelectorAll(".payment-details").forEach((detail) => {
+          detail.style.display = "none"
+        })
+
+        // Show selected payment details
+        const method = this.getAttribute("data-method")
+        paymentModal.querySelector(`.${method}-details`).style.display = "block"
+      })
+    })
+
+    // Select the first option by default
+    methodOptions[0].classList.add("selected")
+    methodOptions[0].style.borderColor = "#ff5e62"
+    methodOptions[0].style.borderWidth = "2px"
+
+    // Close button
+    paymentModal.querySelector(".close-payment-modal").addEventListener("click", () => {
+      paymentModal.remove()
+    })
+
+    // Cancel button
+    paymentModal.querySelector(".cancel-payment").addEventListener("click", () => {
+      paymentModal.remove()
+    })
+
+    // Process payment button
+    paymentModal.querySelector(".process-payment").addEventListener("click", function () {
+      const id = this.getAttribute("data-id")
+      const selectedMethod = paymentModal.querySelector("input[name='payment-method']:checked").id
+
+      // Process payment based on method
+      processPayment(id, selectedMethod)
+      paymentModal.remove()
+    })
+  }
+  // Process payment
+  function processPayment(bookingId, paymentMethod) {
+    const bookingIndex = bookings.findIndex((b) => b.id === bookingId)
+    if (bookingIndex === -1) return
+
+    // Update booking payment status
+    bookings[bookingIndex].paymentStatus = "completed"
+    bookings[bookingIndex].paymentMethod = paymentMethod
+
+    // Save to localStorage
+    localStorage.setItem("bookings", JSON.stringify(bookings))
+
+    // Add notification
+    if (window.addNotification) {
+      window.addNotification(
+        "Payment Successful",
+        `Payment for order #${bookingId} has been processed successfully.`,
+        "payment",
+      )
+    }
+
+    // Show payment receipt
+    showPaymentReceipt(bookingId)
+
+    // Re-render bookings
+    const activeTab = document.querySelector(".filter-tab.active")
+    const status = activeTab ? activeTab.getAttribute("data-status") : "all"
+    const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : ""
+    renderBookings(status, searchTerm)
   }
 
   // Show order success message
@@ -576,23 +980,27 @@ document.addEventListener("DOMContentLoaded", () => {
     successMessage.innerHTML = `
 <div class="success-content">
 <div class="success-icon">
-  <i class="fas fa-check-circle"></i>
+<i class="fas fa-check-circle"></i>
 </div>
 <h3>Order Placed Successfully!</h3>
 <p>Your order #${booking.id} has been placed and is being processed.</p>
 <div class="order-summary">
-  <div class="summary-row">
-    <span>Items:</span>
-    <span>${booking.items.length}</span>
-  </div>
-  <div class="summary-row">
-    <span>Total:</span>
-    <span>$${booking.total.toFixed(2)}</span>
-  </div>
+<div class="summary-row">
+  <span>Items:</span>
+  <span>${booking.items.length}</span>
+</div>
+<div class="summary-row">
+  <span>Total:</span>
+  <span>$${booking.total.toFixed(2)}</span>
+</div>
 </div>
 <div class="success-actions">
-  <button class="btn-primary view-order-details" data-id="${booking.id}">View Order Details</button>
-  <button class="btn-success pay-now-btn" data-id="${booking.id}">Pay Now</button>
+<button class="btn-primary view-order-details" data-id="${booking.id}">View Order Details</button>
+${
+  booking.paymentStatus === "pending" || !booking.paymentStatus
+    ? `<button class="btn-success pay-now-btn" data-id="${booking.id}">Pay Now</button>`
+    : ""
+}
 </div>
 </div>
 `
@@ -607,13 +1015,15 @@ document.addEventListener("DOMContentLoaded", () => {
       showBookingDetails(id)
     })
 
-    // Add event listener to pay now button
+    // Add event listener to pay now button if it exists
     const payNowButton = successMessage.querySelector(".pay-now-btn")
-    payNowButton.addEventListener("click", function () {
-      const id = this.getAttribute("data-id")
-      successMessage.remove()
-      redirectToPayment(id)
-    })
+    if (payNowButton) {
+      payNowButton.addEventListener("click", function () {
+        const id = this.getAttribute("data-id")
+        successMessage.remove()
+        showPaymentModal(id)
+      })
+    }
 
     // Auto remove after 5 seconds
     setTimeout(() => {
@@ -1057,133 +1467,593 @@ padding: 15px 20px;
 border-top: 1px solid #eee;
 }
 
-/* Order Success Message */
-.order-success-message {
-position: fixed;
-top: 50%;
-left: 50%;
-transform: translate(-50%, -50%);
-width: 90%;
-max-width: 400px;
-background-color: white;
-border-radius: 10px;
-box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-z-index: 1000;
-overflow: hidden;
-animation: fadeIn 0.5s ease;
-transition: opacity 0.5s ease;
+/* Payment Modal */
+.payment-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100;
 }
 
-.order-success-message.fade-out {
-opacity: 0;
+.payment-modal-content {
+  width: 95%;
+  max-width: 700px;
+  background-color: white;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
 }
 
-.success-content {
-padding: 30px 20px;
-text-align: center;
+.payment-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 25px;
+  border-bottom: 1px solid #eee;
+  background-color: white;
 }
 
-.success-icon {
-font-size: 60px;
-color: #4caf50;
-margin-bottom: 20px;
+.payment-modal-header h3 {
+  margin: 0;
+  font-size: 22px;
+  color: #333;
+  font-weight: 600;
 }
 
-.success-content h3 {
-margin: 0 0 10px;
-font-size: 22px;
-color: #333;
+.close-payment-modal {
+  background: none;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  color: #999;
+  transition: color 0.2s;
 }
 
-.success-content p {
-margin: 0 0 20px;
-font-size: 16px;
-color: #666;
+.close-payment-modal:hover {
+  color: #333;
 }
 
-.success-content .order-summary {
-width: 80%;
-margin: 0 auto 20px;
+.payment-modal-body {
+  padding: 25px;
+  max-height: 65vh;
+  overflow-y: auto;
+  background-color: white;
 }
 
-.success-actions {
-display: flex;
-flex-direction: column;
-gap: 10px;
+.payment-amount {
+  text-align: center;
+  margin-bottom: 30px;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
 }
 
-/* Payment Confirmation Dialog */
-.payment-confirmation-dialog {
-position: fixed;
-top: 0;
-left: 0;
-width: 100%;
-height: 100%;
-background-color: rgba(0, 0, 0, 0.5);
-display: flex;
-align-items: center;
-justify-content: center;
-z-index: 1100;
+.payment-amount h4 {
+  margin: 0 0 10px;
+  font-size: 18px;
+  color: #666;
 }
 
-.confirmation-content {
-width: 90%;
-max-width: 400px;
-background-color: white;
-border-radius: 10px;
-box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-padding: 30px;
-text-align: center;
+.payment-amount .amount {
+  font-size: 32px;
+  font-weight: 700;
+  color: #ff5e62;
 }
 
-.confirmation-content h3 {
-margin: 0 0 15px;
-font-size: 20px;
-color: #333;
+.payment-methods {
+  margin-bottom: 30px;
 }
 
-.confirmation-content p {
-margin: 0 0 20px;
-font-size: 16px;
-color: #666;
+.payment-methods h4 {
+  margin: 0 0 15px;
+  font-size: 18px;
+  color: #333;
 }
 
-.confirmation-actions {
-display: flex;
-justify-content: center;
-gap: 15px;
+.method-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
 }
 
-@keyframes fadeIn {
-from { opacity: 0; transform: translate(-50%, -60%); }
-to { opacity: 1; transform: translate(-50%, -50%); }
+.method-option {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: white;
 }
 
-/* Responsive Styles */
-@media (max-width: 768px) {
-.booking-footer {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 15px;
+.method-option:hover {
+  border-color: #ff5e62;
+  background-color: #fff5f5;
+  transform: translateY(-2px);
 }
 
-.booking-actions {
+.method-option input[type="radio"] {
+  margin-right: 12px;
+  width: 18px;
+  height: 18px;
+}
+
+.method-option label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  width: 100%;
+}
+
+.method-option i {
+  font-size: 24px;
+}
+
+.method-option[data-method="credit-card"] i {
+  color: #2196F3;
+}
+
+.method-option[data-method="qr-code"] i {
+  color: #9C27B0;
+}
+
+.method-option[data-method="apple-pay"] i {
+  color: #000;
+  font-size: 28px;
+}
+
+.method-option[data-method="cash"] i {
+  color: #4CAF50;
+}
+
+.payment-details {
+  margin-top: 25px;
+  padding: 20px;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  background-color: white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.payment-details h4 {
+  margin: 0 0 20px;
+  font-size: 18px;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 15px;
+  color: #555;
+  font-weight: 500;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: border-color 0.3s;
+}
+
+.form-group input:focus {
+  border-color: #ff5e62;
+  outline: none;
+}
+
+.form-row {
+  display: flex;
+  gap: 15px;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+.qr-code-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.qr-code-image {
+  width: 220px;
+  height: 220px;
+  margin-bottom: 25px;
+  border: 1px solid #ddd;
+  padding: 15px;
+  background-color: white;
+  border-radius: 10px;
+}
+
+.qr-code-image img {
+  width: 100%;
+  height: 100%;
+}
+
+.qr-code-timer {
+  margin-top: 15px;
+  font-size: 15px;
+  color: #ff5e62;
+  font-weight: 500;
+}
+
+.apple-pay-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.apple-pay-logo {
+  font-size: 60px;
+  margin-bottom: 20px;
+}
+
+.apple-pay-button {
+  background-color: #000;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 18px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  margin-bottom: 15px;
+}
+
+.apple-pay-button i {
+  font-size: 22px;
+}
+
+.cash-icon {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.cash-icon i {
+  font-size: 60px;
+  color: #4CAF50;
+}
+
+.cash-instructions {
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 15px;
+}
+
+.payment-modal-footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 25px;
+  border-top: 1px solid #eee;
+  background-color: white;
+}
+
+.payment-modal-footer button {
+  padding: 12px 25px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.process-payment {
+  background-color: #ff5e62;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 25px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.process-payment:hover {
+  background-color: #ff4146;
+}
+
+/* Receipt Modal Styles */
+.receipt-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1200;
+}
+
+.receipt-modal-content {
+  width: 95%;
+  max-width: 600px;
+  max-height: 90vh;
+  background-color: white;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+.receipt-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 25px;
+  border-bottom: 1px solid #eee;
+  background-color: white;
+}
+
+.receipt-modal-header h3 {
+  margin: 0;
+  font-size: 22px;
+  color: #333;
+  font-weight: 600;
+}
+
+.close-receipt-modal {
+  background: none;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  color: #999;
+  transition: color 0.2s;
+}
+
+.close-receipt-modal:hover {
+  color: #333;
+}
+
+.receipt-modal-body {
+  padding: 25px;
+  max-height: 60vh;
+  overflow-y: auto;
+  background-color: white;
+}
+
+.receipt-header {
+  text-align: center;
+  margin-bottom: 25px;
+  padding-bottom: 20px;
+  border-bottom: 1px dashed #ddd;
+}
+
+.receipt-logo {
+  font-size: 50px;
+  color: #4caf50;
+  margin-bottom: 15px;
+}
+
+.receipt-header h4 {
+  margin: 0 0 10px;
+  font-size: 24px;
+  color: #333;
+}
+
+.receipt-date, .receipt-number {
+  font-size: 14px;
+  color: #666;
+  margin: 5px 0;
+}
+
+.receipt-details {
+  margin-bottom: 25px;
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.receipt-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.status-completed {
+  color: #4caf50;
+  font-weight: 600;
+}
+
+.receipt-items {
+  margin-bottom: 25px;
+}
+
+.receipt-items h5 {
+  margin: 0 0 15px;
+  font-size: 18px;
+  color: #333;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+.receipt-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px dashed #eee;
+}
+
+.receipt-item:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.receipt-item-details {
+  display: flex;
+  width: 70%;
+}
+
+.item-image-small {
+  width: 50px;
+  height: 50px;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-right: 12px;
+}
+
+.item-image-small img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.item-info {
+  flex: 1;
+}
+
+.item-info h6 {
+  margin: 0 0 5px;
+  font-size: 16px;
+  color: #333;
+}
+
+.item-info p {
+  margin: 0 0 3px;
+  font-size: 13px;
+  color: #666;
+}
+
+.item-price-qty {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 5px;
+}
+
+.item-price-qty span:last-child {
+  font-weight: 600;
+  color: #ff5e62;
+}
+
+.receipt-total {
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.receipt-row.total {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  border-top: 1px dashed #ddd;
+  padding-top: 10px;
+  margin-top: 10px;
+}
+
+.receipt-row.total span:last-child {
+  color: #ff5e62;
+}
+
+.receipt-thank-you {
+  text-align: center;
+  margin: 25px 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.receipt-barcode {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.receipt-barcode img {
+  margin-bottom: 5px;
+}
+
+.receipt-barcode p {
+  font-size: 12px;
+  color: #666;
+  margin: 0;
+}
+
+.receipt-modal-footer {
+  display: flex;
+  justify-content: center;
+  padding: 20px 25px;
+  border-top: 1px solid #eee;
+  background-color: white;
+}
+
+.receipt-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.receipt-actions button {
+  padding: 10px 20px;
+}
+
+.print-only {
+  padding: 30px;
+  max-width: 800px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+}
+
+.print-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .print-only, .print-only * {
+    visibility: visible;
+  }
+  .print-only {
+    position: absolute;
+    left: 0;
+    top: 0;
     width: 100%;
-    justify-content: space-between;
+  }
 }
 
-.order-header {
+@media (max-width: 768px) {
+  .method-options {
+    grid-template-columns: 1fr;
+  }
+  
+  .receipt-actions {
     flex-direction: column;
-}
-
-.order-status {
-    margin-top: 10px;
-    align-self: flex-start;
-}
-
-.confirmation-actions {
-    flex-direction: column;
-}
+  }
+  
+  .receipt-item-details {
+    width: 60%;
+  }
 }
 `
   document.head.appendChild(style)
