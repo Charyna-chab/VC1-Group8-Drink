@@ -60,7 +60,7 @@
                 
                 <div class="payment-methods-container">
                     <!-- Card Payment Option -->
-                    <div class="payment-method-card">
+                    <div class="payment-method-card" data-payment="card">
                         <div class="payment-method-header">
                             <input type="radio" name="payment_method" id="card_payment" value="card">
                             <label for="card_payment">
@@ -93,7 +93,7 @@
                     </div>
                     
                     <!-- QR Code Payment Option -->
-                    <div class="payment-method-card">
+                    <div class="payment-method-card" data-payment="qr">
                         <div class="payment-method-header">
                             <input type="radio" name="payment_method" id="qr_payment" value="qr">
                             <label for="qr_payment">
@@ -115,7 +115,7 @@
                     </div>
                     
                     <!-- Cash Payment Option -->
-                    <div class="payment-method-card">
+                    <div class="payment-method-card" data-payment="cash">
                         <div class="payment-method-header">
                             <input type="radio" name="payment_method" id="cash_payment" value="cash">
                             <label for="cash_payment">

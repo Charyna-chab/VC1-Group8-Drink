@@ -1,38 +1,55 @@
+// checkout.js - Handles checkout functionality
 document.addEventListener("DOMContentLoaded", () => {
     // DOM Elements
     const paymentOptions = document.querySelectorAll(".payment-option")
     const paymentRadios = document.querySelectorAll('input[name="payment_method"]')
     const completePaymentBtn = document.getElementById("complete-payment")
     const paymentSuccessModal = document.getElementById("paymentSuccessModal")
-    const paymentSuccessMessage = document.getElementById("payment-success-message")
-    const orderNumberElement = document.getElementById("order-number")
     const overlay = document.getElementById("overlay")
-    const verifyQrPaymentBtn = document.getElementById("verify-qr-payment")
+
+    // Get cart items from localStorage
+    const cartItems = JSON.parse(localStorage.getItem("cart")) || []
+
+    // Calculate totals
+    const subtotal = cartItems.reduce((total, item) => total + item.totalPrice, 0)
+    const tax = subtotal * 0.08 // 8% tax
+    const total = subtotal + tax
+
+    // Initialize payment options
+    paymentRadios.forEach((radio) => {
+        radio.addEventListener("change", function() {
+            // Hide all payment option content
+            document.querySelectorAll(".payment-option-content").forEach((content) => {
+                content.style.display = "none"
+            })
+
+            // Show selected payment option content
+            const selectedOption = document.querySelector(`.payment-option[data-payment="${this.value}"]`)
+            if (selectedOption) {
+                const content = selectedOption.querySelector(".payment-option-content")
+                if (content) {
+                    content.style.display = "block"
+                }
+            }
+
+            // Enable the complete payment button
+            if (completePaymentBtn) {
+                completePaymentBtn.disabled = false
+            }
+        })
+    })
+
+    // Set default payment method if none selected
+    if (paymentRadios.length > 0 && !document.querySelector('input[name="payment_method"]:checked')) {
+        paymentRadios[0].checked = true
+        paymentRadios[0].dispatchEvent(new Event("change"))
+    }
 
     // Card form elements
     const cardNumber = document.getElementById("card_number")
     const expiryDate = document.getElementById("expiry_date")
     const cvv = document.getElementById("cvv")
     const cardName = document.getElementById("card_name")
-
-    // Initialize payment method selection
-    paymentRadios.forEach((radio) => {
-        radio.addEventListener("change", function() {
-            // Remove active class from all payment options
-            paymentOptions.forEach((option) => {
-                option.classList.remove("active")
-            })
-
-            // Add active class to selected payment option
-            const selectedOption = this.closest(".payment-option")
-            if (selectedOption) {
-                selectedOption.classList.add("active")
-            }
-
-            // Enable the complete payment button
-            completePaymentBtn.disabled = false
-        })
-    })
 
     // Format card number with spaces
     if (cardNumber) {
@@ -72,6 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Verify QR payment button
+    const verifyQrPaymentBtn = document.getElementById("verify-qr-payment")
     if (verifyQrPaymentBtn) {
         verifyQrPaymentBtn.addEventListener("click", () => {
             // In a real app, this would verify the payment with the server
@@ -86,7 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const selectedPaymentMethod = document.querySelector('input[name="payment_method"]:checked')
 
             if (!selectedPaymentMethod) {
-                showToast("Please select a payment method", "error")
+                showToast("Error", "Please select a payment method", "error")
                 return
             }
 
@@ -99,6 +117,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             }
 
+            // Disable the button to prevent multiple clicks
+            completePaymentBtn.disabled = true
+            completePaymentBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...'
+
             // Process the payment
             processPayment(paymentMethod)
         })
@@ -107,29 +129,30 @@ document.addEventListener("DOMContentLoaded", () => {
     // Validate card payment details
     function validateCardPayment() {
         if (!cardNumber || !expiryDate || !cvv || !cardName) {
+            showToast("Error", "Card form elements not found", "error")
             return false
         }
 
         if (cardNumber.value.replace(/\s/g, "").length < 16) {
-            showToast("Please enter a valid card number", "error")
+            showToast("Error", "Please enter a valid card number", "error")
             cardNumber.focus()
             return false
         }
 
         if (expiryDate.value.length < 5) {
-            showToast("Please enter a valid expiry date (MM/YY)", "error")
+            showToast("Error", "Please enter a valid expiry date (MM/YY)", "error")
             expiryDate.focus()
             return false
         }
 
         if (cvv.value.length < 3) {
-            showToast("Please enter a valid CVV", "error")
+            showToast("Error", "Please enter a valid CVV", "error")
             cvv.focus()
             return false
         }
 
         if (cardName.value.trim() === "") {
-            showToast("Please enter the name on card", "error")
+            showToast("Error", "Please enter the name on card", "error")
             cardName.focus()
             return false
         }
@@ -139,20 +162,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Process payment based on method
     function processPayment(method) {
-        // Disable the button to prevent multiple clicks
-        completePaymentBtn.disabled = true
-        completePaymentBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...'
+        // Generate a unique order ID
+        const orderId = "ORD" + Date.now().toString().slice(-6)
 
         // In a real app, this would make an API call to process the payment
-        // For demo, we'll simulate a payment processing delay
+        // For demo, we'll just simulate a payment processing delay
         setTimeout(() => {
-                // Generate a random order number
-                const orderNumber = "ORD" + Math.floor(Math.random() * 900000 + 100000)
-
-                // Update order number in success modal
-                if (orderNumberElement) {
-                    orderNumberElement.textContent = "#" + orderNumber
-                }
+                // Create a booking from the order
+                createBookingFromOrder(orderId, method)
 
                 // Set success message based on payment method
                 let successMessage = ""
@@ -170,20 +187,65 @@ document.addEventListener("DOMContentLoaded", () => {
                         successMessage = "Your payment has been processed successfully."
                 }
 
+                // Update payment success modal
+                const paymentSuccessMessage = document.getElementById("payment-success-message")
                 if (paymentSuccessMessage) {
                     paymentSuccessMessage.textContent = successMessage
+                }
+
+                // Update order number in success modal
+                const orderNumberElement = document.getElementById("order-number")
+                if (orderNumberElement) {
+                    orderNumberElement.textContent = "#" + orderId
                 }
 
                 // Show success modal
                 showPaymentSuccessModal()
 
-                // Create a booking from the cart
-                createBookingFromCart(method, orderNumber)
-
                 // Reset button state
                 completePaymentBtn.disabled = false
                 completePaymentBtn.innerHTML = '<i class="fas fa-lock"></i> Complete Payment'
+
+                // Clear cart
+                localStorage.setItem("cart", JSON.stringify([]))
+
+                // Set flag for booking page to know we just checked out
+                sessionStorage.setItem("justCheckedOut", "true")
+
+                // Redirect to booking page after 3 seconds
+                setTimeout(() => {
+                    window.location.href = "/booking"
+                }, 3000)
             }, 2000) // 2 second delay to simulate payment processing
+    }
+
+    // Create booking from order
+    function createBookingFromOrder(orderId, paymentMethod) {
+        // Get existing bookings
+        const bookings = JSON.parse(localStorage.getItem("bookings")) || []
+
+        // Create new booking
+        const booking = {
+            id: orderId,
+            order_number: orderId,
+            date: new Date().toISOString(),
+            time: new Date().toLocaleTimeString(),
+            items: cartItems,
+            subtotal: subtotal,
+            tax: tax,
+            total: total,
+            status: paymentMethod === "cash" ? "processing" : "completed",
+            paymentStatus: paymentMethod === "cash" ? "pending" : "completed",
+            paymentMethod: paymentMethod,
+            delivery_address: "123 Main St, Apt 4B, New York, NY 10001", // In a real app, get from form
+            contact: "+1 (555) 123-4567", // In a real app, get from form
+        }
+
+        // Add to bookings
+        bookings.unshift(booking)
+
+        // Save to localStorage
+        localStorage.setItem("bookings", JSON.stringify(bookings))
     }
 
     // Show payment success modal
@@ -197,49 +259,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // Create booking from cart
-    function createBookingFromCart(paymentMethod, orderNumber) {
-        // Get cart items from localStorage
-        const cart = JSON.parse(localStorage.getItem("cart")) || []
-
-        if (cart.length === 0) return
-
-        // Calculate total
-        const subtotal = cart.reduce((total, item) => total + item.totalPrice, 0)
-        const tax = subtotal * 0.08 // 8% tax
-        const total = subtotal + tax
-
-        // Create booking
-        const booking = {
-            id: orderNumber,
-            date: new Date().toISOString(),
-            items: cart,
-            subtotal,
-            tax,
-            total,
-            status: "processing",
-            paymentMethod: paymentMethod,
-            paymentStatus: "paid",
-        }
-
-        // Get existing bookings
-        const bookings = JSON.parse(localStorage.getItem("bookings")) || []
-
-        // Add new booking
-        bookings.unshift(booking)
-
-        // Save to localStorage
-        localStorage.setItem("bookings", JSON.stringify(bookings))
-
-        // Clear cart
-        localStorage.setItem("cart", JSON.stringify([]))
-
-        // Add notification
-        addNotification("Order Placed", `Your order #${orderNumber} has been placed successfully.`, "order")
-    }
-
     // Show toast notification
-    function showToast(message, type = "info") {
+    function showToast(title, message, type = "info") {
         // Create toast container if it doesn't exist
         let toastContainer = document.querySelector(".toast-container")
         if (!toastContainer) {
@@ -265,6 +286,7 @@ document.addEventListener("DOMContentLoaded", () => {
                   <i class="fas fa-${icon}"></i>
               </div>
               <div class="toast-content">
+                  <h4>${title}</h4>
                   <p>${message}</p>
               </div>
               <button class="toast-close">&times;</button>
@@ -291,11 +313,81 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 5000)
     }
 
-    // Add notification
-    function addNotification(title, message, type = "info") {
-        // Check if notification function exists in window scope
-        if (typeof window.addNotification === "function") {
-            window.addNotification(title, message, type)
-        }
-    }
+    // Add CSS for toast notifications
+    const style = document.createElement("style")
+    style.textContent = `
+          .toast-container {
+              position: fixed;
+              top: 20px;
+              right: 20px;
+              z-index: 9999;
+              display: flex;
+              flex-direction: column;
+              gap: 10px;
+          }
+          
+          .toast {
+              display: flex;
+              align-items: flex-start;
+              background-color: white;
+              border-radius: 8px;
+              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+              padding: 12px;
+              min-width: 300px;
+              max-width: 400px;
+              animation: slideIn 0.3s ease;
+              transition: opacity 0.3s ease, transform 0.3s ease;
+          }
+          
+          .toast.toast-hide {
+              opacity: 0;
+              transform: translateX(20px);
+          }
+          
+          .toast.success .toast-icon {
+              color: #4caf50;
+          }
+          
+          .toast.error .toast-icon {
+              color: #f44336;
+          }
+          
+          .toast-icon {
+              font-size: 24px;
+              margin-right: 12px;
+              color: #2196f3;
+          }
+          
+          .toast-content {
+              flex: 1;
+          }
+          
+          .toast-content h4 {
+              margin: 0 0 5px;
+              font-size: 16px;
+              font-weight: 600;
+          }
+          
+          .toast-content p {
+              margin: 0;
+              font-size: 14px;
+              color: #666;
+          }
+          
+          .toast-close {
+              background: none;
+              border: none;
+              font-size: 18px;
+              color: #999;
+              cursor: pointer;
+              padding: 0;
+              margin-left: 8px;
+          }
+          
+          @keyframes slideIn {
+              from { transform: translateX(100%); opacity: 0; }
+              to { transform: translateX(0); opacity: 1; }
+          }
+      `
+    document.head.appendChild(style)
 })

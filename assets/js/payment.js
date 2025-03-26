@@ -1,7 +1,7 @@
-// payment.js - Enhanced payment processing
+// payment.js - Handles payment processing functionality
 document.addEventListener("DOMContentLoaded", () => {
     // DOM Elements
-    const paymentMethodCards = document.querySelectorAll(".payment-method-card")
+    const paymentOptions = document.querySelectorAll(".payment-method-card")
     const paymentRadios = document.querySelectorAll('input[name="payment_method"]')
     const completePaymentBtn = document.getElementById("complete-payment")
     const paymentSuccessModal = document.getElementById("paymentSuccessModal")
@@ -16,48 +16,64 @@ document.addEventListener("DOMContentLoaded", () => {
     const cvv = document.getElementById("cvv")
     const cardName = document.getElementById("card_name")
 
-    // Get order ID from URL
+    // Get order ID from URL or session storage
     const urlParams = new URLSearchParams(window.location.search)
-    const orderId = urlParams.get("order_id")
+    const orderId = urlParams.get("order_id") || sessionStorage.getItem("paymentOrderId")
 
-    // Update the button text to "Completed" initially
-    if (completePaymentBtn) {
-        completePaymentBtn.innerHTML = '<i class="fas fa-check-circle"></i> Completed'
+    // Clear session storage order ID
+    if (sessionStorage.getItem("paymentOrderId")) {
+        sessionStorage.removeItem("paymentOrderId")
     }
 
-    // Load order data from localStorage
-    loadOrderData(orderId)
+    // Get booking details if order ID is provided
+    let currentBooking = null
+    if (orderId) {
+        const bookings = JSON.parse(localStorage.getItem("bookings")) || []
+        currentBooking = bookings.find((booking) => booking.id === orderId)
 
-    // Initialize payment method selection
+        // Update order details in the UI
+        if (currentBooking) {
+            updateOrderDetails(currentBooking)
+        }
+    }
+
+    // Initialize payment options
     paymentRadios.forEach((radio) => {
         radio.addEventListener("change", function() {
-            // Remove active class from all payment methods
-            paymentMethodCards.forEach((card) => {
-                card.classList.remove("active")
+            // Remove active class from all payment options
+            paymentOptions.forEach((option) => {
+                option.classList.remove("active")
             })
 
-            // Add active class to selected payment method
-            const selectedCard = this.closest(".payment-method-card")
-            if (selectedCard) {
-                selectedCard.classList.add("active")
+            // Add active class to selected payment option
+            const selectedOption = document.querySelector(`.payment-method-card[data-payment="${this.value}"]`)
+            if (selectedOption) {
+                selectedOption.classList.add("active")
             }
 
             // Show selected payment content
-            const selectedMethod = this.value
-            const allContents = document.querySelectorAll(".payment-method-content")
-            allContents.forEach((content) => {
+            const paymentContents = document.querySelectorAll(".payment-method-content")
+            paymentContents.forEach((content) => {
                 content.style.display = "none"
             })
 
-            const selectedContent = document.getElementById(`${selectedMethod}_payment_content`)
+            const selectedContent = document.getElementById(`${this.value}_payment_content`)
             if (selectedContent) {
                 selectedContent.style.display = "block"
             }
 
             // Enable the complete payment button
-            completePaymentBtn.disabled = false
+            if (completePaymentBtn) {
+                completePaymentBtn.disabled = false
+            }
         })
     })
+
+    // Set default payment method if none selected
+    if (paymentRadios.length > 0 && !document.querySelector('input[name="payment_method"]:checked')) {
+        paymentRadios[0].checked = true
+        paymentRadios[0].dispatchEvent(new Event("change"))
+    }
 
     // Format card number with spaces
     if (cardNumber) {
@@ -124,131 +140,69 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             }
 
-            // Show payment interface alert before processing
-            showPaymentAlert("Payment interface activated. Your order will be processed.")
+            // Disable the button to prevent multiple clicks
+            completePaymentBtn.disabled = true
+            completePaymentBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...'
 
             // Process the payment
             processPayment(paymentMethod)
         })
     }
 
-    // Custom payment alert function
-    function showPaymentAlert(message) {
-        // Create overlay
-        const alertOverlay = document.createElement("div")
-        alertOverlay.className = "payment-alert-overlay"
-
-        // Create alert box
-        const alertBox = document.createElement("div")
-        alertBox.className = "payment-alert-box"
-
-        // Add content
-        alertBox.innerHTML = `
-              <div class="payment-alert-icon">
-                  <i class="fas fa-credit-card"></i>
-              </div>
-              <h3>Payment Notification</h3>
-              <p>${message}</p>
-              <button id="alert-ok" class="btn-primary">Proceed</button>
-          `
-
-        // Add to DOM
-        alertOverlay.appendChild(alertBox)
-        document.body.appendChild(alertOverlay)
-
-        // Add event listener to OK button
-        document.getElementById("alert-ok").addEventListener("click", () => {
-            alertOverlay.classList.add("fade-out")
-            setTimeout(() => {
-                alertOverlay.remove()
-            }, 300)
+    // Update order details in the UI
+    function updateOrderDetails(booking) {
+        // Update order number
+        const orderNumberElements = document.querySelectorAll(".order-number span:last-child")
+        orderNumberElements.forEach((el) => {
+            if (el) el.textContent = "#" + booking.id
         })
 
-        // Also close when clicking outside the alert box
-        alertOverlay.addEventListener("click", (e) => {
-            if (e.target === alertOverlay) {
-                alertOverlay.classList.add("fade-out")
-                setTimeout(() => {
-                    alertOverlay.remove()
-                }, 300)
-            }
+        // Update total amount
+        const totalAmountElements = document.querySelectorAll(".order-total span:last-child")
+        orderNumberElements.forEach((el) => {
+            if (el) el.textContent = "#" + booking.id
         })
-    }
 
-    // Load order data from localStorage
-    function loadOrderData(orderId) {
-        if (!orderId) return
+        // Update total amount
+        const totalAmountElements2 = document.querySelectorAll(".order-total span:last-child")
+        totalAmountElements2.forEach((el) => {
+            if (el) el.textContent = "$" + booking.total.toFixed(2)
+        })
 
-        // Get bookings from localStorage
-        const bookings = JSON.parse(localStorage.getItem("bookings")) || []
-
-        // Find the booking with the matching ID
-        const booking = bookings.find((b) => b.id === orderId)
-
-        if (!booking) {
-            showToast("Error", "Order not found", "error")
-            return
-        }
-
-        // Update order summary
-        updateOrderSummary(booking)
-
-        // Update order number in success modal
-        if (orderNumberElement) {
-            orderNumberElement.textContent = "#" + orderId
-        }
-    }
-
-    // Update order summary
-    function updateOrderSummary(booking) {
-        // Update order items
+        // Update order items if there's a container for them
         const orderItemsContainer = document.querySelector(".order-items")
-        if (!orderItemsContainer) return
+        if (orderItemsContainer && booking.items) {
+            orderItemsContainer.innerHTML = booking.items
+                .map(
+                    (item) => `
+                  <div class="order-item">
+                      <div class="item-image">
+                          <img src="${item.image}" alt="${item.name}">
+                      </div>
+                      <div class="item-details">
+                          <h4>${item.name}</h4>
+                          <p>Size: ${item.size.name} | Sugar: ${item.sugar.name} | Ice: ${item.ice.name}</p>
+                          <p>Toppings: ${item.toppings && item.toppings.length > 0 ? item.toppings.map((t) => t.name).join(", ") : "None"}</p>
+                          <div class="item-quantity-price">
+                              <span>Qty: ${item.quantity}</span>
+                              <span>$${item.totalPrice.toFixed(2)}</span>
+                          </div>
+                      </div>
+                  </div>
+              `,
+                )
+                .join("")
+        }
 
-        // Clear existing items
-        orderItemsContainer.innerHTML = ""
-
-        // Add each item
-        booking.items.forEach((item) => {
-            const itemElement = document.createElement("div")
-            itemElement.className = "order-item"
-
-            // Format toppings
-            let toppingsText = "None"
-            if (item.toppings && item.toppings.length > 0) {
-                toppingsText = item.toppings.map((t) => t.name).join(", ")
-            }
-
-            itemElement.innerHTML = `
-          <div class="item-image">
-            <img src="${item.image || "/assets/images/default-product.png"}" alt="${item.name}">
-          </div>
-          <div class="item-details">
-            <h4>${item.name}</h4>
-            <p>Size: ${item.size.name} | Sugar: ${item.sugar.name} | Ice: ${item.ice.name}</p>
-            <p>Toppings: ${toppingsText}</p>
-            <div class="item-quantity-price">
-              <span>Qty: ${item.quantity}</span>
-              <span>$${item.totalPrice.toFixed(2)}</span>
-            </div>
-          </div>
-        `
-
-            orderItemsContainer.appendChild(itemElement)
-        })
-
-        // Update totals
+        // Update subtotal, tax, and total in order summary
         const subtotalElement = document.querySelector(".total-row:nth-child(1) span:last-child")
+        if (subtotalElement) subtotalElement.textContent = "$" + booking.subtotal.toFixed(2)
+
         const taxElement = document.querySelector(".total-row:nth-child(2) span:last-child")
-        const totalElement = document.querySelector(".grand-total span:last-child")
+        if (taxElement) taxElement.textContent = "$" + booking.tax.toFixed(2)
 
-        if (subtotalElement) subtotalElement.textContent = `$${booking.subtotal.toFixed(2)}`
-        if (taxElement) taxElement.textContent = `$${booking.tax.toFixed(2)}`
-        if (totalElement) totalElement.textContent = `$${booking.total.toFixed(2)}`
-
-        // Update cash payment amount
-        const cashPaymentAmount = document.querySelector(".cash-payment-info p:last-child strong")
-        if (cashPaymentAmount) cashPaymentAmount.textContent = `$${booking.total.toFixed(2)}`
+        const totalElement = document.querySelector(".total-row.grand-total span:last-child")
+        if (totalElement) totalElement.textContent = "$" + booking.total.toFixed(2)
     }
 
     // Validate card payment details
@@ -287,15 +241,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Process payment based on method
     function processPayment(method) {
-        // Disable the button to prevent multiple clicks
-        completePaymentBtn.disabled = true
-        completePaymentBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...'
+        // If we have a current booking, update it
+        if (currentBooking) {
+            processExistingBookingPayment(currentBooking.id, method)
+            return
+        }
+
+        // Get cart items from localStorage
+        const cartItems = JSON.parse(localStorage.getItem("cart")) || []
+
+        // Calculate totals
+        const subtotal = cartItems.reduce((total, item) => total + item.totalPrice, 0)
+        const tax = subtotal * 0.08 // 8% tax
+        const total = subtotal + tax
+
+        // Generate a unique order ID if we don't have one
+        const orderId = "ORD" + Date.now().toString().slice(-6)
 
         // In a real app, this would make an API call to process the payment
-        // For demo, we'll simulate a payment processing delay
+        // For demo, we'll just simulate a payment processing delay
         setTimeout(() => {
-                // Update booking status in localStorage
-                updateBookingStatus(orderId, method)
+                // Create a booking from the order
+                createBookingFromOrder(orderId, method, cartItems, subtotal, tax, total)
 
                 // Set success message based on payment method
                 let successMessage = ""
@@ -317,12 +284,20 @@ document.addEventListener("DOMContentLoaded", () => {
                     paymentSuccessMessage.textContent = successMessage
                 }
 
+                // Update order number in success modal
+                if (orderNumberElement) {
+                    orderNumberElement.textContent = "#" + orderId
+                }
+
                 // Show success modal
                 showPaymentSuccessModal()
 
                 // Reset button state
                 completePaymentBtn.disabled = false
-                completePaymentBtn.innerHTML = '<i class="fas fa-check-circle"></i> Completed'
+                completePaymentBtn.innerHTML = '<i class="fas fa-lock"></i> Complete Payment'
+
+                // Clear cart
+                localStorage.setItem("cart", JSON.stringify([]))
 
                 // Add notification
                 if (window.addNotification) {
@@ -333,6 +308,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     )
                 }
 
+                // Set flag for booking page to know we just checked out
+                sessionStorage.setItem("justCheckedOut", "true")
+
                 // Redirect to booking page after 3 seconds
                 setTimeout(() => {
                     window.location.href = "/booking"
@@ -340,22 +318,101 @@ document.addEventListener("DOMContentLoaded", () => {
             }, 2000) // 2 second delay to simulate payment processing
     }
 
-    // Update booking status in localStorage
-    function updateBookingStatus(orderId, paymentMethod) {
-        if (!orderId) return
-
+    // Process payment for an existing booking
+    function processExistingBookingPayment(bookingId, method) {
         // Get bookings from localStorage
         const bookings = JSON.parse(localStorage.getItem("bookings")) || []
 
-        // Find the booking with the matching ID
-        const bookingIndex = bookings.findIndex((b) => b.id === orderId)
+        // Find the booking
+        const bookingIndex = bookings.findIndex((b) => b.id === bookingId)
 
-        if (bookingIndex === -1) return
+        if (bookingIndex === -1) {
+            showToast("Error", "Booking not found", "error")
+            return
+        }
 
-        // Update booking
-        bookings[bookingIndex].status = "completed"
-        bookings[bookingIndex].paymentMethod = paymentMethod
-        bookings[bookingIndex].paymentDate = new Date().toISOString()
+        // Update booking payment status and method
+        bookings[bookingIndex].paymentStatus = "completed"
+        bookings[bookingIndex].paymentMethod = method
+
+        // Save to localStorage
+        localStorage.setItem("bookings", JSON.stringify(bookings))
+
+        // Set success message based on payment method
+        let successMessage = ""
+        switch (method) {
+            case "card":
+                successMessage = "Your card payment has been processed successfully."
+                break
+            case "qr":
+                successMessage = "Your QR code payment has been verified successfully."
+                break
+            case "cash":
+                successMessage = "Your cash on delivery order has been confirmed."
+                break
+            default:
+                successMessage = "Your payment has been processed successfully."
+        }
+
+        // Update payment success modal
+        if (paymentSuccessMessage) {
+            paymentSuccessMessage.textContent = successMessage
+        }
+
+        // Update order number in success modal
+        if (orderNumberElement) {
+            orderNumberElement.textContent = "#" + bookingId
+        }
+
+        // Show success modal after a delay to simulate processing
+        setTimeout(() => {
+            // Show success modal
+            showPaymentSuccessModal()
+
+            // Reset button state
+            completePaymentBtn.disabled = false
+            completePaymentBtn.innerHTML = '<i class="fas fa-lock"></i> Complete Payment'
+
+            // Add notification
+            if (window.addNotification) {
+                window.addNotification(
+                    "Payment Successful",
+                    `Your payment for order #${bookingId} has been processed successfully.`,
+                    "success",
+                )
+            }
+
+            // Redirect to receipt page after 3 seconds
+            setTimeout(() => {
+                window.location.href = `/receipt?order_id=${bookingId}`
+            }, 3000)
+        }, 2000)
+    }
+
+    // Create booking from order
+    function createBookingFromOrder(orderId, paymentMethod, items, subtotal, tax, total) {
+        // Get existing bookings
+        const bookings = JSON.parse(localStorage.getItem("bookings")) || []
+
+        // Create new booking
+        const booking = {
+            id: orderId,
+            order_number: orderId,
+            date: new Date().toISOString(),
+            time: new Date().toLocaleTimeString(),
+            items: items,
+            subtotal: subtotal,
+            tax: tax,
+            total: total,
+            status: paymentMethod === "cash" ? "processing" : "completed",
+            paymentStatus: paymentMethod === "cash" ? "pending" : "completed",
+            paymentMethod: paymentMethod,
+            delivery_address: "123 Main St, Apt 4B, New York, NY 10001", // In a real app, get from form
+            contact: "+1 (555) 123-4567", // In a real app, get from form
+        }
+
+        // Add to bookings
+        bookings.unshift(booking)
 
         // Save to localStorage
         localStorage.setItem("bookings", JSON.stringify(bookings))
@@ -395,15 +452,15 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         toast.innerHTML = `
-        <div class="toast-icon">
-          <i class="fas fa-${icon}"></i>
-        </div>
-        <div class="toast-content">
-          <h4>${title}</h4>
-          <p>${message}</p>
-        </div>
-        <button class="toast-close">&times;</button>
-      `
+                <div class="toast-icon">
+                    <i class="fas fa-${icon}"></i>
+                </div>
+                <div class="toast-content">
+                    <h4>${title}</h4>
+                    <p>${message}</p>
+                </div>
+                <button class="toast-close">&times;</button>
+            `
 
         // Add to container
         toastContainer.appendChild(toast)
@@ -425,4 +482,257 @@ document.addEventListener("DOMContentLoaded", () => {
             }, 300)
         }, 5000)
     }
+
+    // Add CSS for toast notifications and payment UI
+    const style = document.createElement("style")
+    style.textContent = `
+            .toast-container {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                z-index: 9999;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .toast {
+                display: flex;
+                align-items: flex-start;
+                background-color: white;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                padding: 12px;
+                min-width: 300px;
+                max-width: 400px;
+                animation: slideIn 0.3s ease;
+                transition: opacity 0.3s ease, transform 0.3s ease;
+            }
+            
+            .toast.toast-hide {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            
+            .toast.success .toast-icon {
+                color: #4caf50;
+            }
+            
+            .toast.error .toast-icon {
+                color: #f44336;
+            }
+            
+            .toast-icon {
+                font-size: 24px;
+                margin-right: 12px;
+                color: #2196f3;
+            }
+            
+            .toast-content {
+                flex: 1;
+            }
+            
+            .toast-content h4 {
+                margin: 0 0 5px;
+                font-size: 16px;
+                font-weight: 600;
+            }
+            
+            .toast-content p {
+                margin: 0;
+                font-size: 14px;
+                color: #666;
+            }
+            
+            .toast-close {
+                background: none;
+                border: none;
+                font-size: 18px;
+                color: #999;
+                cursor: pointer;
+                padding: 0;
+                margin-left: 8px;
+            }
+            
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            
+            /* Payment Success Modal Styles */
+            .payment-success-modal {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: 1000;
+                justify-content: center;
+                align-items: center;
+            }
+            
+            .payment-success-modal.active {
+                display: flex;
+            }
+            
+            .payment-success-content {
+                background-color: white;
+                border-radius: 10px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+                padding: 30px;
+                text-align: center;
+                max-width: 90%;
+                width: 400px;
+                animation: fadeIn 0.3s ease;
+            }
+            
+            .success-icon {
+                font-size: 60px;
+                color: #4caf50;
+                margin-bottom: 20px;
+            }
+            
+            .order-details {
+                background-color: #f9f9f9;
+                border-radius: 8px;
+                padding: 15px;
+                margin: 20px 0;
+                text-align: left;
+            }
+            
+            .order-number, .order-total {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 10px;
+            }
+            
+            .order-total {
+                font-weight: 600;
+                border-top: 1px dashed #ddd;
+                padding-top: 10px;
+                margin-top: 10px;
+            }
+            
+            .success-actions {
+                margin-top: 20px;
+            }
+            
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(-20px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            
+            /* Payment Method Styles */
+            .payment-option {
+                margin-bottom: 15px;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                overflow: hidden;
+            }
+            
+            .payment-option.active {
+                border-color: #ff5e62;
+                box-shadow: 0 0 0 2px rgba(255, 94, 98, 0.1);
+            }
+            
+            .payment-option-header {
+                padding: 15px;
+                background-color: #f9f9f9;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+            }
+            
+            .payment-option-header label {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                cursor: pointer;
+                font-weight: 500;
+                margin-left: 10px;
+            }
+            
+            .payment-option-content {
+                padding: 15px;
+                display: none;
+            }
+            
+            .card-payment-form {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .form-group {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .form-group label {
+                font-size: 14px;
+                color: #666;
+            }
+            
+            .form-group input {
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                font-size: 14px;
+            }
+            
+            .form-group input:focus {
+                border-color: #ff5e62;
+                outline: none;
+                box-shadow: 0 0 0 2px rgba(255, 94, 98, 0.1);
+            }
+            
+            .form-row {
+                display: flex;
+                gap: 15px;
+            }
+            
+            .form-row .form-group {
+                flex: 1;
+            }
+            
+            .qr-code-container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+            }
+            
+            .qr-code-container img {
+                max-width: 200px;
+                height: auto;
+            }
+            
+            .qr-code-container p {
+                text-align: center;
+                font-size: 14px;
+                color: #666;
+            }
+            
+            .qr-verification {
+                margin-top: 10px;
+            }
+            
+            .cash-payment-info {
+                font-size: 14px;
+                color: #666;
+                line-height: 1.6;
+            }
+            
+            .cash-payment-info p {
+                margin-bottom: 10px;
+            }
+            
+            .cash-payment-info strong {
+                color: #ff5e62;
+                font-weight: 600;
+            }
+        `
+    document.head.appendChild(style)
 })

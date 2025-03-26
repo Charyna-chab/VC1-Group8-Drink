@@ -115,6 +115,7 @@
     <script src="/assets/js/product.js"></script>
     <script src="/assets/js/checkout.js"></script>
     <script src="/assets/js/payment.js"></script>
+    <script src="/assets/js/receipt.js"></script>
     <script src="/assets/js/cash-payment.js"></script>
 
 </body>

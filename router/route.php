@@ -1,20 +1,21 @@
 <?php
-require_once __DIR__ . "/Router.php";
-require_once __DIR__ . "/../controllers/BaseController.php";
-require_once __DIR__ . "/../controllers/WelcomeController.php";
-require_once __DIR__ . "/../controllers/FavoritesController.php";
-require_once __DIR__ . "/../controllers/FeedbackController.php";
-require_once __DIR__ . "/../controllers/SettingsController.php";
-require_once __DIR__ . "/../controllers/OrdersController.php";
-require_once __DIR__ . "/../controllers/BookingController.php";
-require_once __DIR__ . "/../controllers/AuthController.php";
-require_once __DIR__ . "/../controllers/AdminController.php";
-require_once __DIR__ . "/../controllers/ProductController.php";
-require_once __DIR__ . "/../controllers/UserController.php";
-require_once __DIR__ . "/../controllers/DashboardController.php";
-require_once __DIR__ . "/../controllers/PaymentController.php";
-require_once __DIR__ . "/../controllers/CashController.php";
-
+// Main entry point - only require the router
+require_once "router/Router.php";
+require_once "controllers/BaseController.php";
+require_once "controllers/WelcomeController.php";
+require_once "controllers/FavoritesController.php";
+require_once "controllers/FeedbackController.php";
+require_once "controllers/SettingsController.php";
+require_once "controllers/OrdersController.php";
+require_once "controllers/BookingController.php";
+require_once "controllers/AuthController.php";
+require_once "controllers/AdminController.php";
+require_once "controllers/ProductController.php";
+require_once "controllers/UserController.php";
+require_once "controllers/DashboardController.php";
+require_once "controllers/PaymentController.php";
+require_once "controllers/CashController.php";
+require_once "controllers/ReceiptController.php";
 
 use YourNamespace\Router;
 use YourNamespace\Controllers\WelcomeController;
@@ -30,6 +31,7 @@ use YourNamespace\Controllers\UserController;
 use YourNamespace\Controllers\DashboardController;
 use YourNamespace\Controllers\PaymentController;
 use YourNamespace\Controllers\CashController;
+use YourNamespace\Controllers\ReceiptController;
 
 $route = new Router();
 
@@ -71,10 +73,15 @@ $route->post("/process-payment", [OrdersController::class, 'processPayment']);
 $route->get("/payment", [PaymentController::class, 'index']);
 $route->get("/payment/{id}", [PaymentController::class, 'show']);
 $route->post("/payment/process", [PaymentController::class, 'process']);
-// Add these routes to your router
+
+// Cash payment routes
 $route->get("/cash", [CashController::class, 'index']);
 $route->post("/cash/process", [CashController::class, 'process']);
 $route->get("/cash/confirm/{id}", [CashController::class, 'confirm']);
+
+// Receipt routes
+$route->get("/receipt", [ReceiptController::class, 'index']);
+$route->get("/receipt/download/{id}", [ReceiptController::class, 'download']);
 
 $route->get("/booking", [BookingController::class, 'index']);
 $route->get("/orders", [OrdersController::class, 'index']);
@@ -105,9 +112,4 @@ $route->post("/admin/users/update/{id}", [UserController::class, 'update']);
 $route->post("/admin/users/delete/{id}", [UserController::class, 'delete']);
 
 $route->route();
-
-// First, add the require statement at the top with the other requires
-
-// Then add this to the use statements
-
 

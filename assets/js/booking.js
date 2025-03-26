@@ -103,6 +103,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     tax,
                     total,
                     status: "processing",
+                    paymentStatus: "pending", // Add payment status
+                    paymentMethod: null, // Will be set when payment is made
                 }
 
                 // Add to bookings
@@ -299,6 +301,10 @@ document.addEventListener("DOMContentLoaded", () => {
         break
     }
 
+    // Get payment status
+    const paymentStatus = booking.paymentStatus || "pending"
+    const paymentStatusClass = paymentStatus === "completed" ? "completed" : "processing"
+
     modal.innerHTML = `
 <div class="modal-content">
 <div class="modal-header">
@@ -312,8 +318,13 @@ document.addEventListener("DOMContentLoaded", () => {
         <h4>Order #${booking.id}</h4>
         <p><i class="fas fa-calendar-alt"></i> ${formattedDate}</p>
       </div>
-      <div class="order-status ${statusClass}">
-        ${booking.status}
+      <div class="order-status-container">
+        <div class="order-status ${statusClass}">
+          ${booking.status}
+        </div>
+        <div class="payment-status ${paymentStatusClass}">
+          Payment: ${paymentStatus}
+        </div>
       </div>
     </div>
     
@@ -368,6 +379,15 @@ document.addEventListener("DOMContentLoaded", () => {
     `
       : ""
   }
+  ${
+    (booking.status === "processing" && booking.paymentStatus === "pending") || !booking.paymentStatus
+      ? `
+      <button class="btn-success pay-now-modal" data-id="${booking.id}">
+        <i class="fas fa-credit-card"></i> Pay Now
+      </button>
+    `
+      : ""
+  }
 </div>
 </div>
 `
@@ -396,6 +416,16 @@ document.addEventListener("DOMContentLoaded", () => {
       completeButton.addEventListener("click", function () {
         const id = this.getAttribute("data-id")
         completeBooking(id)
+        modal.remove()
+      })
+    }
+
+    // Add event listener for Pay Now button
+    const payNowButton = modal.querySelector(".pay-now-modal")
+    if (payNowButton) {
+      payNowButton.addEventListener("click", function () {
+        const id = this.getAttribute("data-id")
+        redirectToPayment(id)
         modal.remove()
       })
     }
@@ -464,6 +494,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const bookingIndex = bookings.findIndex((b) => b.id === id)
     if (bookingIndex === -1) return
 
+    const booking = bookings[bookingIndex]
+
+    // Check if payment is pending and not cash on delivery
+    if ((booking.paymentStatus === "pending" || !booking.paymentStatus) && booking.paymentMethod !== "cash") {
+      // Show payment confirmation dialog
+      showPaymentConfirmation(id)
+      return
+    }
+
     // Update booking status
     bookings[bookingIndex].status = "completed"
 
@@ -475,11 +514,57 @@ document.addEventListener("DOMContentLoaded", () => {
       window.addNotification("Order Completed", `Your order #${bookings[bookingIndex].id} has been completed.`, "order")
     }
 
-    // Redirect to order page
+    // Re-render bookings
     const activeTab = document.querySelector(".filter-tab.active")
     const status = activeTab ? activeTab.getAttribute("data-status") : "all"
     const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : ""
     renderBookings(status, searchTerm)
+  }
+
+  // Show payment confirmation dialog
+  function showPaymentConfirmation(id) {
+    const booking = bookings.find((b) => b.id === id)
+    if (!booking) return
+
+    // Create confirmation dialog
+    const confirmationDialog = document.createElement("div")
+    confirmationDialog.className = "payment-confirmation-dialog"
+
+    confirmationDialog.innerHTML = `
+<div class="confirmation-content">
+  <h3>Payment Required</h3>
+  <p>This order requires payment before it can be completed.</p>
+  <p>Would you like to make a payment now?</p>
+  <div class="confirmation-actions">
+    <button class="btn-secondary cancel-payment">Not Now</button>
+    <button class="btn-primary proceed-payment" data-id="${booking.id}">Pay Now</button>
+  </div>
+</div>
+`
+
+    document.body.appendChild(confirmationDialog)
+
+    // Add event listeners
+    const cancelButton = confirmationDialog.querySelector(".cancel-payment")
+    cancelButton.addEventListener("click", () => {
+      confirmationDialog.remove()
+    })
+
+    const proceedButton = confirmationDialog.querySelector(".proceed-payment")
+    proceedButton.addEventListener("click", function () {
+      const id = this.getAttribute("data-id")
+      redirectToPayment(id)
+      confirmationDialog.remove()
+    })
+  }
+
+  // Redirect to payment page
+  function redirectToPayment(id) {
+    // Store the booking ID in sessionStorage for the payment page
+    sessionStorage.setItem("paymentOrderId", id)
+
+    // Redirect to payment page
+    window.location.href = `/payment?order_id=${id}`
   }
 
   // Show order success message
@@ -505,7 +590,10 @@ document.addEventListener("DOMContentLoaded", () => {
     <span>$${booking.total.toFixed(2)}</span>
   </div>
 </div>
-<button class="btn-primary view-order-details" data-id="${booking.id}">View Order Details</button>
+<div class="success-actions">
+  <button class="btn-primary view-order-details" data-id="${booking.id}">View Order Details</button>
+  <button class="btn-success pay-now-btn" data-id="${booking.id}">Pay Now</button>
+</div>
 </div>
 `
 
@@ -517,6 +605,14 @@ document.addEventListener("DOMContentLoaded", () => {
       const id = this.getAttribute("data-id")
       successMessage.remove()
       showBookingDetails(id)
+    })
+
+    // Add event listener to pay now button
+    const payNowButton = successMessage.querySelector(".pay-now-btn")
+    payNowButton.addEventListener("click", function () {
+      const id = this.getAttribute("data-id")
+      successMessage.remove()
+      redirectToPayment(id)
     })
 
     // Auto remove after 5 seconds
@@ -590,6 +686,31 @@ color: #4caf50;
 .booking-status.cancelled {
 background-color: #ffebee;
 color: #f44336;
+}
+
+.payment-status {
+padding: 6px 12px;
+border-radius: 20px;
+font-size: 12px;
+font-weight: 600;
+text-transform: uppercase;
+margin-top: 5px;
+}
+
+.payment-status.processing {
+background-color: #e3f2fd;
+color: #2196f3;
+}
+
+.payment-status.completed {
+background-color: #e8f5e9;
+color: #4caf50;
+}
+
+.order-status-container {
+display: flex;
+flex-direction: column;
+align-items: flex-end;
 }
 
 .booking-items {
@@ -707,6 +828,25 @@ gap: 5px;
 
 .btn-primary:hover {
 background-color: #ff4146;
+}
+
+.btn-success {
+padding: 8px 15px;
+background-color: #4caf50;
+color: white;
+border: none;
+border-radius: 5px;
+font-size: 14px;
+font-weight: 500;
+cursor: pointer;
+transition: all 0.3s ease;
+display: flex;
+align-items: center;
+gap: 5px;
+}
+
+.btn-success:hover {
+background-color: #43a047;
 }
 
 /* Empty State */
@@ -966,6 +1106,54 @@ width: 80%;
 margin: 0 auto 20px;
 }
 
+.success-actions {
+display: flex;
+flex-direction: column;
+gap: 10px;
+}
+
+/* Payment Confirmation Dialog */
+.payment-confirmation-dialog {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background-color: rgba(0, 0, 0, 0.5);
+display: flex;
+align-items: center;
+justify-content: center;
+z-index: 1100;
+}
+
+.confirmation-content {
+width: 90%;
+max-width: 400px;
+background-color: white;
+border-radius: 10px;
+box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+padding: 30px;
+text-align: center;
+}
+
+.confirmation-content h3 {
+margin: 0 0 15px;
+font-size: 20px;
+color: #333;
+}
+
+.confirmation-content p {
+margin: 0 0 20px;
+font-size: 16px;
+color: #666;
+}
+
+.confirmation-actions {
+display: flex;
+justify-content: center;
+gap: 15px;
+}
+
 @keyframes fadeIn {
 from { opacity: 0; transform: translate(-50%, -60%); }
 to { opacity: 1; transform: translate(-50%, -50%); }
@@ -992,6 +1180,10 @@ to { opacity: 1; transform: translate(-50%, -50%); }
     margin-top: 10px;
     align-self: flex-start;
 }
+
+.confirmation-actions {
+    flex-direction: column;
+}
 }
 `
   document.head.appendChild(style)
@@ -1007,201 +1199,3 @@ to { opacity: 1; transform: translate(-50%, -50%); }
     }
   }
 })
-
-// Event listeners for filter tabs
-// filterTabs.forEach((tab) => {
-//   tab.addEventListener("click", function () {
-//     // Remove active class from other tabs
-//     filterTabs.forEach((t) => t.classList.remove("active"))
-
-//     // Add active class to current tab
-//     this.classList.add("active")
-
-//     // Get status from data attribute
-//     const status = this.getAttribute("data-status")
-
-//     // Get search term
-//     const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : ""
-
-//     // Render bookings based on status
-//     renderBookings(status, searchTerm)
-//   })
-// })
-
-// Event listener for search input
-// if (searchInput) {
-//   searchInput.addEventListener("input", function () {
-//     const searchTerm = this.value.toLowerCase().trim()
-//     const activeTab = document.querySelector(".filter-tab.active")
-//     const status = activeTab ? activeTab.getAttribute("data-status") : "all"
-//     renderBookings(status, searchTerm)
-//   })
-// }
-
-// Render bookings
-// function renderBookings(status = "all", searchTerm = "") {
-//   let filteredBookings = [...bookings]
-
-//   // Filter by status
-//   if (status !== "all") {
-//     filteredBookings = filteredBookings.filter((booking) => booking.status === status)
-//   }
-
-//   // Filter by search term
-//   if (searchTerm) {
-//     filteredBookings = filteredBookings.filter((booking) => {
-//       return (
-//         booking.name.toLowerCase().includes(searchTerm) ||
-//         booking.service.toLowerCase().includes(searchTerm) ||
-//         booking.date.includes(searchTerm)
-//       )
-//     })
-//   }
-
-//   // Sort bookings by date and time
-//   filteredBookings.sort((a, b) => {
-//     const dateA = new Date(a.date + " " + a.time)
-//     const dateB = new Date(b.date + " " + b.time)
-//     return dateA - dateB
-//   })
-
-//   // Generate HTML
-//   let html = ""
-//   if (filteredBookings.length === 0) {
-//     html = "<p>No bookings found.</p>"
-//   } else {
-//     filteredBookings.forEach((booking) => {
-//       html += `
-//         <div class="booking-card">
-//           <div class="booking-details">
-//             <h3>${booking.name}</h3>
-//             <p>Date: ${booking.date}</p>
-//             <p>Time: ${booking.time}</p>
-//             <p>Service: ${booking.service}</p>
-//             <p>Status: ${booking.status}</p>
-//           </div>
-//           <div class="booking-actions">
-//             <button class="btn-primary view-booking" data-id="${booking.id}">
-//               <i class="fas fa-eye"></i> View Details
-//             </button>
-//             <button class="btn-success complete-booking" data-id="${booking.id}">
-//               <i class="fas fa-check"></i> Complete
-//             </button>
-//           </div>
-//         </div>
-//       `
-//     })
-//   }
-
-//   // Update bookings container
-//   bookingsContainer.innerHTML = html
-
-//   // Add event listeners to view buttons
-//   const viewButtons = document.querySelectorAll(".view-booking")
-
-//   viewButtons.forEach((button) => {
-//     button.addEventListener("click", function () {
-//       const id = this.getAttribute("data-id")
-//       showBookingDetails(id)
-//     })
-//   })
-
-//   const completeButtons = document.querySelectorAll(".complete-booking")
-
-//   completeButtons.forEach((button) => {
-//     button.addEventListener("click", function () {
-//       const id = this.getAttribute("data-id")
-//       completeBooking(id)
-//     })
-//   })
-// }
-
-// // Show booking details in modal
-// function showBookingDetails(id) {
-//   const booking = bookings.find((b) => b.id === id)
-//   if (!booking) return
-
-//   // Create modal content
-//   const modalContent = `
-//     <div class="modal-content">
-//       <div class="modal-header">
-//         <h2>Booking Details</h2>
-//         <span class="close">&times;</span>
-//       </div>
-//       <div class="modal-body">
-//         <p><strong>Name:</strong> ${booking.name}</p>
-//         <p><strong>Date:</strong> ${booking.date}</p>
-//         <p><strong>Time:</strong> ${booking.time}</p>
-//         <p><strong>Service:</strong> ${booking.service}</p>
-//         <p><strong>Status:</strong> ${booking.status}</p>
-//       </div>
-//       <div class="modal-footer">
-//         <button class="btn-success complete-booking-modal" data-id="${booking.id}">Complete</button>
-//       </div>
-//     </div>
-//   `
-
-//   // Add modal content to modal
-//   modal.innerHTML = modalContent
-
-//   // Show modal
-//   modal.style.display = "block"
-
-//   // Close modal button
-//   const closeButton = modal.querySelector(".close")
-//   closeButton.addEventListener("click", () => {
-//     modal.style.display = "none"
-//   })
-
-//   // Close modal when clicking outside
-//   window.addEventListener("click", (event) => {
-//     if (event.target == modal) {
-//       modal.style.display = "none"
-//     }
-//   })
-
-//   const completeButton = modal.querySelector(".complete-booking-modal")
-//   if (completeButton) {
-//     completeButton.addEventListener("click", function () {
-//       const id = this.getAttribute("data-id")
-//       completeBooking(id)
-//       modal.remove()
-//     })
-//   }
-// }
-
-// // Edit booking (Placeholder function)
-// function editBooking(id) {
-//   alert(`Editing booking with id ${id}`)
-// }
-
-// // Complete booking
-// function completeBooking(id) {
-//   const bookingIndex = bookings.findIndex((b) => b.id === id)
-//   if (bookingIndex === -1) return
-
-//   // Update booking status
-//   bookings[bookingIndex].status = "completed"
-
-//   // Save to localStorage
-//   localStorage.setItem("bookings", JSON.stringify(bookings))
-
-//   // Add notification
-//   if (window.addNotification) {
-//     window.addNotification("Order Completed", `Your order #${bookings[bookingIndex].id} has been completed.`, "order")
-//   }
-
-//   // Re-render bookings
-//   const activeTab = document.querySelector(".filter-tab.active")
-//   const status = activeTab ? activeTab.getAttribute("data-status") : "all"
-//   const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : ""
-//   renderBookings(status, searchTerm)
-// }
-
-// // Initial render
-// renderBookings()
-
-// // Example addNotification function (replace with your actual implementation)
-// window.addNotification = (title, message, type) => {
-//   alert(`${title}: ${message} (Type: ${type})`)
-// }
