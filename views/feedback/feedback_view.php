@@ -223,6 +223,91 @@
     </div>
 </div>
 
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Get elements
+    const nameSearchInput = document.querySelector('input[name="name"]');
+    const feedbackRows = document.querySelectorAll('tbody tr');
+    const emptyStateRow = document.querySelector('tbody tr[colspan]');
+    
+    // Function to filter and highlight rows
+    function filterFeedback() {
+        const searchTerm = nameSearchInput.value.toLowerCase().trim();
+        let hasMatches = false;
+        
+        // Check if searching for "vanda"
+        if (searchTerm === 'vanda') {
+            alert("Showing feedback from user: Vanda");
+        }
+        
+        feedbackRows.forEach(row => {
+            if (row === emptyStateRow) return;
+            
+            const customerNameCell = row.querySelector('td:first-child');
+            const customerName = customerNameCell.textContent.toLowerCase();
+            
+            if (customerName.includes(searchTerm)) {
+                row.style.display = '';
+                hasMatches = true;
+                
+                // Highlight matching text if needed
+                if (searchTerm && customerName.includes(searchTerm)) {
+                    const nameElement = customerNameCell.querySelector('.fw-bold');
+                    if (nameElement) {
+                        const originalText = nameElement.textContent;
+                        const regex = new RegExp(searchTerm, 'gi');
+                        nameElement.innerHTML = originalText.replace(regex, 
+                            match => `<span class="highlight" style="background-color: #FFEB3B;">${match}</span>`);
+                    }
+                }
+            } else {
+                row.style.display = 'none';
+            }
+        });
+        
+        // Show/hide empty state
+        if (emptyStateRow) {
+            emptyStateRow.style.display = hasMatches || !searchTerm ? 'none' : '';
+        }
+    }
+    
+    // Initial filter on page load if there's a search term
+    if (nameSearchInput.value) {
+        filterFeedback();
+    }
+    
+    // Add event listeners
+    nameSearchInput.addEventListener('input', function() {
+        filterFeedback();
+    });
+    
+    // Clear highlights when search is cleared
+    nameSearchInput.addEventListener('search', function() {
+        if (!this.value) {
+            document.querySelectorAll('.highlight').forEach(el => {
+                el.outerHTML = el.textContent;
+            });
+            filterFeedback();
+        }
+    });
+    
+    // Optional: Add debounce for better performance
+    function debounce(func, wait) {
+        let timeout;
+        return function() {
+            const context = this, args = arguments;
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                func.apply(context, args);
+            }, wait);
+        };
+    }
+    
+    // Apply debounced version (300ms delay)
+    nameSearchInput.addEventListener('input', debounce(filterFeedback, 300));
+});
+</script>
 <style>
     /* Custom styles */
     .avatar-circle {
