@@ -57,7 +57,7 @@ $_SESSION['product_count'] = $product_count;
               </td>
               <td><?= htmlspecialchars($product['product_name']) ?></td>
               <td><?= htmlspecialchars($product['product_detail']) ?></td>
-              <td><?= htmlspecialchars($product['price']) ?></td>
+              <td>$<?= htmlspecialchars($product['price']) ?></td>
 
               <td>
                 <!-- Action Dropdown - Fixed Version -->
