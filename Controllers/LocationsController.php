@@ -3,6 +3,6 @@ namespace LocationsController\Controllers;
 
 class LocationsController {
     public function index() {
-        echo "LocationsController loaded successfully!";
+        echo "LocationsController loaded!";
     }
 }

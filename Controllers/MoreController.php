@@ -1,9 +1,10 @@
 <?php
-namespace MoreController\Controllers;
+namespace YourNamespace\Controllers;
 
 class MoreController {
     public function index() {
-        // Render the gift card page
+        // Render the more menu page
         include __DIR__ . '/../more.php';
     }
 }
+

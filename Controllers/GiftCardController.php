@@ -1,5 +1,5 @@
 <?php
-namespace GiftCardController\Controllers;
+namespace YourNamespace\Controllers;
 
 class GiftCardController {
     public function index() {

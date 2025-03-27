@@ -1,70 +1,98 @@
-
-    <style>
-        .success-container {
-            text-align: center;
-            padding: 40px 20px;
-        }
-        
-        .success-icon {
-            font-size: 80px;
-            color: #4CAF50;
-            margin-bottom: 20px;
-        }
-        
-        .success-message {
-            font-size: 24px;
-            color: #333;
-            margin-bottom: 20px;
-        }
-        
-        .redirect-message {
-            font-size: 16px;
-            color: #666;
-            margin-bottom: 30px;
-        }
-        
-        .loading-dots {
-            display: inline-block;
-        }
-        
-        .loading-dots::after {
-            content: '.';
-            animation: dots 1.5s steps(5, end) infinite;
-        }
-        
-        @keyframes dots {
-            0%, 20% {
-                content: '.';
-            }
-            40% {
-                content: '..';
-            }
-            60% {
-                content: '...';
-            }
-            80%, 100% {
-                content: '';
-            }
-        }
-    </style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?php echo isset($title) ? $title : 'Register - XING FU CHA'; ?></title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/auth.css">
 </head>
 <body>
-    <div class="auth-container">
-        <div class="auth-form-container">
-            <div class="success-container">
-                <i class="fas fa-check-circle success-icon"></i>
-                <h2 class="success-message">Registration Successful!</h2>
-                <p class="redirect-message">Welcome to XING FU CHA, <?php echo isset($user) && isset($user['name']) ? htmlspecialchars($user['name']) : 'User'; ?>. Redirecting to order page<span class="loading-dots"></span></p>
-                <a href="/order" class="auth-button">Go to Order Page</a>
+    <div class="main-container">
+        <!-- Main Content -->
+        <div class="auth-container">
+            <div class="auth-form-container">
+                <div class="auth-header">
+                    <img src="/assets/image/logo/logo.png" alt="XING FU CHA Logo">
+                    <h2>Create Account</h2>
+                    <p>Join us and enjoy our delicious boba tea</p>
+                </div>
+
+                <?php if(isset($error)): ?>
+                    <div class="auth-error">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span><?php echo $error; ?></span>
+                    </div>
+                <?php endif; ?>
+
+                <form action="/register" method="post" class="auth-form">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="password" name="password" placeholder="Create a password" required>
+                            <i class="fas fa-eye toggle-password"></i>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirm_password">Confirm Password</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm your password" required>
+                            <i class="fas fa-eye toggle-password"></i>
+                        </div>
+                    </div>
+
+                    <div class="form-options">
+                        <label class="terms-checkbox">
+                            <input type="checkbox" name="terms" required>
+                            <span>I agree to the <a href="/terms">Terms of Service</a> and <a href="/privacy">Privacy Policy</a></span>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="auth-button">Create Account</button>
+
+                    <div class="social-login">
+                        <p>Or register with</p>
+                        <div class="social-buttons">
+                            <button type="button" class="social-button google">
+                                <i class="fab fa-google"></i>
+                                <span>Google</span>
+                            </button>
+                            <button type="button" class="social-button facebook">
+                                <i class="fab fa-facebook-f"></i>
+                                <span>Facebook</span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="auth-footer">
+                    <p>Already have an account? <a href="/login">Login</a></p>
+                </div>
             </div>
         </div>
     </div>
 
-    <script>
-        // Redirect after 3 seconds
-        setTimeout(() => {
-            window.location.href = '/order';
-        }, 3000);
-    </script>
+    <script src="/assets/js/auth.js"></script>
 </body>
 </html>
+

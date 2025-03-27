@@ -19,3 +19,4 @@ class MenuController {
         require_once 'views/menu.php';
     }
 }
+

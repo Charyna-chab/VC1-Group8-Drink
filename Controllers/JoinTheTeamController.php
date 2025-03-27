@@ -1,10 +1,10 @@
 <?php
-namespace JoinTheTeamController\Controllers;
+namespace YourNamespace\Controllers;
 
 class JoinTheTeamController {
     public function index() {
-        echo "JoinTheTeamController loaded successfully!";
+        // Render the join the team page
+        include __DIR__ . '/../views/join-the-team.php';
     }
 }
-
 

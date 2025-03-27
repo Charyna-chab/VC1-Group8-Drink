@@ -6,7 +6,7 @@
             <li><a href="/gift-card">Gift Card</a></li>
             <li><a href="/locations">Locations</a></li>
             <li><a href="/join-the-team">Join The Team</a></li>
-            <li><a href="/more">More</a></li>
+            <li><a href="#" id="moreMenuBtn">More</a></li>
         </ul>
     </nav>
     <div class="search-bar">
@@ -50,19 +50,19 @@
         <span class="notification-badge" id="notificationBadge">0</span>
     </div>
 </header>
-<section class="content">
+<section class="content-welcome">
     
     <!-- Hero Section -->
     <div class="hero-section">
         <div class="hero-content">
             <h1>Welcome to <span class="brand-name">XING FU CHA</span></h1>
             <p>
-    Experience the authentic taste of premium bubble tea and refreshing drinks. 
-    Our handcrafted beverages are made with the finest ingredients, offering a perfect 
-    balance of sweetness, creaminess, and chewiness in every sip. Whether you love 
-    classic milk tea, fruity blends, or unique toppings, we have something special for you. 
-    Come and indulge in the ultimate bubble tea experience!
-</p>
+                Experience the authentic taste of premium bubble tea and refreshing drinks. 
+                Our handcrafted beverages are made with the finest ingredients, offering a perfect 
+                balance of sweetness, creaminess, and chewiness in every sip. Whether you love 
+                classic milk tea, fruity blends, or unique toppings, we have something special for you. 
+                Come and indulge in the ultimate bubble tea experience!
+            </p>
 
             
             <div class="wave-text">Sip Happiness in Every Cup! </div> <!-- New animated text -->
@@ -290,4 +290,3 @@
 <div class="toast-container" id="toastContainer"></div>
 
 <script src="/assets/js/welcome.js"></script>
-

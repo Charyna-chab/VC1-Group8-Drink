@@ -1,3 +1,4 @@
+
 </main>
         
         <!-- Footer -->
@@ -112,11 +113,10 @@
     <script src="/assets/js/settings.js"></script>
     <script src="/assets/js/booking.js"></script>
     <script src="/assets/js/product.js"></script>
-    <script src="/assets/js/gift-card.js"></script>
-    <script src="/assets/js/join-team.js"></script>
-    <script src="/assets/js/locations.js"></script>
-    <script src="/assets/js/more.js"></script>
+    <script src="/assets/js/checkout.js"></script>
+    <script src="/assets/js/payment.js"></script>
+    <script src="/assets/js/receipt.js"></script>
+    <script src="/assets/js/cash-payment.js"></script>
 
 </body>
-
 </html>

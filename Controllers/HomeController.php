@@ -14,7 +14,6 @@ class HomeController {
         
         // Get current user if logged in
         $user = null;
-        
   private $db;
   
   public function __construct() {
@@ -97,3 +96,4 @@ class HomeController extends BaseController {
         }
     }
 }
+

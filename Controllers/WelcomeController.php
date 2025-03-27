@@ -1,4 +1,7 @@
 <?php
+namespace YourNamespace\Controllers;
+
+use YourNamespace\BaseController;
 
 class WelcomeController extends BaseController {
     public function welcome() {
