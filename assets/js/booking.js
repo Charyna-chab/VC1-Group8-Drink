@@ -1,97 +1,72 @@
-let bookings = [
-    { id: "1", name: "John Doe", date: "2024-07-15", time: "10:00", service: "Haircut", status: "pending" },
-    { id: "2", name: "Jane Smith", date: "2024-07-16", time: "14:00", service: "Manicure", status: "confirmed" },
-    { id: "3", name: "Peter Jones", date: "2024-07-17", time: "11:00", service: "Facial", status: "cancelled" },
-    { id: "4", name: "Alice Brown", date: "2024-07-18", time: "16:00", service: "Massage", status: "pending" },
-    { id: "5", name: "Bob Williams", date: "2024-07-19", time: "09:00", service: "Pedicure", status: "confirmed" },
-]
-
-// Check if localStorage is supported
-if (typeof Storage !== "undefined") {
-    // Retrieve bookings from localStorage if available
-    const storedBookings = localStorage.getItem("bookings")
-    if (storedBookings) {
-        bookings = JSON.parse(storedBookings)
-    }
-} else {
-    console.log("localStorage is not supported in this browser.")
-}
-
-// Get DOM elements
-const bookingsContainer = document.getElementById("bookings")
-const searchInput = document.getElementById("search")
-const filterTabs = document.querySelectorAll(".filter-tab")
-const modal = document.getElementById("bookingModal")
-
-// booking.js - Handles booking functionality
+// booking.js - Enhanced with improved payment methods, receipt handling, and better UX
 document.addEventListener("DOMContentLoaded", () => {
             // DOM Elements
-            const bookingsList = document.querySelector(".bookings-list")
-            const filterTabs = document.querySelectorAll(".filter-tab")
-            const searchInput = document.getElementById("bookingSearch")
-            const ctaButton = document.querySelector(".cta-button")
+            const bookingsList = document.querySelector(".bookings-list");
+            const filterTabs = document.querySelectorAll(".filter-tab");
+            const searchInput = document.getElementById("bookingSearch");
+            const ctaButton = document.querySelector(".cta-button");
 
             // Get cart items from localStorage
-            const cartItems = JSON.parse(localStorage.getItem("cart")) || []
+            const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
 
             // Create bookings from cart items
-            const bookings = JSON.parse(localStorage.getItem("bookings")) || []
+            const bookings = JSON.parse(localStorage.getItem("bookings")) || [];
 
             // Check if we just came from checkout
-            const justCheckedOut = sessionStorage.getItem("justCheckedOut")
+            const justCheckedOut = sessionStorage.getItem("justCheckedOut");
             if (justCheckedOut) {
                 // Clear the flag
-                sessionStorage.removeItem("justCheckedOut")
+                sessionStorage.removeItem("justCheckedOut");
 
                 // Create a new booking from cart items if there are any
                 if (cartItems.length > 0) {
-                    createBookingFromCart()
+                    createBookingFromCart();
                 }
             }
 
             // Initialize bookings
-            renderBookings()
+            renderBookings();
 
             // Filter bookings by status
             filterTabs.forEach((tab) => {
                 tab.addEventListener("click", function() {
                     // Remove active class from all tabs
-                    filterTabs.forEach((t) => t.classList.remove("active"))
+                    filterTabs.forEach((t) => t.classList.remove("active"));
 
                     // Add active class to clicked tab
-                    this.classList.add("active")
+                    this.classList.add("active");
 
                     // Filter bookings
-                    const status = this.getAttribute("data-status")
-                    renderBookings(status)
-                })
-            })
+                    const status = this.getAttribute("data-status");
+                    renderBookings(status);
+                });
+            });
 
             // Search bookings
             if (searchInput) {
                 searchInput.addEventListener("input", function() {
-                    const searchTerm = this.value.toLowerCase().trim()
-                    const activeStatus = document.querySelector(".filter-tab.active").getAttribute("data-status")
+                    const searchTerm = this.value.toLowerCase().trim();
+                    const activeStatus = document.querySelector(".filter-tab.active").getAttribute("data-status");
 
-                    renderBookings(activeStatus, searchTerm)
-                })
+                    renderBookings(activeStatus, searchTerm);
+                });
             }
 
             // CTA button click
             if (ctaButton) {
                 ctaButton.addEventListener("click", () => {
-                    window.location.href = "/order"
-                })
+                    window.location.href = "/order";
+                });
             }
 
             // Create booking from cart
             function createBookingFromCart() {
-                if (cartItems.length === 0) return
+                if (cartItems.length === 0) return;
 
                 // Calculate total
-                const subtotal = cartItems.reduce((total, item) => total + item.totalPrice, 0)
-                const tax = subtotal * 0.08
-                const total = subtotal + tax
+                const subtotal = cartItems.reduce((total, item) => total + item.totalPrice, 0);
+                const tax = subtotal * 0.08;
+                const total = subtotal + tax;
 
                 // Create booking
                 const booking = {
@@ -104,16 +79,16 @@ document.addEventListener("DOMContentLoaded", () => {
                     status: "processing",
                     paymentStatus: "pending", // Add payment status
                     paymentMethod: null, // Will be set when payment is made
-                }
+                };
 
                 // Add to bookings
-                bookings.unshift(booking)
+                bookings.unshift(booking);
 
                 // Save to localStorage
-                localStorage.setItem("bookings", JSON.stringify(bookings))
+                localStorage.setItem("bookings", JSON.stringify(bookings));
 
                 // Clear cart
-                localStorage.setItem("cart", JSON.stringify([]))
+                localStorage.setItem("cart", JSON.stringify([]));
 
                 // Add notification
                 if (window.addNotification) {
@@ -121,34 +96,34 @@ document.addEventListener("DOMContentLoaded", () => {
                         "Order Placed Successfully",
                         `Your order #${booking.id} has been placed and is being processed.`,
                         "order",
-                    )
+                    );
                 }
 
                 // Show success message
-                showOrderSuccessMessage(booking)
+                showOrderSuccessMessage(booking);
             }
 
             // Render bookings
             function renderBookings(status = "all", searchTerm = "") {
-                if (!bookingsList) return
+                if (!bookingsList) return;
 
                 // Filter bookings by status
-                let filteredBookings = bookings
+                let filteredBookings = bookings;
                 if (status !== "all") {
-                    filteredBookings = bookings.filter((booking) => booking.status === status)
+                    filteredBookings = bookings.filter((booking) => booking.status === status);
                 }
                 // Fix: When in "all" tab, don't show cancelled orders
                 else {
-                    filteredBookings = bookings.filter((booking) => booking.status !== "cancelled")
+                    filteredBookings = bookings.filter((booking) => booking.status !== "cancelled");
                 }
 
                 // Filter by search term
                 if (searchTerm) {
-                    filteredBookings = filteredBookings.filter((booking) => booking.id.toLowerCase().includes(searchTerm))
+                    filteredBookings = filteredBookings.filter((booking) => booking.id.toLowerCase().includes(searchTerm));
                 }
 
                 // Clear bookings list
-                bookingsList.innerHTML = ""
+                bookingsList.innerHTML = "";
 
                 // Show empty state if no bookings
                 if (filteredBookings.length === 0) {
@@ -159,33 +134,33 @@ document.addEventListener("DOMContentLoaded", () => {
 <p>${status === "all" ? "You haven't placed any orders yet." : `You don't have any ${status} orders.`}</p>
 <a href="/order" class="btn-primary">Order Now</a>
 </div>
-`
-      return
+`;
+      return;
     }
 
     // Render each booking
     filteredBookings.forEach((booking) => {
-      const bookingCard = document.createElement("div")
-      bookingCard.className = "booking-card"
-      bookingCard.setAttribute("data-id", booking.id)
-      bookingCard.setAttribute("data-status", booking.status)
+      const bookingCard = document.createElement("div");
+      bookingCard.className = "booking-card";
+      bookingCard.setAttribute("data-id", booking.id);
+      bookingCard.setAttribute("data-status", booking.status);
 
       // Format date
-      const date = new Date(booking.date)
-      const formattedDate = date.toLocaleDateString() + " " + date.toLocaleTimeString()
+      const date = new Date(booking.date);
+      const formattedDate = date.toLocaleDateString() + " " + date.toLocaleTimeString();
 
       // Get status class
-      let statusClass = ""
+      let statusClass = "";
       switch (booking.status) {
         case "processing":
-          statusClass = "processing"
-          break
+          statusClass = "processing";
+          break;
         case "completed":
-          statusClass = "completed"
-          break
+          statusClass = "completed";
+          break;
         case "cancelled":
-          statusClass = "cancelled"
-          break
+          statusClass = "cancelled";
+          break;
       }
 
       // Create booking card HTML
@@ -238,71 +213,131 @@ ${booking.items
     `
       : ""
   }
+  ${
+    booking.status === "cancelled"
+      ? `
+      <button class="btn-outline-danger delete-booking" data-id="${booking.id}">
+        <i class="fas fa-trash"></i> Delete
+      </button>
+    `
+      : ""
+  }
 </div>
 </div>
-`
+`;
 
-      bookingsList.appendChild(bookingCard)
-    })
+      bookingsList.appendChild(bookingCard);
+    });
 
     // Add event listeners to buttons
-    const viewDetailsButtons = document.querySelectorAll(".view-details")
-    const cancelButtons = document.querySelectorAll(".cancel-booking")
-    const completeButtons = document.querySelectorAll(".complete-booking")
+    const viewDetailsButtons = document.querySelectorAll(".view-details");
+    const cancelButtons = document.querySelectorAll(".cancel-booking");
+    const completeButtons = document.querySelectorAll(".complete-booking");
+    const deleteButtons = document.querySelectorAll(".delete-booking");
 
     viewDetailsButtons.forEach((button) => {
       button.addEventListener("click", function (e) {
-        e.preventDefault()
-        const id = this.getAttribute("data-id")
-        showBookingDetails(id)
-      })
-    })
+        e.preventDefault();
+        const id = this.getAttribute("data-id");
+        showBookingDetails(id);
+      });
+    });
 
     cancelButtons.forEach((button) => {
       button.addEventListener("click", function () {
-        const id = this.getAttribute("data-id")
-        cancelBooking(id)
-      })
-    })
+        const id = this.getAttribute("data-id");
+        cancelBooking(id);
+      });
+    });
 
     completeButtons.forEach((button) => {
       button.addEventListener("click", function () {
-        const id = this.getAttribute("data-id")
-        completeBooking(id)
-      })
-    })
+        const id = this.getAttribute("data-id");
+        completeBooking(id);
+      });
+    });
+
+    deleteButtons.forEach((button) => {
+      button.addEventListener("click", function () {
+        const id = this.getAttribute("data-id");
+        deleteBooking(id);
+      });
+    });
+  }
+
+  // Delete booking
+  function deleteBooking(id) {
+    const bookingIndex = bookings.findIndex((b) => b.id === id);
+    if (bookingIndex === -1) return;
+
+    // Remove booking from array
+    bookings.splice(bookingIndex, 1);
+
+    // Save to localStorage
+    localStorage.setItem("bookings", JSON.stringify(bookings));
+
+    // Add notification
+    if (window.addNotification) {
+      window.addNotification("Order Deleted", `Order #${id} has been permanently deleted.`, "order");
+    }
+
+    // Find and remove the booking card from the DOM
+    const bookingCard = document.querySelector(`.booking-card[data-id="${id}"]`);
+    if (bookingCard) {
+      // Add fade-out animation
+      bookingCard.style.transition = "opacity 0.3s ease, transform 0.3s ease";
+      bookingCard.style.opacity = "0";
+      bookingCard.style.transform = "translateX(20px)";
+
+      // Remove after animation completes
+      setTimeout(() => {
+        bookingCard.remove();
+
+        // Check if there are no more bookings and show empty state if needed
+        if (bookingsList.children.length === 0) {
+          bookingsList.innerHTML = `
+    <div class="empty-state">
+      <img src="/assets/image/empty-orders.svg" alt="No Orders">
+      <h3>No Orders Found</h3>
+      <p>You haven't placed any orders yet.</p>
+      <a href="/order" class="btn-primary">Order Now</a>
+    </div>
+  `;
+        }
+      }, 300);
+    }
   }
 
   // Show booking details
   function showBookingDetails(id) {
-    const booking = bookings.find((b) => b.id === id)
-    if (!booking) return
+    const booking = bookings.find((b) => b.id === id);
+    if (!booking) return;
 
     // Create modal
-    const modal = document.createElement("div")
-    modal.className = "booking-details-modal"
+    const modal = document.createElement("div");
+    modal.className = "booking-details-modal";
 
     // Format date
-    const date = new Date(booking.date)
-    const formattedDate = date.toLocaleDateString() + " " + date.toLocaleTimeString()
+    const date = new Date(booking.date);
+    const formattedDate = date.toLocaleDateString() + " " + date.toLocaleTimeString();
 
     // Get status class
-    let statusClass = ""
+    let statusClass = "";
     switch (booking.status) {
       case "processing":
-        statusClass = "processing"
-        break
+        statusClass = "processing";
+        break;
       case "completed":
-        statusClass = "completed"
-        break
+        statusClass = "completed";
+        break;
       case "cancelled":
-        statusClass = "cancelled"
-        break
+        statusClass = "cancelled";
+        break;
     }
 
     // Get payment status
-    const paymentStatus = booking.paymentStatus || "pending"
-    const paymentStatusClass = paymentStatus === "completed" ? "completed" : "processing"
+    const paymentStatus = booking.paymentStatus || "pending";
+    const paymentStatusClass = paymentStatus === "completed" ? "completed" : "processing";
 
     modal.innerHTML = `
 <div class="modal-content">
@@ -379,6 +414,15 @@ ${
     : ""
 }
 ${
+  booking.status === "cancelled"
+    ? `
+    <button class="btn-outline-danger delete-booking-modal" data-id="${booking.id}">
+      <i class="fas fa-trash"></i> Delete Order
+    </button>
+  `
+    : ""
+}
+${
   (booking.status === "processing" && booking.paymentStatus === "pending") || !booking.paymentStatus
     ? `
     <button class="btn-success pay-now-modal" data-id="${booking.id}">
@@ -387,85 +431,113 @@ ${
   `
     : ""
 }
+${
+  booking.paymentStatus === "completed"
+    ? `
+    <button class="btn-success view-receipt-modal" data-id="${booking.id}">
+      <i class="fas fa-receipt"></i> View Receipt
+    </button>
+  `
+    : ""
+}
 </div>
 </div>
-`
+`;
 
-    document.body.appendChild(modal)
+    document.body.appendChild(modal);
 
     // Add event listeners
-    const closeButtons = modal.querySelectorAll(".close-modal, .close-details")
+    const closeButtons = modal.querySelectorAll(".close-modal, .close-details");
     closeButtons.forEach((button) => {
       button.addEventListener("click", () => {
-        modal.remove()
-      })
-    })
+        modal.remove();
+      });
+    });
 
-    const cancelButton = modal.querySelector(".cancel-booking-modal")
+    const cancelButton = modal.querySelector(".cancel-booking-modal");
     if (cancelButton) {
       cancelButton.addEventListener("click", function () {
-        const id = this.getAttribute("data-id")
-        cancelBooking(id)
-        modal.remove()
-      })
+        const id = this.getAttribute("data-id");
+        cancelBooking(id);
+        modal.remove();
+      });
     }
 
-    const completeButton = modal.querySelector(".complete-booking-modal")
+    const completeButton = modal.querySelector(".complete-booking-modal");
     if (completeButton) {
       completeButton.addEventListener("click", function () {
-        const id = this.getAttribute("data-id")
-        completeBooking(id)
-        modal.remove()
-      })
+        const id = this.getAttribute("data-id");
+        completeBooking(id);
+        modal.remove();
+      });
+    }
+
+    const deleteButton = modal.querySelector(".delete-booking-modal");
+    if (deleteButton) {
+      deleteButton.addEventListener("click", function () {
+        const id = this.getAttribute("data-id");
+        deleteBooking(id);
+        modal.remove();
+      });
     }
 
     // Add event listener for Pay Now button
-    const payNowButton = modal.querySelector(".pay-now-modal")
+    const payNowButton = modal.querySelector(".pay-now-modal");
     if (payNowButton) {
       payNowButton.addEventListener("click", function () {
-        const id = this.getAttribute("data-id")
-        showPaymentModal(id)
-        modal.remove()
-      })
+        const id = this.getAttribute("data-id");
+        showPaymentModal(id);
+        modal.remove();
+      });
+    }
+
+    // Add event listener for View Receipt button
+    const viewReceiptButton = modal.querySelector(".view-receipt-modal");
+    if (viewReceiptButton) {
+      viewReceiptButton.addEventListener("click", function () {
+        const id = this.getAttribute("data-id");
+        showPaymentReceipt(id);
+        modal.remove();
+      });
     }
 
     // Close when clicking outside
     modal.addEventListener("click", (e) => {
       if (e.target === modal) {
-        modal.remove()
+        modal.remove();
       }
-    })
+    });
   }
 
   // Cancel booking
   function cancelBooking(id) {
-    const bookingIndex = bookings.findIndex((b) => b.id === id)
-    if (bookingIndex === -1) return
+    const bookingIndex = bookings.findIndex((b) => b.id === id);
+    if (bookingIndex === -1) return;
 
     // Update booking status
-    bookings[bookingIndex].status = "cancelled"
+    bookings[bookingIndex].status = "cancelled";
 
     // Save to localStorage
-    localStorage.setItem("bookings", JSON.stringify(bookings))
+    localStorage.setItem("bookings", JSON.stringify(bookings));
 
     // Add notification
     if (window.addNotification) {
-      window.addNotification("Order Cancelled", `Your order #${bookings[bookingIndex].id} has been cancelled.`, "order")
+      window.addNotification("Order Cancelled", `Your order #${bookings[bookingIndex].id} has been cancelled.`, "order");
     }
 
     // Find and remove the booking card from the DOM if in "all" tab
-    const activeTab = document.querySelector(".filter-tab.active")
+    const activeTab = document.querySelector(".filter-tab.active");
     if (activeTab && activeTab.getAttribute("data-status") === "all") {
-      const bookingCard = document.querySelector(`.booking-card[data-id="${id}"]`)
+      const bookingCard = document.querySelector(`.booking-card[data-id="${id}"]`);
       if (bookingCard) {
         // Add fade-out animation
-        bookingCard.style.transition = "opacity 0.3s ease, transform 0.3s ease"
-        bookingCard.style.opacity = "0"
-        bookingCard.style.transform = "translateX(20px)"
+        bookingCard.style.transition = "opacity 0.3s ease, transform 0.3s ease";
+        bookingCard.style.opacity = "0";
+        bookingCard.style.transform = "translateX(20px)";
 
         // Remove after animation completes
         setTimeout(() => {
-          bookingCard.remove()
+          bookingCard.remove();
 
           // Check if there are no more bookings and show empty state if needed
           if (bookingsList.children.length === 0) {
@@ -476,37 +548,98 @@ ${
       <p>You haven't placed any orders yet.</p>
       <a href="/order" class="btn-primary">Order Now</a>
     </div>
-  `
+  `;
           }
-        }, 300)
+        }, 300);
       }
     } else {
       // Re-render bookings for other tabs
-      const status = activeTab ? activeTab.getAttribute("data-status") : "all"
-      const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : ""
-      renderBookings(status, searchTerm)
+      const status = activeTab ? activeTab.getAttribute("data-status") : "all";
+      const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : "";
+      renderBookings(status, searchTerm);
     }
   }
 
   // Complete booking
   function completeBooking(id) {
-    const bookingIndex = bookings.findIndex((b) => b.id === id)
-    if (bookingIndex === -1) return
+    const bookingIndex = bookings.findIndex((b) => b.id === id);
+    if (bookingIndex === -1) return;
 
-    const booking = bookings[bookingIndex]
+    const booking = bookings[bookingIndex];
 
-    // Always show payment modal when complete button is clicked
-    showPaymentModal(id)
+    // Check if payment is completed
+    if (booking.paymentStatus !== "completed") {
+      // Show payment modal when complete button is clicked
+      showPaymentModal(id);
+    } else {
+      // Update booking status
+      bookings[bookingIndex].status = "completed";
+
+      // Save to localStorage
+      localStorage.setItem("bookings", JSON.stringify(bookings));
+
+      // Add notification
+      if (window.addNotification) {
+        window.addNotification(
+          "Order Completed",
+          `Your order #${booking.id} has been marked as completed.`,
+          "order"
+        );
+      }
+
+      // Show success notification
+      showOrderCompletedNotification(booking);
+
+      // Re-render bookings
+      const activeTab = document.querySelector(".filter-tab.active");
+      const status = activeTab ? activeTab.getAttribute("data-status") : "all";
+      const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : "";
+      renderBookings(status, searchTerm);
+    }
+  }
+
+  // Show order completed notification
+  function showOrderCompletedNotification(booking) {
+    const notification = document.createElement("div");
+    notification.className = "order-success-notification";
+    
+    notification.innerHTML = `
+      <div class="notification-content">
+        <div class="success-icon">
+          <i class="fas fa-check-circle"></i>
+        </div>
+        <div class="notification-text">
+          <h4>Order Completed!</h4>
+          <p>Order #${booking.id} has been successfully completed.</p>
+        </div>
+        <button class="close-notification">&times;</button>
+      </div>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+      notification.classList.add("fade-out");
+      setTimeout(() => {
+        notification.remove();
+      }, 500);
+    }, 5000);
+    
+    // Close button
+    notification.querySelector(".close-notification").addEventListener("click", () => {
+      notification.remove();
+    });
   }
 
   // Show payment confirmation dialog
   function showPaymentConfirmation(id) {
-    const booking = bookings.find((b) => b.id === id)
-    if (!booking) return
+    const booking = bookings.find((b) => b.id === id);
+    if (!booking) return;
 
     // Create confirmation dialog
-    const confirmationDialog = document.createElement("div")
-    confirmationDialog.className = "payment-confirmation-dialog"
+    const confirmationDialog = document.createElement("div");
+    confirmationDialog.className = "payment-confirmation-dialog";
 
     confirmationDialog.innerHTML = `
 <div class="confirmation-content">
@@ -518,39 +651,39 @@ ${
   <button class="btn-primary proceed-payment" data-id="${booking.id}">Pay Now</button>
 </div>
 </div>
-`
+`;
 
-    document.body.appendChild(confirmationDialog)
+    document.body.appendChild(confirmationDialog);
 
     // Add event listeners
-    const cancelButton = confirmationDialog.querySelector(".cancel-payment")
+    const cancelButton = confirmationDialog.querySelector(".cancel-payment");
     cancelButton.addEventListener("click", () => {
-      confirmationDialog.remove()
-    })
+      confirmationDialog.remove();
+    });
 
-    const proceedButton = confirmationDialog.querySelector(".proceed-payment")
+    const proceedButton = confirmationDialog.querySelector(".proceed-payment");
     proceedButton.addEventListener("click", function () {
-      const id = this.getAttribute("data-id")
-      showPaymentModal(id)
-      confirmationDialog.remove()
-    })
+      const id = this.getAttribute("data-id");
+      showPaymentModal(id);
+      confirmationDialog.remove();
+    });
   }
 
-  // Show payment modal
+  // Show payment receipt
   function showPaymentReceipt(bookingId) {
-    const booking = bookings.find((b) => b.id === bookingId)
-    if (!booking) return
+    const booking = bookings.find((b) => b.id === bookingId);
+    if (!booking) return;
 
     // Create receipt modal
-    const receiptModal = document.createElement("div")
-    receiptModal.className = "receipt-modal"
+    const receiptModal = document.createElement("div");
+    receiptModal.className = "receipt-modal";
 
     // Format date
-    const date = new Date()
-    const formattedDate = date.toLocaleDateString() + " " + date.toLocaleTimeString()
+    const date = new Date();
+    const formattedDate = date.toLocaleDateString() + " " + date.toLocaleTimeString();
 
     // Generate receipt ID
-    const receiptId = "RCP" + Date.now().toString().slice(-6)
+    const receiptId = "RCP" + Date.now().toString().slice(-6);
 
     receiptModal.innerHTML = `
       <div class="receipt-modal-content">
@@ -582,7 +715,9 @@ ${
                             ? "QR Code Payment"
                             : booking.paymentMethod === "apple-pay"
                               ? "Apple Pay"
-                              : "Cash on Delivery"
+                              : booking.paymentMethod === "aba"
+                                ? "ABA Payment"
+                                : "Cash on Delivery"
                       }</span>
                   </div>
                   <div class="receipt-row">
@@ -660,23 +795,23 @@ ${
               </div>
           </div>
       </div>
-  `
+  `;
 
-    document.body.appendChild(receiptModal)
+    document.body.appendChild(receiptModal);
 
     // Add event listeners
     receiptModal.querySelector(".close-receipt-modal").addEventListener("click", () => {
-      receiptModal.remove()
-    })
+      receiptModal.remove();
+    });
 
     receiptModal.querySelector(".close-receipt").addEventListener("click", () => {
-      receiptModal.remove()
-    })
+      receiptModal.remove();
+    });
 
     receiptModal.querySelector(".print-receipt").addEventListener("click", () => {
       // Print the receipt
-      const receiptContent = document.getElementById("receipt-content")
-      const originalContents = document.body.innerHTML
+      const receiptContent = document.getElementById("receipt-content");
+      const originalContents = document.body.innerHTML;
 
       document.body.innerHTML = `
       <div class="print-only">
@@ -685,18 +820,18 @@ ${
         </div>
         ${receiptContent.innerHTML}
       </div>
-    `
+    `;
 
-      window.print()
-      document.body.innerHTML = originalContents
+      window.print();
+      document.body.innerHTML = originalContents;
 
       // Recreate the receipt modal after printing
-      showPaymentReceipt(bookingId)
-    })
+      showPaymentReceipt(bookingId);
+    });
 
     receiptModal.querySelector(".download-receipt").addEventListener("click", () => {
       // Create a virtual link to download the receipt as HTML
-      const receiptContent = document.getElementById("receipt-content")
+      const receiptContent = document.getElementById("receipt-content");
       const receiptHTML = `
       <!DOCTYPE html>
       <html>
@@ -754,28 +889,28 @@ ${
         ${receiptContent.innerHTML}
       </body>
       </html>
-    `
+    `;
 
-      const blob = new Blob([receiptHTML], { type: "text/html" })
-      const url = URL.createObjectURL(blob)
+      const blob = new Blob([receiptHTML], { type: "text/html" });
+      const url = URL.createObjectURL(blob);
 
-      const downloadLink = document.createElement("a")
-      downloadLink.href = url
-      downloadLink.download = `Receipt-${booking.id}.html`
-      document.body.appendChild(downloadLink)
-      downloadLink.click()
-      document.body.removeChild(downloadLink)
-    })
+      const downloadLink = document.createElement("a");
+      downloadLink.href = url;
+      downloadLink.download = `Receipt-${booking.id}.html`;
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+    });
   }
 
   // Show payment modal
   function showPaymentModal(bookingId) {
-    const booking = bookings.find((b) => b.id === bookingId)
-    if (!booking) return
+    const booking = bookings.find((b) => b.id === bookingId);
+    if (!booking) return;
 
     // Create payment modal
-    const paymentModal = document.createElement("div")
-    paymentModal.className = "payment-modal"
+    const paymentModal = document.createElement("div");
+    paymentModal.className = "payment-modal";
 
     paymentModal.innerHTML = `
 <div class="payment-modal-content">
@@ -802,6 +937,12 @@ ${
                 <input type="radio" id="qr-code" name="payment-method">
                 <label for="qr-code">
                     <i class="fas fa-qrcode"></i> QR Code Payment
+                </label>
+            </div>
+            <div class="method-option" data-method="aba">
+                <input type="radio" id="aba" name="payment-method">
+                <label for="aba">
+                    <i class="fas fa-university"></i> ABA Payment
                 </label>
             </div>
             <div class="method-option" data-method="apple-pay">
@@ -853,6 +994,32 @@ ${
         </div>
     </div>
     
+    <div class="payment-details aba-details" style="display: none;">
+        <div class="aba-container">
+            <div class="aba-logo">
+                <img src="/placeholder.svg?height=80&width=150" alt="ABA Logo">
+            </div>
+            <div class="aba-info">
+                <h5>ABA Bank Transfer</h5>
+                <div class="aba-account-info">
+                    <div class="info-row">
+                        <span>Account Name:</span>
+                        <span>Your Business Name</span>
+                    </div>
+                    <div class="info-row">
+                        <span>Account Number:</span>
+                        <span>000 123 456 789</span>
+                    </div>
+                    <div class="info-row">
+                        <span>Reference:</span>
+                        <span>${booking.id}</span>
+                    </div>
+                </div>
+                <p class="aba-instructions">Please use your Order ID as the payment reference. Your order will be processed once payment is confirmed.</p>
+            </div>
+        </div>
+    </div>
+    
     <div class="payment-details apple-pay-details" style="display: none;">
         <div class="apple-pay-container">
             <div class="apple-pay-logo">
@@ -879,78 +1046,79 @@ ${
 </div>
 <div class="payment-modal-footer">
     <button class="btn-secondary cancel-payment">Cancel</button>
-    <button class="process-payment" data-id="${booking.id}">
-        <i class="fas fa-lock"></i> Pay Now
+    <button class="btn-success process-payment" data-id="${booking.id}">
+        <i class="fas fa-lock"></i> Pay Now $${booking.total.toFixed(2)}
     </button>
 </div>
 </div>
-`
+`;
 
-    document.body.appendChild(paymentModal)
+    document.body.appendChild(paymentModal);
 
     // Add event listeners for payment method selection
-    const methodOptions = paymentModal.querySelectorAll(".method-option")
+    const methodOptions = paymentModal.querySelectorAll(".method-option");
     methodOptions.forEach((option) => {
       option.addEventListener("click", function () {
         // Update radio button
-        const radio = this.querySelector("input[type='radio']")
-        radio.checked = true
+        const radio = this.querySelector("input[type='radio']");
+        radio.checked = true;
 
         // Add selected class to the clicked option and remove from others
-        methodOptions.forEach((opt) => opt.classList.remove("selected"))
-        this.classList.add("selected")
+        methodOptions.forEach((opt) => opt.classList.remove("selected"));
+        this.classList.add("selected");
 
         // Update border color for selected option
-        this.style.borderColor = "#ff5e62"
-        this.style.borderWidth = "2px"
+        this.style.borderColor = "#ff5e62";
+        this.style.borderWidth = "2px";
 
         // Hide all payment details
         paymentModal.querySelectorAll(".payment-details").forEach((detail) => {
-          detail.style.display = "none"
-        })
+          detail.style.display = "none";
+        });
 
         // Show selected payment details
-        const method = this.getAttribute("data-method")
-        paymentModal.querySelector(`.${method}-details`).style.display = "block"
-      })
-    })
+        const method = this.getAttribute("data-method");
+        paymentModal.querySelector(`.${method}-details`).style.display = "block";
+      });
+    });
 
     // Select the first option by default
-    methodOptions[0].classList.add("selected")
-    methodOptions[0].style.borderColor = "#ff5e62"
-    methodOptions[0].style.borderWidth = "2px"
+    methodOptions[0].classList.add("selected");
+    methodOptions[0].style.borderColor = "#ff5e62";
+    methodOptions[0].style.borderWidth = "2px";
 
     // Close button
     paymentModal.querySelector(".close-payment-modal").addEventListener("click", () => {
-      paymentModal.remove()
-    })
+      paymentModal.remove();
+    });
 
     // Cancel button
     paymentModal.querySelector(".cancel-payment").addEventListener("click", () => {
-      paymentModal.remove()
-    })
+      paymentModal.remove();
+    });
 
     // Process payment button
     paymentModal.querySelector(".process-payment").addEventListener("click", function () {
-      const id = this.getAttribute("data-id")
-      const selectedMethod = paymentModal.querySelector("input[name='payment-method']:checked").id
+      const id = this.getAttribute("data-id");
+      const selectedMethod = paymentModal.querySelector("input[name='payment-method']:checked").id;
 
       // Process payment based on method
-      processPayment(id, selectedMethod)
-      paymentModal.remove()
-    })
+      processPayment(id, selectedMethod);
+      paymentModal.remove();
+    });
   }
+  
   // Process payment
   function processPayment(bookingId, paymentMethod) {
-    const bookingIndex = bookings.findIndex((b) => b.id === bookingId)
-    if (bookingIndex === -1) return
+    const bookingIndex = bookings.findIndex((b) => b.id === bookingId);
+    if (bookingIndex === -1) return;
 
     // Update booking payment status
-    bookings[bookingIndex].paymentStatus = "completed"
-    bookings[bookingIndex].paymentMethod = paymentMethod
+    bookings[bookingIndex].paymentStatus = "completed";
+    bookings[bookingIndex].paymentMethod = paymentMethod;
 
     // Save to localStorage
-    localStorage.setItem("bookings", JSON.stringify(bookings))
+    localStorage.setItem("bookings", JSON.stringify(bookings));
 
     // Add notification
     if (window.addNotification) {
@@ -958,24 +1126,24 @@ ${
         "Payment Successful",
         `Payment for order #${bookingId} has been processed successfully.`,
         "payment",
-      )
+      );
     }
 
     // Show payment receipt
-    showPaymentReceipt(bookingId)
+    showPaymentReceipt(bookingId);
 
     // Re-render bookings
-    const activeTab = document.querySelector(".filter-tab.active")
-    const status = activeTab ? activeTab.getAttribute("data-status") : "all"
-    const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : ""
-    renderBookings(status, searchTerm)
+    const activeTab = document.querySelector(".filter-tab.active");
+    const status = activeTab ? activeTab.getAttribute("data-status") : "all";
+    const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : "";
+    renderBookings(status, searchTerm);
   }
 
   // Show order success message
   function showOrderSuccessMessage(booking) {
     // Create success message
-    const successMessage = document.createElement("div")
-    successMessage.className = "order-success-message"
+    const successMessage = document.createElement("div");
+    successMessage.className = "order-success-message";
 
     successMessage.innerHTML = `
 <div class="success-content">
@@ -1003,39 +1171,39 @@ ${
 }
 </div>
 </div>
-`
+`;
 
-    document.body.appendChild(successMessage)
+    document.body.appendChild(successMessage);
 
     // Add event listener to view details button
-    const viewDetailsButton = successMessage.querySelector(".view-order-details")
+    const viewDetailsButton = successMessage.querySelector(".view-order-details");
     viewDetailsButton.addEventListener("click", function () {
-      const id = this.getAttribute("data-id")
-      successMessage.remove()
-      showBookingDetails(id)
-    })
+      const id = this.getAttribute("data-id");
+      successMessage.remove();
+      showBookingDetails(id);
+    });
 
     // Add event listener to pay now button if it exists
-    const payNowButton = successMessage.querySelector(".pay-now-btn")
+    const payNowButton = successMessage.querySelector(".pay-now-btn");
     if (payNowButton) {
       payNowButton.addEventListener("click", function () {
-        const id = this.getAttribute("data-id")
-        successMessage.remove()
-        showPaymentModal(id)
-      })
+        const id = this.getAttribute("data-id");
+        successMessage.remove();
+        showPaymentModal(id);
+      });
     }
 
     // Auto remove after 5 seconds
     setTimeout(() => {
-      successMessage.classList.add("fade-out")
+      successMessage.classList.add("fade-out");
       setTimeout(() => {
-        successMessage.remove()
-      }, 500)
-    }, 5000)
+        successMessage.remove();
+      }, 500);
+    }, 5000);
   }
 
   // Add CSS for booking
-  const style = document.createElement("style")
+  const style = document.createElement("style");
   style.textContent = `
 /* Booking Card Styles */
 .booking-card {
@@ -1607,6 +1775,10 @@ border-top: 1px solid #eee;
   color: #9C27B0;
 }
 
+.method-option[data-method="aba"] i {
+  color: #E91E63;
+}
+
 .method-option[data-method="apple-pay"] i {
   color: #000;
   font-size: 28px;
@@ -1693,6 +1865,52 @@ border-top: 1px solid #eee;
   font-size: 15px;
   color: #ff5e62;
   font-weight: 500;
+}
+
+.aba-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.aba-logo {
+  margin-bottom: 20px;
+}
+
+.aba-info {
+  width: 100%;
+  text-align: center;
+}
+
+.aba-info h5 {
+  margin: 0 0 15px;
+  font-size: 18px;
+  color: #333;
+}
+
+.aba-account-info {
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.info-row:last-child {
+  margin-bottom: 0;
+}
+
+.aba-instructions {
+  font-size: 14px;
+  color: #666;
+  margin-top: 15px;
 }
 
 .apple-pay-container {
@@ -2027,6 +2245,86 @@ border-top: 1px solid #eee;
   margin-bottom: 30px;
 }
 
+/* Order Success Notification */
+.order-success-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+  width: 300px;
+  z-index: 1300;
+  overflow: hidden;
+  animation: slide-in 0.3s ease;
+}
+
+.notification-content {
+  display: flex;
+  padding: 15px;
+  align-items: center;
+  position: relative;
+}
+
+.success-icon {
+  font-size: 24px;
+  color: #4caf50;
+  margin-right: 15px;
+}
+
+.notification-text {
+  flex: 1;
+}
+
+.notification-text h4 {
+  margin: 0 0 5px;
+  font-size: 16px;
+  color: #333;
+}
+
+.notification-text p {
+  margin: 0;
+  font-size: 14px;
+  color: #666;
+}
+
+.close-notification {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #999;
+  cursor: pointer;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+.order-success-notification.fade-out {
+  animation: fade-out 0.5s ease forwards;
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
 @media print {
   body * {
     visibility: hidden;
@@ -2055,17 +2353,17 @@ border-top: 1px solid #eee;
     width: 60%;
   }
 }
-`
-  document.head.appendChild(style)
+`;
+  document.head.appendChild(style);
 
   // Check if we need to create a booking from cart
   if (window.location.pathname === "/booking" && cartItems.length > 0) {
     // Set flag to create booking on page load
-    sessionStorage.setItem("justCheckedOut", "true")
+    sessionStorage.setItem("justCheckedOut", "true");
 
     // Reload page to trigger booking creation
     if (!justCheckedOut) {
-      window.location.reload()
+      window.location.reload();
     }
   }
-})
+});
