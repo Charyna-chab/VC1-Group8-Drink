@@ -104,7 +104,6 @@ class OrdersController extends BaseController {
                 'image' => '/assets/image/products/Vanilla Strawberry.png',
                 'category' => 'smoothie'
             ],
-            
             [
                 'id' => 13,
                 'name' => 'Trolach Machhiato',
@@ -113,7 +112,6 @@ class OrdersController extends BaseController {
                 'image' => '/assets/image/products/Trolach Machhiato.png',
                 'category' => 'coffee'
             ],
-            
             [
                 'id' => 14,
                 'name' => 'Japan Yuzu',
@@ -124,62 +122,54 @@ class OrdersController extends BaseController {
             ],
             [
                 'id' => 15,
-                'name' => 'Black Tea Macha',
+                'name' => 'Mocha',
                 'description' => 'A delightful espresso drink with chocolate syrup and steamed milk for a sweet and smooth taste.',
                 'price' => 4.50,
-                'image' => '/assets/image/products/Black Tea Machhiato.png',
+                'image' => '/assets/images/products/mocha.jpg',
                 'category' => 'coffee'
             ],
             [
                 'id' => 16,
-                'name' => 'Chocolate Milk Tea',
+                'name' => 'Vanilla Latte',
                 'description' => 'Espresso combined with vanilla syrup and steamed milk for a sweet, comforting coffee.',
                 'price' => 4.50,
-                'image' => '/assets/image/products/Chocolate Milk Tea.png',
+                'image' => '/assets/image/products/vanilla-latte.jpg',
                 'category' => 'coffee'
             ],
             [
                 'id' => 17,
-                'name' => 'Chocolate Almont Croissand 80Baht',
-                'description' => 'Hong Kong-style egg waffles, crispy on the outside and fluffy on the inside, served fresh.',
-                'price' => 4.00,
-                'image' => '/assets/image/products/Chocolate Almont Croissand 80Baht.png',
-                'category' => 'snacks'
-            ],
-            [
-                'id' => 18,
                 'name' => 'Chocolate Supreme 80Baht',
-                'description' => 'Crispy Taiwanese-style popcorn chicken, seasoned with special spices for a savory snack.',
-                'price' => 5.50,
+                'description' => 'A rich chocolate-infused waffle with a crispy outside and soft inside, perfect for chocolate lovers.',
+                'price' => 4.00,
                 'image' => '/assets/image/products/Chocolate Supreme 80Baht.png',
                 'category' => 'snacks'
             ],
             [
+                'id' => 18,
+                'name' => 'Almond Puff 55Baht',
+                'description' => 'A light and flaky almond puff pastry with a buttery texture and nutty flavor.',
+                'price' => 5.50,
+                'image' => '/assets/image/products/Almond Puff 55Baht.png',
+                'category' => 'snacks'
+            ],
+            [
                 'id' => 19,
-                'name' => 'Macha Croissant 70Baht',
-                'description' => 'Crispy and delicious sweet potato fries, seasoned with a special blend of spices.',
+                'name' => 'Matcha Croissant 70Baht',
+                'description' => 'A flaky croissant with a rich matcha filling, blending earthy tea flavors with buttery layers.',
                 'price' => 4.00,
                 'image' => '/assets/image/products/Macha Croissant 70Baht.png',
                 'category' => 'snacks'
             ],
             [
                 'id' => 20,
-                'name' => 'Almond Puff 55baht',
-                'description' => 'A soft sponge cake topped with our signature cheese foam, creating a creamy and sweet experience.',
+                'name' => 'Chocolate Almond Croissant 80Baht',
+                'description' => 'A golden, flaky croissant filled with rich chocolate and crunchy almonds for a delightful treat.',
                 'price' => 4.50,
-                'image' => '/assets/image/products/Almond Puff 55baht.png',
-                'category' => 'snacks'
-            ],
-            [
-                'id' => 21,
-                'name' => 'Sweet Potato Brown Sugar',
-                'description' => 'A soft sponge cake topped with our signature cheese foam, creating a creamy and sweet experience.',
-                'price' => 4.50,
-                'image' => '/assets/image/products/Sweet Potato Brown Sugar.png',
+                'image' => '/assets/image/products/Chocolate Almont Croissand 80Baht.png',
                 'category' => 'snacks'
             ]
+            
         ];
-        
         
         $toppings = [
             [
@@ -238,6 +228,88 @@ class OrdersController extends BaseController {
             'products' => $products,
             'toppings' => $toppings,
             'favorites' => $favorites
+        ]);
+    }
+    
+    public function details($id) {
+        // In a real application, you would fetch the product from the database
+        // For now, we'll create a lookup array with all products
+        $products = [
+            1 => [
+                'id' => 1,
+                'name' => 'Taiwan Milk Tea',
+                'description' => 'A classic Taiwanese milk tea with a perfect blend of black tea and creamy milk, offering a smooth and rich taste.',
+                'price' => 1.75,
+                'image' => '/assets/image/products/1.png',
+                'category' => 'milk-tea'
+            ],
+            2 => [
+                'id' => 2,
+                'name' => 'Thai Tea Brown Sugar Red Bean',
+                'description' => 'A rich and creamy Thai tea with brown sugar syrup, complemented by sweet red beans for an added texture and flavor.',
+                'price' => 2.50,
+                'image' => '/assets/image/products/2.png',
+                'category' => 'milk-tea'
+            ],
+            // Add more products as needed
+        ];
+        
+        $toppings = [
+            [
+                'id' => 1,
+                'name' => 'Boba Pearls',
+                'price' => 0.75
+            ],
+            [
+                'id' => 2,
+                'name' => 'Grass Jelly',
+                'price' => 0.75
+            ],
+            [
+                'id' => 3,
+                'name' => 'Pudding',
+                'price' => 0.75
+            ],
+            [
+                'id' => 4,
+                'name' => 'Aloe Vera',
+                'price' => 0.75
+            ],
+            [
+                'id' => 5,
+                'name' => 'Cheese Foam',
+                'price' => 1.00
+            ],
+            [
+                'id' => 6,
+                'name' => 'Fresh Fruit',
+                'price' => 1.00
+            ],
+            [
+                'id' => 7,
+                'name' => 'Red Bean',
+                'price' => 0.75
+            ],
+            [
+                'id' => 8,
+                'name' => 'Coconut Jelly',
+                'price' => 0.75
+            ]
+        ];
+        
+        $product = isset($products[$id]) ? $products[$id] : null;
+        
+        if (!$product) {
+            // Handle product not found
+            $_SESSION['error'] = 'Product not found';
+            header('Location: /order');
+            exit;
+        }
+        
+        $this->views('order_details', [
+            'title' => 'Customize Your Drink',
+            'product' => $product,
+            'toppings' => $toppings
         ]);
     }
     
@@ -331,235 +403,83 @@ class OrdersController extends BaseController {
         // Check if cart is empty
         if (!isset($_SESSION['cart']) || empty($_SESSION['cart'])) {
             $_SESSION['error'] = 'Your cart is empty';
-            $this->redirect('/order');
+            header('Location: /order');
             exit;
         }
-        
-        // Get cart items
-        $cartItems = $_SESSION['cart'];
-        
-        // Calculate totals
-        $subtotal = 0;
-        foreach ($cartItems as $item) {
-            $subtotal += $item['total_price'];
-        }
-        
-        $tax = $subtotal * 0.08; // 8% tax
-        $total = $subtotal + $tax;
-        
-        $this->views('checkout', [
-            'title' => 'Checkout',
-            'cartItems' => $cartItems,
-            'subtotal' => $subtotal,
-            'tax' => $tax,
-            'total' => $total
-        ]);
-    }
-    
-    public function processPayment() {
-        // Check if request is POST
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            http_response_code(405); // Method Not Allowed
-            echo json_encode(['success' => false, 'message' => 'Method not allowed']);
-            exit;
-        }
-        
-        // Get JSON data from request body
-        $json = file_get_contents('php://input');
-        $data = json_decode($json, true);
-        
-        if (!$data || !isset($data['payment_method'])) {
-            http_response_code(400); // Bad Request
-            echo json_encode(['success' => false, 'message' => 'Invalid request data']);
-            exit;
-        }
-        
-        $paymentMethod = $data['payment_method'];
         
         // In a real application, you would:
-        // 1. Process the payment with a payment gateway
-        // 2. Create an order in the database
-        // 3. Clear the cart
+        // 1. Validate the cart items
+        // 2. Process the payment
+        // 3. Create an order in the database
+        // 4. Clear the cart
         
-        // Generate a unique order ID
-        $orderId = 'ORD' . date('YmdHis') . rand(100, 999);
-        
-        // For now, we'll just simulate a successful payment
-        $response = [
-            'success' => true,
-            'message' => 'Payment processed successfully',
-            'order_id' => $orderId,
-            'payment_method' => $paymentMethod
-        ];
+        // For now, we'll just redirect to a success page
+        $_SESSION['success'] = 'Your order has been placed successfully';
         
         // Clear the cart
         $_SESSION['cart'] = [];
         
-        echo json_encode($response);
+        header('Location: /booking');
         exit;
     }
     
-    public function removeFromCart() {
-        // Check if request is POST
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            http_response_code(405); // Method Not Allowed
-            echo json_encode(['success' => false, 'message' => 'Method not allowed']);
-            exit;
-        }
-        
-        // Get JSON data from request body
-        $json = file_get_contents('php://input');
-        $data = json_decode($json, true);
-        
-        if (!$data || !isset($data['id'])) {
-            http_response_code(400); // Bad Request
-            echo json_encode(['success' => false, 'message' => 'Invalid request data']);
-            exit;
-        }
-        
-        $itemId = $data['id'];
-        
-        // Find and remove the item from the cart
-        if (isset($_SESSION['cart'])) {
-            foreach ($_SESSION['cart'] as $key => $item) {
-                if ($item['id'] === $itemId) {
-                    unset($_SESSION['cart'][$key]);
-                    $_SESSION['cart'] = array_values($_SESSION['cart']); // Reindex array
-                    break;
-                }
-            }
-        }
-        
-        echo json_encode([
-            'success' => true,
-            'message' => 'Item removed from cart',
-            'cart_count' => isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0
-        ]);
-        exit;
-    }
-    
-    public function updateCartItem() {
-        // Check if request is POST
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            http_response_code(405); // Method Not Allowed
-            echo json_encode(['success' => false, 'message' => 'Method not allowed']);
-            exit;
-        }
-        
-        // Get JSON data from request body
-        $json = file_get_contents('php://input');
-        $data = json_decode($json, true);
-        
-        if (!$data || !isset($data['id']) || !isset($data['quantity'])) {
-            http_response_code(400); // Bad Request
-            echo json_encode(['success' => false, 'message' => 'Invalid request data']);
-            exit;
-        }
-        
-        $itemId = $data['id'];
-        $quantity = intval($data['quantity']);
-        
-        // Validate quantity
-        if ($quantity < 1) {
-            http_response_code(400); // Bad Request
-            echo json_encode(['success' => false, 'message' => 'Quantity must be at least 1']);
-            exit;
-        }
-        
-        // Update the item in the cart
-        if (isset($_SESSION['cart'])) {
-            foreach ($_SESSION['cart'] as $key => $item) {
-                if ($item['id'] === $itemId) {
-                    $_SESSION['cart'][$key]['quantity'] = $quantity;
-                    $_SESSION['cart'][$key]['total_price'] = $_SESSION['cart'][$key]['price'] * $quantity;
-                    break;
-                }
-            }
-        }
-        
-        echo json_encode([
-            'success' => true,
-            'message' => 'Cart item updated',
-            'cart_count' => isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0
-        ]);
-        exit;
-    }
-    
-    public function clearCart() {
-        // Check if request is POST
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            http_response_code(405); // Method Not Allowed
-            echo json_encode(['success' => false, 'message' => 'Method not allowed']);
-            exit;
-        }
-        
-        // Clear the cart
-        $_SESSION['cart'] = [];
-        
-        echo json_encode([
-            'success' => true,
-            'message' => 'Cart cleared',
-            'cart_count' => 0
-        ]);
-        exit;
-    }
-
-    // Add a new method to get product details by ID
-    public function getProductDetails() {
-        // Check if request is POST
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            http_response_code(405); // Method Not Allowed
-            echo json_encode(['success' => false, 'message' => 'Method not allowed']);
-            exit;
-        }
-        
-        // Get JSON data from request body
-        $json = file_get_contents('php://input');
-        $data = json_decode($json, true);
-        
-        if (!$data || !isset($data['product_id'])) {
-            http_response_code(400); // Bad Request
-            echo json_encode(['success' => false, 'message' => 'Invalid request data']);
-            exit;
-        }
-        
-        $productId = $data['product_id'];
-        
-        // In a real application, you would fetch the product from the database
-        // For now, we'll use our sample data
-        $products = [
-            1 => [
-                'id' => 1,
-                'name' => 'Taiwan Milk Tea',
-                'description' => 'A classic Taiwanese milk tea with a perfect blend of black tea and creamy milk, offering a smooth and rich taste.',
-                'price' => 1.75,
-                'image' => '/assets/image/products/1.png',
-                'category' => 'milk-tea'
+    public function booking() {
+        // In a real application, you would fetch the user's orders from the database
+        // For now, we'll create sample data
+        $orders = [
+            [
+                'id' => 'ORD123456',
+                'date' => date('Y-m-d H:i:s', strtotime('-2 days')),
+                'items' => [
+                    [
+                        'name' => 'Taiwan Milk Tea',
+                        'size' => 'Medium',
+                        'sugar' => '50%',
+                        'ice' => 'Normal',
+                        'toppings' => ['Boba Pearls', 'Pudding'],
+                        'quantity' => 2,
+                        'price' => 5.50
+                    ],
+                    [
+                        'name' => 'Thai Tea Brown Sugar Red Bean',
+                        'size' => 'Large',
+                        'sugar' => '70%',
+                        'ice' => 'Less',
+                        'toppings' => ['Red Bean'],
+                        'quantity' => 1,
+                        'price' => 3.50
+                    ]
+                ],
+                'subtotal' => 14.50,
+                'tax' => 1.16,
+                'total' => 15.66,
+                'status' => 'completed'
             ],
-            2 => [
-                'id' => 2,
-                'name' => 'Thai Tea Brown Sugar Red Bean',
-                'description' => 'A rich and creamy Thai tea with brown sugar syrup, complemented by sweet red beans for an added texture and flavor.',
-                'price' => 2.50,
-                'image' => '/assets/image/products/2.png',
-                'category' => 'milk-tea'
-            ],
-            // Add more products as needed
+            [
+                'id' => 'ORD123457',
+                'date' => date('Y-m-d H:i:s', strtotime('-1 day')),
+                'items' => [
+                    [
+                        'name' => 'Oolong Passion',
+                        'size' => 'Large',
+                        'sugar' => '30%',
+                        'ice' => 'Normal',
+                        'toppings' => ['Aloe Vera'],
+                        'quantity' => 1,
+                        'price' => 3.00
+                    ]
+                ],
+                'subtotal' => 3.00,
+                'tax' => 0.24,
+                'total' => 3.24,
+                'status' => 'processing'
+            ]
         ];
         
-        // Check if product exists
-        if (!isset($products[$productId])) {
-            http_response_code(404); // Not Found
-            echo json_encode(['success' => false, 'message' => 'Product not found']);
-            exit;
-        }
-        
-        // Return product details
-        echo json_encode([
-            'success' => true,
-            'product' => $products[$productId]
+        $this->views('booking', [
+            'title' => 'Your Orders',
+            'orders' => $orders
         ]);
-        exit;
     }
 }
 
