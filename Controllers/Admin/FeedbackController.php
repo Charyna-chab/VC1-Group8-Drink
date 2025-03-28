@@ -22,7 +22,7 @@ class FeedbackController extends BaseController {
 
     function create()
     {
-        $this->views('feedback_view.php');
+        $this->views('/feedback/feedback_view.php');
     }
 
 }
