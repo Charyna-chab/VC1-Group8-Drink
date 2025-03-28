@@ -1,30 +1,33 @@
-<div class="card shadow mb-4 ml-3 mr-3" style="width:50%;">
-    <div class="card-body ">
-        <div class="container">
-            <form action="/product/store" method="POST" enctype="multipart/form-data">
-                <div class="form-group">
-                    <label for="name" class="form-label">Product Name:</label>
-                    <input type="product_name" id="product_name" name="product_name" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label for="phone" class="form-label">Price:</label>
-                    <input type="price" id="price" name="price" class="form-control">
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form action="/product/store" method="POST" enctype="multipart/form-data" class="border border-2 rounded p-4 shadow-sm bg-light">
+                <h3 class="mb-4 text-center text-primary">Add a New Product</h3>
+                
+                <div class="mb-3">
+                    <label for="product_name" class="form-label">Product Name</label>
+                    <input type="text" id="product_name" name="product_name" class="form-control" placeholder="Enter product name" required>
                 </div>
 
-
-                <div class="form-group">
-                    <label for="email" class="form-label">Product Detail:</label>
-                    <input type="product_detail" id="product_detail" name="product_detail" class="form-control">
+                <div class="mb-3">
+                    <label for="price" class="form-label">Price</label>
+                    <input type="number" id="price" name="price" class="form-control" placeholder="Enter product price" required>
                 </div>
 
-                <div class="form-group ">
-                    <label for="profile" class="form-label">Image:</label>
+                <div class="mb-3">
+                    <label for="product_detail" class="form-label">Product Detail</label>
+                    <textarea id="product_detail" name="product_detail" class="form-control" placeholder="Describe your product" rows="4" required></textarea>
                 </div>
-                <input type="file" id="image" name="image" class="form-control">
 
-                <button type="submit" class="btn btn-success">Submit</button>
+                <div class="mb-3">
+                    <label for="image" class="form-label">Product Image</label>
+                    <input type="file" id="image" name="image" class="form-control">
+                </div>
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-success w-100">Submit</button>
+                </div>
             </form>
-
+        </div>
     </div>
-    <?php require_once 'views/layouts/admin/footer.php' ?>
 </div>
