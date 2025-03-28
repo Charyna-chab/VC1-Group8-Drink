@@ -2,73 +2,41 @@
 require_once 'Models/UserModel.php';
 require_once 'BaseController.php';
 
+
+
+use YourNamespace\BaseController;
+
 class UserController extends BaseController
 {
     private $model;
 
     function __construct()
     {
-        // Make sure sessions are started if you're using $_SESSION
-        if (session_status() == PHP_SESSION_NONE) {
-            session_start();
-        }
-
         $this->model = new UserModel();
     }
 
     function index()
     {
         $users = $this->model->getUsers();
-        $this->views('user/list.php', ['users' => $users]); // Removed .php extension
+        $this->views('user/list.php', ['users' => $users]);
     }
 
     function create()
     {
-        $this->views('user/create.php'); // Removed .php extension
+        $this->views('user/create.php');
     }
 
     function store()
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            // Set up the target directory for image uploads
-            $uploadDir = 'uploads/user/';
-
-            // Check if the directory exists, if not create it
-            if (!is_dir($uploadDir)) {
-                mkdir($uploadDir, 0777, true); // Creates the directory if it doesn't exist
-            }
-
-            // Set the image file path
-            $imageName = basename($_FILES['image']['name']);
-            $uploadFile = $uploadDir . $imageName;
-
-            // Check if file is an image
-            $imageFileType = strtolower(pathinfo($uploadFile, PATHINFO_EXTENSION));
-            $allowedTypes = ['jpg', 'jpeg', 'png', 'gif'];
-
-            if (in_array($imageFileType, $allowedTypes)) {
-                // Try to upload the file
-                if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadFile)) {
-                    $image_url = $uploadFile;  // Image URL or path saved to the database
-
-                    // Prepare the data for the user
-                    $data = [
-                        'image' => $image_url,
-                        'name' => isset($_POST['name']) ? $_POST['name'] : null,
-                        'phone' => isset($_POST['phone']) ? $_POST['phone'] : null,
-                        'email' => isset($_POST['email']) ? $_POST['email'] : null,
-                        'address' => isset($_POST['address']) ? $_POST['address'] : null,
-                    ];
-
-                    // Validate that all required fields are present
-                    if (empty($data['name']) || empty($data['phone']) || empty($data['email']) || empty($data['address'])) {
-                        $_SESSION['error'] = 'All fields except the image are required!';
-                        $this->views('user/create.php', ['error' => $_SESSION['error']]); // Removed .php extension
-                        return;
-                    }
-                }
-            }
-
+           
+            $data = [
+                'name' => $_POST['name'],
+                'phone' => $_POST['phone'],
+                'email' => $_POST['email'],
+                'address' => $_POST['address'],
+            ];
+            print_r($data); // Debugging: Print the data
             $this->model->createUser($data);
             $this->redirect('/user');
         }
@@ -77,26 +45,57 @@ class UserController extends BaseController
     function edit($id)
     {
         $user = $this->model->getUser($id);
-        $this->views('user/edit.php', ['user' => $user]); // Removed .php extension
+        $this->views('user/edit.php', ['user' => $user]);
     }
 
     function update($id)
+{
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+       
+        $data = [
+            'name' => $_POST['name'],
+            'phone' => $_POST['phone'],
+            'email' => $_POST['email'],
+            'address' => $_POST['address'],
+        ];
+        $this->model->updateUser($id, $data); // Only call updateUser
+        $this->redirect('/user');
+    }
+}
+
+function destroy($id)
+{
+    $this->model->deleteUser($id);
+    $this->redirect('/user');
+}
+
+
+
+    public function profile()
     {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $data = [
-                'name' => $_POST['name'],
-                'phone' => $_POST['phone'],
-                'email' => $_POST['email'],
-                'address' => $_POST['address']
-            ];
-            $this->model->updateUser($id, $data);
-            $this->redirect('/user');
+        // Check if user is logged in
+        if (!isset($_SESSION['user_id'])) {
+            header('Location: /login');
+            exit; // Use exit to stop further execution
         }
+
+        // Fetch user profile data (assuming you have a method in the model)
+        $user = $this->model->getUser($_SESSION['user_id']);
+        $this->views('profile.php', ['user' => $user]);
     }
 
-    function destroy($id)
+    public function notifications()
     {
-        $this->model->deleteUser($id);
-        $this->redirect('/user');
+        // Check if user is logged in
+        if (!isset($_SESSION['user_id'])) {
+            header('Content-Type: application/json');
+            echo json_encode(['error' => 'User not logged in']);
+            exit; // Use exit to stop further execution
+        }
+
+        // Fetch notifications (assuming you have a method in the model)
+        // $notifications = $this->model->getNotifications($_SESSION['user_id']);
+        // header('Content-Type: application/json');
+        // echo json_encode($notifications);
     }
 }

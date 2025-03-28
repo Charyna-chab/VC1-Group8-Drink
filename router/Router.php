@@ -11,6 +11,14 @@ class Router {
     public function post($path, $callback) {
         $this->addRoute('POST', $path, $callback);
     }
+
+    public function put($path, $callback) {
+        $this->addRoute('PUT', $path, $callback);
+    }
+    
+    public function delete($path, $callback) {
+        $this->addRoute('DELETE', $path, $callback);
+    }
     
     private function addRoute($method, $path, $callback) {
         $this->routes[] = [
@@ -23,6 +31,13 @@ class Router {
     public function route() {
         $path = $_SERVER['REQUEST_URI'];
         $method = $_SERVER['REQUEST_METHOD'];
+        
+        // Handle PUT and DELETE methods via POST with _method parameter
+        if ($method === 'POST' && isset($_POST['_method'])) {
+            if (in_array(strtoupper($_POST['_method']), ['PUT', 'DELETE'])) {
+                $method = strtoupper($_POST['_method']);
+            }
+        }
         
         // Remove query string if present
         if (($pos = strpos($path, '?')) !== false) {
@@ -77,4 +92,3 @@ class Router {
         return $pattern;
     }
 }
-

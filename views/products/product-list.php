@@ -2,14 +2,10 @@
 // session_start();
 $products = $products ?? [];
 $total = 0;
-$product_count = count($products);
 foreach ($products as $product) {
     $total += floatval($product['price']);
 }
 $_SESSION['product_total'] = $total;
-
-// Store the product count in a session variable
-$_SESSION['product_count'] = $product_count;
 ?>
 
 
@@ -19,7 +15,6 @@ $_SESSION['product_count'] = $product_count;
     <h6 class="m-0 font-weight-bold text-primary">Product List</h6>
   </div>
   <div class="card-body">
- 
     <div class="table-responsive">
       <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
         <a href="/product/create" class="btn btn-primary ">Add New</a>

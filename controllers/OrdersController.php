@@ -1,5 +1,9 @@
 <?php
-class OrderController extends BaseController {
+namespace YourNamespace\Controllers;
+
+use YourNamespace\BaseController;
+
+class OrdersController extends BaseController {
     public function index() {
         // In a real application, you would fetch products from the database
         // For now, we'll create sample data
@@ -118,52 +122,53 @@ class OrderController extends BaseController {
             ],
             [
                 'id' => 15,
-                'name' => 'Mocha',
+                'name' => 'Black Tea Macha',
                 'description' => 'A delightful espresso drink with chocolate syrup and steamed milk for a sweet and smooth taste.',
                 'price' => 4.50,
-                'image' => '/assets/images/products/mocha.jpg',
+                'image' => '/assets/image/products/Black Tea Machhiato.png',
                 'category' => 'coffee'
             ],
             [
                 'id' => 16,
-                'name' => 'Vanilla Latte',
+                'name' => 'Chocolate Milk Tea',
                 'description' => 'Espresso combined with vanilla syrup and steamed milk for a sweet, comforting coffee.',
                 'price' => 4.50,
-                'image' => '/assets/image/products/vanilla-latte.jpg',
+                'image' => '/assets/images/products/vanilla-latte.jpg',
                 'category' => 'coffee'
             ],
             [
                 'id' => 17,
-                'name' => 'Chocolate Supreme 80Baht',
-                'description' => 'A rich chocolate-infused waffle with a crispy outside and soft inside, perfect for chocolate lovers.',
+                'name' => 'Egg Waffles',
+                'description' => 'Hong Kong-style egg waffles, crispy on the outside and fluffy on the inside, served fresh.',
                 'price' => 4.00,
-                'image' => '/assets/image/products/Chocolate Supreme 80Baht.png',
+                'image' => '/assets/images/products/egg-waffles.jpg',
                 'category' => 'snacks'
             ],
             [
                 'id' => 18,
-                'name' => 'Almond Puff 55Baht',
-                'description' => 'A light and flaky almond puff pastry with a buttery texture and nutty flavor.',
+                'name' => 'Popcorn Chicken',
+                'description' => 'Crispy Taiwanese-style popcorn chicken, seasoned with special spices for a savory snack.',
                 'price' => 5.50,
-                'image' => '/assets/image/products/Almond Puff 55Baht.png',
+                'image' => '/assets/images/products/popcorn-chicken.jpg',
                 'category' => 'snacks'
             ],
             [
                 'id' => 19,
-                'name' => 'Matcha Croissant 70Baht',
-                'description' => 'A flaky croissant with a rich matcha filling, blending earthy tea flavors with buttery layers.',
+                'name' => 'Sweet Potato Fries',
+                'description' => 'Crispy and delicious sweet potato fries, seasoned with a special blend of spices.',
                 'price' => 4.00,
                 'image' => '/assets/image/products/Macha Croissant 70Baht.png',
                 'category' => 'snacks'
             ],
             [
                 'id' => 20,
-                'name' => 'Chocolate Almond Croissant 80Baht',
-                'description' => 'A golden, flaky croissant filled with rich chocolate and crunchy almonds for a delightful treat.',
+                'name' => 'Cheese Foam Cake',
+                'description' => 'A soft sponge cake topped with our signature cheese foam, creating a creamy and sweet experience.',
                 'price' => 4.50,
-                'image' => '/assets/image/products/Chocolate Almont Croissand 80Baht.png',
+                'image' => '/assets/images/products/cheese-foam-cake.jpg',
                 'category' => 'snacks'
-            ]
+            ],
+
             
         ];
         
@@ -233,18 +238,34 @@ class OrderController extends BaseController {
         $products = [
             1 => [
                 'id' => 1,
-                'name' => 'Taiwan Milk Tea',
-                'description' => 'A classic Taiwanese milk tea with a perfect blend of black tea and creamy milk, offering a smooth and rich taste.',
-                'price' => 1.75,
-                'image' => '/assets/image/products/1.png',
+                'name' => 'Classic Milk Tea',
+                'description' => 'Our signature milk tea with premium black tea and creamy milk.',
+                'price' => 4.50,
+                'image' => '/assets/images/products/classic-milk-tea.jpg',
                 'category' => 'milk-tea'
             ],
             2 => [
                 'id' => 2,
-                'name' => 'Thai Tea Brown Sugar Red Bean',
-                'description' => 'A rich and creamy Thai tea with brown sugar syrup, complemented by sweet red beans for an added texture and flavor.',
-                'price' => 2.50,
-                'image' => '/assets/image/products/2.png',
+                'name' => 'Taro Milk Tea',
+                'description' => 'Creamy taro flavor blended with our premium milk tea.',
+                'price' => 5.00,
+                'image' => '/assets/images/products/taro-milk-tea.jpg',
+                'category' => 'milk-tea'
+            ],
+            3 => [
+                'id' => 3,
+                'name' => 'Matcha Latte',
+                'description' => 'Premium Japanese matcha powder with fresh milk.',
+                'price' => 5.50,
+                'image' => '/assets/images/products/matcha-latte.jpg',
+                'category' => 'milk-tea'
+            ],
+            4 => [
+                'id' => 4,
+                'name' => 'Brown Sugar Boba Milk',
+                'description' => 'Fresh milk with brown sugar syrup and chewy boba pearls.',
+                'price' => 5.75,
+                'image' => '/assets/images/products/brown-sugar-boba.jpg',
                 'category' => 'milk-tea'
             ],
             // Add more products as needed
@@ -374,107 +395,40 @@ class OrderController extends BaseController {
     
     public function cart() {
         // In a real application, you would fetch the cart items from the database
-        // For now, we'll use session data
-        $cartItems = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
-        
-        // Calculate totals
-        $subtotal = 0;
-        foreach ($cartItems as $item) {
-            $subtotal += $item['total_price'];
-        }
-        
-        $tax = $subtotal * 0.08; // 8% tax
-        $total = $subtotal + $tax;
+        // For now, we'll create sample data
+        $cartItems = [
+            [
+                'id' => 1,
+                'product_id' => 1,
+                'product_name' => 'Classic Milk Tea',
+                'size' => 'medium',
+                'sugar' => '50%',
+                'ice' => '100%',
+                'toppings' => ['Boba Pearls', 'Pudding'],
+                'quantity' => 1,
+                'price' => 6.00,
+                'image' => '/assets/images/products/classic-milk-tea.jpg'
+            ],
+            [
+                'id' => 2,
+                'product_id' => 9,
+                'product_name' => 'Strawberry Smoothie',
+                'size' => 'large',
+                'sugar' => '70%',
+                'ice' => '30%',
+                'toppings' => ['Fresh Fruit'],
+                'quantity' => 2,
+                'price' => 13.00,
+                'image' => '/assets/images/products/strawberry-smoothie.jpg'
+            ]
+        ];
         
         $this->views('cart', [
             'title' => 'Your Cart',
             'cartItems' => $cartItems,
-            'subtotal' => $subtotal,
-            'tax' => $tax,
-            'total' => $total
-        ]);
-    }
-    
-    public function checkout() {
-        // Check if cart is empty
-        if (!isset($_SESSION['cart']) || empty($_SESSION['cart'])) {
-            $_SESSION['error'] = 'Your cart is empty';
-            header('Location: /order');
-            exit;
-        }
-        
-        // In a real application, you would:
-        // 1. Validate the cart items
-        // 2. Process the payment
-        // 3. Create an order in the database
-        // 4. Clear the cart
-        
-        // For now, we'll just redirect to a success page
-        $_SESSION['success'] = 'Your order has been placed successfully';
-        
-        // Clear the cart
-        $_SESSION['cart'] = [];
-        
-        header('Location: /booking');
-        exit;
-    }
-    
-    public function booking() {
-        // In a real application, you would fetch the user's orders from the database
-        // For now, we'll create sample data
-        $orders = [
-            [
-                'id' => 'ORD123456',
-                'date' => date('Y-m-d H:i:s', strtotime('-2 days')),
-                'items' => [
-                    [
-                        'name' => 'Taiwan Milk Tea',
-                        'size' => 'Medium',
-                        'sugar' => '50%',
-                        'ice' => 'Normal',
-                        'toppings' => ['Boba Pearls', 'Pudding'],
-                        'quantity' => 2,
-                        'price' => 5.50
-                    ],
-                    [
-                        'name' => 'Thai Tea Brown Sugar Red Bean',
-                        'size' => 'Large',
-                        'sugar' => '70%',
-                        'ice' => 'Less',
-                        'toppings' => ['Red Bean'],
-                        'quantity' => 1,
-                        'price' => 3.50
-                    ]
-                ],
-                'subtotal' => 14.50,
-                'tax' => 1.16,
-                'total' => 15.66,
-                'status' => 'completed'
-            ],
-            [
-                'id' => 'ORD123457',
-                'date' => date('Y-m-d H:i:s', strtotime('-1 day')),
-                'items' => [
-                    [
-                        'name' => 'Oolong Passion',
-                        'size' => 'Large',
-                        'sugar' => '30%',
-                        'ice' => 'Normal',
-                        'toppings' => ['Aloe Vera'],
-                        'quantity' => 1,
-                        'price' => 3.00
-                    ]
-                ],
-                'subtotal' => 3.00,
-                'tax' => 0.24,
-                'total' => 3.24,
-                'status' => 'processing'
-            ]
-        ];
-        
-        $this->views('booking', [
-            'title' => 'Your Orders',
-            'orders' => $orders
+            'subtotal' => 19.00,
+            'tax' => 1.52,
+            'total' => 20.52
         ]);
     }
 }
