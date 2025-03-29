@@ -174,4 +174,3 @@ class FeedbackController extends BaseController {
         exit;
     }
 }
-

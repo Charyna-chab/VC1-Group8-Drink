@@ -1,6 +1,5 @@
 <?php
-require_once 'BaseController.php';
-
+namespace YourNamespace\Controllers;
 
 use YourNamespace\BaseController;
 
@@ -25,4 +24,3 @@ class DashboardController extends BaseController {
         ]);
     }
 }
-

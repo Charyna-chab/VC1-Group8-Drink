@@ -6,6 +6,9 @@ use YourNamespace\BaseController;
 
 class BookingController extends BaseController {
     public function index() {
+        // Get cart items from localStorage via JavaScript
+        // This will be populated in the view
+        
         // In a real application, you would fetch bookings from the database
         // For now, we'll create sample data
         $bookings = [
@@ -55,9 +58,13 @@ class BookingController extends BaseController {
             ]
         ];
         
+        // Get cart count for notification badge
+        $cartCount = 0; // This will be updated via JavaScript
+        
         $this->views('booking', [
             'title' => 'My Bookings',
-            'bookings' => $bookings
+            'bookings' => $bookings,
+            'cartCount' => $cartCount
         ]);
     }
     
@@ -130,4 +137,59 @@ class BookingController extends BaseController {
             'booking' => $booking
         ]);
     }
+    
+    // Add a new method to create a booking from cart
+    public function createBooking() {
+        // Check if request is POST
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(405); // Method Not Allowed
+            echo json_encode(['success' => false, 'message' => 'Method not allowed']);
+            exit;
+        }
+        
+        // Get JSON data from request body
+        $json = file_get_contents('php://input');
+        $data = json_decode($json, true);
+        
+        if (!$data || !isset($data['items']) || empty($data['items'])) {
+            http_response_code(400); // Bad Request
+            echo json_encode(['success' => false, 'message' => 'Invalid request data']);
+            exit;
+        }
+        
+        // Calculate totals
+        $subtotal = 0;
+        foreach ($data['items'] as $item) {
+            $subtotal += $item['totalPrice'];
+        }
+        
+        $tax = $subtotal * 0.08; // 8% tax
+        $total = $subtotal + $tax;
+        
+        // Generate a unique order ID
+        $orderId = 'ORD' . date('YmdHis') . rand(100, 999);
+        
+        // Create booking
+        $booking = [
+            'id' => $orderId,
+            'date' => date('Y-m-d H:i:s'),
+            'items' => $data['items'],
+            'subtotal' => $subtotal,
+            'tax' => $tax,
+            'total' => $total,
+            'status' => 'processing',
+            'payment_status' => 'pending'
+        ];
+        
+        // In a real application, you would save the booking to the database
+        // For now, we'll just return success
+        
+        echo json_encode([
+            'success' => true,
+            'message' => 'Booking created successfully',
+            'booking' => $booking
+        ]);
+        exit;
+    }
 }
+

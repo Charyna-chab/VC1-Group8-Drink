@@ -74,7 +74,7 @@
                                     </button>
                                 </div>
 
-                                <button class="fav-btn">❤</button>
+                               
                             </div>
                         <?php endforeach; ?>
                     <?php else: ?>

@@ -220,15 +220,18 @@ class OrdersController extends BaseController {
         if (isset($_SESSION['user_id'])) {
             // In a real app, you would fetch favorites from the database
             // For now, we'll get from localStorage via JavaScript
-            // This is just a fallback for server-side rendering
             $favorites = isset($_SESSION['favorites']) ? $_SESSION['favorites'] : [];
         }
+        
+        // Get cart count for notification badge
+        $cartCount = isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0;
         
         $this->views('order', [
             'title' => 'Order Drinks',
             'products' => $products,
             'toppings' => $toppings,
-            'favorites' => $favorites
+            'favorites' => $favorites,
+            'cartCount' => $cartCount
         ]);
     }
     
