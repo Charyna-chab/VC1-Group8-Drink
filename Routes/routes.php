@@ -21,7 +21,5 @@ $routes->delete('/user/delete', [UserController::class, 'destroy']);
 
 
 
-
-
 // dispatch
 $routes->dispatch();

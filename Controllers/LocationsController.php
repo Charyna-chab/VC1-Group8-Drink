@@ -1,8 +1,7 @@
 <?php
-namespace LocationsController\Controllers;
-
 class LocationsController {
     public function index() {
-        echo "LocationsController loaded successfully!";
+        // Render the locations page
+        $this->views('locations/index');
     }
 }

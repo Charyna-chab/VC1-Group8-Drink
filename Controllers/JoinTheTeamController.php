@@ -1,9 +1,8 @@
 <?php
-namespace JoinTheTeamController\Controllers;
-
 class JoinTheTeamController {
     public function index() {
-        echo "JoinTheTeamController loaded successfully!";
+        // Render the join-the-team page
+        $this->views('join-the-team/index');
     }
 }
 

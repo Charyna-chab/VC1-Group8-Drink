@@ -47,6 +47,8 @@ $route->get("/join-the-team", [JoinTheTeamController::class, 'index']);
 // More Menu
 $route->get("/more", [MoreController::class, 'index']);
 
+
+
 // Original routes
 $route->get("/welcome", [WelcomeController::class, 'welcome']);
 $route->get("/order", [OrdersController::class, 'index']);

@@ -307,25 +307,25 @@
             
             <div class="gift-card-grid">
                 <div class="gift-card-item">
-                    <img src="/assets/image/gift-cards/card1.jpg" alt="Classic Gift Card">
+                    <img src="/assets/image/1gift-card.webp" alt="Classic Gift Card">
                     <h3>Classic Gift Card</h3>
                     <p>Perfect for any occasion</p>
                     <div class="price-options">
-                        <button class="price-option active" data-value="25">$25</button>
-                        <button class="price-option" data-value="50">$50</button>
-                        <button class="price-option" data-value="100">$100</button>
+                        <button class="price-option active" data-value="25">20%</button>
+                        <button class="price-option" data-value="50">30%</button>
+                        <button class="price-option" data-value="100">40%</button>
                     </div>
                     <button class="add-to-cart">Add to Cart</button>
                 </div>
                 
                 <div class="gift-card-item">
-                    <img src="/assets/image/gift-cards/card2.jpg" alt="Birthday Gift Card">
-                    <h3>Birthday Gift Card</h3>
+                    <img src="/assets/image/member-ship.png" alt="Birthday Gift Card">
+                    <h3>Member Gift Card</h3>
                     <p>Celebrate with bubble tea</p>
                     <div class="price-options">
-                        <button class="price-option active" data-value="25">$25</button>
-                        <button class="price-option" data-value="50">$50</button>
-                        <button class="price-option" data-value="100">$100</button>
+                        <button class="price-option active" data-value="25">15%</button>
+                        <button class="price-option" data-value="50">25%</button>
+                        <button class="price-option" data-value="100">35%</button>
                     </div>
                     <button class="add-to-cart">Add to Cart</button>
                 </div>
@@ -335,9 +335,9 @@
                     <h3>Holiday Gift Card</h3>
                     <p>Seasonal special design</p>
                     <div class="price-options">
-                        <button class="price-option active" data-value="25">$25</button>
-                        <button class="price-option" data-value="50">$50</button>
-                        <button class="price-option" data-value="100">$100</button>
+                        <button class="price-option active" data-value="25">25%</button>
+                        <button class="price-option" data-value="50">50%</button>
+                        <button class="price-option" data-value="100">70%</button>
                     </div>
                     <button class="add-to-cart">Add to Cart</button>
                 </div>
