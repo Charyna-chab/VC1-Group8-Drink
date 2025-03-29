@@ -245,13 +245,11 @@
             <div class="location-card">
                 <img src="/assets/image/locations/location1.jpg" alt="Downtown Store">
                 <div class="location-info">
-                    <h3>Downtown</h3>
-                    <p><i class="fas fa-map-marker-alt"></i> 123 Main Street, City, State 12345</p>
-                    <p><i class="fas fa-phone"></i> (123) 456-7890</p>
-                    <p><i class="fas fa-clock"></i> 10:00 AM - 10:00 PM</p>
+                    <h3>PTT</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> PTT Gas Station, Maeda Street 2004, Phnom Penh 12352</p>
+                    <p><i class="fas fa-clock"></i> 08:00 AM - 18:15 PM</p>
                     <div class="location-actions">
                         <a href="#" class="btn-directions"><i class="fas fa-directions"></i> Get Directions</a>
-                        <a href="#" class="btn-order"><i class="fas fa-shopping-bag"></i> Order Online</a>
                     </div>
                 </div>
             </div>
@@ -259,13 +257,11 @@
             <div class="location-card">
                 <img src="/assets/image/locations/location2.jpg" alt="Westside Store">
                 <div class="location-info">
-                    <h3>Westside</h3>
-                    <p><i class="fas fa-map-marker-alt"></i> 456 West Avenue, City, State 12345</p>
-                    <p><i class="fas fa-phone"></i> (123) 456-7891</p>
-                    <p><i class="fas fa-clock"></i> 10:00 AM - 10:00 PM</p>
+                    <h3>Toul Kork</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> Xin Fu Cha Toul Kork Phnom Penh</p>
+                    <p><i class="fas fa-clock"></i> 08:00 AM - 18:15 PM</p>
                     <div class="location-actions">
                         <a href="#" class="btn-directions"><i class="fas fa-directions"></i> Get Directions</a>
-                        <a href="#" class="btn-order"><i class="fas fa-shopping-bag"></i> Order Online</a>
                     </div>
                 </div>
             </div>
@@ -273,26 +269,36 @@
             <div class="location-card">
                 <img src="/assets/image/locations/location3.jpg" alt="Eastside Store">
                 <div class="location-info">
-                    <h3>Eastside</h3>
-                    <p><i class="fas fa-map-marker-alt"></i> 789 East Boulevard, City, State 12345</p>
-                    <p><i class="fas fa-phone"></i> (123) 456-7892</p>
-                    <p><i class="fas fa-clock"></i> 10:00 AM - 10:00 PM</p>
+                    <h3>Steng Meanchey</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> XIN FU CHA Steng Meanchey Veng Sreng Blvd, Phnom Penh 12000</p>
+                    <p><i class="fas fa-clock"></i> 08:00 AM - 18:15 PM</p>
                     <div class="location-actions">
                         <a href="#" class="btn-directions"><i class="fas fa-directions"></i> Get Directions</a>
-                        <a href="#" class="btn-order"><i class="fas fa-shopping-bag"></i> Order Online</a>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</section>
-
-<section class="map-section">
-    <div class="container">
-        <h2>Find Us on the Map</h2>
-        <div id="storeMap" class="store-map">
-            <!-- Map will be loaded here via JavaScript -->
-            <img src="/assets/image/locations/map-placeholder.jpg" alt="Store Map" class="map-placeholder">
+            <div class="location-card">
+                <img src="/assets/image/locations/location3.jpg" alt="Eastside Store">
+                <div class="location-info">
+                    <h3>BKK</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> XIN FU CHA BKK 292 15 St 292, Phnom Penh</p>
+                    <p><i class="fas fa-clock"></i> 08:00 AM - 18:15 PM</p>
+                    <div class="location-actions">
+                        <a href="#" class="btn-directions"><i class="fas fa-directions"></i> Get Directions</a>
+                    </div>
+                </div>
+            </div>
+            <div class="location-card">
+                <img src="/assets/image/locations/location3.jpg" alt="Eastside Store">
+                <div class="location-info">
+                    <h3>TK</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> Xin Fu Cha TK 66 Street 317, Phnom Penh 120408</p>
+                    <p><i class="fas fa-clock"></i> 08:00 AM - 18:15 PM</p>
+                    <div class="location-actions">
+                        <a href="#" class="btn-directions"><i class="fas fa-directions"></i> Get Directions</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>

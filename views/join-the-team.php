@@ -296,9 +296,9 @@
 
 <section class="open-positions">
     <div class="container">
-        <h2>Current Openings</h2>
+        <!-- <h2>Current Openings</h2> -->
         
-        <div class="positions-list">
+        <!-- <div class="positions-list">
             <div class="position-card">
                 <h3>Bubble Tea Barista</h3>
                 <p class="position-type"><i class="fas fa-clock"></i> Full-time / Part-time</p>
@@ -323,7 +323,7 @@
                 <a href="#" class="btn-apply">Apply Now</a>
             </div>
         </div>
-    </div>
+    </div> -->
 </section>
 
 <section class="application-process">
