@@ -80,10 +80,10 @@
       </div>
       
       <!-- Right side - Image -->
-      <div class="auth-image" style="background-image: url('/assets/image/bubble-tea-bg.jpg');">
+      <div class="auth-image" style="background-image: url('/assets/image/logo-image.jpg');">
         <div class="bubble-decoration"></div>
         <div class="auth-image-content">
-          <img src="/assets/image/logo/logo-white.png" alt="XING FU CHA" class="brand-logo">
+          <img src="/assets/image/logo/logo-white.png" alt="" class="brand-logo">
         </div>
       </div>
     </div>

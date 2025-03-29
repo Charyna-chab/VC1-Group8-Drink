@@ -655,6 +655,13 @@ document.addEventListener("DOMContentLoaded", () => {
             cartCountElement.textContent = cartCount
             cartCountElement.style.display = cartCount > 0 ? "block" : "none"
         }
+
+        // Update booking notification count in sidebar
+        const bookingCountElement = document.querySelector(".sidebar-nav .nav-item:nth-child(2) .notification-count")
+        if (bookingCountElement) {
+            bookingCountElement.textContent = cartCount
+            bookingCountElement.style.display = cartCount > 0 ? "block" : "none"
+        }
     }
 
     // Render cart items

@@ -1,37 +1,40 @@
 <?php
-// Main entry point - only require the router
+namespace YourNamespace;
+
 require_once "router/Router.php";
 require_once "controllers/BaseController.php";
 require_once "controllers/WelcomeController.php";
 require_once "controllers/FavoritesController.php";
-require_once "controllers/FeedbackController.php";
 require_once "controllers/SettingsController.php";
 require_once "controllers/OrdersController.php";
 require_once "controllers/BookingController.php";
 require_once "controllers/AuthController.php";
 require_once "controllers/AdminController.php";
 require_once "controllers/ProductController.php";
+require_once "controllers/FeedbackController.php";
 require_once "controllers/UserController.php";
 require_once "controllers/DashboardController.php";
 require_once "controllers/PaymentController.php";
 require_once "controllers/CashController.php";
 require_once "controllers/ReceiptController.php";
+require_once "controllers/Admin/AdminFeedbackController.php";
 
 use YourNamespace\Router;
 use YourNamespace\Controllers\WelcomeController;
 use YourNamespace\Controllers\OrdersController;
 use YourNamespace\Controllers\BookingController;
 use YourNamespace\Controllers\FavoritesController;
-use YourNamespace\Controllers\FeedbackController;
 use YourNamespace\Controllers\SettingsController;
 use YourNamespace\Controllers\AuthController;
 use YourNamespace\Controllers\AdminController;
 use YourNamespace\Controllers\ProductController;
+use YourNamespace\Controllers\FeedbackController;
 use YourNamespace\Controllers\UserController;
 use YourNamespace\Controllers\DashboardController;
 use YourNamespace\Controllers\PaymentController;
 use YourNamespace\Controllers\CashController;
 use YourNamespace\Controllers\ReceiptController;
+use YourNamespace\Controllers\Admin\AdminFeedbackController;
 
 $route = new Router();
 
@@ -83,13 +86,26 @@ $route->get("/cash/confirm/{id}", [CashController::class, 'confirm']);
 $route->get("/receipt", [ReceiptController::class, 'index']);
 $route->get("/receipt/download/{id}", [ReceiptController::class, 'download']);
 
+// Booking routes
 $route->get("/booking", [BookingController::class, 'index']);
-$route->get("/orders", [OrdersController::class, 'index']);
 $route->get("/booking/details/{id}", [BookingController::class, 'details']);
+$route->post("/booking/create", [BookingController::class, 'createBooking']);
+
+// Order routes
+$route->get("/orders", [OrdersController::class, 'index']);
 $route->get("/orders/details/{id}", [OrdersController::class, 'details']);
+
+// Favorites routes
 $route->get("/favorites", [FavoritesController::class, 'index']);
 $route->post("/favorites/toggle", [FavoritesController::class, 'toggle']);
+
+// Feedback routes
 $route->get("/feedback", [FeedbackController::class, 'index']);
+$route->post("/feedback", [FeedbackController::class, 'index']);
+$route->post("/feedback/submit-review", [FeedbackController::class, 'submitReview']);
+$route->post("/feedback/submit-suggestion", [FeedbackController::class, 'submitSuggestion']);
+$route->post("/feedback/submit-report", [FeedbackController::class, 'submitReport']);
+
 $route->get("/settings", [SettingsController::class, 'index']);
 
 // Admin routes
@@ -110,6 +126,14 @@ $route->post("/admin/users/store", [UserController::class, 'store']);
 $route->get("/admin/users/edit/{id}", [UserController::class, 'edit']);
 $route->post("/admin/users/update/{id}", [UserController::class, 'update']);
 $route->post("/admin/users/delete/{id}", [UserController::class, 'delete']);
+
+// Admin Feedback Management
+$route->get("/admin/feedback", [FeedbackController::class, 'index']);
+$route->get("/admin/feedback/create", [FeedbackController::class, 'create']);
+$route->post("/admin/feedback/store", [FeedbackController::class, 'store']);
+$route->get("/admin/feedback/edit/{id}", [FeedbackController::class, 'edit']);
+$route->post("/admin/feedback/update/{id}", [FeedbackController::class, 'update']);
+$route->post("/admin/feedback/delete/{id}", [FeedbackController::class, 'delete']);
 
 $route->route();
 
