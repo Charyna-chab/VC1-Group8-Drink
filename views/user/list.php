@@ -37,8 +37,10 @@ $users = $users ?? [];
             <th>ID</th>
             <th>Image</th>
             <th>Name</th>
+            <th>Phone</th>
+            <th>Address</th>
             <th>Email</th>
-           
+            <th>Role</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -51,8 +53,10 @@ $users = $users ?? [];
                 <img src="<?= htmlspecialchars($user['image']) ?>">
               </td>
               <td class="name-user"><?= htmlspecialchars($user['name']) ?></td>
+              <td class="phone-user"><?= htmlspecialchars($user['phone']) ?></td>
+              <td class="address-user"><?= htmlspecialchars($user['address']) ?></td>
               <td class="email-user"><?= htmlspecialchars($user['email']) ?></td>
-             
+              <td class="role-user"><?= htmlspecialchars($user['role']) ?></td>
               <td>
                 <a href="/user/edit?id=<?= $user['user_id'] ?>" class="btn btn-warning">Edit</a>
                 <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#users<?= $user['user_id'] ?>">Delete</button>
