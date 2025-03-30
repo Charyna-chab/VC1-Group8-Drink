@@ -198,8 +198,9 @@
         <div class="options-grid">
             <a href="/about-us" class="option-card">
                 <i class="fas fa-store"></i>
-                <h3>Contact & Support</h3>
-                <p></p>
+                <h2>Contact & Support</h2>
+                <h4>Phone : +1 (123) 456-7890</h4>
+                <h4>Email : info@xingfucha.com</h4>
             </a>
             
 </section>

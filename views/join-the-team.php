@@ -258,19 +258,19 @@
             <div class="benefit-item">
                 <i class="fas fa-users"></i>
                 <h3>Great Team Culture</h3>
-                <p>Join a supportive and friendly team that feels like family.</p>
+                <p>Step into a warm and inviting atmosphere where every member feels like family.</p>
             </div>
             
             <div class="benefit-item">
                 <i class="fas fa-chart-line"></i>
                 <h3>Growth Opportunities</h3>
-                <p>Clear paths for advancement and professional development.</p>
+                <p>We’re all about helping you rise and thrive in your career!</p>
             </div>
             
             <div class="benefit-item">
                 <i class="fas fa-graduation-cap"></i>
                 <h3>Training Programs</h3>
-                <p>Comprehensive training to help you master your role.</p>
+                <p>Enjoy thorough training designed to help you perfect your skills and truly shine in your role.</p>
             </div>
             
             <div class="benefit-item">
@@ -334,31 +334,31 @@
             <div class="step">
                 <div class="step-number">1</div>
                 <h3>Submit Application</h3>
-                <p>Fill out our online application form for the position you're interested in.</p>
+                <p>Fill out our online form for the position you’re interested in. We can’t wait to hear from you!</p>
             </div>
             
             <div class="step">
                 <div class="step-number">2</div>
                 <h3>Initial Interview</h3>
-                <p>If selected, you'll be invited for an initial interview with our store manager.</p>
+                <p>If selected, you’ll be invited for a friendly initial interview with our store manager.</p>
             </div>
             
             <div class="step">
                 <div class="step-number">3</div>
                 <h3>Skills Assessment</h3>
-                <p>Demonstrate your skills and abilities related to the position.</p>
+                <p>Demonstrate your talents and abilities in a fun skills assessment related to the position.</p>
             </div>
             
             <div class="step">
                 <div class="step-number">4</div>
                 <h3>Final Interview</h3>
-                <p>Meet with our district manager for a final interview.</p>
+                <p>MMeet with your future manager for a final chat to discuss your fit with the team.</p>
             </div>
             
             <div class="step">
                 <div class="step-number">5</div>
                 <h3>Welcome Aboard!</h3>
-                <p>If selected, you'll receive an offer and begin your training.</p>
+                <p>If selected, you’ll receive an offer and we’ll kick off your training!</p>
             </div>
         </div>
     </div>

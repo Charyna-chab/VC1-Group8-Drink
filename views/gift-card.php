@@ -307,37 +307,37 @@
             
             <div class="gift-card-grid">
                 <div class="gift-card-item">
-                    <img src="/assets/image/1gift-card.webp" alt="Classic Gift Card">
+                    <img src="/assets/image/giftcard.jpg" alt="Classic Gift Card">
                     <h3>Classic Gift Card</h3>
                     <p>Perfect for any occasion</p>
                     <div class="price-options">
-                        <button class="price-option active" data-value="25">20%</button>
-                        <button class="price-option" data-value="50">30%</button>
-                        <button class="price-option" data-value="100">40%</button>
+                        <button class="price-option active" data-value="0.20">20%</button>
+                        <button class="price-option" data-value="0.30">30%</button>
+                        <button class="price-option" data-value="0.40">40%</button>
                     </div>
                     <button class="add-to-cart">Add to Cart</button>
                 </div>
                 
                 <div class="gift-card-item">
-                    <img src="/assets/image/member-ship.png" alt="Birthday Gift Card">
+                    <img src="/assets/image/2membership.jpg" alt="Birthday Gift Card">
                     <h3>Member Gift Card</h3>
                     <p>Celebrate with bubble tea</p>
                     <div class="price-options">
-                        <button class="price-option active" data-value="25">15%</button>
-                        <button class="price-option" data-value="50">25%</button>
-                        <button class="price-option" data-value="100">35%</button>
+                        <button class="price-option active" data-value="0.15">15%</button>
+                        <button class="price-option" data-value="0.25">25%</button>
+                        <button class="price-option" data-value="0.35">35%</button>
                     </div>
                     <button class="add-to-cart">Add to Cart</button>
                 </div>
                 
                 <div class="gift-card-item">
-                    <img src="/assets/image/gift-cards/card3.jpg" alt="Holiday Gift Card">
+                    <img src="/assets/image/holyday.jpg" alt="Holiday Gift Card">
                     <h3>Holiday Gift Card</h3>
                     <p>Seasonal special design</p>
                     <div class="price-options">
-                        <button class="price-option active" data-value="25">25%</button>
-                        <button class="price-option" data-value="50">50%</button>
-                        <button class="price-option" data-value="100">70%</button>
+                        <button class="price-option active" data-value="0.25">25%</button>
+                        <button class="price-option" data-value="0.50">50%</button>
+                        <button class="price-option" data-value="0.70">70%</button>
                     </div>
                     <button class="add-to-cart">Add to Cart</button>
                 </div>
