@@ -1,4 +1,27 @@
+<?php
+// Start session if not already started
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Check for success messages
+$deletedMessage = isset($_GET['deleted']) && $_GET['deleted'] === 'true' ? 'Feedback successfully deleted.' : '';
+$createdMessage = isset($_GET['created']) && $_GET['created'] === 'true' ? 'Feedback successfully created.' : '';
+$updatedMessage = isset($_GET['updated']) && $_GET['updated'] === 'true' ? 'Feedback successfully updated.' : '';
+$repliedMessage = isset($_GET['replied']) && $_GET['replied'] === 'true' ? 'Reply sent successfully.' : '';
+
+// Combine all messages
+$successMessage = $deletedMessage . $createdMessage . $updatedMessage . $repliedMessage;
+?>
+
 <div class="container-fluid py-4">
+    <?php if (!empty($successMessage)): ?>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <?php echo $successMessage; ?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <?php endif; ?>
+
     <div class="row mb-4">
         <div class="col-12">
             <div class="card shadow-sm border-0 bg-white">
@@ -98,115 +121,127 @@
                     
                     <!-- Table -->
                     <div class="table-responsive">
-    <table class="table table-hover align-middle">
-        <thead>
-            <tr style="background-color: #FCE4EC;">
-                <th scope="col" class="fw-bold text-black">Customer</th>
-                <th scope="col" class="fw-bold text-black">Date</th>
-                <th scope="col" class="fw-bold text-black">Feedback</th>
-                <th scope="col" class="fw-bold text-black">Rating</th>
-                <th scope="col" class="fw-bold text-black">Status</th>
-                <th scope="col" class="fw-bold text-black">Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php if (count($feedbackEntries) > 0): ?>
-                <?php foreach ($feedbackEntries as $index => $feedback): ?>
-                    <?php 
-                        // Generate random rating and status for demo
-                        $rating = isset($feedback['rating']) ? $feedback['rating'] : rand(1, 5);
-                        $statuses = ['New', 'Reviewed', 'Responded', 'Closed'];
-                        $status = isset($feedback['status']) ? $feedback['status'] : $statuses[array_rand($statuses)];
-                        $statusClass = [
-                            'New' => 'bg-info',
-                            'Reviewed' => 'bg-warning',
-                            'Responded' => 'bg-success',
-                            'Closed' => 'bg-secondary'
-                        ];
-                    ?>
-                    <tr>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div class="avatar-circle me-2" style="background-color: #E91E63; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 14px;">
-                                    <?php echo substr($feedback['customer_name'], 0, 1); ?>
-                                </div>
-                                <div>
-                                    <div class="fw-bold"><?php echo htmlspecialchars($feedback['customer_name']); ?></div>
-                                    <div class="small text-muted">
-                                        <?php echo ($feedback['customer_name'] === 'Guest') ? 'Anonymous User' : 'Registered Customer'; ?>
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div><?php echo date('M d, Y', strtotime($feedback['created_at'])); ?></div>
-                            <small class="text-muted"><?php echo date('h:i A', strtotime($feedback['created_at'])); ?></small>
-                        </td>
-                        <td>
-                            <div class="feedback-text text-truncate" style="max-width: 200px;" title="<?php echo htmlspecialchars($feedback['message']); ?>">
-                                <?php echo htmlspecialchars($feedback['message']); ?>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="rating">
-                                <?php for ($i = 1; $i <= 5; $i++): ?>
-                                    <?php if ($i <= $rating): ?>
-                                        <i class="fas fa-star" style="color: #FFD700;"></i>
-                                    <?php else: ?>
-                                        <i class="far fa-star" style="color: #FFD700;"></i>
-                                    <?php endif; ?>
-                                <?php endfor; ?>
-                            </div>
-                        </td>
-                        <td>
-                            <span class="badge <?php echo $statusClass[$status]; ?>"><?php echo $status; ?></span>
-                        </td>
-                        <td>
-                            <div class="d-flex gap-1">
-                                <a href="view_feedback?id=<?php echo $feedback['id']; ?>" class="btn btn-sm btn-outline-secondary" title="View Details">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                <a href="reply_feedback?id=<?php echo $feedback['id']; ?>" class="btn btn-sm btn-outline-primary" title="Reply">
-                                    <i class="fas fa-reply"></i>
-                                </a>
-                                <button class="btn btn-sm btn-outline-danger" title="Delete" onclick="confirmDelete(<?php echo $feedback['id']; ?>)">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <tr>
-                    <td colspan="6" class="text-center py-5">
-                        <div class="empty-state">
-                            <i class="fas fa-comment-slash fa-3x mb-3" style="color: #E91E63;"></i>
-                            <h5>No Feedback Found</h5>
-                            <p class="text-muted">No feedback entries match your current filters.</p>
-                            <?php if (!empty($dateFilter) || !empty($nameFilter)): ?>
-                                <a href="feedback" class="btn btn-sm" style="background-color: #E91E63; color: white;">
-                                    Clear Filters
-                                </a>
-                            <?php endif; ?>
-                        </div>
-                    </td>
-                </tr>
-            <?php endif; ?>
-        </tbody>
-    </table>
+                        <table class="table table-hover align-middle">
+                            <thead>
+                                <tr style="background-color: #FCE4EC;">
+                                    <th scope="col" class="fw-bold text-black">Customer</th>
+                                    <th scope="col" class="fw-bold text-black">Date</th>
+                                    <th scope="col" class="fw-bold text-black">Feedback</th>
+                                    <th scope="col" class="fw-bold text-black">Rating</th>
+                                    <th scope="col" class="fw-bold text-black">Status</th>
+                                    <th scope="col" class="fw-bold text-black">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php if (count($feedbackEntries) > 0): ?>
+                                    <?php foreach ($feedbackEntries as $feedback): ?>
+                                        <?php 
+                                            // Generate random rating and status for demo if not set
+                                            $rating = isset($feedback['rating']) ? $feedback['rating'] : rand(1, 5);
+                                            $statuses = ['New', 'Reviewed', 'Responded', 'Closed'];
+                                            $status = isset($feedback['status']) ? $feedback['status'] : $statuses[array_rand($statuses)];
+                                            $statusClass = [
+                                                'New' => 'bg-info',
+                                                'Reviewed' => 'bg-warning',
+                                                'Responded' => 'bg-success',
+                                                'Closed' => 'bg-secondary'
+                                            ];
+                                        ?>
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="avatar-circle me-2" style="background-color: #E91E63; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 14px;">
+                                                        <?php echo substr($feedback['customer_name'], 0, 1); ?>
+                                                    </div>
+                                                    <div>
+                                                        <div class="fw-bold"><?php echo htmlspecialchars($feedback['customer_name']); ?></div>
+                                                        <div class="small text-muted">
+                                                            <?php echo ($feedback['customer_name'] === 'Guest') ? 'Anonymous User' : 'Registered Customer'; ?>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div><?php echo date('M d, Y', strtotime($feedback['created_at'])); ?></div>
+                                                <small class="text-muted"><?php echo date('h:i A', strtotime($feedback['created_at'])); ?></small>
+                                            </td>
+                                            <td>
+                                                <div class="feedback-text text-truncate" style="max-width: 200px;" title="<?php echo htmlspecialchars($feedback['message']); ?>">
+                                                    <?php echo htmlspecialchars($feedback['message']); ?>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="rating">
+                                                    <?php for ($i = 1; $i <= 5; $i++): ?>
+                                                        <?php if ($i <= $rating): ?>
+                                                            <i class="fas fa-star" style="color: #FFD700;"></i>
+                                                        <?php else: ?>
+                                                            <i class="far fa-star" style="color: #FFD700;"></i>
+                                                        <?php endif; ?>
+                                                    <?php endfor; ?>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="badge <?php echo $statusClass[$status]; ?>"><?php echo $status; ?></span>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex gap-1">
+                                                    <a href="view_feedback?id=<?php echo $feedback['id']; ?>" class="btn btn-sm btn-outline-secondary" title="View Details">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
+                                                    <a href="reply_feedback?id=<?php echo $feedback['id']; ?>" class="btn btn-sm btn-outline-primary" title="Reply">
+                                                        <i class="fas fa-reply"></i>
+                                                    </a>
+                                                    <button class="btn btn-sm btn-outline-danger" title="Delete" onclick="confirmDelete(<?php echo $feedback['id']; ?>)">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr>
+                                        <td colspan="6" class="text-center py-5">
+                                            <div class="empty-state">
+                                                <i class="fas fa-comment-slash fa-3x mb-3" style="color: #E91E63;"></i>
+                                                <h5>No Feedback Found</h5>
+                                                <p class="text-muted">No feedback entries match your current filters.</p>
+                                                <?php if (!empty($dateFilter) || !empty($nameFilter)): ?>
+                                                    <a href="feedback" class="btn btn-sm" style="background-color: #E91E63; color: white;">
+                                                        Clear Filters
+                                                    </a>
+                                                <?php endif; ?>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Hidden delete forms for each feedback entry -->
+                    <?php foreach ($feedbackEntries as $feedback): ?>
+                        <form id="delete-form-<?php echo $feedback['id']; ?>" action="admin/delete_feedback.php" method="POST" style="display: none;">
+                            <input type="hidden" name="id" value="<?php echo $feedback['id']; ?>">
+                            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                        </form>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-<!-- Add this JavaScript function at the bottom of your page or in a separate JS file -->
 <script>
 function confirmDelete(id) {
     if (confirm('Are you sure you want to delete this feedback?')) {
-        window.location.href = 'delete_feedback?id=' + id;
+        const form = document.getElementById('delete-form-' + id);
+        if (form) {
+            form.submit();
+        }
     }
 }
-</script>
 
-
-<script>
 document.addEventListener('DOMContentLoaded', function() {
     // Get elements
     const nameSearchInput = document.querySelector('input[name="name"]');
@@ -218,9 +253,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const searchTerm = nameSearchInput.value.toLowerCase().trim();
         let hasMatches = false;
         
-        // Check if searching for "vanda"
-        if (searchTerm === 'vanda') {
-            alert("Showing feedback from user: Vanda");
+        // Check if searching for "sophy"
+        if (searchTerm === 'sophy') {
+            alert("Showing feedback from user: Sophy");
         }
         
         feedbackRows.forEach(row => {
@@ -290,6 +325,7 @@ document.addEventListener('DOMContentLoaded', function() {
     nameSearchInput.addEventListener('input', debounce(filterFeedback, 300));
 });
 </script>
+
 <style>
     /* Custom styles */
     .avatar-circle {

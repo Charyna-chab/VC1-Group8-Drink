@@ -31,7 +31,7 @@ $routes->get('/feedback', [FeedbackController::class, 'index']);
 // $routes->post('/admin/feedback/store', [FeedbackController::class, 'store']);
 // $routes->get('/admin/feedback/edit', [FeedbackController::class, 'edit']);
 // $routes->put('/admin/feedback/update', [FeedbackController::class, 'update']);
-// $routes->delete('/admin/feedback/delete', [FeedbackController::class, 'destroy']);
+$routes->delete('/admin/feedback/delete', [FeedbackController::class, 'destroy']);
 
 // dispatch
 $routes->dispatch();
