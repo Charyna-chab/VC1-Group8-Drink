@@ -3,6 +3,8 @@
 .content-welcome {
     width: 80%;
     margin: auto;
+    position: relative;
+    top: 200px;
 }
 
 
@@ -857,7 +859,7 @@ textarea:focus {
     /* Light text color */
     padding: 40px 20px;
     font-family: 'Arial', sans-serif;
-    margin-top: 100px;
+    margin-top: 200px;
 }
 
 .footer-content {

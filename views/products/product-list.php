@@ -2,10 +2,14 @@
 // session_start();
 $products = $products ?? [];
 $total = 0;
+$product_count = count($products);
 foreach ($products as $product) {
   $total += floatval($product['price']);
 }
 $_SESSION['product_total'] = $total;
+
+// Store the product count in a session variable
+$_SESSION['product_count'] = $product_count;
 ?>
 <!-- In your header.php or at the top of your file -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -18,11 +22,9 @@ $_SESSION['product_total'] = $total;
   </div>
   <div class="card-body">
     <div class="table-responsive">
-      <!-- Search form moved outside the table -->
-      <div class="d-flex justify-content-between mb-3">
-        <a href="/product/create" class="btn btn-primary">Add New</a>
+      <div class="d-flex justify-content-end">
         <form class="form-inline">
-          <div class="input-group border" style="max-width: 250px;">
+          <div class="input-group" style="max-width: 250px;">
             <input type="text" class="form-control form-control-sm bg-light border-0" placeholder="Search...">
             <div class="input-group-append">
               <button class="btn btn-primary btn-sm" type="button">
@@ -34,7 +36,14 @@ $_SESSION['product_total'] = $total;
       </div>
 
       <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+        <!-- Button to add new user -->
+        <div class="mb-2">
+          <a href="/product/create" class="btn btn-primary">Add New</a>
+        </div>
+
+        <!-- Search form inside the table header -->
         <thead>
+
           <tr>
             <th>ID</th>
             <th>Image</th>
@@ -53,7 +62,7 @@ $_SESSION['product_total'] = $total;
               </td>
               <td><?= htmlspecialchars($product['product_name']) ?></td>
               <td><?= htmlspecialchars($product['product_detail']) ?></td>
-              <td><?= htmlspecialchars($product['price']) ?></td>
+              <td>$<?= htmlspecialchars($product['price']) ?></td>
 
               <td>
                 <!-- Action Dropdown - Fixed Version -->

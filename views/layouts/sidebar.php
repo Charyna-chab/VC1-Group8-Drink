@@ -19,13 +19,19 @@
             <li><a href="/settings"><i class="fas fa-cogs setting-icon"></i> Setting</a></li>
         </ul>
 
-        <!-- Logout & User/Admin Section -->
-        <ul class="nav-list">
-            <hr>
-            <li><a href="/logout"><i class="fas fa-sign-out-alt logout-icon"></i> Logout</a></li>
-            <hr>
-            <li><a href="/admin"><i class="fas fa-user-shield"></i> Admin</a></li>
-        </ul>
+<!-- Logout & User/Admin Section -->
+<ul class="nav-list">
+    <hr>
+    <li><a href="/logout"><i class="fas fa-sign-out-alt logout-icon"></i> Logout</a></li>
+    <hr>
+    <!-- Show Admin section only if the user has an admin role -->
+    <?php if (isset($user_role) && $user_role === 'admin') : ?>
+        <li><a href="/admin"><i class="fas fa-user-shield"></i> Admin</a></li>
+    <?php else : ?>
+        <li><a href="/user"><i class="fas fa-user"></i> User</a></li>
+    <?php endif; ?>
+</ul>
+
     </div>
 </aside>
 

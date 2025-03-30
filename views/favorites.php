@@ -6,8 +6,11 @@
     <section class="content">
         <!-- Favorites Header -->
         <div class="favorites-header">
-            <h2>My Favorites</h2>
-            <p>Your favorite Xing Fu Cha drinks and snacks</p>
+            <div class="favorites-header-content">
+                <h2>My Favorites</h2>
+                <p>Your favorite Xing Fu Cha drinks and snacks</p>
+                <div class="sparkle-icon">✨</div>
+            </div>
         </div>
 
         <!-- Empty State (initially hidden if there are favorites) -->
@@ -62,7 +65,7 @@
     </section>
 </main>
 
+<link rel="stylesheet" href="/assets/css/favorites.css">
 <script src="/assets/js/favorites.js"></script>
 
 <?php require_once __DIR__ . '/layouts/footer.php'; ?>
-
