@@ -61,6 +61,8 @@ $route->post("/forgot-password", [AuthController::class, 'forgotPassword']);
 $route->post("/update-profile", [AuthController::class, 'updateProfile']);
 $route->post("/update-password", [AuthController::class, 'updatePassword']);
 
+
+
 // Original routes
 $route->get("/welcome", [WelcomeController::class, 'welcome']);
 $route->get("/order", [OrdersController::class, 'index']);
