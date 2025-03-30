@@ -18,6 +18,10 @@ require_once "controllers/PaymentController.php";
 require_once "controllers/CashController.php";
 require_once "controllers/ReceiptController.php";
 require_once "controllers/Admin/AdminFeedbackController.php";
+require_once "controllers/GiftCardController.php";
+require_once "controllers/LocationsController.php";
+require_once "controllers/JoinTheTeamController.php";
+require_once "controllers/MoreController.php";
 
 use YourNamespace\Router;
 use YourNamespace\Controllers\WelcomeController;
@@ -35,6 +39,10 @@ use YourNamespace\Controllers\PaymentController;
 use YourNamespace\Controllers\CashController;
 use YourNamespace\Controllers\ReceiptController;
 use YourNamespace\Controllers\Admin\AdminFeedbackController;
+use YourNamespace\Controllers\GiftCardController;
+use YourNamespace\Controllers\LocationsController;
+use YourNamespace\Controllers\JoinTheTeamController;
+use YourNamespace\Controllers\MoreController;
 
 $route = new Router();
 
@@ -134,6 +142,22 @@ $route->post("/admin/feedback/store", [FeedbackController::class, 'store']);
 $route->get("/admin/feedback/edit/{id}", [FeedbackController::class, 'edit']);
 $route->post("/admin/feedback/update/{id}", [FeedbackController::class, 'update']);
 $route->post("/admin/feedback/delete/{id}", [FeedbackController::class, 'delete']);
+
+// New navigation routes
+$route->get("/gift-card", [GiftCardController::class, 'index']);
+$route->get("/locations", [LocationsController::class, 'index']);
+$route->get("/join-the-team", [JoinTheTeamController::class, 'index']);
+$route->get("/more", [MoreController::class, 'index']);
+
+// Additional pages from More menu
+$route->get("/about-us", [MoreController::class, 'aboutUs']);
+$route->get("/menu", [MoreController::class, 'menu']);
+$route->get("/rewards", [MoreController::class, 'rewards']);
+$route->get("/catering", [MoreController::class, 'catering']);
+$route->get("/franchising", [MoreController::class, 'franchising']);
+$route->get("/contact", [MoreController::class, 'contact']);
+$route->get("/faq", [MoreController::class, 'faq']);
+$route->get("/blog", [MoreController::class, 'blog']);
 
 $route->route();
 

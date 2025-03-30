@@ -669,22 +669,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 </label>
               </div>
               
-              <div class="payment-method-card" data-method="aba">
-                <input type="radio" id="aba" name="payment-method">
-                <label for="aba">
-                  <i class="fas fa-university"></i>
-                  <span>ABA Payment</span>
-                </label>
-              </div>
-              
-              <div class="payment-method-card" data-method="apple-pay">
-                <input type="radio" id="apple-pay" name="payment-method">
-                <label for="apple-pay">
-                  <i class="fab fa-apple-pay"></i>
-                  <span>Apple Pay</span>
-                </label>
-              </div>
-              
               <div class="payment-method-card" data-method="cash">
                 <input type="radio" id="cash" name="payment-method">
                 <label for="cash">
@@ -727,45 +711,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div class="qr-code-timer">
                   <p>This QR code will expire in <span class="timer">05:00</span></p>
                 </div>
-              </div>
-            </div>
-            
-            <div class="payment-details aba-details" style="display: none;">
-              <div class="aba-container">
-                <div class="aba-logo">
-                  <img src="/placeholder.svg?height=80&width=150" alt="ABA Logo">
-                </div>
-                <div class="aba-info">
-                  <h5>ABA Bank Transfer</h5>
-                  <div class="aba-account-info">
-                    <div class="info-row">
-                      <span>Account Name:</span>
-                      <span>Your Business Name</span>
-                    </div>
-                    <div class="info-row">
-                      <span>Account Number:</span>
-                      <span>000 123 456 789</span>
-                    </div>
-                    <div class="info-row">
-                      <span>Reference:</span>
-                      <span>${booking.id}</span>
-                    </div>
-                  </div>
-                  <p class="aba-instructions">Please use your Order ID as the payment reference. Your order will be processed once payment is confirmed.</p>
-                </div>
-              </div>
-            </div>
-            
-            <div class="payment-details apple-pay-details" style="display: none;">
-              <div class="apple-pay-container">
-                <div class="apple-pay-logo">
-                  <i class="fab fa-apple-pay"></i>
-                </div>
-                <button class="apple-pay-button">
-                  <span>Pay with</span>
-                  <i class="fab fa-apple"></i> Pay
-                </button>
-                <p>Click the button above to pay with Apple Pay.</p>
               </div>
             </div>
             
@@ -1010,6 +955,9 @@ document.addEventListener("DOMContentLoaded", () => {
           <button class="btn-secondary print-receipt">
             <i class="fas fa-print"></i> Print Receipt
           </button>
+          <button class="btn-secondary download-receipt">
+            <i class="fas fa-download"></i> Download Receipt
+          </button>
           <button class="btn-primary continue-order" data-id="${booking.id}">
             <i class="fas fa-check"></i> Continue Order
           </button>
@@ -1040,6 +988,28 @@ document.addEventListener("DOMContentLoaded", () => {
       showReceiptModal(bookingId)
     })
 
+    // Download button
+    receiptModal.querySelector(".download-receipt").addEventListener("click", () => {
+      // Create a canvas from the receipt
+      const receiptContent = receiptModal.querySelector(".receipt-paper")
+      // Ensure html2canvas is available before using it
+      if (typeof html2canvas !== "undefined") {
+        html2canvas(receiptContent).then((canvas) => {
+          // Convert canvas to image
+          const imgData = canvas.toDataURL("image/png")
+
+          // Create download link
+          const link = document.createElement("a")
+          link.download = `Receipt-${receiptId}.png`
+          link.href = imgData
+          link.click()
+        })
+      } else {
+        console.error("html2canvas is not loaded. Please check your internet connection or script inclusion.")
+        alert("Failed to download receipt. html2canvas is not available.")
+      }
+    })
+
     // Continue Order button
     receiptModal.querySelector(".continue-order").addEventListener("click", function () {
       const id = this.getAttribute("data-id")
@@ -1049,6 +1019,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Close the receipt modal
       receiptModal.remove()
+
+      // Show thank you notification
+      showThankYouNotification()
 
       // Return to original bookings list
       if (sessionStorage.getItem("originalBookingsContent")) {
@@ -1083,6 +1056,40 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   }
 
+  // Show thank you notification
+  function showThankYouNotification() {
+    const notification = document.createElement("div")
+    notification.className = "thank-you-notification"
+
+    notification.innerHTML = `
+      <div class="notification-content">
+        <div class="success-icon">
+          <i class="fas fa-check-circle"></i>
+        </div>
+        <div class="notification-text">
+          <h4>Thank You For Your Order!</h4>
+          <p>We hope you enjoy your drinks. Please visit us again soon!</p>
+        </div>
+        <button class="close-notification">&times;</button>
+      </div>
+    `
+
+    document.body.appendChild(notification)
+
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+      notification.classList.add("fade-out")
+      setTimeout(() => {
+        notification.remove()
+      }, 500)
+    }, 5000)
+
+    // Close button
+    notification.querySelector(".close-notification").addEventListener("click", () => {
+      notification.remove()
+    })
+  }
+
   // Show receipt interface (as a section in the page, not a modal)
   function showReceiptInterface(bookingId) {
     const booking = bookings.find((b) => b.id === bookingId)
@@ -1098,6 +1105,12 @@ document.addEventListener("DOMContentLoaded", () => {
     // Create receipt interface content
     const receiptInterfaceContent = `
       <div class="receipt-interface-container">
+        <div class="receipt-interface-header">
+          <button class="back-to-bookings">
+            <i class="fas fa-arrow-left"></i> Back to Orders
+          </button>
+          <h2>Receipt</h2>
+        </div>
         <div class="receipt-interface-content">
           <div class="receipt-paper">
             <div class="receipt-header">
@@ -1181,6 +1194,9 @@ document.addEventListener("DOMContentLoaded", () => {
             <button class="btn-secondary print-receipt">
               <i class="fas fa-print"></i> Print Receipt
             </button>
+            <button class="btn-secondary download-receipt">
+              <i class="fas fa-download"></i> Download Receipt
+            </button>
             <button class="btn-primary continue-order" data-id="${booking.id}">
               <i class="fas fa-check"></i> Continue Order
             </button>
@@ -1189,8 +1205,21 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
     `
 
+    // Save original bookings list content
+    const originalBookingsContent = bookingsList.innerHTML
+    sessionStorage.setItem("originalBookingsContent", originalBookingsContent)
+
     // Replace content with receipt interface
     bookingsList.innerHTML = receiptInterfaceContent
+
+    // Back button
+    document.querySelector(".back-to-bookings").addEventListener("click", () => {
+      bookingsList.innerHTML = sessionStorage.getItem("originalBookingsContent")
+      sessionStorage.removeItem("originalBookingsContent")
+
+      // Re-initialize event listeners
+      initializeEventListeners()
+    })
 
     // Print button
     document.querySelector(".print-receipt").addEventListener("click", () => {
@@ -1213,12 +1242,37 @@ document.addEventListener("DOMContentLoaded", () => {
       showReceiptInterface(bookingId)
     })
 
+    // Download button
+    document.querySelector(".download-receipt").addEventListener("click", () => {
+      // Create a canvas from the receipt
+      const receiptContent = document.querySelector(".receipt-paper")
+      // Ensure html2canvas is available before using it
+      if (typeof html2canvas !== "undefined") {
+        html2canvas(receiptContent).then((canvas) => {
+          // Convert canvas to image
+          const imgData = canvas.toDataURL("image/png")
+
+          // Create download link
+          const link = document.createElement("a")
+          link.download = `Receipt-${receiptId}.png`
+          link.href = imgData
+          link.click()
+        })
+      } else {
+        console.error("html2canvas is not loaded. Please check your internet connection or script inclusion.")
+        alert("Failed to download receipt. html2canvas is not available.")
+      }
+    })
+
     // Continue Order button
     document.querySelector(".continue-order").addEventListener("click", function () {
       const id = this.getAttribute("data-id")
 
       // Complete the booking
       completeBooking(id)
+
+      // Show thank you notification
+      showThankYouNotification()
 
       // Return to original bookings list
       if (sessionStorage.getItem("originalBookingsContent")) {
@@ -1826,14 +1880,6 @@ document.addEventListener("DOMContentLoaded", () => {
       color: #9C27B0;
     }
 
-    .payment-method-card[data-method="aba"] i {
-      color: #E91E63;
-    }
-
-    .payment-method-card[data-method="apple-pay"] i {
-      color: #000;
-    }
-
     .payment-method-card[data-method="cash"] i {
       color: #4CAF50;
     }
@@ -1891,7 +1937,7 @@ document.addEventListener("DOMContentLoaded", () => {
       flex: 1;
     }
 
-    .qr-code-container, .aba-container, .apple-pay-container, .cash-icon {
+    .qr-code-container, .cash-icon {
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -1977,9 +2023,30 @@ document.addEventListener("DOMContentLoaded", () => {
     /* Receipt Interface Styles */
     .receipt-interface-container {
       display: flex;
-      justify-content: center;
+      flex-direction: column;
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: white;
+      border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+
+    .receipt-interface-header {
+      display: flex;
       align-items: center;
       padding: 20px;
+      border-bottom: 1px solid #eee;
+      position: relative;
+    }
+
+    .receipt-interface-header h2 {
+      text-align: center;
+      flex: 1;
+      font-size: 24px;
+      color: #333;
+      margin: 0;
     }
 
     .receipt-interface-content {
@@ -1987,8 +2054,7 @@ document.addEventListener("DOMContentLoaded", () => {
       flex-direction: column;
       align-items: center;
       gap: 20px;
-      max-width: 500px;
-      width: 100%;
+      padding: 30px;
     }
 
     .receipt-paper {
@@ -1997,6 +2063,7 @@ document.addEventListener("DOMContentLoaded", () => {
       box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
       padding: 30px 20px;
       width: 100%;
+      max-width: 500px;
       position: relative;
       overflow: hidden;
     }
@@ -2159,7 +2226,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     /* Order Success Notification */
     .order-success-notification,
-    .payment-success-notification {
+    .payment-success-notification,
+    .thank-you-notification {
       position: fixed;
       top: 20px;
       left: 20px;
@@ -2174,7 +2242,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     /* Left notification for order completed */
     .order-success-notification.left-notification,
-    .payment-success-notification.left-notification {
+    .payment-success-notification.left-notification,
+    .thank-you-notification.left-notification {
       left: 20px;
       right: auto;
     }
@@ -2220,7 +2289,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     .order-success-notification.fade-out,
-    .payment-success-notification.fade-out {
+    .payment-success-notification.fade-out,
+    .thank-you-notification.fade-out {
       animation: fade-out-left 0.5s ease forwards;
     }
 
@@ -2287,6 +2357,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   `
   document.head.appendChild(style)
+
+  // Add html2canvas script for receipt download functionality
+  const html2canvasScript = document.createElement("script")
+  html2canvasScript.src = "https://html2canvas.hertzen.com/dist/html2canvas.min.js"
+  document.head.appendChild(html2canvasScript)
 
   // Check if we need to create a booking from cart
   if (window.location.pathname === "/booking" && cartItems.length > 0) {

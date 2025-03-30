@@ -14,7 +14,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const checkoutBtn = document.getElementById("checkoutBtn")
     const clearCartBtn = document.getElementById("clearCartBtn")
 
-    // Add this after the DOM Elements section
     // Product Detail Modal Elements
     const productDetailModal = document.getElementById("productDetailModal")
     const detailProductImage = document.getElementById("detailProductImage")
@@ -671,12 +670,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (cart.length === 0) {
             cartItemsContainer.innerHTML = `
-                  <div class="empty-cart">
-                      <i class="fas fa-shopping-cart"></i>
-                      <p>Your cart is empty</p>
-                      <button class="btn-primary" id="startShoppingBtn">Start Shopping</button>
-                  </div>
-              `
+                    <div class="empty-cart">
+                        <i class="fas fa-shopping-cart"></i>
+                        <p>Your cart is empty</p>
+                        <button class="btn-primary" id="startShoppingBtn">Start Shopping</button>
+                    </div>
+                `
 
             const startShoppingBtn = document.getElementById("startShoppingBtn")
             if (startShoppingBtn) {
@@ -703,26 +702,26 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             cartItemElement.innerHTML = `
-                  <div class="cart-item-image">
-                      <img src="${item.image}" alt="${item.name}">
-                  </div>
-                  <div class="cart-item-details">
-                      <h4>${item.name}</h4>
-                      <p>Size: ${item.size.name} | Sugar: ${item.sugar.name} | Ice: ${item.ice.name}</p>
-                      <p>Toppings: ${toppingsText}</p>
-                      <div class="cart-item-quantity">
-                          <button class="quantity-btn minus" data-id="${item.id}">-</button>
-                          <input type="number" value="${item.quantity}" min="1" max="10" data-id="${item.id}">
-                          <button class="quantity-btn plus" data-id="${item.id}">+</button>
-                      </div>
-                  </div>
-                  <div class="cart-item-price">
-                      <p>$${item.totalPrice.toFixed(2)}</p>
-                      <button class="remove-item-btn" data-id="${item.id}">
-                          <i class="fas fa-trash"></i>
-                      </button>
-                  </div>
-              `
+                    <div class="cart-item-image">
+                        <img src="${item.image}" alt="${item.name}">
+                    </div>
+                    <div class="cart-item-details">
+                        <h4>${item.name}</h4>
+                        <p>Size: ${item.size.name} | Sugar: ${item.sugar.name} | Ice: ${item.ice.name}</p>
+                        <p>Toppings: ${toppingsText}</p>
+                        <div class="cart-item-quantity">
+                            <button class="quantity-btn minus" data-id="${item.id}">-</button>
+                            <input type="number" value="${item.quantity}" min="1" max="10" data-id="${item.id}">
+                            <button class="quantity-btn plus" data-id="${item.id}">+</button>
+                        </div>
+                    </div>
+                    <div class="cart-item-price">
+                        <p>$${item.totalPrice.toFixed(2)}</p>
+                        <button class="remove-item-btn" data-id="${item.id}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `
 
             cartItemsContainer.appendChild(cartItemElement)
         })
@@ -1049,15 +1048,15 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         toast.innerHTML = `
-              <div class="toast-icon">
-                  <i class="fas fa-${icon}"></i>
-              </div>
-              <div class="toast-content">
-                  <h4>${title}</h4>
-                  <p>${message}</p>
-              </div>
-              <button class="toast-close">&times;</button>
-          `
+                <div class="toast-icon">
+                    <i class="fas fa-${icon}"></i>
+                </div>
+                <div class="toast-content">
+                    <h4>${title}</h4>
+                    <p>${message}</p>
+                </div>
+                <button class="toast-close">&times;</button>
+            `
 
         // Add to container
         toastContainer.appendChild(toast)
@@ -1112,16 +1111,16 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         notification.innerHTML = `
-              <div class="notification-icon">
-                  <i class="fas fa-${icon}"></i>
-              </div>
-              <div class="notification-content">
-                  <h4>${title}</h4>
-                  <p>${message}</p>
-                  <span class="notification-time">Just now</span>
-              </div>
-              <button class="notification-close">&times;</button>
-          `
+                <div class="notification-icon">
+                    <i class="fas fa-${icon}"></i>
+                </div>
+                <div class="notification-content">
+                    <h4>${title}</h4>
+                    <p>${message}</p>
+                    <span class="notification-time">Just now</span>
+                </div>
+                <button class="notification-close">&times;</button>
+            `
 
         // Add to notification list
         notificationList.insertBefore(notification, notificationList.firstChild)
@@ -1134,11 +1133,11 @@ document.addEventListener("DOMContentLoaded", () => {
             // Show empty notification message if no notifications
             if (notificationList.children.length === 0) {
                 notificationList.innerHTML = `
-                      <div class="empty-notification">
-                          <i class="fas fa-bell-slash"></i>
-                          <p>No notifications yet</p>
-                      </div>
-                  `
+                        <div class="empty-notification">
+                            <i class="fas fa-bell-slash"></i>
+                            <p>No notifications yet</p>
+                        </div>
+                    `
             }
         })
     }
@@ -1192,156 +1191,156 @@ const style = document.createElement("style")
 document.head.appendChild(style)
 
 style.textContent += `
-      /* Product Detail Modal Styles */
-      .product-detail-modal {
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          display: none;
-          justify-content: center;
-          align-items: center;
-          z-index: 1000;
-      }
-      
-      .product-detail-modal.active {
-          display: flex;
-      }
-      
-      .product-detail-content {
-          position: relative;
-          width: 90%;
-          max-width: 500px;
-          background-color: white;
-          border-radius: 10px;
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-          display: flex;
-          flex-direction: column;
-          overflow: hidden;
-          animation: fadeIn 0.3s ease;
-          max-height: 90vh;
-          overflow-y: auto;
-      }
-      
-      .product-detail-image {
-          width: 100%;
-          padding: 30px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          background-color: #fff;
-      }
-      
-      .product-detail-image img {
-          max-width: 100%;
-          height: 250px;
-          object-fit: contain;
-      }
-      
-      .product-detail-info {
-          padding: 0 20px 20px;
-          display: flex;
-          flex-direction: column;
-      }
-      
-      .product-detail-info h3 {
-          margin: 0 0 15px;
-          font-size: 24px;
-          color: #333;
-          font-weight: 600;
-      }
-      
-      .product-detail-desc {
-          margin: 0 0 20px;
-          font-size: 16px;
-          color: #666;
-          line-height: 1.6;
-      }
-      
-      .product-detail-price {
-          font-size: 24px;
-          font-weight: 700;
-          color: #ff5e62;
-          margin-bottom: 15px;
-      }
-      
-      .product-detail-category {
-          margin-bottom: 20px;
-          font-size: 14px;
-          color: #666;
-      }
-      
-      .product-detail-category span:first-child {
-          font-weight: 600;
-      }
-      
-      .product-detail-actions {
-          display: flex;
-          gap: 10px;
-          margin-top: 20px;
-      }
-      
-      .product-detail-actions button {
-          flex: 1;
-          padding: 12px;
-          font-size: 16px;
-          font-weight: 600;
-          border-radius: 5px;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 8px;
-          transition: all 0.3s ease;
-      }
-      
-      .product-detail-content .close-btn {
-          position: absolute;
-          top: 10px;
-          right: 10px;
-          background: none;
-          border: none;
-          font-size: 24px;
-          color: #999;
-          cursor: pointer;
-          z-index: 10;
-          width: 30px;
-          height: 30px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          border-radius: 50%;
-          background-color: rgba(255, 255, 255, 0.8);
-      }
-      
-      .product-detail-content .close-btn:hover {
-          background-color: rgba(0, 0, 0, 0.1);
-          color: #333;
-      }
-      
-      .btn-primary {
-          background-color: #ff5e62;
-          color: white;
-          border: none;
-      }
-      
-      .btn-primary:hover {
-          background-color: #ff4146;
-      }
-      
-      .btn-outline {
-          background-color: transparent;
-          color: #ff5e62;
-          border: 1px solid #ff5e62;
-      }
-      
-      .btn-outline:hover {
-          background-color: #fff0f0;
-      }
-      
-      @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(-20px); }
-          to { opacity: 1; transform: translateY(0); }
-      }
-  `
+        /* Product Detail Modal Styles */
+        .product-detail-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .product-detail-modal.active {
+            display: flex;
+        }
+        
+        .product-detail-content {
+            position: relative;
+            width: 90%;
+            max-width: 500px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            animation: fadeIn 0.3s ease;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .product-detail-image {
+            width: 100%;
+            padding: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #fff;
+        }
+        
+        .product-detail-image img {
+            max-width: 100%;
+            height: 250px;
+            object-fit: contain;
+        }
+        
+        .product-detail-info {
+            padding: 0 20px 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .product-detail-info h3 {
+            margin: 0 0 15px;
+            font-size: 24px;
+            color: #333;
+            font-weight: 600;
+        }
+        
+        .product-detail-desc {
+            margin: 0 0 20px;
+            font-size: 16px;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .product-detail-price {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ff5e62;
+            margin-bottom: 15px;
+        }
+        
+        .product-detail-category {
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .product-detail-category span:first-child {
+            font-weight: 600;
+        }
+        
+        .product-detail-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .product-detail-actions button {
+            flex: 1;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .product-detail-content .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #999;
+            cursor: pointer;
+            z-index: 10;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .product-detail-content .close-btn:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+            color: #333;
+        }
+        
+        .btn-primary {
+            background-color: #ff5e62;
+            color: white;
+            border: none;
+        }
+        
+        .btn-primary:hover {
+            background-color: #ff4146;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            color: #ff5e62;
+            border: 1px solid #ff5e62;
+        }
+        
+        .btn-outline:hover {
+            background-color: #fff0f0;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    `
