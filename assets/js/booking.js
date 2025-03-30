@@ -1,74 +1,74 @@
 // booking.js - Enhanced with improved payment methods, receipt handling, and better UX
 document.addEventListener("DOMContentLoaded", () => {
             // DOM Elements
-            const bookingsList = document.querySelector(".bookings-list")
-            const filterTabs = document.querySelectorAll(".filter-tab")
-            const searchInput = document.getElementById("bookingSearch")
-            const ctaButton = document.querySelector(".cta-button")
-            const mainContent = document.querySelector(".main-content")
-            const contentArea = document.querySelector(".content-area") || mainContent
+            const bookingsList = document.querySelector(".bookings-list");
+            const filterTabs = document.querySelectorAll(".filter-tab");
+            const searchInput = document.getElementById("bookingSearch");
+            const ctaButton = document.querySelector(".cta-button");
+            const mainContent = document.querySelector(".main-content");
+            const contentArea = document.querySelector(".content-area") || mainContent;
 
             // Get cart items from localStorage
-            const cartItems = JSON.parse(localStorage.getItem("cart")) || []
+            const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
 
             // Create bookings from cart items
-            const bookings = JSON.parse(localStorage.getItem("bookings")) || []
+            const bookings = JSON.parse(localStorage.getItem("bookings")) || [];
 
             // Check if we just came from checkout
-            const justCheckedOut = sessionStorage.getItem("justCheckedOut")
+            const justCheckedOut = sessionStorage.getItem("justCheckedOut");
             if (justCheckedOut) {
                 // Clear the flag
-                sessionStorage.removeItem("justCheckedOut")
+                sessionStorage.removeItem("justCheckedOut");
 
                 // Create a new booking from cart items if there are any
                 if (cartItems.length > 0) {
-                    createBookingFromCart()
+                    createBookingFromCart();
                 }
             }
 
             // Initialize bookings
-            renderBookings()
+            renderBookings();
 
             // Filter bookings by status
             filterTabs.forEach((tab) => {
                 tab.addEventListener("click", function() {
                     // Remove active class from all tabs
-                    filterTabs.forEach((t) => t.classList.remove("active"))
+                    filterTabs.forEach((t) => t.classList.remove("active"));
 
                     // Add active class to clicked tab
-                    this.classList.add("active")
+                    this.classList.add("active");
 
                     // Filter bookings
-                    const status = this.getAttribute("data-status")
-                    renderBookings(status)
-                })
-            })
+                    const status = this.getAttribute("data-status");
+                    renderBookings(status);
+                });
+            });
 
             // Search bookings
             if (searchInput) {
                 searchInput.addEventListener("input", function() {
-                    const searchTerm = this.value.toLowerCase().trim()
-                    const activeStatus = document.querySelector(".filter-tab.active").getAttribute("data-status")
+                    const searchTerm = this.value.toLowerCase().trim();
+                    const activeStatus = document.querySelector(".filter-tab.active").getAttribute("data-status");
 
-                    renderBookings(activeStatus, searchTerm)
-                })
+                    renderBookings(activeStatus, searchTerm);
+                });
             }
 
             // CTA button click
             if (ctaButton) {
                 ctaButton.addEventListener("click", () => {
-                    window.location.href = "/order"
-                })
+                    window.location.href = "/order";
+                });
             }
 
             // Create booking from cart
             function createBookingFromCart() {
-                if (cartItems.length === 0) return
+                if (cartItems.length === 0) return;
 
                 // Calculate total
-                const subtotal = cartItems.reduce((total, item) => total + item.totalPrice, 0)
-                const tax = subtotal * 0.08
-                const total = subtotal + tax
+                const subtotal = cartItems.reduce((total, item) => total + item.totalPrice, 0);
+                const tax = subtotal * 0.08;
+                const total = subtotal + tax;
 
                 // Create booking
                 const booking = {
@@ -81,48 +81,48 @@ document.addEventListener("DOMContentLoaded", () => {
                     status: "processing",
                     paymentStatus: "pending", // Add payment status
                     paymentMethod: null, // Will be set when payment is made
-                }
+                };
 
                 // Add to bookings
-                bookings.unshift(booking)
+                bookings.unshift(booking);
 
                 // Save to localStorage
-                localStorage.setItem("bookings", JSON.stringify(bookings))
+                localStorage.setItem("bookings", JSON.stringify(bookings));
 
                 // Clear cart
-                localStorage.setItem("cart", JSON.stringify([]))
+                localStorage.setItem("cart", JSON.stringify([]));
 
                 // Add notification
                 if (window.addNotification) {
                     window.addNotification(
                         "Order Placed Successfully",
                         `Your order #${booking.id} has been placed and is being processed.`,
-                        "order",
-                    )
+                        "order"
+                    );
                 }
             }
 
             // Render bookings
             function renderBookings(status = "all", searchTerm = "") {
-                if (!bookingsList) return
+                if (!bookingsList) return;
 
                 // Filter bookings by status
-                let filteredBookings = bookings
+                let filteredBookings = bookings;
                 if (status !== "all") {
-                    filteredBookings = bookings.filter((booking) => booking.status === status)
+                    filteredBookings = bookings.filter((booking) => booking.status === status);
                 }
                 // Fix: When in "all" tab, don't show cancelled orders
                 else {
-                    filteredBookings = bookings.filter((booking) => booking.status !== "cancelled")
+                    filteredBookings = bookings.filter((booking) => booking.status !== "cancelled");
                 }
 
                 // Filter by search term
                 if (searchTerm) {
-                    filteredBookings = filteredBookings.filter((booking) => booking.id.toLowerCase().includes(searchTerm))
+                    filteredBookings = filteredBookings.filter((booking) => booking.id.toLowerCase().includes(searchTerm));
                 }
 
                 // Clear bookings list
-                bookingsList.innerHTML = ""
+                bookingsList.innerHTML = "";
 
                 // Show empty state if no bookings
                 if (filteredBookings.length === 0) {
@@ -133,33 +133,33 @@ document.addEventListener("DOMContentLoaded", () => {
           <p>${status === "all" ? "You haven't placed any orders yet." : `You don't have any ${status} orders.`}</p>
           <a href="/order" class="btn-primary">Order Now</a>
         </div>
-      `
-      return
+      `;
+      return;
     }
 
     // Render each booking
     filteredBookings.forEach((booking) => {
-      const bookingCard = document.createElement("div")
-      bookingCard.className = "booking-card"
-      bookingCard.setAttribute("data-id", booking.id)
-      bookingCard.setAttribute("data-status", booking.status)
+      const bookingCard = document.createElement("div");
+      bookingCard.className = "booking-card";
+      bookingCard.setAttribute("data-id", booking.id);
+      bookingCard.setAttribute("data-status", booking.status);
 
       // Format date
-      const date = new Date(booking.date)
-      const formattedDate = date.toLocaleDateString() + " " + date.toLocaleTimeString()
+      const date = new Date(booking.date);
+      const formattedDate = date.toLocaleDateString() + " " + date.toLocaleTimeString();
 
       // Get status class
-      let statusClass = ""
+      let statusClass = "";
       switch (booking.status) {
         case "processing":
-          statusClass = "processing"
-          break
+          statusClass = "processing";
+          break;
         case "completed":
-          statusClass = "completed"
-          break
+          statusClass = "completed";
+          break;
         case "cancelled":
-          statusClass = "cancelled"
-          break
+          statusClass = "cancelled";
+          break;
       }
 
       // Create booking card HTML
@@ -188,7 +188,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
                 <div class="item-price">$${item.totalPrice.toFixed(2)}</div>
               </div>
-            `,
+            `
             )
             .join("")}
         </div>
@@ -223,75 +223,75 @@ document.addEventListener("DOMContentLoaded", () => {
             }
           </div>
         </div>
-      `
+      `;
 
-      bookingsList.appendChild(bookingCard)
-    })
+      bookingsList.appendChild(bookingCard);
+    });
 
     // Add event listeners to buttons
-    const viewDetailsButtons = document.querySelectorAll(".view-details")
-    const cancelButtons = document.querySelectorAll(".cancel-booking")
-    const completeButtons = document.querySelectorAll(".complete-booking")
-    const deleteButtons = document.querySelectorAll(".delete-booking")
+    const viewDetailsButtons = document.querySelectorAll(".view-details");
+    const cancelButtons = document.querySelectorAll(".cancel-booking");
+    const completeButtons = document.querySelectorAll(".complete-booking");
+    const deleteButtons = document.querySelectorAll(".delete-booking");
 
     viewDetailsButtons.forEach((button) => {
       button.addEventListener("click", function (e) {
-        e.preventDefault()
-        const id = this.getAttribute("data-id")
-        showBookingDetails(id)
-      })
-    })
+        e.preventDefault();
+        const id = this.getAttribute("data-id");
+        showBookingDetails(id);
+      });
+    });
 
     cancelButtons.forEach((button) => {
       button.addEventListener("click", function () {
-        const id = this.getAttribute("data-id")
-        cancelBooking(id)
-      })
-    })
+        const id = this.getAttribute("data-id");
+        cancelBooking(id);
+      });
+    });
 
     completeButtons.forEach((button) => {
       button.addEventListener("click", function () {
-        const id = this.getAttribute("data-id")
+        const id = this.getAttribute("data-id");
         // Show payment interface directly when complete button is clicked
-        showPaymentInterface(id)
-      })
-    })
+        showPaymentInterface(id);
+      });
+    });
 
     deleteButtons.forEach((button) => {
       button.addEventListener("click", function () {
-        const id = this.getAttribute("data-id")
-        deleteBooking(id)
-      })
-    })
+        const id = this.getAttribute("data-id");
+        deleteBooking(id);
+      });
+    });
   }
 
   // Delete booking
   function deleteBooking(id) {
-    const bookingIndex = bookings.findIndex((b) => b.id === id)
-    if (bookingIndex === -1) return
+    const bookingIndex = bookings.findIndex((b) => b.id === id);
+    if (bookingIndex === -1) return;
 
     // Remove booking from array
-    bookings.splice(bookingIndex, 1)
+    bookings.splice(bookingIndex, 1);
 
     // Save to localStorage
-    localStorage.setItem("bookings", JSON.stringify(bookings))
+    localStorage.setItem("bookings", JSON.stringify(bookings));
 
     // Add notification
     if (window.addNotification) {
-      window.addNotification("Order Deleted", `Order #${id} has been permanently deleted.`, "order")
+      window.addNotification("Order Deleted", `Order #${id} has been permanently deleted.`, "order");
     }
 
     // Find and remove the booking card from the DOM
-    const bookingCard = document.querySelector(`.booking-card[data-id="${id}"]`)
+    const bookingCard = document.querySelector(`.booking-card[data-id="${id}"]`);
     if (bookingCard) {
       // Add fade-out animation
-      bookingCard.style.transition = "opacity 0.3s ease, transform 0.3s ease"
-      bookingCard.style.opacity = "0"
-      bookingCard.style.transform = "translateX(20px)"
+      bookingCard.style.transition = "opacity 0.3s ease, transform 0.3s ease";
+      bookingCard.style.opacity = "0";
+      bookingCard.style.transform = "translateX(20px)";
 
       // Remove after animation completes
       setTimeout(() => {
-        bookingCard.remove()
+        bookingCard.remove();
 
         // Check if there are no more bookings and show empty state if needed
         if (bookingsList.children.length === 0) {
@@ -302,42 +302,42 @@ document.addEventListener("DOMContentLoaded", () => {
               <p>You haven't placed any orders yet.</p>
               <a href="/order" class="btn-primary">Order Now</a>
             </div>
-          `
+          `;
         }
-      }, 300)
+      }, 300);
     }
   }
 
   // Show booking details
   function showBookingDetails(id) {
-    const booking = bookings.find((b) => b.id === id)
-    if (!booking) return
+    const booking = bookings.find((b) => b.id === id);
+    if (!booking) return;
 
     // Create modal
-    const modal = document.createElement("div")
-    modal.className = "booking-details-modal"
+    const modal = document.createElement("div");
+    modal.className = "booking-details-modal";
 
     // Format date
-    const date = new Date(booking.date)
-    const formattedDate = date.toLocaleDateString() + " " + date.toLocaleTimeString()
+    const date = new Date(booking.date);
+    const formattedDate = date.toLocaleDateString() + " " + date.toLocaleTimeString();
 
     // Get status class
-    let statusClass = ""
+    let statusClass = "";
     switch (booking.status) {
       case "processing":
-        statusClass = "processing"
-        break
+        statusClass = "processing";
+        break;
       case "completed":
-        statusClass = "completed"
-        break
+        statusClass = "completed";
+        break;
       case "cancelled":
-        statusClass = "cancelled"
-        break
+        statusClass = "cancelled";
+        break;
     }
 
     // Get payment status
-    const paymentStatus = booking.paymentStatus || "pending"
-    const paymentStatusClass = paymentStatus === "completed" ? "completed" : "processing"
+    const paymentStatus = booking.paymentStatus || "pending";
+    const paymentStatusClass = paymentStatus === "completed" ? "completed" : "processing";
 
     modal.innerHTML = `
       <div class="modal-content">
@@ -381,7 +381,7 @@ document.addEventListener("DOMContentLoaded", () => {
                       </div>
                     </div>
                   </div>
-                `,
+                `
                 )
                 .join("")}
             </div>
@@ -406,23 +406,6 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="modal-footer">
           <button class="btn-secondary close-details">Close</button>
           ${
-            booking.status === "processing"
-              ? `
-              <button class="btn-outline-danger cancel-booking-modal" data-id="${booking.id}">Cancel Order</button>
-              <button class="btn-primary complete-booking-modal" data-id="${booking.id}">Complete Order</button>
-            `
-              : ""
-          }
-          ${
-            booking.status === "cancelled" || booking.status === "completed"
-              ? `
-              <button class="btn-outline-danger delete-booking-modal" data-id="${booking.id}">
-                <i class="fas fa-trash"></i> Delete Order
-              </button>
-            `
-              : ""
-          }
-          ${
             (booking.status === "processing" && booking.paymentStatus === "pending") || !booking.paymentStatus
               ? `
               <button class="btn-success pay-now-modal" data-id="${booking.id}">
@@ -442,103 +425,75 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         </div>
       </div>
-    `
+    `;
 
-    document.body.appendChild(modal)
+    document.body.appendChild(modal);
 
     // Add event listeners
-    const closeButtons = modal.querySelectorAll(".close-modal, .close-details")
+    const closeButtons = modal.querySelectorAll(".close-modal, .close-details");
     closeButtons.forEach((button) => {
       button.addEventListener("click", () => {
-        modal.remove()
-      })
-    })
-
-    const cancelButton = modal.querySelector(".cancel-booking-modal")
-    if (cancelButton) {
-      cancelButton.addEventListener("click", function () {
-        const id = this.getAttribute("data-id")
-        cancelBooking(id)
-        modal.remove()
-      })
-    }
-
-    const completeButton = modal.querySelector(".complete-booking-modal")
-    if (completeButton) {
-      completeButton.addEventListener("click", function () {
-        const id = this.getAttribute("data-id")
-        // Show payment interface directly when complete button is clicked
-        modal.remove()
-        showPaymentInterface(id)
-      })
-    }
-
-    const deleteButton = modal.querySelector(".delete-booking-modal")
-    if (deleteButton) {
-      deleteButton.addEventListener("click", function () {
-        const id = this.getAttribute("data-id")
-        deleteBooking(id)
-        modal.remove()
-      })
-    }
+        modal.remove();
+      });
+    });
 
     // Add event listener for Pay Now button
-    const payNowButton = modal.querySelector(".pay-now-modal")
+    const payNowButton = modal.querySelector(".pay-now-modal");
     if (payNowButton) {
       payNowButton.addEventListener("click", function () {
-        const id = this.getAttribute("data-id")
-        modal.remove()
-        showPaymentInterface(id)
-      })
+        const id = this.getAttribute("data-id");
+        modal.remove();
+        showPaymentInterface(id);
+      });
     }
 
     // Add event listener for View Receipt button
-    const viewReceiptButton = modal.querySelector(".view-receipt-modal")
+    const viewReceiptButton = modal.querySelector(".view-receipt-modal");
     if (viewReceiptButton) {
       viewReceiptButton.addEventListener("click", function () {
-        const id = this.getAttribute("data-id")
-        modal.remove()
-        showReceiptInterface(id)
-      })
+        const id = this.getAttribute("data-id");
+        modal.remove();
+        showReceiptInterface(id);
+      });
     }
 
     // Close when clicking outside
     modal.addEventListener("click", (e) => {
       if (e.target === modal) {
-        modal.remove()
+        modal.remove();
       }
-    })
+    });
   }
 
   // Cancel booking
   function cancelBooking(id) {
-    const bookingIndex = bookings.findIndex((b) => b.id === id)
-    if (bookingIndex === -1) return
+    const bookingIndex = bookings.findIndex((b) => b.id === id);
+    if (bookingIndex === -1) return;
 
     // Update booking status
-    bookings[bookingIndex].status = "cancelled"
+    bookings[bookingIndex].status = "cancelled";
 
     // Save to localStorage
-    localStorage.setItem("bookings", JSON.stringify(bookings))
+    localStorage.setItem("bookings", JSON.stringify(bookings));
 
     // Add notification
     if (window.addNotification) {
-      window.addNotification("Order Cancelled", `Your order #${bookings[bookingIndex].id} has been cancelled.`, "order")
+      window.addNotification("Order Cancelled", `Your order #${bookings[bookingIndex].id} has been cancelled.`, "order");
     }
 
     // Find and remove the booking card from the DOM if in "all" tab
-    const activeTab = document.querySelector(".filter-tab.active")
+    const activeTab = document.querySelector(".filter-tab.active");
     if (activeTab && activeTab.getAttribute("data-status") === "all") {
-      const bookingCard = document.querySelector(`.booking-card[data-id="${id}"]`)
+      const bookingCard = document.querySelector(`.booking-card[data-id="${id}"]`);
       if (bookingCard) {
         // Add fade-out animation
-        bookingCard.style.transition = "opacity 0.3s ease, transform 0.3s ease"
-        bookingCard.style.opacity = "0"
-        bookingCard.style.transform = "translateX(20px)"
+        bookingCard.style.transition = "opacity 0.3s ease, transform 0.3s ease";
+        bookingCard.style.opacity = "0";
+        bookingCard.style.transform = "translateX(20px)";
 
         // Remove after animation completes
         setTimeout(() => {
-          bookingCard.remove()
+          bookingCard.remove();
 
           // Check if there are no more bookings and show empty state if needed
           if (bookingsList.children.length === 0) {
@@ -549,52 +504,84 @@ document.addEventListener("DOMContentLoaded", () => {
                 <p>You haven't placed any orders yet.</p>
                 <a href="/order" class="btn-primary">Order Now</a>
               </div>
-            `
+            `;
           }
-        }, 300)
+        }, 300);
       }
     } else {
       // Re-render bookings for other tabs
-      const status = activeTab ? activeTab.getAttribute("data-status") : "all"
-      const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : ""
-      renderBookings(status, searchTerm)
+      const status = activeTab ? activeTab.getAttribute("data-status") : "all";
+      const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : "";
+      renderBookings(status, searchTerm);
     }
   }
 
   // Complete booking
   function completeBooking(id) {
-    const bookingIndex = bookings.findIndex((b) => b.id === id)
-    if (bookingIndex === -1) return
+    const bookingIndex = bookings.findIndex((b) => b.id === id);
+    if (bookingIndex === -1) return;
 
     // Update booking status
-    bookings[bookingIndex].status = "completed"
+    bookings[bookingIndex].status = "completed";
 
     // Save to localStorage
-    localStorage.setItem("bookings", JSON.stringify(bookings))
+    localStorage.setItem("bookings", JSON.stringify(bookings));
 
     // Add notification
     if (window.addNotification) {
       window.addNotification(
         "Order Completed",
         `Your order #${bookings[bookingIndex].id} has been marked as completed.`,
-        "order",
-      )
+        "order"
+      );
     }
 
     // Show success notification on the left side
-    showOrderSuccessNotification(bookings[bookingIndex])
+    showOrderSuccessNotification(bookings[bookingIndex]);
+
+    // Show celebration animation
+    showCelebrationAnimation();
 
     // Re-render bookings
-    const activeTab = document.querySelector(".filter-tab.active")
-    const status = activeTab ? activeTab.getAttribute("data-status") : "all"
-    const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : ""
-    renderBookings(status, searchTerm)
+    const activeTab = document.querySelector(".filter-tab.active");
+    const status = activeTab ? activeTab.getAttribute("data-status") : "all";
+    const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : "";
+    renderBookings(status, searchTerm);
+  }
+
+  // Show celebration animation
+  function showCelebrationAnimation() {
+    // Create celebration container
+    const celebrationContainer = document.createElement("div");
+    celebrationContainer.className = "celebration-animation";
+    document.body.appendChild(celebrationContainer);
+
+    // Create confetti pieces
+    const colors = ["#ff5e62", "#4caf50", "#2196F3", "#ff9800", "#9C27B0"];
+    for (let i = 0; i < 100; i++) {
+      const confetti = document.createElement("div");
+      confetti.className = "confetti";
+      confetti.style.left = Math.random() * 100 + "vw";
+      confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+      confetti.style.width = Math.random() * 10 + 5 + "px";
+      confetti.style.height = Math.random() * 10 + 10 + "px";
+      confetti.style.animationDuration = Math.random() * 3 + 2 + "s";
+      celebrationContainer.appendChild(confetti);
+    }
+
+    // Remove celebration after animation completes
+    setTimeout(() => {
+      celebrationContainer.classList.add("fade-out");
+      setTimeout(() => {
+        celebrationContainer.remove();
+      }, 1000);
+    }, 3000);
   }
 
   // Show order success notification on the left side
   function showOrderSuccessNotification(booking) {
-    const notification = document.createElement("div")
-    notification.className = "order-success-notification left-notification"
+    const notification = document.createElement("div");
+    notification.className = "order-success-notification left-notification";
 
     notification.innerHTML = `
       <div class="notification-content">
@@ -607,31 +594,31 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
         <button class="close-notification">&times;</button>
       </div>
-    `
+    `;
 
-    document.body.appendChild(notification)
+    document.body.appendChild(notification);
 
     // Auto remove after 5 seconds
     setTimeout(() => {
-      notification.classList.add("fade-out")
+      notification.classList.add("fade-out");
       setTimeout(() => {
-        notification.remove()
-      }, 500)
-    }, 5000)
+        notification.remove();
+      }, 500);
+    }, 5000);
 
     // Close button
     notification.querySelector(".close-notification").addEventListener("click", () => {
-      notification.remove()
-    })
+      notification.remove();
+    });
   }
 
   // Show payment interface (as a section in the page, not a modal)
   function showPaymentInterface(bookingId) {
-    const booking = bookings.find((b) => b.id === bookingId)
-    if (!booking) return
+    const booking = bookings.find((b) => b.id === bookingId);
+    if (!booking) return;
 
     // Save original bookings list content
-    const originalBookingsContent = bookingsList.innerHTML
+    const originalBookingsContent = bookingsList.innerHTML;
 
     // Create payment interface content
     const paymentInterfaceContent = `
@@ -674,6 +661,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 <label for="cash">
                   <i class="fas fa-money-bill-wave"></i>
                   <span>Cash on Delivery</span>
+                </label>
+              </div>
+              
+              <div class="payment-method-card" data-method="money-out">
+                <input type="radio" id="money-out" name="payment-method">
+                <label for="money-out">
+                  <i class="fas fa-wallet"></i>
+                  <span>Money Out</span>
                 </label>
               </div>
             </div>
@@ -724,6 +719,21 @@ document.addEventListener("DOMContentLoaded", () => {
                 <p>Our delivery person will provide you with a receipt upon payment.</p>
               </div>
             </div>
+            
+            <div class="payment-details money-out-details" style="display: none;">
+              <div class="money-out-icon">
+                <i class="fas fa-wallet"></i>
+              </div>
+              <p>Pay using your Money Out account.</p>
+              <div class="form-group">
+                <label for="money-out-id">Money Out ID</label>
+                <input type="text" id="money-out-id" placeholder="Enter your Money Out ID">
+              </div>
+              <div class="form-group">
+                <label for="money-out-password">Password</label>
+                <input type="password" id="money-out-password" placeholder="Enter your password">
+              </div>
+            </div>
           </div>
           
           <div class="payment-actions">
@@ -734,97 +744,97 @@ document.addEventListener("DOMContentLoaded", () => {
           </div>
         </div>
       </div>
-    `
+    `;
 
     // Replace bookings list content with payment interface
-    bookingsList.innerHTML = paymentInterfaceContent
+    bookingsList.innerHTML = paymentInterfaceContent;
 
     // Store original content for returning
-    sessionStorage.setItem("originalBookingsContent", originalBookingsContent)
+    sessionStorage.setItem("originalBookingsContent", originalBookingsContent);
 
     // Add event listeners for payment method selection
-    const methodCards = document.querySelectorAll(".payment-method-card")
+    const methodCards = document.querySelectorAll(".payment-method-card");
     methodCards.forEach((card) => {
       card.addEventListener("click", function () {
         // Update radio button
-        const radio = this.querySelector("input[type='radio']")
-        radio.checked = true
+        const radio = this.querySelector("input[type='radio']");
+        radio.checked = true;
 
         // Add selected class to clicked card and remove from others
-        methodCards.forEach((c) => c.classList.remove("selected"))
-        this.classList.add("selected")
+        methodCards.forEach((c) => c.classList.remove("selected"));
+        this.classList.add("selected");
 
         // Hide all payment details
         document.querySelectorAll(".payment-details").forEach((detail) => {
-          detail.style.display = "none"
-        })
+          detail.style.display = "none";
+        });
 
         // Show selected payment details
-        const method = this.getAttribute("data-method")
-        document.querySelector(`.${method}-details`).style.display = "block"
-      })
-    })
+        const method = this.getAttribute("data-method");
+        document.querySelector(`.${method}-details`).style.display = "block";
+      });
+    });
 
     // Back button
     document.querySelector(".back-to-bookings").addEventListener("click", () => {
-      bookingsList.innerHTML = sessionStorage.getItem("originalBookingsContent")
-      sessionStorage.removeItem("originalBookingsContent")
+      bookingsList.innerHTML = sessionStorage.getItem("originalBookingsContent");
+      sessionStorage.removeItem("originalBookingsContent");
 
       // Re-initialize event listeners
-      initializeEventListeners()
-    })
+      initializeEventListeners();
+    });
 
     // Cancel button
     document.querySelector(".cancel-payment").addEventListener("click", () => {
-      bookingsList.innerHTML = sessionStorage.getItem("originalBookingsContent")
-      sessionStorage.removeItem("originalBookingsContent")
+      bookingsList.innerHTML = sessionStorage.getItem("originalBookingsContent");
+      sessionStorage.removeItem("originalBookingsContent");
 
       // Re-initialize event listeners
-      initializeEventListeners()
-    })
+      initializeEventListeners();
+    });
 
     // Process payment button
     document.querySelector(".process-payment").addEventListener("click", function () {
-      const id = this.getAttribute("data-id")
-      const selectedMethod = document.querySelector("input[name='payment-method']:checked").id
+      const id = this.getAttribute("data-id");
+      const selectedMethod = document.querySelector("input[name='payment-method']:checked").id;
 
       // Process payment
-      processPayment(id, selectedMethod)
-    })
+      processPayment(id, selectedMethod);
+    });
   }
 
   // Process payment
   function processPayment(bookingId, paymentMethod) {
-    const bookingIndex = bookings.findIndex((b) => b.id === bookingId)
-    if (bookingIndex === -1) return
+    const bookingIndex = bookings.findIndex((b) => b.id === bookingId);
+    if (bookingIndex === -1) return;
 
     // Update booking payment status
-    bookings[bookingIndex].paymentStatus = "completed"
-    bookings[bookingIndex].paymentMethod = paymentMethod
+    bookings[bookingIndex].paymentStatus = "completed";
+    bookings[bookingIndex].paymentMethod = paymentMethod;
 
     // Save to localStorage
-    localStorage.setItem("bookings", JSON.stringify(bookings))
+    localStorage.setItem("bookings", JSON.stringify(bookings));
 
     // Add notification
     if (window.addNotification) {
       window.addNotification(
         "Payment Successful",
         `Payment for order #${bookingId} has been processed successfully.`,
-        "payment",
-      )
+        "payment"
+      );
     }
 
     // Show success notification on the left side
-    showPaymentSuccessNotification(bookings[bookingIndex])
+    showPaymentSuccessNotification(bookings[bookingIndex]);
 
     // Show receipt interface as a modal in the center
-    showReceiptModal(bookingId)
+    showReceiptModal(bookingId);
   }
 
   // Show payment success notification on the left side
   function showPaymentSuccessNotification(booking) {
-    const notification = document.createElement("div")
-    notification.className = "payment-success-notification left-notification"
+    const notification = document.createElement("div");
+    notification.className = "payment-success-notification left-notification";
 
     notification.innerHTML = `
       <div class="notification-content">
@@ -835,41 +845,43 @@ document.addEventListener("DOMContentLoaded", () => {
           <h4>Payment Successful!</h4>
           <p>Your payment for order #${booking.id} has been processed.</p>
         </div>
+        <button class="close-notification">&times;</button  has been processed.</p>
+        </div>
         <button class="close-notification">&times;</button>
       </div>
-    `
+    `;
 
-    document.body.appendChild(notification)
+    document.body.appendChild(notification);
 
     // Auto remove after 5 seconds
     setTimeout(() => {
-      notification.classList.add("fade-out")
+      notification.classList.add("fade-out");
       setTimeout(() => {
-        notification.remove()
-      }, 500)
-    }, 5000)
+        notification.remove();
+      }, 500);
+    }, 5000);
 
     // Close button
     notification.querySelector(".close-notification").addEventListener("click", () => {
-      notification.remove()
-    })
+      notification.remove();
+    });
   }
 
   // Show receipt as a modal in the center
   function showReceiptModal(bookingId) {
-    const booking = bookings.find((b) => b.id === bookingId)
-    if (!booking) return
+    const booking = bookings.find((b) => b.id === bookingId);
+    if (!booking) return;
 
     // Format date
-    const date = new Date()
-    const formattedDate = date.toLocaleDateString() + " " + date.toLocaleTimeString()
+    const date = new Date();
+    const formattedDate = date.toLocaleDateString() + " " + date.toLocaleTimeString();
 
     // Generate receipt ID
-    const receiptId = "RCP" + Date.now().toString().slice(-6)
+    const receiptId = "RCP" + Date.now().toString().slice(-6);
 
     // Create receipt modal
-    const receiptModal = document.createElement("div")
-    receiptModal.className = "receipt-modal"
+    const receiptModal = document.createElement("div");
+    receiptModal.className = "receipt-modal";
 
     receiptModal.innerHTML = `
       <div class="receipt-modal-content">
@@ -918,7 +930,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
                 <div class="item-price">$${item.totalPrice.toFixed(2)}</div>
               </div>
-            `,
+            `
               )
               .join("")}
             
@@ -959,107 +971,107 @@ document.addEventListener("DOMContentLoaded", () => {
             <i class="fas fa-download"></i> Download Receipt
           </button>
           <button class="btn-primary continue-order" data-id="${booking.id}">
-            <i class="fas fa-check"></i> Continue Order
+            <i class="fas fa-check"></i> Done
           </button>
         </div>
       </div>
-    `
+    `;
 
-    document.body.appendChild(receiptModal)
+    document.body.appendChild(receiptModal);
 
     // Print button
     receiptModal.querySelector(".print-receipt").addEventListener("click", () => {
       // Print the receipt
-      const receiptContent = receiptModal.querySelector(".receipt-paper")
-      const originalContents = document.body.innerHTML
+      const receiptContent = receiptModal.querySelector(".receipt-paper");
+      const originalContents = document.body.innerHTML;
 
       document.body.innerHTML = `
         <div class="print-only">
           ${receiptContent.outerHTML}
         </div>
-      `
+      `;
 
-      window.print()
+      window.print();
 
       // Restore the page
-      document.body.innerHTML = originalContents
+      document.body.innerHTML = originalContents;
 
       // Show receipt modal again
-      showReceiptModal(bookingId)
-    })
+      showReceiptModal(bookingId);
+    });
 
     // Download button
     receiptModal.querySelector(".download-receipt").addEventListener("click", () => {
       // Create a canvas from the receipt
-      const receiptContent = receiptModal.querySelector(".receipt-paper")
+      const receiptContent = receiptModal.querySelector(".receipt-paper");
       // Ensure html2canvas is available before using it
       if (typeof html2canvas !== "undefined") {
         html2canvas(receiptContent).then((canvas) => {
           // Convert canvas to image
-          const imgData = canvas.toDataURL("image/png")
+          const imgData = canvas.toDataURL("image/png");
 
           // Create download link
-          const link = document.createElement("a")
-          link.download = `Receipt-${receiptId}.png`
-          link.href = imgData
-          link.click()
-        })
+          const link = document.createElement("a");
+          link.download = `Receipt-${receiptId}.png`;
+          link.href = imgData;
+          link.click();
+        });
       } else {
-        console.error("html2canvas is not loaded. Please check your internet connection or script inclusion.")
-        alert("Failed to download receipt. html2canvas is not available.")
+        console.error("html2canvas is not loaded. Please check your internet connection or script inclusion.");
+        alert("Failed to download receipt. html2canvas is not available.");
       }
-    })
+    });
 
     // Continue Order button
     receiptModal.querySelector(".continue-order").addEventListener("click", function () {
-      const id = this.getAttribute("data-id")
+      const id = this.getAttribute("data-id");
 
       // Complete the booking
-      completeBooking(id)
+      completeBooking(id);
 
       // Close the receipt modal
-      receiptModal.remove()
+      receiptModal.remove();
 
       // Show thank you notification
-      showThankYouNotification()
+      showThankYouNotification();
 
       // Return to original bookings list
       if (sessionStorage.getItem("originalBookingsContent")) {
-        bookingsList.innerHTML = sessionStorage.getItem("originalBookingsContent")
-        sessionStorage.removeItem("originalBookingsContent")
+        bookingsList.innerHTML = sessionStorage.getItem("originalBookingsContent");
+        sessionStorage.removeItem("originalBookingsContent");
       } else {
         // If original content is not available, just render bookings
-        renderBookings()
+        renderBookings();
       }
 
       // Re-initialize event listeners
-      initializeEventListeners()
-    })
+      initializeEventListeners();
+    });
 
     // Close when clicking outside
     receiptModal.addEventListener("click", (e) => {
       if (e.target === receiptModal) {
-        receiptModal.remove()
+        receiptModal.remove();
 
         // Return to original bookings list
         if (sessionStorage.getItem("originalBookingsContent")) {
-          bookingsList.innerHTML = sessionStorage.getItem("originalBookingsContent")
-          sessionStorage.removeItem("originalBookingsContent")
+          bookingsList.innerHTML = sessionStorage.getItem("originalBookingsContent");
+          sessionStorage.removeItem("originalBookingsContent");
         } else {
           // If original content is not available, just render bookings
-          renderBookings()
+          renderBookings();
         }
 
         // Re-initialize event listeners
-        initializeEventListeners()
+        initializeEventListeners();
       }
-    })
+    });
   }
 
   // Show thank you notification
   function showThankYouNotification() {
-    const notification = document.createElement("div")
-    notification.className = "thank-you-notification"
+    const notification = document.createElement("div");
+    notification.className = "thank-you-notification left-notification";
 
     notification.innerHTML = `
       <div class="notification-content">
@@ -1072,35 +1084,35 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
         <button class="close-notification">&times;</button>
       </div>
-    `
+    `;
 
-    document.body.appendChild(notification)
+    document.body.appendChild(notification);
 
     // Auto remove after 5 seconds
     setTimeout(() => {
-      notification.classList.add("fade-out")
+      notification.classList.add("fade-out");
       setTimeout(() => {
-        notification.remove()
-      }, 500)
-    }, 5000)
+        notification.remove();
+      }, 500);
+    }, 5000);
 
     // Close button
     notification.querySelector(".close-notification").addEventListener("click", () => {
-      notification.remove()
-    })
+      notification.remove();
+    });
   }
 
   // Show receipt interface (as a section in the page, not a modal)
   function showReceiptInterface(bookingId) {
-    const booking = bookings.find((b) => b.id === bookingId)
-    if (!booking) return
+    const booking = bookings.find((b) => b.id === bookingId);
+    if (!booking) return;
 
     // Format date
-    const date = new Date()
-    const formattedDate = date.toLocaleDateString() + " " + date.toLocaleTimeString()
+    const date = new Date();
+    const formattedDate = date.toLocaleDateString() + " " + date.toLocaleTimeString();
 
     // Generate receipt ID
-    const receiptId = "RCP" + Date.now().toString().slice(-6)
+    const receiptId = "RCP" + Date.now().toString().slice(-6);
 
     // Create receipt interface content
     const receiptInterfaceContent = `
@@ -1157,7 +1169,7 @@ document.addEventListener("DOMContentLoaded", () => {
                   </div>
                   <div class="item-price">$${item.totalPrice.toFixed(2)}</div>
                 </div>
-              `,
+              `
                 )
                 .join("")}
               
@@ -1198,125 +1210,125 @@ document.addEventListener("DOMContentLoaded", () => {
               <i class="fas fa-download"></i> Download Receipt
             </button>
             <button class="btn-primary continue-order" data-id="${booking.id}">
-              <i class="fas fa-check"></i> Continue Order
+              <i class="fas fa-check"></i> Done
             </button>
           </div>
         </div>
       </div>
-    `
+    `;
 
     // Save original bookings list content
-    const originalBookingsContent = bookingsList.innerHTML
-    sessionStorage.setItem("originalBookingsContent", originalBookingsContent)
+    const originalBookingsContent = bookingsList.innerHTML;
+    sessionStorage.setItem("originalBookingsContent", originalBookingsContent);
 
     // Replace content with receipt interface
-    bookingsList.innerHTML = receiptInterfaceContent
+    bookingsList.innerHTML = receiptInterfaceContent;
 
     // Back button
     document.querySelector(".back-to-bookings").addEventListener("click", () => {
-      bookingsList.innerHTML = sessionStorage.getItem("originalBookingsContent")
-      sessionStorage.removeItem("originalBookingsContent")
+      bookingsList.innerHTML = sessionStorage.getItem("originalBookingsContent");
+      sessionStorage.removeItem("originalBookingsContent");
 
       // Re-initialize event listeners
-      initializeEventListeners()
-    })
+      initializeEventListeners();
+    });
 
     // Print button
     document.querySelector(".print-receipt").addEventListener("click", () => {
       // Print the receipt
-      const receiptContent = document.querySelector(".receipt-paper")
-      const originalContents = document.body.innerHTML
+      const receiptContent = document.querySelector(".receipt-paper");
+      const originalContents = document.body.innerHTML;
 
       document.body.innerHTML = `
         <div class="print-only">
           ${receiptContent.outerHTML}
         </div>
-      `
+      `;
 
-      window.print()
+      window.print();
 
       // Restore the page
-      document.body.innerHTML = originalContents
+      document.body.innerHTML = originalContents;
 
       // Show receipt interface again
-      showReceiptInterface(bookingId)
-    })
+      showReceiptInterface(bookingId);
+    });
 
     // Download button
     document.querySelector(".download-receipt").addEventListener("click", () => {
       // Create a canvas from the receipt
-      const receiptContent = document.querySelector(".receipt-paper")
+      const receiptContent = document.querySelector(".receipt-paper");
       // Ensure html2canvas is available before using it
       if (typeof html2canvas !== "undefined") {
         html2canvas(receiptContent).then((canvas) => {
           // Convert canvas to image
-          const imgData = canvas.toDataURL("image/png")
+          const imgData = canvas.toDataURL("image/png");
 
           // Create download link
-          const link = document.createElement("a")
-          link.download = `Receipt-${receiptId}.png`
-          link.href = imgData
-          link.click()
-        })
+          const link = document.createElement("a");
+          link.download = `Receipt-${receiptId}.png`;
+          link.href = imgData;
+          link.click();
+        });
       } else {
-        console.error("html2canvas is not loaded. Please check your internet connection or script inclusion.")
-        alert("Failed to download receipt. html2canvas is not available.")
+        console.error("html2canvas is not loaded. Please check your internet connection or script inclusion.");
+        alert("Failed to download receipt. html2canvas is not available.");
       }
-    })
+    });
 
     // Continue Order button
     document.querySelector(".continue-order").addEventListener("click", function () {
-      const id = this.getAttribute("data-id")
+      const id = this.getAttribute("data-id");
 
       // Complete the booking
-      completeBooking(id)
+      completeBooking(id);
 
       // Show thank you notification
-      showThankYouNotification()
+      showThankYouNotification();
 
       // Return to original bookings list
       if (sessionStorage.getItem("originalBookingsContent")) {
-        bookingsList.innerHTML = sessionStorage.getItem("originalBookingsContent")
-        sessionStorage.removeItem("originalBookingsContent")
+        bookingsList.innerHTML = sessionStorage.getItem("originalBookingsContent");
+        sessionStorage.removeItem("originalBookingsContent");
       } else {
         // If original content is not available, just render bookings
-        renderBookings()
+        renderBookings();
       }
 
       // Re-initialize event listeners
-      initializeEventListeners()
-    })
+      initializeEventListeners();
+    });
   }
 
   // Initialize event listeners after DOM changes
   function initializeEventListeners() {
     // Re-attach event listeners to filter tabs
-    const filterTabs = document.querySelectorAll(".filter-tab")
+    const filterTabs = document.querySelectorAll(".filter-tab");
     filterTabs.forEach((tab) => {
       tab.addEventListener("click", function () {
-        filterTabs.forEach((t) => t.classList.remove("active"))
-        this.classList.add("active")
-        const status = this.getAttribute("data-status")
-        renderBookings(status)
-      })
-    })
+        filterTabs.forEach((t) => t.classList.remove("active"));
+        this.classList.add("active");
+        const status = this.getAttribute("data-status");
+        renderBookings(status);
+      });
+    });
 
     // Re-attach search functionality
-    const searchInput = document.getElementById("bookingSearch")
+    const searchInput = document.getElementById("bookingSearch");
     if (searchInput) {
       searchInput.addEventListener("input", function () {
-        const searchTerm = this.value.toLowerCase().trim()
-        const activeStatus = document.querySelector(".filter-tab.active").getAttribute("data-status")
-        renderBookings(activeStatus, searchTerm)
-      })
+        const searchTerm = this.value.toLowerCase().trim();
+        const activeStatus = document.querySelector(".filter-tab.active").getAttribute("data-status");
+        renderBookings(activeStatus, searchTerm);
+      });
     }
 
     // Re-render bookings
-    renderBookings()
+    renderBookings();
   }
 
   // Add CSS for booking
-  const style = document.createElement("style")
+  const style = document.createElement("style");
   style.textContent = `
     /* Booking Card Styles */
     .booking-card {
@@ -1883,6 +1895,10 @@ document.addEventListener("DOMContentLoaded", () => {
     .payment-method-card[data-method="cash"] i {
       color: #4CAF50;
     }
+    
+    .payment-method-card[data-method="money-out"] i {
+      color: #FF9800;
+    }
 
     .payment-details-section {
       margin-bottom: 30px;
@@ -1937,7 +1953,7 @@ document.addEventListener("DOMContentLoaded", () => {
       flex: 1;
     }
 
-    .qr-code-container, .cash-icon {
+    .qr-code-container, .cash-icon, .money-out-icon {
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -1958,6 +1974,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .qr-code-image img {
       width: 100%;
       height: 100%;
+      object-fit: cover;
     }
 
     .payment-actions {
@@ -2294,6 +2311,50 @@ document.addEventListener("DOMContentLoaded", () => {
       animation: fade-out-left 0.5s ease forwards;
     }
 
+    /* Celebration Animation */
+    .celebration-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 2000;
+      overflow: hidden;
+    }
+
+    .confetti {
+      position: absolute;
+      top: -10px;
+      width: 10px;
+      height: 20px;
+      animation: fall 3s linear forwards;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+      }
+    }
+
+    .celebration-animation.fade-out {
+      animation: fade-out 1s forwards;
+    }
+
+    @keyframes fade-out {
+      from {
+        opacity: 1;
+      }
+      to {
+        opacity: 0;
+      }
+    }
+
     @keyframes slide-in-left {
       from {
         transform: translateX(-100%);
@@ -2355,22 +2416,29 @@ document.addEventListener("DOMContentLoaded", () => {
         width: 100%;
       }
     }
-  `
-  document.head.appendChild(style)
+  `;
+  document.head.appendChild(style);
 
   // Add html2canvas script for receipt download functionality
-  const html2canvasScript = document.createElement("script")
-  html2canvasScript.src = "https://html2canvas.hertzen.com/dist/html2canvas.min.js"
-  document.head.appendChild(html2canvasScript)
+  let html2canvas;
+  const html2canvasScript = document.createElement("script");
+  html2canvasScript.src = "https://html2canvas.hertzen.com/dist/html2canvas.min.js";
+  html2canvasScript.onload = () => {
+    html2canvas = window.html2canvas;
+  };
+  html2canvasScript.onerror = () => {
+    console.error("Failed to load html2canvas. Please check your internet connection.");
+  };
+  document.head.appendChild(html2canvasScript);
 
   // Check if we need to create a booking from cart
   if (window.location.pathname === "/booking" && cartItems.length > 0) {
     // Set flag to create booking on page load
-    sessionStorage.setItem("justCheckedOut", "true")
+    sessionStorage.setItem("justCheckedOut", "true");
 
     // Reload page to trigger booking creation
     if (!justCheckedOut) {
-      window.location.reload()
+      window.location.reload();
     }
   }
-})
+});
