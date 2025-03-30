@@ -29,7 +29,7 @@
         </ul>
 
         <!-- Logout & User/Admin Section -->
-        <ul class="nav-list">
+        <ul class="nav-list logout-section">
             <hr>
             <li class="logout-container">
                 <a href="#" class="logout-trigger">
@@ -38,44 +38,186 @@
                 </a>
                 <div class="logout-dropdown">
                     <div class="logout-header">
-                        <span>Switch Account Type</span>
+                        <span>Account Options</span>
                     </div>
-                    <a href="/logout?type=admin" class="logout-option admin-option">
-                        <i class="fas fa-user-shield"></i> Logout as Admin
-                        <?php if (isset($user_role) && $user_role === 'admin') : ?>
-                            <span class="current-role-badge">Current</span>
-                        <?php endif; ?>
+                    <a href="/admin-login" class="logout-option admin-login-option">
+                        <i class="fas fa-user-shield admin-icon"></i> Login as Admin
                     </a>
-                    <a href="/logout?type=user" class="logout-option user-option">
-                        <i class="fas fa-user"></i> Logout as User
-                        <?php if (isset($user_role) && $user_role === 'user') : ?>
-                            <span class="current-role-badge">Current</span>
-                        <?php endif; ?>
+                    <a href="/login" class="logout-option user-login-option">
+                        <i class="fas fa-user user-icon"></i> Login as User
                     </a>
-                    <div class="logout-confirm">
-                        <span>Are you sure?</span>
-                        <div class="logout-buttons">
-                            <a href="/logout" class="confirm-logout">Yes, Logout</a>
-                            <button class="cancel-logout">Cancel</button>
-                        </div>
-                    </div>
+                    <div class="logout-divider"></div>
+                    <a href="/logout" class="logout-option logout-now">
+                        <i class="fas fa-sign-out-alt logout-icon"></i> Logout Now
+                    </a>
                 </div>
             </li>
             <hr>
-            <!-- Show Admin section only if the user has an admin role -->
-            <?php if (isset($user_role) && $user_role === 'admin') : ?>
-                <li><a href="/admin"><i class="fas fa-user-shield admin-icon"></i> Admin Panel</a></li>
-                <li><a href="/admin/users"><i class="fas fa-users"></i> Manage Users</a></li>
-                <li><a href="/admin/reports"><i class="fas fa-chart-bar"></i> Reports</a></li>
-            <?php else : ?>
-                <li><a href="/user"><i class="fas fa-user user-icon"></i> User Profile</a></li>
-            <?php endif; ?>
         </ul>
     </div>
 </aside>
 </div>
 
 <style>
+    /* Sidebar Styles */
+    .sidebar {
+        width: 260px;
+        height: 100vh;
+        background-color: #fff;
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 200;
+        transition: transform 0.3s ease-in-out;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        padding-top: 15px;
+    }
+
+    .children-sidebar {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        padding: 20px;
+    }
+
+    .branch-order-sidebar {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    .branch-logo {
+        width: 110px;
+        height: auto;
+        border-radius: 10px;
+    }
+
+    /* Navigation List */
+    .nav-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .nav-list li {
+        margin-bottom: 12px;
+    }
+
+    .nav-list li a {
+        display: flex;
+        align-items: center;
+        padding: 12px 18px;
+        border-radius: 8px;
+        color: #333;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        font-weight: 500;
+    }
+
+    .nav-list li a:hover {
+        background-color: rgba(255, 94, 98, 0.1);
+        color: #ff5e62;
+        transform: translateX(5px);
+    }
+
+    .nav-list li a i {
+        margin-right: 12px;
+        font-size: 18px;
+        width: 22px;
+        text-align: center;
+    }
+
+    /* Sidebar Icons */
+    .drink-icon {
+        color: #ff9800;
+    }
+
+    .booking-icon {
+        color: #4caf50;
+    }
+
+    .favorite-icon {
+        color: #f44336;
+    }
+
+    .feedback-icon {
+        color: #2196f3;
+    }
+
+    .setting-icon {
+        color: #607d8b;
+    }
+
+    .logout-icon {
+        color: #f44336;
+    }
+
+    /* Notification Badge */
+    .badge {
+        background-color: #ff5e62;
+        color: white;
+        font-size: 10px;
+        font-weight: 600;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: auto;
+    }
+
+    /* Upgrade Box */
+    .upgrade-box {
+        background: linear-gradient(135deg, #ff9a9e 0%, #ff5e62 100%);
+        border-radius: 10px;
+        padding: 16px;
+        color: white;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .upgrade-box p {
+        margin: 0 0 12px;
+        font-size: 14px;
+    }
+
+    .upgrade-box button {
+        background-color: white;
+        color: #ff5e62;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 5px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .upgrade-box button:hover {
+        background-color: rgba(255, 255, 255, 0.9);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Separator Line */
+    hr {
+        border: none;
+        border-top: 1px solid #eee;
+        margin: 15px 0;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 992px) {
+        .sidebar {
+            transform: translateX(-100%);
+        }
+        .sidebar.active {
+            transform: translateX(0);
+        }
+    }
+    
     /* Role badge styling */
     .user-role-display {
         text-align: center;
@@ -101,7 +243,14 @@
         color: white;
     }
     
-    /* Logout dropdown styling */
+    /* Logout section styling */
+    .logout-section {
+        margin-top: auto;
+        position: relative;
+        bottom: 100px;
+
+    }
+    
     .logout-container {
         position: relative;
     }
@@ -131,19 +280,20 @@
         width: 100%;
         background: white;
         border: 1px solid #ddd;
-        border-radius: 5px;
+        border-radius: 8px;
         box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         z-index: 100;
-        padding: 10px;
+        padding: 0;
         opacity: 0;
         transform: translateY(-10px);
         transition: all 0.3s ease, opacity 0.2s ease;
+        overflow: hidden;
     }
     
     .logout-container.active .logout-dropdown {
         display: block;
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(5px);
         animation: dropdownSlide 0.4s forwards;
     }
     
@@ -152,105 +302,66 @@
     }
     
     .logout-header {
-        padding: 5px 0;
+        padding: 10px;
         font-weight: bold;
         border-bottom: 1px solid #eee;
-        margin-bottom: 5px;
         color: #555;
+        background-color: #f8f9fa;
+        text-align: center;
     }
     
     .logout-option {
-        display: block;
-        padding: 8px 10px;
-        margin: 5px 0;
-        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        padding: 12px 15px;
         color: #333;
         text-decoration: none;
         transition: all 0.3s ease;
-        transform-origin: left center;
+        border-bottom: 1px solid #f1f1f1;
+    }
+    
+    .logout-option:last-child {
+        border-bottom: none;
     }
     
     .logout-option:hover {
         background: #f5f5f5;
-        transform: scale(1.02);
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        padding-left: 20px;
     }
     
-    .admin-option {
-        color: #dc3545;
-    }
-    
-    .user-option {
-        color: #000;
-    }
-    
-    .current-role-badge {
-        float: right;
-        background: #28a745;
-        color: white;
-        padding: 2px 5px;
-        border-radius: 3px;
-        font-size: 10px;
-        animation: bounce 1s infinite alternate;
-    }
-    
-    .logout-confirm {
-        margin-top: 10px;
-        padding-top: 10px;
-        border-top: 1px solid #eee;
+    .logout-option i {
+        margin-right: 10px;
+        font-size: 16px;
+        width: 20px;
         text-align: center;
-        animation: fadeIn 0.5s ease;
     }
     
-    .logout-buttons {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 8px;
-        gap: 5px;
-    }
-    
-    .confirm-logout {
-        background: #dc3545;
-        color: white;
-        padding: 5px 10px;
-        border-radius: 4px;
-        text-decoration: none;
-        font-size: 13px;
-        transition: all 0.3s ease;
-        flex: 1;
-    }
-    
-    .confirm-logout:hover {
-        background: #c82333;
-        transform: translateY(-2px);
-        box-shadow: 0 2px 5px rgba(220, 53, 69, 0.3);
-    }
-    
-    .cancel-logout {
-        background: #6c757d;
-        color: white;
-        padding: 5px 10px;
-        border-radius: 4px;
-        border: none;
-        cursor: pointer;
-        font-size: 13px;
-        transition: all 0.3s ease;
-        flex: 1;
-    }
-    
-    .cancel-logout:hover {
-        background: #5a6268;
-        transform: translateY(-2px);
-        box-shadow: 0 2px 5px rgba(108, 117, 125, 0.3);
-    }
-    
-    /* Admin/user icons */
     .admin-icon {
         color: #dc3545;
     }
     
     .user-icon {
-        color: rgb(0, 0, 0);
+        color: #000;
+    }
+    
+    .logout-divider {
+        height: 1px;
+        background-color: #eee;
+        margin: 5px 0;
+    }
+    
+    .logout-now {
+        background-color: #f8f9fa;
+        font-weight: 500;
+    }
+    
+    .logout-now:hover {
+        background-color: #dc3545;
+        color: white;
+    }
+    
+    .logout-now:hover i {
+        color: white;
     }
     
     /* Animations */
@@ -261,7 +372,7 @@
         }
         100% {
             opacity: 1;
-            transform: translateY(0);
+            transform: translateY(5px);
         }
     }
     
@@ -274,24 +385,6 @@
         }
         100% {
             box-shadow: 0 0 0 0 rgba(220, 53, 69, 0);
-        }
-    }
-    
-    @keyframes bounce {
-        0% {
-            transform: translateY(0);
-        }
-        100% {
-            transform: translateY(-3px);
-        }
-    }
-    
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-        }
-        to {
-            opacity: 1;
         }
     }
 </style>
@@ -315,23 +408,16 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Cancel button functionality
-    const cancelBtn = document.querySelector('.cancel-logout');
-    cancelBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        logoutContainer.classList.remove('active');
-    });
-    
-    // Smooth hover effects
+    // Add hover effects for menu items
     const logoutOptions = document.querySelectorAll('.logout-option');
     logoutOptions.forEach(option => {
         option.addEventListener('mouseenter', function() {
-            this.style.transform = 'scale(1.02)';
+            this.style.transition = 'all 0.2s ease';
         });
         option.addEventListener('mouseleave', function() {
-            this.style.transform = 'scale(1)';
+            this.style.transition = 'all 0.3s ease';
         });
     });
 });
 </script>
+
