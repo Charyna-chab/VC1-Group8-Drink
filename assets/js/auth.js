@@ -19,19 +19,11 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 
     // Form validation
-<<<<<<< HEAD
-    const loginForm = document.querySelector('form[action="/login"]')
-    const registerForm = document.querySelector('form[action="/register"]')
-    const forgotPasswordForm = document.querySelector('form[action="/forgot-password"]')
-    const adminLoginForm = document.querySelector('form[action="/admin-login"]')
-    const adminVerificationForm = document.querySelector('form[action="/admin-verification"]')
-=======
     const authForm = document.querySelector(".auth-form")
     if (authForm) {
         authForm.addEventListener("submit", (event) => {
             // Get form type (login or register)
             const isRegisterForm = window.location.pathname.includes("register")
->>>>>>> feature/dashboad
 
             if (isRegisterForm) {
                 // Validate register form
@@ -71,45 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
         })
     })
 
-<<<<<<< HEAD
-    if (forgotPasswordForm) {
-        forgotPasswordForm.addEventListener("submit", (e) => {
-            const email = document.getElementById("email").value
-
-            if (!email) {
-                e.preventDefault()
-                showError("Please enter your email address")
-            }
-        })
-    }
-
-    if (adminLoginForm) {
-        adminLoginForm.addEventListener("submit", (e) => {
-            const email = document.getElementById("email").value
-            const password = document.getElementById("password").value
-
-            if (!email || !password) {
-                e.preventDefault()
-                showError("Please fill in all required fields")
-            }
-        })
-    }
-
-    if (adminVerificationForm) {
-        adminVerificationForm.addEventListener("submit", (e) => {
-            const verificationCode = document.getElementById("verification_code").value
-
-            if (!verificationCode || verificationCode.length !== 6 || !/^\d+$/.test(verificationCode)) {
-                e.preventDefault()
-                showError("Please enter a valid 6-digit verification code")
-            }
-        })
-    }
-
-    // Show error message
-=======
     // Function to show error message
->>>>>>> feature/dashboad
     function showError(message) {
         // Check if error element already exists
         let errorElement = document.querySelector(".auth-error")
@@ -134,27 +88,4 @@ document.addEventListener("DOMContentLoaded", () => {
         // Scroll to error
         errorElement.scrollIntoView({ behavior: "smooth", block: "center" })
     }
-<<<<<<< HEAD
-
-    // Social login buttons (placeholder functionality)
-    const socialButtons = document.querySelectorAll(".social-button")
-
-    socialButtons.forEach((button) => {
-        button.addEventListener("click", function() {
-            const provider = this.classList.contains("google") ? "Google" : "Facebook"
-            alert(`${provider} login would be implemented here in a real application.`)
-        })
-    })
-
-    // Handle logout button click
-    const logoutBtn = document.getElementById("logoutBtn")
-    if (logoutBtn) {
-        logoutBtn.addEventListener("click", (e) => {
-            // No need to prevent default - we want the link to work normally
-            // This is just for any additional functionality you might want to add
-            console.log("Logging out...")
-        })
-    }
-=======
->>>>>>> e1afa46761f16fc7671bbd4993a2db1bab8276b4
 })

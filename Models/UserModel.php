@@ -21,16 +21,16 @@ class UserModel
     function createUser($data)
 {
     try {
-        $query = "INSERT INTO users (image, name, phone, email, address)
-                  VALUES (:image, :name, :phone, :email, :address)";
+        $query = "INSERT INTO users (image, name, email, password)
+                  VALUES (:image, :name, :email, :password)";
         
         // Use the query method from your Database class
         $result = $this->pdo->query($query, [
             'image' => $data['image'],
             'name' => $data['name'],
-            'phone' => $data['phone'],
             'email' => $data['email'],
-            'address' => $data['address']
+            'password' => $data['password'],
+            
         ]);
         
         // Return success or the new ID if your Database class provides a method for it
@@ -51,12 +51,11 @@ class UserModel
   
     function updateUser($id, $data)
     {
-        $stmt = $this->pdo->query( "UPDATE users SET name = :name, phone = :phone, email = :email, address = :address WHERE user_id = :user_id",
+        $stmt = $this->pdo->query( "UPDATE users SET name = :name, email = :email, password = :password WHERE user_id = :user_id",
         [
             'name' => $data['name'],
-            'phone' => $data['phone'],
             'email' => $data['email'],
-            'address' => $data['address'],
+            'password' => $data['password'],
             'user_id' => $id
         ]);
     }

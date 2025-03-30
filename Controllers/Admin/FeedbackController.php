@@ -21,8 +21,22 @@ class FeedbackController extends BaseController {
     }
 
     function create()
+    {   $users = $this->model->getUser();
+        $this->views('/feedback/admin/feedback_view.php',['users' => $users]);
+    }
+
+    function store()
     {
-        $this->views('products/product-create.php');
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $data = [
+                'user_name' => $_POST['user_name'],
+                'comment' => $_POST['comment'],
+                'data' => $_POST['data'],
+                'user_id' => $_POST['user_id'],
+            ];
+            $this->model->createFeedback($data);
+            $this->readdir('/feedback');
+        }
     }
 
 }

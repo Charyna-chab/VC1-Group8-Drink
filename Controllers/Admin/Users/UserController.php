@@ -55,13 +55,13 @@ class UserController extends BaseController
                     $data = [
                         'image' => $image_url,
                         'name' => isset($_POST['name']) ? $_POST['name'] : null,
-                        'phone' => isset($_POST['phone']) ? $_POST['phone'] : null,
                         'email' => isset($_POST['email']) ? $_POST['email'] : null,
-                        'address' => isset($_POST['address']) ? $_POST['address'] : null,
+                        'password' => isset($_POST['password']) ? $_POST['password'] : null,
+                        
                     ];
 
                     // Validate that all required fields are present
-                    if (empty($data['name']) || empty($data['phone']) || empty($data['email']) || empty($data['address'])) {
+                    if (empty($data['name'])|| empty($data['email']) || empty($data['password'])) {
                         $_SESSION['error'] = 'All fields except the image are required!';
                         $this->views('user/create.php', ['error' => $_SESSION['error']]); // Removed .php extension
                         return;
@@ -85,9 +85,8 @@ class UserController extends BaseController
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $data = [
                 'name' => $_POST['name'],
-                'phone' => $_POST['phone'],
                 'email' => $_POST['email'],
-                'address' => $_POST['address']
+                
             ];
             $this->model->updateUser($id, $data);
             $this->redirect('/user');

@@ -8,20 +8,14 @@
                         <label for="name" class="form-label">Name</label>
                         <input type="text" id="name" name="name" class="form-control" placeholder="Enter your name" required>
                     </div>
-
-                    <div class="mb-3">
-                        <label for="phone" class="form-label">Phone</label>
-                        <input type="tel" id="phone" name="phone" class="form-control" placeholder="Enter your phone number" required>
-                    </div>
-
                     <div class="mb-3">
                         <label for="email" class="form-label">Email</label>
                         <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email address" required>
                     </div>
 
                     <div class="mb-3">
-                        <label for="address" class="form-label">Address</label>
-                        <input type="text" id="address" name="address" class="form-control" placeholder="Enter your address" required>
+                        <label for="address" class="form-label">Password</label>
+                        <input type="text" id="password" name="password" class="form-control" placeholder="Enter your password" required>
                     </div>
 
                     <div class="mb-3">
