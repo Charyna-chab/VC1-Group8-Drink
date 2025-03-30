@@ -101,12 +101,6 @@ $route->get("/orders/details/{id}", [OrdersController::class, 'details']);
 $route->get("/favorites", [FavoritesController::class, 'index']);
 $route->post("/favorites/toggle", [FavoritesController::class, 'toggle']);
 
-// Feedback routes
-$route->get("/feedback", [FeedbackController::class, 'index']);
-$route->post("/feedback", [FeedbackController::class, 'index']);
-$route->post("/feedback/submit-review", [FeedbackController::class, 'submitReview']);
-$route->post("/feedback/submit-suggestion", [FeedbackController::class, 'submitSuggestion']);
-$route->post("/feedback/submit-report", [FeedbackController::class, 'submitReport']);
 
 $route->get("/settings", [SettingsController::class, 'index']);
 
@@ -120,22 +114,6 @@ $route->post("/admin/products/store", [ProductController::class, 'store']);
 $route->get("/admin/products/edit/{id}", [ProductController::class, 'edit']);
 $route->post("/admin/products/update/{id}", [ProductController::class, 'update']);
 $route->post("/admin/products/delete/{id}", [ProductController::class, 'delete']);
-
-// Admin User Management
-$route->get("/admin/users", [UserController::class, 'index']);
-$route->get("/admin/users/create", [UserController::class, 'create']);
-$route->post("/admin/users/store", [UserController::class, 'store']);
-$route->get("/admin/users/edit/{id}", [UserController::class, 'edit']);
-$route->post("/admin/users/update/{id}", [UserController::class, 'update']);
-$route->post("/admin/users/delete/{id}", [UserController::class, 'delete']);
-
-// Admin Feedback Management
-$route->get("/admin/feedback", [FeedbackController::class, 'index']);
-$route->get("/admin/feedback/create", [FeedbackController::class, 'create']);
-$route->post("/admin/feedback/store", [FeedbackController::class, 'store']);
-$route->get("/admin/feedback/edit/{id}", [FeedbackController::class, 'edit']);
-$route->post("/admin/feedback/update/{id}", [FeedbackController::class, 'update']);
-$route->post("/admin/feedback/delete/{id}", [FeedbackController::class, 'delete']);
 
 $route->route();
 
