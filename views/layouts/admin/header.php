@@ -23,6 +23,7 @@
     <!-- Custom styles for this template-->
     <link href="/assets/css/sb-admin-2.min.css" rel="stylesheet">
     <script src="/assets/js/search.js"></script>
+    <!-- Bootstrap Bundle with Popper -->
 
 
 </head>
