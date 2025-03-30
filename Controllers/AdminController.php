@@ -18,10 +18,6 @@ class AdminController extends BaseController {
     }
     
     public function dashboard() {
-        $this->views('admin/dashboard', [
-            'title' => 'Admin Dashboard - XING FU CHA',
-            'user' => $_SESSION['user']
-        ]);
+        $this->redirect('/admin-dashboard');
     }
 }
-

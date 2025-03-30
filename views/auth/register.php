@@ -46,6 +46,22 @@
             </div>
           </div>
 
+          <!-- Add these fields to your registration form -->
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <div class="input-with-icon">
+              <i class="fas fa-phone"></i>
+              <input type="tel" id="phone" name="phone" placeholder="Enter your phone number">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="address">Address</label>
+            <div class="input-with-icon">
+              <i class="fas fa-map-marker-alt"></i>
+              <input type="text" id="address" name="address" placeholder="Enter your address">
+            </div>
+          </div>
           <div class="form-group">
             <label for="password">Password</label>
             <div class="input-with-icon">

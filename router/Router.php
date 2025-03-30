@@ -29,6 +29,10 @@ class Router {
     }
     
     public function route() {
+        $this->dispatch();
+    }
+    
+    public function dispatch() {
         $path = $_SERVER['REQUEST_URI'];
         $method = $_SERVER['REQUEST_METHOD'];
         

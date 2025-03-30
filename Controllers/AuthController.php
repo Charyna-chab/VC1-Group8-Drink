@@ -16,7 +16,12 @@ class AuthController extends BaseController {
 
     public function login() {
         if (isset($_SESSION['user_id'])) {
-            $this->redirect('/order');
+            // If user is already logged in, redirect based on role
+            if (isset($_SESSION['user']['role']) && $_SESSION['user']['role'] === 'admin') {
+                $this->redirect('/admin-dashboard');
+            } else {
+                $this->redirect('/order');
+            }
         }
 
         $error = null;
@@ -75,6 +80,8 @@ class AuthController extends BaseController {
                 if ($remember) {
                     setcookie('remember_token', 'demo_token', time() + (86400 * 30), '/');
                 }
+                
+                // Redirect to order page for regular users
                 $this->redirect('/order');
             } else {
                 $error = 'Invalid email or password.';
@@ -100,7 +107,12 @@ class AuthController extends BaseController {
 
     public function register() {
         if (isset($_SESSION['user_id'])) {
-            $this->redirect('/order');
+            // If user is already logged in, redirect based on role
+            if (isset($_SESSION['user']['role']) && $_SESSION['user']['role'] === 'admin') {
+                $this->redirect('/admin-dashboard');
+            } else {
+                $this->redirect('/order');
+            }
         }
 
         $error = null;
@@ -494,4 +506,3 @@ class AuthController extends BaseController {
         }
     }
 }
-

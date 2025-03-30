@@ -1,12 +1,13 @@
-<?php '../layout/header.php' ?>
-<ul class="navbar-nav shadow sidebar sidebar-light accordion" id="accordionSidebar" style="background-color: white;">
+<?php '../layouts/admin/header.php' ?>
+<?php '../layouts/admin/nav.php' ?>
+<ul class="navbar-nav bg-white sidebar sidebar-light accordion" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
         <div class="sidebar-brand-icon rotate-n-15">
-            <img src="#" alt="">
+            <img src="/placeholder.svg" alt="">
         </div>
-        <div class="sidebar-brand-text mx-3">XING FU CHA</div>
+        <div class="sidebar-brand-text mx-3 text-dark">XING FU CHA</div>
     </a>
 
     <!-- Divider -->
@@ -20,8 +21,6 @@
     </li>
 
     <!-- Divider -->
-
-
     <hr class="sidebar-divider">
 
     <!-- Nav Item - Utilities Collapse Menu -->
@@ -31,12 +30,10 @@
             <i class="fa fa-user" aria-hidden="true"></i>
             <span>Customers</span>
         </a>
-
     </li>
 
     <!-- Divider -->
     <hr class="sidebar-divider">
-
 
     <!-- Nav Item - Pages Collapse Menu -->
     <li class="nav-item">
@@ -44,17 +41,12 @@
             <i class="fas fa-fw fa-folder"></i>
             <span>Products</span>
         </a>
-
     </li>
     <hr class="sidebar-divider">
 
-
-
-
-
     <!-- Nav Item - Charts -->
     <li class="nav-item">
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="/feedback">
             <i class="fas fa-comment-alt feedback-icon"></i>
             <span>Feedback</span></a>
     </li>
@@ -64,7 +56,6 @@
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
             aria-expanded="true" aria-controls="collapsePages">
             <i class="fas fa-cogs setting-icon"></i>
-
             <span>Sitting</span>
         </a>
         <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
@@ -80,9 +71,6 @@
             </div>
         </div>
     </li>
-
-
-
 </ul>
 
 <!-- End of Sidebar -->
@@ -94,17 +82,15 @@
     <div id="content">
 
         <!-- Topbar -->
-        <nav class="navbar navbar-expand navbar-light bg-info topbar mb-4 static-top shadow ">
+        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
             <!-- Sidebar Toggle (Topbar) -->
-            <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3 ">
+            <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                 <i class="fa fa-bars"></i>
             </button>
 
-
-
             <!-- Topbar Navbar -->
-            <ul class="navbar-nav ml-auto ">
+            <ul class="navbar-nav ml-auto">
 
                 <!-- Nav Item - Search Dropdown (Visible Only XS) -->
                 <li class="nav-item dropdown no-arrow d-sm-none">
@@ -253,7 +239,7 @@
                 <li class="nav-item dropdown no-arrow">
                     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="mr-2 d-none d-lg-inline text-light small">Charyna Chab</span>
+                        <span class="mr-2 d-none d-lg-inline text-dark small">Charyna Chab</span>
                         <img class="img-profile rounded-circle"
                             src="/assets/image/07.jpg">
                     </a>
@@ -279,14 +265,38 @@
                         </a>
                     </div>
                 </li>
-
             </ul>
-
         </nav>
         <style>
-            .fas {
-                color: #f0f0f0;
-                /* Light color */
+            /* Make topbar icons black */
+            .navbar .fas, .navbar .fa {
+                color:rgb(41, 33, 33); /* Bootstrap's default dark color */
+            }
+            
+            /* Make sidebar icons pink */
+            .sidebar .fas, .sidebar .fa {
+                color:rgb(255, 0, 128); /* Hot pink color */
+            }
+            .sidebar .fas, .sidebar .fa-fw{
+
+            /* Make sure sidebar text is dark */
+            .sidebar .nav-item .nav-link span {
+                color:rgb(41, 33, 35);
+            }
+            
+            /* Update sidebar-divider color for better visibility on white background */
+            .sidebar-divider {
+                border-top: 1px solid rgba(0, 0, 0, 0.1);
+            }
+            
+            /* Ensure active items have proper styling */
+            .sidebar .nav-item.active .nav-link {
+                color: #4e73df;
+            }
+            
+            /* Fix any remaining light text */
+            .text-light {
+                color: #212529 !important;
             }
         </style>
         <!-- End of Topbar -->
