@@ -25,6 +25,9 @@ $routes->get('/product/edit', [ProductController::class, 'edit']);
 $routes->put('/product/update', [ProductController::class, 'update']);
 $routes->get('/product/delete', [ProductController::class, 'destroy']);
 
+<<<<<<< HEAD
+
+=======
 // feedback
 $routes->get('/feedback', [FeedbackController::class, 'index']);
 $routes->get('/feedback/create', [FeedbackController::class, 'create']);
@@ -32,6 +35,7 @@ $routes->get('/feedback/create', [FeedbackController::class, 'create']);
 // $routes->get('/admin/feedback/edit', [FeedbackController::class, 'edit']);
 // $routes->put('/admin/feedback/update', [FeedbackController::class, 'update']);
 // $routes->delete('/admin/feedback/delete', [FeedbackController::class, 'destroy']);
+>>>>>>> ad27e52f9ea85a75c1dcd66ff0ce8440e91d9715
 
 // dispatch
 $routes->dispatch();

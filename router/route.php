@@ -69,6 +69,23 @@ $route->post("/forgot-password", [AuthController::class, 'forgotPassword']);
 $route->post("/update-profile", [AuthController::class, 'updateProfile']);
 $route->post("/update-password", [AuthController::class, 'updatePassword']);
 
+// Add these new routes for gift card, locations, join the team, and more
+$route->get("/gift-card", [GiftCardController::class, 'index']);
+$route->get("/gift-card/details/{id}", [GiftCardController::class, 'details']);
+
+$route->get("/locations", [LocationsController::class, 'index']);
+$route->get("/locations/details/{id}", [LocationsController::class, 'details']);
+
+$route->get("/join-the-team", [JoinTheTeamController::class, 'index']);
+$route->get("/join-the-team/apply", [JoinTheTeamController::class, 'apply']);
+$route->post("/join-the-team/apply", [JoinTheTeamController::class, 'apply']);
+$route->get("/join-the-team/success", [JoinTheTeamController::class, 'success']);
+
+$route->get("/more", [MoreController::class, 'index']);
+$route->get("/about-us", [MoreController::class, 'aboutUs']);
+$route->get("/contact-us", [MoreController::class, 'contactUs']);
+$route->get("/faq", [MoreController::class, 'faq']);
+
 // Original routes
 $route->get("/welcome", [WelcomeController::class, 'welcome']);
 $route->get("/order", [OrdersController::class, 'index']);

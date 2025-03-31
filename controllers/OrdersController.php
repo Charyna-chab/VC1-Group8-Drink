@@ -104,7 +104,6 @@ class OrdersController extends BaseController {
                 'image' => '/assets/image/products/Vanilla Strawberry.png',
                 'category' => 'smoothie'
             ],
-            
             [
                 'id' => 13,
                 'name' => 'Trolach Machhiato',
@@ -113,7 +112,6 @@ class OrdersController extends BaseController {
                 'image' => '/assets/image/products/Trolach Machhiato.png',
                 'category' => 'coffee'
             ],
-            
             [
                 'id' => 14,
                 'name' => 'Japan Yuzu',
@@ -135,28 +133,28 @@ class OrdersController extends BaseController {
                 'name' => 'Chocolate Milk Tea',
                 'description' => 'Espresso combined with vanilla syrup and steamed milk for a sweet, comforting coffee.',
                 'price' => 4.50,
-                'image' => '/assets/image/products/Chocolate Milk Tea.png',
+                'image' => '/assets/images/products/vanilla-latte.jpg',
                 'category' => 'coffee'
             ],
             [
                 'id' => 17,
-                'name' => 'Chocolate Almont Croissand 80Baht',
+                'name' => 'Egg Waffles',
                 'description' => 'Hong Kong-style egg waffles, crispy on the outside and fluffy on the inside, served fresh.',
                 'price' => 4.00,
-                'image' => '/assets/image/products/Chocolate Almont Croissand 80Baht.png',
+                'image' => '/assets/images/products/egg-waffles.jpg',
                 'category' => 'snacks'
             ],
             [
                 'id' => 18,
-                'name' => 'Chocolate Supreme 80Baht',
+                'name' => 'Popcorn Chicken',
                 'description' => 'Crispy Taiwanese-style popcorn chicken, seasoned with special spices for a savory snack.',
                 'price' => 5.50,
-                'image' => '/assets/image/products/Chocolate Supreme 80Baht.png',
+                'image' => '/assets/images/products/popcorn-chicken.jpg',
                 'category' => 'snacks'
             ],
             [
                 'id' => 19,
-                'name' => 'Macha Croissant 70Baht',
+                'name' => 'Sweet Potato Fries',
                 'description' => 'Crispy and delicious sweet potato fries, seasoned with a special blend of spices.',
                 'price' => 4.00,
                 'image' => '/assets/image/products/Macha Croissant 70Baht.png',
@@ -164,22 +162,15 @@ class OrdersController extends BaseController {
             ],
             [
                 'id' => 20,
-                'name' => 'Almond Puff 55baht',
+                'name' => 'Cheese Foam Cake',
                 'description' => 'A soft sponge cake topped with our signature cheese foam, creating a creamy and sweet experience.',
                 'price' => 4.50,
-                'image' => '/assets/image/products/Almond Puff 55baht.png',
+                'image' => '/assets/images/products/cheese-foam-cake.jpg',
                 'category' => 'snacks'
             ],
-            [
-                'id' => 21,
-                'name' => 'Sweet Potato Brown Sugar',
-                'description' => 'A soft sponge cake topped with our signature cheese foam, creating a creamy and sweet experience.',
-                'price' => 4.50,
-                'image' => '/assets/image/products/Sweet Potato Brown Sugar.png',
-                'category' => 'snacks'
-            ]
+
+            
         ];
-        
         
         $toppings = [
             [
@@ -241,6 +232,104 @@ class OrdersController extends BaseController {
             'toppings' => $toppings,
             'favorites' => $favorites,
             'cartCount' => $cartCount
+        ]);
+    }
+    
+    public function details($id) {
+        // In a real application, you would fetch the product from the database
+        // For now, we'll create a lookup array with all products
+        $products = [
+            1 => [
+                'id' => 1,
+                'name' => 'Classic Milk Tea',
+                'description' => 'Our signature milk tea with premium black tea and creamy milk.',
+                'price' => 4.50,
+                'image' => '/assets/images/products/classic-milk-tea.jpg',
+                'category' => 'milk-tea'
+            ],
+            2 => [
+                'id' => 2,
+                'name' => 'Taro Milk Tea',
+                'description' => 'Creamy taro flavor blended with our premium milk tea.',
+                'price' => 5.00,
+                'image' => '/assets/images/products/taro-milk-tea.jpg',
+                'category' => 'milk-tea'
+            ],
+            3 => [
+                'id' => 3,
+                'name' => 'Matcha Latte',
+                'description' => 'Premium Japanese matcha powder with fresh milk.',
+                'price' => 5.50,
+                'image' => '/assets/images/products/matcha-latte.jpg',
+                'category' => 'milk-tea'
+            ],
+            4 => [
+                'id' => 4,
+                'name' => 'Brown Sugar Boba Milk',
+                'description' => 'Fresh milk with brown sugar syrup and chewy boba pearls.',
+                'price' => 5.75,
+                'image' => '/assets/images/products/brown-sugar-boba.jpg',
+                'category' => 'milk-tea'
+            ],
+            // Add more products as needed
+        ];
+        
+        $toppings = [
+            [
+                'id' => 1,
+                'name' => 'Boba Pearls',
+                'price' => 0.75
+            ],
+            [
+                'id' => 2,
+                'name' => 'Grass Jelly',
+                'price' => 0.75
+            ],
+            [
+                'id' => 3,
+                'name' => 'Pudding',
+                'price' => 0.75
+            ],
+            [
+                'id' => 4,
+                'name' => 'Aloe Vera',
+                'price' => 0.75
+            ],
+            [
+                'id' => 5,
+                'name' => 'Cheese Foam',
+                'price' => 1.00
+            ],
+            [
+                'id' => 6,
+                'name' => 'Fresh Fruit',
+                'price' => 1.00
+            ],
+            [
+                'id' => 7,
+                'name' => 'Red Bean',
+                'price' => 0.75
+            ],
+            [
+                'id' => 8,
+                'name' => 'Coconut Jelly',
+                'price' => 0.75
+            ]
+        ];
+        
+        $product = isset($products[$id]) ? $products[$id] : null;
+        
+        if (!$product) {
+            // Handle product not found
+            $_SESSION['error'] = 'Product not found';
+            header('Location: /order');
+            exit;
+        }
+        
+        $this->views('order_details', [
+            'title' => 'Customize Your Drink',
+            'product' => $product,
+            'toppings' => $toppings
         ]);
     }
     
@@ -309,260 +398,41 @@ class OrdersController extends BaseController {
     
     public function cart() {
         // In a real application, you would fetch the cart items from the database
-        // For now, we'll use session data
-        $cartItems = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
-        
-        // Calculate totals
-        $subtotal = 0;
-        foreach ($cartItems as $item) {
-            $subtotal += $item['total_price'];
-        }
-        
-        $tax = $subtotal * 0.08; // 8% tax
-        $total = $subtotal + $tax;
+        // For now, we'll create sample data
+        $cartItems = [
+            [
+                'id' => 1,
+                'product_id' => 1,
+                'product_name' => 'Classic Milk Tea',
+                'size' => 'medium',
+                'sugar' => '50%',
+                'ice' => '100%',
+                'toppings' => ['Boba Pearls', 'Pudding'],
+                'quantity' => 1,
+                'price' => 6.00,
+                'image' => '/assets/images/products/classic-milk-tea.jpg'
+            ],
+            [
+                'id' => 2,
+                'product_id' => 9,
+                'product_name' => 'Strawberry Smoothie',
+                'size' => 'large',
+                'sugar' => '70%',
+                'ice' => '30%',
+                'toppings' => ['Fresh Fruit'],
+                'quantity' => 2,
+                'price' => 13.00,
+                'image' => '/assets/images/products/strawberry-smoothie.jpg'
+            ]
+        ];
         
         $this->views('cart', [
             'title' => 'Your Cart',
             'cartItems' => $cartItems,
-            'subtotal' => $subtotal,
-            'tax' => $tax,
-            'total' => $total
+            'subtotal' => 19.00,
+            'tax' => 1.52,
+            'total' => 20.52
         ]);
-    }
-    
-    public function checkout() {
-        // Check if cart is empty
-        if (!isset($_SESSION['cart']) || empty($_SESSION['cart'])) {
-            $_SESSION['error'] = 'Your cart is empty';
-            $this->redirect('/order');
-            exit;
-        }
-        
-        // Get cart items
-        $cartItems = $_SESSION['cart'];
-        
-        // Calculate totals
-        $subtotal = 0;
-        foreach ($cartItems as $item) {
-            $subtotal += $item['total_price'];
-        }
-        
-        $tax = $subtotal * 0.08; // 8% tax
-        $total = $subtotal + $tax;
-        
-        $this->views('checkout', [
-            'title' => 'Checkout',
-            'cartItems' => $cartItems,
-            'subtotal' => $subtotal,
-            'tax' => $tax,
-            'total' => $total
-        ]);
-    }
-    
-    public function processPayment() {
-        // Check if request is POST
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            http_response_code(405); // Method Not Allowed
-            echo json_encode(['success' => false, 'message' => 'Method not allowed']);
-            exit;
-        }
-        
-        // Get JSON data from request body
-        $json = file_get_contents('php://input');
-        $data = json_decode($json, true);
-        
-        if (!$data || !isset($data['payment_method'])) {
-            http_response_code(400); // Bad Request
-            echo json_encode(['success' => false, 'message' => 'Invalid request data']);
-            exit;
-        }
-        
-        $paymentMethod = $data['payment_method'];
-        
-        // In a real application, you would:
-        // 1. Process the payment with a payment gateway
-        // 2. Create an order in the database
-        // 3. Clear the cart
-        
-        // Generate a unique order ID
-        $orderId = 'ORD' . date('YmdHis') . rand(100, 999);
-        
-        // For now, we'll just simulate a successful payment
-        $response = [
-            'success' => true,
-            'message' => 'Payment processed successfully',
-            'order_id' => $orderId,
-            'payment_method' => $paymentMethod
-        ];
-        
-        // Clear the cart
-        $_SESSION['cart'] = [];
-        
-        echo json_encode($response);
-        exit;
-    }
-    
-    public function removeFromCart() {
-        // Check if request is POST
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            http_response_code(405); // Method Not Allowed
-            echo json_encode(['success' => false, 'message' => 'Method not allowed']);
-            exit;
-        }
-        
-        // Get JSON data from request body
-        $json = file_get_contents('php://input');
-        $data = json_decode($json, true);
-        
-        if (!$data || !isset($data['id'])) {
-            http_response_code(400); // Bad Request
-            echo json_encode(['success' => false, 'message' => 'Invalid request data']);
-            exit;
-        }
-        
-        $itemId = $data['id'];
-        
-        // Find and remove the item from the cart
-        if (isset($_SESSION['cart'])) {
-            foreach ($_SESSION['cart'] as $key => $item) {
-                if ($item['id'] === $itemId) {
-                    unset($_SESSION['cart'][$key]);
-                    $_SESSION['cart'] = array_values($_SESSION['cart']); // Reindex array
-                    break;
-                }
-            }
-        }
-        
-        echo json_encode([
-            'success' => true,
-            'message' => 'Item removed from cart',
-            'cart_count' => isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0
-        ]);
-        exit;
-    }
-    
-    public function updateCartItem() {
-        // Check if request is POST
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            http_response_code(405); // Method Not Allowed
-            echo json_encode(['success' => false, 'message' => 'Method not allowed']);
-            exit;
-        }
-        
-        // Get JSON data from request body
-        $json = file_get_contents('php://input');
-        $data = json_decode($json, true);
-        
-        if (!$data || !isset($data['id']) || !isset($data['quantity'])) {
-            http_response_code(400); // Bad Request
-            echo json_encode(['success' => false, 'message' => 'Invalid request data']);
-            exit;
-        }
-        
-        $itemId = $data['id'];
-        $quantity = intval($data['quantity']);
-        
-        // Validate quantity
-        if ($quantity < 1) {
-            http_response_code(400); // Bad Request
-            echo json_encode(['success' => false, 'message' => 'Quantity must be at least 1']);
-            exit;
-        }
-        
-        // Update the item in the cart
-        if (isset($_SESSION['cart'])) {
-            foreach ($_SESSION['cart'] as $key => $item) {
-                if ($item['id'] === $itemId) {
-                    $_SESSION['cart'][$key]['quantity'] = $quantity;
-                    $_SESSION['cart'][$key]['total_price'] = $_SESSION['cart'][$key]['price'] * $quantity;
-                    break;
-                }
-            }
-        }
-        
-        echo json_encode([
-            'success' => true,
-            'message' => 'Cart item updated',
-            'cart_count' => isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0
-        ]);
-        exit;
-    }
-    
-    public function clearCart() {
-        // Check if request is POST
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            http_response_code(405); // Method Not Allowed
-            echo json_encode(['success' => false, 'message' => 'Method not allowed']);
-            exit;
-        }
-        
-        // Clear the cart
-        $_SESSION['cart'] = [];
-        
-        echo json_encode([
-            'success' => true,
-            'message' => 'Cart cleared',
-            'cart_count' => 0
-        ]);
-        exit;
-    }
-
-    // Add a new method to get product details by ID
-    public function getProductDetails() {
-        // Check if request is POST
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            http_response_code(405); // Method Not Allowed
-            echo json_encode(['success' => false, 'message' => 'Method not allowed']);
-            exit;
-        }
-        
-        // Get JSON data from request body
-        $json = file_get_contents('php://input');
-        $data = json_decode($json, true);
-        
-        if (!$data || !isset($data['product_id'])) {
-            http_response_code(400); // Bad Request
-            echo json_encode(['success' => false, 'message' => 'Invalid request data']);
-            exit;
-        }
-        
-        $productId = $data['product_id'];
-        
-        // In a real application, you would fetch the product from the database
-        // For now, we'll use our sample data
-        $products = [
-            1 => [
-                'id' => 1,
-                'name' => 'Taiwan Milk Tea',
-                'description' => 'A classic Taiwanese milk tea with a perfect blend of black tea and creamy milk, offering a smooth and rich taste.',
-                'price' => 1.75,
-                'image' => '/assets/image/products/1.png',
-                'category' => 'milk-tea'
-            ],
-            2 => [
-                'id' => 2,
-                'name' => 'Thai Tea Brown Sugar Red Bean',
-                'description' => 'A rich and creamy Thai tea with brown sugar syrup, complemented by sweet red beans for an added texture and flavor.',
-                'price' => 2.50,
-                'image' => '/assets/image/products/2.png',
-                'category' => 'milk-tea'
-            ],
-            // Add more products as needed
-        ];
-        
-        // Check if product exists
-        if (!isset($products[$productId])) {
-            http_response_code(404); // Not Found
-            echo json_encode(['success' => false, 'message' => 'Product not found']);
-            exit;
-        }
-        
-        // Return product details
-        echo json_encode([
-            'success' => true,
-            'product' => $products[$productId]
-        ]);
-        exit;
     }
 }
 
