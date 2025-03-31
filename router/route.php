@@ -1,7 +1,5 @@
 <?php
-namespace YourNamespace;
-
-require_once "router/Router.php";
+require_once "Router.php";
 require_once "controllers/BaseController.php";
 require_once "controllers/WelcomeController.php";
 require_once "controllers/FavoritesController.php";
@@ -11,30 +9,12 @@ require_once "controllers/BookingController.php";
 require_once "controllers/AuthController.php";
 require_once "controllers/AdminController.php";
 require_once "controllers/ProductController.php";
-require_once "controllers/FeedbackController.php";
 require_once "controllers/UserController.php";
 require_once "controllers/DashboardController.php";
 require_once "controllers/PaymentController.php";
 require_once "controllers/CashController.php";
 require_once "controllers/ReceiptController.php";
 require_once "controllers/Admin/AdminFeedbackController.php";
-
-use YourNamespace\Router;
-use YourNamespace\Controllers\WelcomeController;
-use YourNamespace\Controllers\OrdersController;
-use YourNamespace\Controllers\BookingController;
-use YourNamespace\Controllers\FavoritesController;
-use YourNamespace\Controllers\SettingsController;
-use YourNamespace\Controllers\AuthController;
-use YourNamespace\Controllers\AdminController;
-use YourNamespace\Controllers\ProductController;
-use YourNamespace\Controllers\FeedbackController;
-use YourNamespace\Controllers\UserController;
-use YourNamespace\Controllers\DashboardController;
-use YourNamespace\Controllers\PaymentController;
-use YourNamespace\Controllers\CashController;
-use YourNamespace\Controllers\ReceiptController;
-use YourNamespace\Controllers\Admin\AdminFeedbackController;
 
 $route = new Router();
 
@@ -106,6 +86,7 @@ $route->post("/feedback/submit-review", [FeedbackController::class, 'submitRevie
 $route->post("/feedback/submit-suggestion", [FeedbackController::class, 'submitSuggestion']);
 $route->post("/feedback/submit-report", [FeedbackController::class, 'submitReport']);
 
+// Settings routes
 $route->get("/settings", [SettingsController::class, 'index']);
 
 // Admin routes
@@ -135,5 +116,7 @@ $route->get("/admin/feedback/edit/{id}", [FeedbackController::class, 'edit']);
 $route->post("/admin/feedback/update/{id}", [FeedbackController::class, 'update']);
 $route->post("/admin/feedback/delete/{id}", [FeedbackController::class, 'delete']);
 
+// Execute the route
 $route->route();
+
 
