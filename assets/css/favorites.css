@@ -26,12 +26,11 @@
     padding: 2rem;
     box-shadow: 0 4px 15px rgba(255, 94, 98, 0.2);
     position: relative;
-    overflow: hidden;
     border-radius: var(--favorites-radius);
     transition: var(--favorites-transition);
     position: relative;
     bottom: 16px;
-    right: 40px;
+    right: 10px;
 }
 
 .favorites-header h2 {
@@ -248,7 +247,6 @@
 .favorites-card {
     background: white;
     border-radius: var(--favorites-radius);
-    overflow: hidden;
     box-shadow: var(--favorites-shadow);
     transition: var(--favorites-transition);
     position: relative;
@@ -301,7 +299,6 @@
 
 .favorites-image {
     height: 200px;
-    overflow: hidden;
 }
 
 .favorites-image img {
@@ -337,7 +334,6 @@
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
-    overflow: hidden;
 }
 
 

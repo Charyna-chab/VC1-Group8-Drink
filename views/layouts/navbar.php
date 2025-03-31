@@ -45,17 +45,8 @@
         <img src="<?php echo isset($_SESSION['user']) ? $_SESSION['user']['avatar'] : '/assets/image/placeholder.svg?height=40&width=40'; ?>" alt="User Profile">
     </div>
     <div class="notification-icon" id="notificationBtn">
-        <a href="/"></a><i class="fas fa-bell"></i>
+        <i class="fas fa-bell"></i>
         <span class="notification-badge" id="notificationBadge">0</span>
     </div>
 </header>
-<div class="more-menu" id="moreMenu">
-    <div class="more-menu-items">
-        <a href="/about"><i class="fas fa-info-circle"></i> About Us</a>
-        <a href="/contact"><i class="fas fa-envelope"></i> Contact Us</a>
-        <a href="/careers"><i class="fas fa-briefcase"></i> Careers</a>
-        <a href="/franchise"><i class="fas fa-store"></i> Franchise</a>
-        <a href="/blog"><i class="fas fa-blog"></i> Blog</a>
-        <a href="/faq"><i class="fas fa-question-circle"></i> FAQ</a>
-    </div>
-</div>
+

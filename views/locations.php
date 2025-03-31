@@ -1,301 +1,222 @@
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gift Cards - XING FU CHA</title>
-    <style>
-        /* Gift Card Page Styles */
-        :root {
-          --primary-color: #e83e8c; /* Pink - brand color */
-          --secondary-color: #6f42c1; /* Purple - accent color */
-          --dark-color: #343a40;
-          --light-color: #f8f9fa;
-          --success-color: #28a745;
-          --border-color: #dee2e6;
-          --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-          --transition: all 0.3s ease;
-        }
-        /* General Reset */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background-color: #f4f4f4;
-        }
-
-        /* Hero Section */
-        .hero {
-            background-color: white;
-            color: black;
-            padding: 50px 0;
-            text-align: center;
-        }
-
-        .hero h1 {
-            font-size: 3em;
-            margin-bottom: 10px;
-        }
-
-        .hero p {
-            font-size: 1.2em;
-        }
-
-        /* Location Search Section */
-        .location-search {
-            background-color: #fff;
-            padding: 20px 0;
-        }
-
-        .location-search .container {
-            text-align: center;
-        }
-
-        .location-search input {
-            padding: 10px;
-            width: 300px;
-            border: 1px solid #ddd;
-            border-radius: 25px;
-        }
-
-        #searchBtn {
-            background-color: #ff6769;
-            color: white;
-            border: none;
-            padding: 10px 50px;
-            border-radius: 25px;
-            cursor: pointer;
-            margin-left: 10px;
-        }
-
-        #searchBtn i {
-            margin-right: 5px;
-        }
-
-        /* Featured Locations Section */
-        .featured-locations {
-            background-color: #f9f9f9;
-            padding: 40px 0;
-        }
-
-        .featured-locations h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 2em;
-        }
-
-        .locations-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-        }
-
-        .location-card {
-            background-color: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s;
-        }
-
-        .location-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .location-card img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-
-        .location-info {
-            padding: 20px;
-        }
-
-        .location-info h3 {
-            margin-bottom: 10px;
-            font-size: 1.5em;
-        }
-
-        .location-info p {
-            margin-bottom: 10px;
-            font-size: 1.1em;
-        }
-
-        .location-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .location-actions a {
-            text-decoration: none;
-            color: black;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-        }
-
-        .location-actions a:hover {
-            color: #ff6769;
-        }
-
-        /* Button styles */
-        .btn-directions, .btn-order {
-            background-color: #e27d60;
-            color: white;
-            padding: 10px 15px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 1em;
-            transition: background-color 0.3s ease;
-        }
-
-        .btn-directions:hover, .btn-order:hover {
-            background-color: #d16450;
-        }
-
-        .fas {
-            margin-right: 5px;
-        }
+<?php require_once __DIR__ . '/layouts/header.php'; ?>
+<?php require_once __DIR__ . '/layouts/navbar.php'; ?>
 
 
-       
-    </style>
-</head>
-<header>
-    <img src="/assets/image/logo/logo.png" alt="XING FU CHA Logo">
-    <nav>
-        <ul>
-            <li><a href="/gift-card">Gift Card</a></li>
-            <li><a href="/locations">Locations</a></li>
-            <li><a href="/join-the-team">Join The Team</a></li>
-            <li><a href="/more">More</a></li>
-        </ul>
-    </nav>
-    <div class="search-bar">
-        <input type="text" placeholder="What do you want to eat today...">
-    </div>
-    <button class="order-search">Order Now</button>
-    <div class="language-selector">
-        <div class="selected-language">
-            <img src="/assets/image/flags/en.png" alt="English" id="currentLanguageFlag">
-            <span id="currentLanguage">English</span>
-            <i class="fas fa-chevron-down"></i>
-        </div>
-        <div class="language-dropdown">
-            <a href="/lang/en" class="language-option" data-lang="en">
-                <img src="/assets/image/flags/en.png" alt="English">
-                <span>English</span>
-            </a>
-            <a href="/lang/zh" class="language-option" data-lang="zh">
-                <img src="/assets/image/flags/zh.png" alt="Chinese">
-                <span>中文</span>
-            </a>
-            <a href="/lang/es" class="language-option" data-lang="es">
-                <img src="/assets/image/flags/es.png" alt="Spanish">
-                <span>Español</span>
-            </a>
-            <a href="/lang/fr" class="language-option" data-lang="fr">
-                <img src="/assets/image/flags/fr.png" alt="French">
-                <span>Français</span>
-            </a>
-            <a href="/lang/ja" class="language-option" data-lang="ja">
-                <img src="/assets/image/flags/ja.png" alt="Japanese">
-                <span>日本語</span>
-            </a>
-        </div>
-    </div>
-    <div class="user-profile" id="userProfileBtn">
-        <img src="<?php echo isset($_SESSION['user']) ? $_SESSION['user']['avatar'] : '/assets/image/placeholder.svg?height=40&width=40'; ?>" alt="User Profile">
-    </div>
-    <div class="notification-icon" id="notificationBtn">
-        <a href="/"></a><i class="fas fa-bell"></i>
-        <span class="notification-badge" id="notificationBadge">0</span>
-    </div>
-</header>
-
-<section class="hero">
+<div class="section-praents-location">
+<section class="location-finder">
     <div class="container">
-        <h1>Our Locations</h1>
-        <p>Find XING FU CHA near you</p>
+        <div class="finder-container">
+            <div class="finder-header">
+                <h2>Find a Store</h2>
+                <p>Visit us for authentic bubble tea and a warm atmosphere</p>
+            </div>
+            <div class="filter-toggle">
+                <button id="filterToggleBtn">
+                    <i class="fas fa-filter"></i> Filter Options <i class="fas fa-chevron-down"></i>
+                </button>
+            </div>
+            
+            <div class="filter-options" id="filterOptions">
+                <div class="filter-section">
+                    <h3>Features</h3>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="features" value="wifi">
+                            <span class="checkbox-custom"></span>
+                            <span class="checkbox-label">Free WiFi</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="features" value="seating">
+                            <span class="checkbox-custom"></span>
+                            <span class="checkbox-label">Indoor Seating</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="features" value="parking">
+                            <span class="checkbox-custom"></span>
+                            <span class="checkbox-label">Parking</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="features" value="delivery">
+                            <span class="checkbox-custom"></span>
+                            <span class="checkbox-label">Delivery</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="filter-section">
+                    <h3>Hours</h3>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="hours" value="early">
+                            <span class="checkbox-custom"></span>
+                            <span class="checkbox-label">Open Early (Before 8AM)</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="hours" value="late">
+                            <span class="checkbox-custom"></span>
+                            <span class="checkbox-label">Open Late (After 8PM)</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="hours" value="weekend">
+                            <span class="checkbox-custom"></span>
+                            <span class="checkbox-label">Open Weekends</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="filter-actions">
+                    <button id="applyFilters" class="apply-filters-btn">Apply Filters</button>
+                    <button id="resetFilters" class="reset-filters-btn">Reset</button>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 
-<section class="location-search">
+<section class="location-results">
     <div class="container">
-        <div class="search-container">
-            <input type="text" id="locationSearch" placeholder="Enter your city or zip code">
-            <button id="searchBtn"><i class="fas fa-search"></i> Find Stores</button>
+        <div class="results-container">
+            <div class="map-container">
+                <div id="storeMap"></div>
+            </div>
+            
+            <div class="locations-list">
+                <div class="locations-header">
+                    <h3>Nearby Locations</h3>
+                    <div class="sort-options">
+                        <label for="sortBy">Sort by:</label>
+                        <select id="sortBy">
+                            <option value="distance">Distance</option>
+                            <option value="name">Name</option>
+                            <option value="rating">Rating</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="locations-grid">
+                    <?php foreach ($locations as $location): ?>
+                        <div class="location-card" data-id="<?php echo $location['id']; ?>" data-lat="<?php echo $location['lat']; ?>" data-lng="<?php echo $location['lng']; ?>">
+                            <div class="location-image">
+                                <img src="<?php echo $location['image']; ?>" alt="<?php echo $location['name']; ?>">
+                                <div class="location-badge">
+                                    <?php if (isset($location['isNew']) && $location['isNew']): ?>
+                                        <span class="badge new-badge">New</span>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                            <div class="location-info">
+                                <h3><?php echo $location['name']; ?></h3>
+                                <div class="location-meta">
+                                    <p><i class="fas fa-map-marker-alt"></i> <?php echo $location['address']; ?></p>
+                                    <p><i class="fas fa-clock"></i> <?php echo $location['hours']; ?></p>
+                                    <p><i class="fas fa-phone"></i> +855 <?php echo rand(10, 99); ?> <?php echo rand(100, 999); ?> <?php echo rand(100, 999); ?></p>
+                                </div>
+                                <div class="location-features">
+                                    <?php 
+                                    $features = [
+                                        1 => ['wifi', 'seating'],
+                                        2 => ['wifi', 'seating', 'parking'],
+                                        3 => ['wifi', 'parking'],
+                                        4 => ['wifi', 'seating'],
+                                        5 => ['wifi', 'seating', 'parking']
+                                    ];
+                                    
+                                    if (isset($features[$location['id']])): 
+                                        foreach ($features[$location['id']] as $feature):
+                                    ?>
+                                        <span class="feature-tag">
+                                            <?php if ($feature === 'wifi'): ?>
+                                                <i class="fas fa-wifi"></i> WiFi
+                                            <?php elseif ($feature === 'seating'): ?>
+                                                <i class="fas fa-chair"></i> Seating
+                                            <?php elseif ($feature === 'parking'): ?>
+                                                <i class="fas fa-parking"></i> Parking
+                                            <?php endif; ?>
+                                        </span>
+                                    <?php 
+                                        endforeach;
+                                    endif; 
+                                    ?>
+                                </div>
+                                <div class="location-actions">
+                                    <a href="https://maps.google.com/?q=<?php echo urlencode($location['address']); ?>" class="btn-directions" target="_blank">
+                                        <i class="fas fa-directions"></i> Directions
+                                    </a>
+                                    <a href="/locations/details/<?php echo $location['id']; ?>" class="btn-view-details">
+                                        <i class="fas fa-info-circle"></i> Details
+                                    </a>
+                                    <a href="/order?location=<?php echo $location['id']; ?>" class="btn-order-online">
+                                        <i class="fas fa-shopping-cart"></i> Order
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+                
+                <div id="no-results-message" class="no-results" style="display: none;">
+                    <i class="fas fa-search"></i>
+                    <h3>No locations found</h3>
+                    <p>Try adjusting your search or filters to find a store near you.</p>
+                </div>
+                
+                <div class="pagination">
+                    <button class="pagination-btn prev" disabled><i class="fas fa-chevron-left"></i> Previous</button>
+                    <div class="pagination-info">Page <span id="currentPage">1</span> of <span id="totalPages">1</span></div>
+                    <button class="pagination-btn next" disabled>Next <i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
         </div>
     </div>
 </section>
 
 <section class="featured-locations">
     <div class="container">
-        <h2>Featured Locations</h2>
+        <div class="section-header">
+            <h2>Featured Locations</h2>
+            <p>Visit our most popular stores</p>
+        </div>
         
-        <div class="locations-grid">
-            <div class="location-card">
-                <img src="/assets/image/locations/location1.jpg" alt="Downtown Store">
-                <div class="location-info">
-                    <h3>PTT</h3>
-                    <p><i class="fas fa-map-marker-alt"></i> PTT Gas Station, Maeda Street 2004, Phnom Penh 12352</p>
-                    <p><i class="fas fa-clock"></i> 08:00 AM - 18:15 PM</p>
-                    <div class="location-actions">
-                        <a href="#" class="btn-directions"><i class="fas fa-directions"></i> Get Directions</a>
+        <div class="featured-slider">
+            <div class="featured-location">
+                <div class="featured-image">
+                    <img src="/assets/image/locations/featured1.jpg" alt="PTT Location">
+                    <div class="featured-overlay">
+                        <h3>PTT</h3>
+                        <p>Our flagship store with a full menu</p>
+                        <a href="/locations/details/1" class="featured-btn">Learn More</a>
                     </div>
                 </div>
             </div>
             
-            <div class="location-card">
-                <img src="/assets/image/locations/location2.jpg" alt="Westside Store">
-                <div class="location-info">
-                    <h3>Toul Kork</h3>
-                    <p><i class="fas fa-map-marker-alt"></i> Xin Fu Cha Toul Kork Phnom Penh</p>
-                    <p><i class="fas fa-clock"></i> 08:00 AM - 18:15 PM</p>
-                    <div class="location-actions">
-                        <a href="#" class="btn-directions"><i class="fas fa-directions"></i> Get Directions</a>
+            <div class="featured-location">
+                <div class="featured-image">
+                    <img src="/assets/image/locations/featured2.jpg" alt="Toul Kork Location">
+                    <div class="featured-overlay">
+                        <h3>Toul Kork</h3>
+                        <p>Cozy atmosphere with indoor seating</p>
+                        <a href="/locations/details/2" class="featured-btn">Learn More</a>
                     </div>
                 </div>
             </div>
             
-            <div class="location-card">
-                <img src="/assets/image/locations/location3.jpg" alt="Eastside Store">
-                <div class="location-info">
-                    <h3>Steng Meanchey</h3>
-                    <p><i class="fas fa-map-marker-alt"></i> XIN FU CHA Steng Meanchey Veng Sreng Blvd, Phnom Penh 12000</p>
-                    <p><i class="fas fa-clock"></i> 08:00 AM - 18:15 PM</p>
-                    <div class="location-actions">
-                        <a href="#" class="btn-directions"><i class="fas fa-directions"></i> Get Directions</a>
+            <div class="featured-location">
+                <div class="featured-image">
+                    <img src="/assets/image/locations/featured3.jpg" alt="BKK Location">
+                    <div class="featured-overlay">
+                        <h3>BKK</h3>
+                        <p>Student-friendly with study spaces</p>
+                        <a href="/locations/details/4" class="featured-btn">Learn More</a>
                     </div>
                 </div>
             </div>
-            <div class="location-card">
-                <img src="/assets/image/locations/location3.jpg" alt="Eastside Store">
-                <div class="location-info">
-                    <h3>BKK</h3>
-                    <p><i class="fas fa-map-marker-alt"></i> XIN FU CHA BKK 292 15 St 292, Phnom Penh</p>
-                    <p><i class="fas fa-clock"></i> 08:00 AM - 18:15 PM</p>
-                    <div class="location-actions">
-                        <a href="#" class="btn-directions"><i class="fas fa-directions"></i> Get Directions</a>
-                    </div>
-                </div>
-            </div>
-            <div class="location-card">
-                <img src="/assets/image/locations/location3.jpg" alt="Eastside Store">
-                <div class="location-info">
-                    <h3>TK</h3>
-                    <p><i class="fas fa-map-marker-alt"></i> Xin Fu Cha TK 66 Street 317, Phnom Penh 120408</p>
-                    <p><i class="fas fa-clock"></i> 08:00 AM - 18:15 PM</p>
-                    <div class="location-actions">
-                        <a href="#" class="btn-directions"><i class="fas fa-directions"></i> Get Directions</a>
+            <div class="featured-location">
+                <div class="featured-image">
+                    <img src="/assets/image/locations/featured3.jpg" alt="BKK Location">
+                    <div class="featured-overlay">
+                        <h3>TK</h3>
+                        <p>Student-friendly with study spaces</p>
+                        <a href="/locations/details/4" class="featured-btn">Learn More</a>
                     </div>
                 </div>
             </div>
@@ -303,5 +224,44 @@
     </div>
 </section>
 
+<section class="location-cta">
+    <div class="container">
+        <div class="cta-content">
+            <h2>Can't Find a Location Near You?</h2>
+            <p>We're expanding! Let us know where you'd like to see a XING FU CHA store next.</p>
+            <button id="suggestLocationBtn" class="cta-button">Suggest a Location</button>
+        </div>
+    </div>
+</section>
+
+<div id="suggestLocationModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h2>Suggest a New Location</h2>
+        <form id="suggestLocationForm">
+            <div class="form-group">
+                <label for="suggestion-name">Your Name</label>
+                <input type="text" id="suggestion-name" required>
+            </div>
+            <div class="form-group">
+                <label for="suggestion-email">Your Email</label>
+                <input type="email" id="suggestion-email" required>
+            </div>
+            <div class="form-group">
+                <label for="suggestion-location">Suggested Location</label>
+                <input type="text" id="suggestion-location" placeholder="City, District, or Area" required>
+            </div>
+            <div class="form-group">
+                <label for="suggestion-reason">Why this location?</label>
+                <textarea id="suggestion-reason" rows="3"></textarea>
+            </div>
+            <button type="submit" class="submit-btn">Submit Suggestion</button>
+        </form>
+    </div>
+</div>
+</div>
+
+
 <?php $pageScript = '/assets/js/locations.js'; ?>
+<?php require_once __DIR__ . '/layouts/footer.php'; ?>
 

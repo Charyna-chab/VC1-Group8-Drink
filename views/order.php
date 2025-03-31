@@ -57,6 +57,34 @@
     </div>
 </section>
 
+<!-- Add this right before the Order Panel div -->
+<!-- Product Detail Modal -->
+<div id="productDetailModal" class="product-detail-modal">
+    <div class="product-detail-content">
+        <button class="close-btn">&times;</button>
+        <div class="product-detail-image">
+            <img id="detailProductImage" src="/placeholder.svg" alt="Product Image">
+        </div>
+        <div class="product-detail-info">
+            <h3 id="detailProductName">Product Name</h3>
+            <p id="detailProductDescription" class="product-detail-desc">Product description goes here.</p>
+            <div class="product-detail-price">$<span id="detailProductPrice">0.00</span></div>
+            <div class="product-detail-category">
+                <span>Category: </span>
+                <span id="detailProductCategory">Category</span>
+            </div>
+            <div class="product-detail-actions">
+                <button id="customizeOrderBtn" class="btn-primary">
+                    <i class="fas fa-mug-hot"></i> Customize Order
+                </button>
+                <button id="addToFavoritesBtn" class="btn-outline">
+                    <i class="far fa-heart"></i> Add to Favorites
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Order Panel -->
 <div id="orderPanel" class="order-panel">
     <div class="order-panel-content">
@@ -144,20 +172,65 @@
     </div>
 </div>
 
+<!-- Cart Panel -->
+<div id="cartPanel" class="cart-panel">
+    <div class="cart-panel-content">
+        <button class="close-btn">&times;</button>
+        <h3>Your Cart</h3>
+        <div id="cartItems" class="cart-items">
+            <!-- Cart items will be dynamically added here -->
+        </div>
+        <div class="cart-summary">
+            <div class="summary-item">
+                <span>Subtotal:</span>
+                <span id="cartSubtotal">$0.00</span>
+            </div>
+            <div class="summary-item">
+                <span>Tax (8%):</span>
+                <span id="cartTax">$0.00</span>
+            </div>
+            <div class="summary-item total">
+                <span>Total:</span>
+                <span id="cartTotal">$0.00</span>
+            </div>
+        </div>
+        <div class="cart-actions">
+            <button id="clearCartBtn" class="btn-outline">
+                <i class="fas fa-trash"></i> Clear Cart
+            </button>
+            <a href="/checkout" id="checkoutBtn" class="btn-primary">
+                <i class="fas fa-check"></i> Checkout
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Notification Panel -->
+<div id="notificationPanel" class="notification-panel">
+    <div class="notification-header">
+        <h3>Notifications</h3>
+        <button class="close-btn">&times;</button>
+    </div>
+    <div id="notificationList" class="notification-list">
+        <!-- Notifications will be dynamically added here -->
+        <div class="empty-notification">
+            <i class="fas fa-bell-slash"></i>
+            <p>No notifications yet</p>
+        </div>
+    </div>
+</div>
+
 <!-- Overlay -->
 <div id="overlay"></div>
-
-<!-- Toast Container -->
-<div class="toast-container" id="toastContainer"></div>
 
 <!-- Include CSS files -->
 <link rel="stylesheet" href="/assets/css/order-panel.css">
 <link rel="stylesheet" href="/assets/css/cart.css">
+<link rel="stylesheet" href="/assets/css/notification.css">
 
 <!-- Include JavaScript files -->
 <script src="/assets/js/cart.js"></script>
 <script src="/assets/js/order.js"></script>
-<script src="/assets/js/navbar.js"></script>
-
-<?php require_once __DIR__ . '/layouts/footer.php'; ?>
+<script src="/assets/js/notification.js"></script>
+\
 
