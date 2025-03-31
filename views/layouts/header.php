@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="/assets/css/cart.css">
     <link rel="stylesheet" href="/assets/css/payment.css">
     <link rel="stylesheet" href="/assets/css/sidebar.css">
+   
     
     <link rel="apple-touch-icon" sizes="76x76" href="/assets/image/logo/logo.png">
     <link rel="icon" type="image/png" href="/assets/image/logo/logo.png">

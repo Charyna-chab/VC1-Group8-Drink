@@ -3,59 +3,48 @@ namespace YourNamespace\Controllers;
 
 class MoreController {
     public function index() {
-        // Set page title
-        $pageTitle = "More Options - XING FU CHA";
-        
-        // Include header
-        include __DIR__ . '/../views/partials/header.php';
-        
-        // Include the more page
+        // Render the more menu page
         include __DIR__ . '/../views/more.php';
-        
-        // Include footer
-        include __DIR__ . '/../views/partials/footer.php';
     }
     
     public function aboutUs() {
-        // Set page title
-        $pageTitle = "About Us - XING FU CHA";
-        
-        // Include header
-        include __DIR__ . '/../views/partials/header.php';
-        
-        // Include the about us page
+        // Render the about us page
         include __DIR__ . '/../views/about-us.php';
-        
-        // Include footer
-        include __DIR__ . '/../views/partials/footer.php';
     }
     
-    public function contactUs() {
-        // Set page title
-        $pageTitle = "Contact Us - XING FU CHA";
-        
-        // Include header
-        include __DIR__ . '/../views/layouts/header.php';
-        
-        // Include the contact us page
-        include __DIR__ . '/../views/contact-us.php';
-        
-        // Include footer
-        include __DIR__ . '/../views/layouts/footer.php';
+    public function menu() {
+        // Render the full menu page
+        include __DIR__ . '/../views/menu.php';
+    }
+    
+    public function rewards() {
+        // Render the rewards program page
+        include __DIR__ . '/../views/rewards.php';
+    }
+    
+    public function catering() {
+        // Render the catering page
+        include __DIR__ . '/../views/catering.php';
+    }
+    
+    public function franchising() {
+        // Render the franchising page
+        include __DIR__ . '/../views/franchising.php';
+    }
+    
+    public function contact() {
+        // Render the contact us page
+        include __DIR__ . '/../views/contact.php';
     }
     
     public function faq() {
-        // Set page title
-        $pageTitle = "FAQ - XING FU CHA";
-        
-        // Include header
-        include __DIR__ . '/../views/layouts/header.php';
-        
-        // Include the FAQ page
+        // Render the FAQ page
         include __DIR__ . '/../views/faq.php';
-        
-        // Include footer
-        include __DIR__ . '/../views/layouts/footer.php';
+    }
+    
+    public function blog() {
+        // Render the blog page
+        include __DIR__ . '/../views/blog.php';
     }
 }
 
