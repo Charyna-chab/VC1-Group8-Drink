@@ -11,6 +11,9 @@ require_once __DIR__ . "/../Controllers/AuthController.php";
 require_once __DIR__ . "/../Controllers/GiftCardController.php"; // Add this line
 require_once __DIR__ . "/../Controllers/MoreController.php"; // Add this line
 
+
+
+
 use YourNamespace\Router;
     
 $route = new Router();
