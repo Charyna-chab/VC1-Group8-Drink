@@ -16,40 +16,34 @@
             <!-- Settings Item with Role Info -->
             <li class="settings-item">
                 <a href="#" class="settings-trigger">
-                    <i class="fas fa-cogs" style="color: #ff5e62;"></i> Setting
+                    <i class="fas fa-user-cog" style="color: #ff5e62;"></i> Account
                     <i class="fas fa-chevron-down arrow" style="color: #ff5e62;"></i>
                 </a>
                 <div class="settings-dropdown">
                     <div class="role-info">
-                        <p><strong>Current Role:</strong> 
+                        <p><strong>Current Access:</strong> 
                             <span class="role-badge <?php echo isset($user_role) ? $user_role : 'guest'; ?>">
                                 <?php echo isset($user_role) ? ucfirst($user_role) : 'Guest'; ?>
                             </span>
                         </p>
                         <div class="role-actions">
-                            <?php if (isset($user_role) && $user_role === 'user') : ?>
-                                <a href="/admin-login"><i class="fas fa-user-shield" style="color: #ff5e62;"></i> Switch to Admin</a>
-                            <?php elseif (isset($user_role) && $user_role === 'admin') : ?>
-                                <a href="/user-login"><i class="fas fa-user" style="color: #ff5e62;"></i> Switch to User</a>
-                            <?php endif; ?>
+                            <a href="/login" class="role-switch-btn"><i class="fas fa-user"></i> User Login</a>
+                            <a href="/admin-login" class="role-switch-btn"><i class="fas fa-user-shield"></i> Admin Login</a>
                         </div>
                     </div>
                 </div>
             </li>
         </ul>
 
-        <!-- Logout Section -->
-        <div class="logout-section">
+        <!-- User Greeting Section -->
+        <?php if (isset($username)) : ?>
+        <div class="user-section">
             <hr>
-            <div class="logout-container">
-                <?php if (isset($username)) : ?>
-                    <p class="user-greeting">Hello, <?php echo $username; ?></p>
-                <?php endif; ?>
-                <a href="/logout" class="logout-btn">
-                    <i class="fas fa-sign-out-alt" style="color: #ff5e62;"></i> Logout
-                </a>
+            <div class="user-container">
+                <p class="user-greeting">Hello, <?php echo $username; ?></p>
             </div>
         </div>
+        <?php endif; ?>
     </div>
 </aside>
 </div>
@@ -140,11 +134,11 @@
 
     .settings-dropdown {
         display: none;
-        background: #fff5f5; /* Light pink background */
+        background: #fff5f5;
         border-radius: 0 0 8px 8px;
         margin-top: -8px;
         padding: 15px;
-        border: 1px solid #ffd6d6; /* Light pink border */
+        border: 1px solid #ffd6d6;
         border-top: none;
         animation: fadeIn 0.3s ease;
     }
@@ -178,38 +172,40 @@
     }
 
     .role-badge.admin {
-        background: #ff5e62; /* Red-pink color */
+        background: #ff5e62;
         color: white;
     }
 
     .role-badge.user {
-        background: #ff8a98; /* Lighter pink */
+        background: #ff8a98;
         color: white;
     }
 
     .role-badge.guest {
-        background: #ffb3c1; /* Lightest pink */
+        background: #ffb3c1;
         color: white;
     }
 
     .role-actions {
         margin-top: 10px;
         padding-top: 10px;
-        border-top: 1px solid #ffd6d6; /* Light pink border */
+        border-top: 1px solid #ffd6d6;
     }
 
     .role-actions a {
-        display: flex;
+        display: block;
         align-items: center;
-        color: #ff5e62; /* Red-pink text */
+        color: #ff5e62;
         font-size: 13px;
         text-decoration: none;
-        padding: 5px 0;
+        padding: 8px 0;
         transition: all 0.2s;
+        margin-bottom: 5px;
     }
 
     .role-actions a:hover {
-        color: #ff2d4d; /* Darker red on hover */
+        color: #ff2d4d;
+        text-decoration: underline;
     }
 
     .role-actions i {
@@ -217,8 +213,8 @@
         font-size: 14px;
     }
 
-    /* Logout Section Styles */
-    .logout-section {
+    /* User Section Styles */
+    .user-section {
         margin-top: auto;
         padding-bottom: 20px;
     }
@@ -227,24 +223,7 @@
         margin: 10px 0;
         font-size: 14px;
         color: #555;
-    }
-
-    .logout-btn {
-        display: flex;
-        align-items: center;
-        padding: 10px 15px;
-        color: #ff5e62; /* Red-pink color */
-        text-decoration: none;
-        border-radius: 6px;
-        transition: all 0.2s ease;
-    }
-
-    .logout-btn:hover {
-        background-color: rgba(255, 94, 98, 0.1);
-    }
-
-    .logout-btn i {
-        margin-right: 10px;
+        text-align: center;
     }
 
     /* Animations */
@@ -273,6 +252,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (settingsTrigger) {
         settingsTrigger.addEventListener('click', function(e) {
             e.preventDefault();
+            e.stopPropagation();
             settingsItem.classList.toggle('active');
         });
     }
@@ -285,5 +265,13 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     });
+
+    // Prevent dropdown from closing when clicking inside it
+    const settingsDropdown = document.querySelector('.settings-dropdown');
+    if (settingsDropdown) {
+        settingsDropdown.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+    }
 });
 </script>
