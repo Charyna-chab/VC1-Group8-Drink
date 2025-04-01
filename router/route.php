@@ -1,4 +1,5 @@
 <?php
+require_once "Router.php";
 
 
 
@@ -13,7 +14,6 @@ require_once "controllers/BookingController.php";
 require_once "controllers/AuthController.php";
 require_once "controllers/AdminController.php";
 require_once "controllers/ProductController.php";
-require_once "controllers/FeedbackController.php";
 require_once "controllers/UserController.php";
 require_once "controllers/DashboardController.php";
 require_once "controllers/PaymentController.php";
@@ -128,6 +128,7 @@ $route->post("/feedback/submit-review", [FeedbackController::class, 'submitRevie
 $route->post("/feedback/submit-suggestion", [FeedbackController::class, 'submitSuggestion']);
 $route->post("/feedback/submit-report", [FeedbackController::class, 'submitReport']);
 
+// Settings routes
 $route->get("/settings", [SettingsController::class, 'index']);
 
 // Admin routes
@@ -174,3 +175,5 @@ $route->get("/faq", [MoreController::class, 'faq']);
 $route->get("/blog", [MoreController::class, 'blog']);
 
 $route->route();
+
+
