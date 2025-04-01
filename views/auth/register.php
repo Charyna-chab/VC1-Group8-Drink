@@ -1,3 +1,9 @@
+<?php
+// Start session if not already started
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -46,7 +52,6 @@
             </div>
           </div>
 
-          <!-- Add these fields to your registration form -->
           <div class="form-group">
             <label for="phone">Phone Number</label>
             <div class="input-with-icon">
@@ -62,6 +67,7 @@
               <input type="text" id="address" name="address" placeholder="Enter your address">
             </div>
           </div>
+          
           <div class="form-group">
             <label for="password">Password</label>
             <div class="input-with-icon">
@@ -90,6 +96,9 @@
           <button type="submit" class="auth-button">Create Account</button>
 
           <div class="divider">
+              class="auth-button">Create Account</button>
+
+          <div class="divider">
             <span class="divider-text">Or register with</span>
           </div>
 
@@ -115,4 +124,3 @@
   <script src="/assets/js/auth.js"></script>
 </body>
 </html>
-

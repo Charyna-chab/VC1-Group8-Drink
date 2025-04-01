@@ -1,5 +1,10 @@
 <?php
 require_once "Router.php";
+
+
+
+
+require_once "router/Router.php";
 require_once "controllers/BaseController.php";
 require_once "controllers/WelcomeController.php";
 require_once "controllers/FavoritesController.php";
@@ -77,7 +82,6 @@ $route->get("/join-the-team", [JoinTheTeamController::class, 'index']);
 $route->get("/join-the-team/apply", [JoinTheTeamController::class, 'apply']);
 $route->post("/join-the-team/apply", [JoinTheTeamController::class, 'apply']);
 $route->get("/join-the-team/success", [JoinTheTeamController::class, 'success']);
-
 
 // Original routes
 $route->get("/welcome", [WelcomeController::class, 'welcome']);
