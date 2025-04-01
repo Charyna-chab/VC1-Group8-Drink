@@ -11,7 +11,7 @@
     <div class="search-bar">
         <input type="text" placeholder="What do you want to eat today...">
     </div>
-    <button class="order-search">Order Now</button>
+    
     <div class="language-selector">
         <div class="selected-language">
             <img src="/assets/image/flags/en.png" alt="English" id="currentLanguageFlag">
@@ -44,9 +44,6 @@
     <div class="user-profile" id="userProfileBtn">
         <img src="<?php echo isset($_SESSION['user']) ? $_SESSION['user']['avatar'] : '/assets/image/placeholder.svg?height=40&width=40'; ?>" alt="User Profile">
     </div>
-    <div class="notification-icon" id="notificationBtn">
-        <i class="fas fa-bell"></i>
-        <span class="notification-badge" id="notificationBadge">0</span>
-    </div>
+
 </header>
 
