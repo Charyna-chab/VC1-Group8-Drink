@@ -18,6 +18,10 @@ require_once "controllers/PaymentController.php";
 require_once "controllers/CashController.php";
 require_once "controllers/ReceiptController.php";
 require_once "controllers/Admin/AdminFeedbackController.php";
+require_once "controllers/GiftCardController.php";
+require_once "controllers/LocationsController.php";
+require_once "controllers/JoinTheTeamController.php";
+require_once "controllers/MoreController.php";
 
 use YourNamespace\Router;
 use YourNamespace\Controllers\WelcomeController;
@@ -35,6 +39,10 @@ use YourNamespace\Controllers\PaymentController;
 use YourNamespace\Controllers\CashController;
 use YourNamespace\Controllers\ReceiptController;
 use YourNamespace\Controllers\Admin\AdminFeedbackController;
+use YourNamespace\Controllers\GiftCardController;
+use YourNamespace\Controllers\LocationsController;
+use YourNamespace\Controllers\JoinTheTeamController;
+use YourNamespace\Controllers\MoreController;
 
 $route = new Router();
 
@@ -61,7 +69,22 @@ $route->post("/forgot-password", [AuthController::class, 'forgotPassword']);
 $route->post("/update-profile", [AuthController::class, 'updateProfile']);
 $route->post("/update-password", [AuthController::class, 'updatePassword']);
 
+// Add these new routes for gift card, locations, join the team, and more
+$route->get("/gift-card", [GiftCardController::class, 'index']);
+$route->get("/gift-card/details/{id}", [GiftCardController::class, 'details']);
 
+$route->get("/locations", [LocationsController::class, 'index']);
+$route->get("/locations/details/{id}", [LocationsController::class, 'details']);
+
+$route->get("/join-the-team", [JoinTheTeamController::class, 'index']);
+$route->get("/join-the-team/apply", [JoinTheTeamController::class, 'apply']);
+$route->post("/join-the-team/apply", [JoinTheTeamController::class, 'apply']);
+$route->get("/join-the-team/success", [JoinTheTeamController::class, 'success']);
+
+$route->get("/more", [MoreController::class, 'index']);
+$route->get("/about-us", [MoreController::class, 'aboutUs']);
+$route->get("/contact-us", [MoreController::class, 'contactUs']);
+$route->get("/faq", [MoreController::class, 'faq']);
 
 // Original routes
 $route->get("/welcome", [WelcomeController::class, 'welcome']);
@@ -114,6 +137,38 @@ $route->post("/admin/products/store", [ProductController::class, 'store']);
 $route->get("/admin/products/edit/{id}", [ProductController::class, 'edit']);
 $route->post("/admin/products/update/{id}", [ProductController::class, 'update']);
 $route->post("/admin/products/delete/{id}", [ProductController::class, 'delete']);
+
+// Admin User Management
+$route->get("/admin/users", [UserController::class, 'index']);
+$route->get("/admin/users/create", [UserController::class, 'create']);
+$route->post("/admin/users/store", [UserController::class, 'store']);
+$route->get("/admin/users/edit/{id}", [UserController::class, 'edit']);
+$route->post("/admin/users/update/{id}", [UserController::class, 'update']);
+$route->post("/admin/users/delete/{id}", [UserController::class, 'delete']);
+
+// Admin Feedback Management
+$route->get("/admin/feedback", [FeedbackController::class, 'index']);
+$route->get("/admin/feedback/create", [FeedbackController::class, 'create']);
+$route->post("/admin/feedback/store", [FeedbackController::class, 'store']);
+$route->get("/admin/feedback/edit/{id}", [FeedbackController::class, 'edit']);
+$route->post("/admin/feedback/update/{id}", [FeedbackController::class, 'update']);
+$route->post("/admin/feedback/delete/{id}", [FeedbackController::class, 'delete']);
+
+// New navigation routes
+$route->get("/gift-card", [GiftCardController::class, 'index']);
+$route->get("/locations", [LocationsController::class, 'index']);
+$route->get("/join-the-team", [JoinTheTeamController::class, 'index']);
+$route->get("/more", [MoreController::class, 'index']);
+
+// Additional pages from More menu
+$route->get("/about-us", [MoreController::class, 'aboutUs']);
+$route->get("/menu", [MoreController::class, 'menu']);
+$route->get("/rewards", [MoreController::class, 'rewards']);
+$route->get("/catering", [MoreController::class, 'catering']);
+$route->get("/franchising", [MoreController::class, 'franchising']);
+$route->get("/contact", [MoreController::class, 'contact']);
+$route->get("/faq", [MoreController::class, 'faq']);
+$route->get("/blog", [MoreController::class, 'blog']);
 
 $route->route();
 

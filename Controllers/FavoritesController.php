@@ -2,16 +2,6 @@
 namespace YourNamespace\Controllers;
 use YourNamespace\BaseController;
 class FavoritesController extends BaseController {
-    public function __construct() {
-        if (session_status() == PHP_SESSION_NONE) {
-            session_start();
-        }
-        
-        // Check if user is logged in
-        if (!isset($_SESSION['user_id']) && $this->requiresAuth()) {
-            $this->redirect('/login');
-        }
-    }
     
     // Method to determine if authentication is required
     protected function requiresAuth() {
@@ -214,4 +204,3 @@ class FavoritesController extends BaseController {
         exit;
     }
 }
-

@@ -29,7 +29,7 @@
     border-radius: var(--favorites-radius);
     transition: var(--favorites-transition);
     position: relative;
-    bottom: 16px;
+    bottom: 306px;
     right: 10px;
 }
 
@@ -190,6 +190,8 @@
     box-shadow: var(--favorites-shadow);
     max-width: 600px;
     margin: 2rem auto;
+    position: relative;
+    bottom: 280px;
 }
 
 .favorites-empty img {
@@ -239,6 +241,8 @@
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 1.5rem;
     margin-top: 2rem;
+    position: relative;
+    bottom: 300px;
 }
 
 

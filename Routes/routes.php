@@ -33,8 +33,5 @@ $routes->get('/feedback/create', [FeedbackController::class, 'create']);
 // $routes->put('/admin/feedback/update', [FeedbackController::class, 'update']);
 // $routes->delete('/admin/feedback/delete', [FeedbackController::class, 'destroy']);
 
-
-
-
 // dispatch
 $routes->dispatch();

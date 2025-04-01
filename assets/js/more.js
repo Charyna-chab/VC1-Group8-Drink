@@ -1,28 +1,29 @@
 document.addEventListener("DOMContentLoaded", () => {
     // Option card hover effects
     const optionCards = document.querySelectorAll(".option-card")
-  
     optionCards.forEach((card) => {
-      card.addEventListener("mouseenter", function () {
-        this.classList.add("hover")
-      })
-  
-      card.addEventListener("mouseleave", function () {
-        this.classList.remove("hover")
-      })
+        card.addEventListener("mouseenter", function() {
+            const icon = this.querySelector(".option-icon i")
+            if (icon) {
+                icon.classList.add("fa-bounce")
+            }
+        })
+
+        card.addEventListener("mouseleave", function() {
+            const icon = this.querySelector(".option-icon i")
+            if (icon) {
+                icon.classList.remove("fa-bounce")
+            }
+        })
     })
-  
-    // Add click animation
-    optionCards.forEach((card) => {
-      card.addEventListener("click", function () {
-        this.classList.add("clicked")
-  
-        // Remove the class after animation completes
-        setTimeout(() => {
-          this.classList.remove("clicked")
-        }, 300)
-      })
+
+    // Social media links tracking
+    const socialLinks = document.querySelectorAll(".social-item")
+    socialLinks.forEach((link) => {
+        link.addEventListener("click", function(e) {
+            // This would typically send analytics data
+            const platform = this.querySelector("span").textContent
+            console.log("Social media click:", platform)
+        })
     })
-  })
-  
-  
+})
