@@ -1,5 +1,7 @@
 <?php
-namespace YourNamespace;
+
+
+
 
 require_once "router/Router.php";
 require_once "controllers/BaseController.php";
@@ -80,7 +82,6 @@ $route->get("/join-the-team", [JoinTheTeamController::class, 'index']);
 $route->get("/join-the-team/apply", [JoinTheTeamController::class, 'apply']);
 $route->post("/join-the-team/apply", [JoinTheTeamController::class, 'apply']);
 $route->get("/join-the-team/success", [JoinTheTeamController::class, 'success']);
-
 
 // Original routes
 $route->get("/welcome", [WelcomeController::class, 'welcome']);
@@ -173,4 +174,3 @@ $route->get("/faq", [MoreController::class, 'faq']);
 $route->get("/blog", [MoreController::class, 'blog']);
 
 $route->route();
-

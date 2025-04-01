@@ -23,7 +23,6 @@ class BaseController {
                 die("View file not found: {$viewPath}. Please create this file.");
             }
             
-
             // Include the view
             require_once $viewPath;
             

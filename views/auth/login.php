@@ -1,18 +1,27 @@
+<?php
+// Start session (MUST BE AT VERY TOP)
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><?php echo isset($title) ? $title : 'Login - XING FU CHA'; ?></title>
+  <title><?php echo isset($title) ? $title : 'XING FU CHA'; ?></title>
   <link rel="icon" type="image/png" href="/assets/image/logo/logo.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
   <link rel="stylesheet" href="/assets/css/style.css">
   <link rel="stylesheet" href="/assets/css/auth.css">
+
 </head>
 <body>
+
+
+  <!-- MAIN CONTENT -->
   <div class="main-container">
-    <!-- Main Content -->
     <div class="auth-container">
       <!-- Left side - Form -->
       <div class="auth-form-container">
@@ -26,6 +35,13 @@
           <div class="auth-error">
             <i class="fas fa-exclamation-circle"></i>
             <span><?php echo $error; ?></span>
+          </div>
+        <?php endif; ?>
+
+        <?php if(isset($success)): ?>
+          <div class="auth-success">
+            <i class="fas fa-check-circle"></i>
+            <span><?php echo $success; ?></span>
           </div>
         <?php endif; ?>
 
@@ -89,7 +105,60 @@
     </div>
   </div>
 
-  <script src="/assets/js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Toggle settings dropdown
+        const settingsTrigger = document.querySelector('.settings-trigger');
+        const settingsItem = document.querySelector('.settings-item');
+        
+        if (settingsTrigger) {
+            settingsTrigger.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                settingsItem.classList.toggle('active');
+            });
+        }
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.settings-item')) {
+                if (settingsItem) {
+                    settingsItem.classList.remove('active');
+                }
+            }
+        });
+
+        // Prevent dropdown from closing when clicking inside it
+        const settingsDropdown = document.querySelector('.settings-dropdown');
+        if (settingsDropdown) {
+            settingsDropdown.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+        }
+
+        // Toggle password visibility
+        const togglePassword = document.querySelector('.toggle-password');
+        const password = document.querySelector('#password');
+        
+        if (togglePassword && password) {
+            togglePassword.addEventListener('click', function() {
+                const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+                password.setAttribute('type', type);
+                this.classList.toggle('fa-eye-slash');
+                this.classList.toggle('fa-eye');
+            });
+        }
+
+        // Close sidebar on mobile when clicking a link
+        const navLinks = document.querySelectorAll('.nav-list a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                if (window.innerWidth <= 992) {
+                    document.querySelector('.sidebar').classList.remove('active');
+                }
+            });
+        });
+    });
+  </script>
 </body>
 </html>
-

@@ -27,7 +27,7 @@
                             </span>
                         </p>
                         <div class="role-actions">
-                            <a href="/login" class="role-switch-btn"><i class="fas fa-user"></i> User Login</a>
+                            <a href="/logout" class="role-switch-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
                             <a href="/admin-login" class="role-switch-btn"><i class="fas fa-user-shield"></i> Admin Login</a>
                         </div>
                     </div>
@@ -37,10 +37,13 @@
 
         <!-- User Greeting Section -->
         <?php if (isset($username)) : ?>
-        <div class="user-section">
+            <div class="user-section">
             <hr>
             <div class="user-container">
                 <p class="user-greeting">Hello, <?php echo $username; ?></p>
+                <a href="/logout" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
             </div>
         </div>
         <?php endif; ?>
@@ -58,10 +61,11 @@
         position: fixed;
         top: 0;
         left: 0;
-        z-index: 100;
+        z-index: 1000;
         display: flex;
         flex-direction: column;
         padding: 20px 0;
+        transition: transform 0.3s ease;
     }
 
     .children-sidebar {
@@ -80,6 +84,11 @@
         width: 100px;
         height: auto;
         border-radius: 8px;
+        transition: transform 0.3s ease;
+    }
+
+    .branch-logo:hover {
+        transform: scale(1.05);
     }
 
     /* Navigation List Styles */
@@ -101,12 +110,13 @@
         color: #333333;
         text-decoration: none;
         border-radius: 6px;
-        transition: all 0.2s ease;
+        transition: all 0.3s ease;
     }
 
     .nav-list a:hover {
         background-color: rgba(255, 94, 98, 0.1);
         color: #ff5e62;
+        transform: translateX(5px);
     }
 
     .nav-list i {
@@ -193,7 +203,7 @@
     }
 
     .role-actions a {
-        display: block;
+        display: flex;
         align-items: center;
         color: #ff5e62;
         font-size: 13px;
@@ -224,6 +234,37 @@
         font-size: 14px;
         color: #555;
         text-align: center;
+    }
+
+    /* Logout Button Styles */
+    .logout-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        padding: 10px 15px;
+        background-color: #ff5e62;
+        color: white;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 14px;
+        margin-top: 10px;
+        transition: all 0.3s ease;
+    }
+
+    .logout-btn i {
+        margin-right: 8px;
+        font-size: 14px;
+    }
+
+    .logout-btn:hover {
+        background-color: #ff2d4d;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(255, 94, 98, 0.2);
+    }
+
+    .logout-btn:active {
+        transform: translateY(0);
     }
 
     /* Animations */
@@ -273,5 +314,32 @@ document.addEventListener('DOMContentLoaded', function() {
             e.stopPropagation();
         });
     }
+
+    // Handle logout and admin login clicks
+    const logoutBtn = document.querySelector('.logout-btn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.location.href = '/logout';
+        });
+    }
+
+    const adminLoginLinks = document.querySelectorAll('a[href="/admin-login"]');
+    adminLoginLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.location.href = '/admin-login';
+        });
+    });
+
+    // Close sidebar on mobile when clicking a link
+    const navLinks = document.querySelectorAll('.nav-list a:not(.settings-trigger)');
+    navLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            if (window.innerWidth <= 992) {
+                document.querySelector('.sidebar').classList.remove('active');
+            }
+        });
+    });
 });
 </script>

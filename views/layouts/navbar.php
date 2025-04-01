@@ -5,13 +5,9 @@
             <li><a href="/gift-card">Gift Card</a></li>
             <li><a href="/locations">Locations</a></li>
             <li><a href="/join-the-team">Join The Team</a></li>
-            <li><a href="#" id="moreMenuBtn">More</a></li>
         </ul>
     </nav>
-    <div class="search-bar">
-        <input type="text" placeholder="What do you want to eat today...">
-    </div>
-    
+
 
     <div class="user-profile" id="userProfileBtn">
         <img src="<?php echo isset($_SESSION['user']) ? $_SESSION['user']['avatar'] : '/assets/image/placeholder.svg?height=40&width=40'; ?>" alt="User Profile">

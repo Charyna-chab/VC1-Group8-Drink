@@ -1,23 +1,25 @@
 <?php
-class Database
-{
-    private $pdo;
-    function __construct()
-    {
-        $servername = "localhost";
-        $username = "root";
-        $password = "";
-        $dbname = "drink_db";
+class Database {
+    private $host = 'localhost';
+    private $db_name = 'drink_db';
+    private $username = 'root';
+    private $password = '';
+    private $conn;
+
+    public function getConnection() {
+        $this->conn = null;
+
         try {
-            $this->pdo = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-        } catch (PDOException $e) {
-            echo "Connection failed: " . $e->getMessage();
+            $this->conn = new PDO(
+                "mysql:host=" . $this->host . ";dbname=" . $this->db_name,
+                $this->username,
+                $this->password
+            );
+            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch(PDOException $e) {
+            echo "Connection Error: " . $e->getMessage();
         }
-    }
-    public function query($sql,$params=[]){
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute($params);
-        return $stmt;
-        
+
+        return $this->conn;
     }
 }
