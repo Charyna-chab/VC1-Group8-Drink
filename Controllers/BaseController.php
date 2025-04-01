@@ -23,14 +23,7 @@ class BaseController {
                 die("View file not found: {$viewPath}. Please create this file.");
             }
             
-            // Include header
-            require_once 'views/layouts/header.php';
-            
-            // Include sidebar if not welcome page
-            if (strpos($views, 'welcome/') !== 0) {
-                require_once 'views/layouts/sidebar.php';
-            }
-            
+
             // Include the view
             require_once $viewPath;
             
