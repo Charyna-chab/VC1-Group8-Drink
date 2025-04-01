@@ -165,28 +165,29 @@ class FeedbackController
     /**
      * Remove the specified feedback from database
      */
-    public function destroy()
+    public function destroy($id)
     {
+        echo "1";
         // Validate CSRF token
-        if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
-            die("Invalid CSRF token.");
-        }
+        // if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+        //     die("Invalid CSRF token.");
+        // }
         
-        $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+        // $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
         
-        if (!$id) {
-            die("Invalid feedback ID.");
-        }
+        // if (!$id) {
+        //     die("Invalid feedback ID.");
+        // }
         
-        // Delete from database
-        $stmt = $this->pdo->prepare("DELETE FROM feedback WHERE id = ?");
+        // // Delete from database
+        // $stmt = $this->pdo->prepare("DELETE FROM feedback WHERE id = ?");
         
-        if ($stmt->execute([$id])) {
-            header("Location: /feedback?deleted=true");
-            exit();
-        } else {
-            echo "Error deleting feedback.";
-        }
+        // if ($stmt->execute([$id])) {
+        //     header("Location: /feedback?deleted=true");
+        //     exit();
+        // } else {
+        //     echo "Error deleting feedback.";
+        // }
     }
     
     /**
