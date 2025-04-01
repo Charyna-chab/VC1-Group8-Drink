@@ -12,35 +12,7 @@
         <input type="text" placeholder="What do you want to eat today...">
     </div>
     
-    <div class="language-selector">
-        <div class="selected-language">
-            <img src="/assets/image/flags/en.png" alt="English" id="currentLanguageFlag">
-            <span id="currentLanguage">English</span>
-            <i class="fas fa-chevron-down"></i>
-        </div>
-        <div class="language-dropdown">
-            <a href="/lang/en" class="language-option" data-lang="en">
-                <img src="/assets/image/flags/en.png" alt="English">
-                <span>English</span>
-            </a>
-            <a href="/lang/zh" class="language-option" data-lang="zh">
-                <img src="/assets/image/flags/zh.png" alt="Chinese">
-                <span>中文</span>
-            </a>
-            <a href="/lang/es" class="language-option" data-lang="es">
-                <img src="/assets/image/flags/es.png" alt="Spanish">
-                <span>Español</span>
-            </a>
-            <a href="/lang/fr" class="language-option" data-lang="fr">
-                <img src="/assets/image/flags/fr.png" alt="French">
-                <span>Français</span>
-            </a>
-            <a href="/lang/ja" class="language-option" data-lang="ja">
-                <img src="/assets/image/flags/ja.png" alt="Japanese">
-                <span>日本語</span>
-            </a>
-        </div>
-    </div>
+
     <div class="user-profile" id="userProfileBtn">
         <img src="<?php echo isset($_SESSION['user']) ? $_SESSION['user']['avatar'] : '/assets/image/placeholder.svg?height=40&width=40'; ?>" alt="User Profile">
     </div>
