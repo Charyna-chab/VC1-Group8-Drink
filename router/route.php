@@ -1,5 +1,7 @@
 <?php
-namespace YourNamespace;
+
+
+
 
 require_once "router/Router.php";
 require_once "controllers/BaseController.php";
@@ -21,7 +23,7 @@ require_once "controllers/Admin/AdminFeedbackController.php";
 require_once "controllers/GiftCardController.php";
 require_once "controllers/LocationsController.php";
 require_once "controllers/JoinTheTeamController.php";
-require_once "controllers/MoreController.php";
+
 
 use YourNamespace\Router;
 use YourNamespace\Controllers\WelcomeController;
@@ -42,7 +44,7 @@ use YourNamespace\Controllers\Admin\AdminFeedbackController;
 use YourNamespace\Controllers\GiftCardController;
 use YourNamespace\Controllers\LocationsController;
 use YourNamespace\Controllers\JoinTheTeamController;
-use YourNamespace\Controllers\MoreController;
+
 
 $route = new Router();
 
@@ -80,11 +82,6 @@ $route->get("/join-the-team", [JoinTheTeamController::class, 'index']);
 $route->get("/join-the-team/apply", [JoinTheTeamController::class, 'apply']);
 $route->post("/join-the-team/apply", [JoinTheTeamController::class, 'apply']);
 $route->get("/join-the-team/success", [JoinTheTeamController::class, 'success']);
-
-$route->get("/more", [MoreController::class, 'index']);
-$route->get("/about-us", [MoreController::class, 'aboutUs']);
-$route->get("/contact-us", [MoreController::class, 'contactUs']);
-$route->get("/faq", [MoreController::class, 'faq']);
 
 // Original routes
 $route->get("/welcome", [WelcomeController::class, 'welcome']);
@@ -177,4 +174,3 @@ $route->get("/faq", [MoreController::class, 'faq']);
 $route->get("/blog", [MoreController::class, 'blog']);
 
 $route->route();
-
