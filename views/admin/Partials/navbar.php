@@ -1,5 +1,3 @@
-
-
 <!-- End of Sidebar -->
 
 <!-- Content Wrapper -->
@@ -169,13 +167,12 @@
                     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span class="mr-2 d-none d-lg-inline text-light small">Charyna Chab</span>
-                        <img class="img-profile rounded-circle"
-                            src="/assets/image/07.jpg">
+                        <img class="img-profile rounded-circle" src="/assets/image/07.jpg">
                     </a>
                     <!-- Dropdown - User Information -->
                     <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                         aria-labelledby="userDropdown">
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#adminProfileModal">
                             <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                             Profile
                         </a>
@@ -198,6 +195,186 @@
             </ul>
 
         </nav>
+
+        <!-- Admin Profile Modal -->
+        <div class="modal fade" id="adminProfileModal" tabindex="-1" aria-labelledby="adminProfileModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-right modal-md h-100 my-0">
+                <div class="modal-content h-100 shadow-lg border-0">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header bg-gradient-primary text-white px-4 py-3">
+                        <h5 class="modal-title font-weight-bold" id="adminProfileModalLabel">Edit Profile</h5>
+                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+
+                    <!-- Modal Body with Form -->
+                    <div class="modal-body p-4 bg-light">
+                        <!-- Profile Picture with Upload -->
+                        <div class="text-center mb-4">
+                            <div class="d-inline-block position-relative">
+                                <img src="/assets/image/07.jpg" class="rounded-circle shadow-sm border border-2 border-white profile-img" width="120" alt="Profile">
+                                <span class="position-absolute bottom-0 end-0 bg-success rounded-circle p-2 border border-3 border-white"></span>
+                            </div>
+                            <div class="mt-3">
+                                <label for="profileImageUpload" class="btn btn-sm btn-outline-primary rounded-pill px-3">Change Photo</label>
+                                <input type="file" id="profileImageUpload" accept="image/*" class="d-none" onchange="previewImage(event)">
+                            </div>
+                        </div>
+
+                        <!-- Profile Form -->
+                        <form>
+                            <div class="mb-3">
+                                <label for="profileName" class="form-label text-muted small font-weight-bold">Full Name</label>
+                                <input type="text" class="form-control form-control-lg rounded-pill" id="profileName" value="Charyna Chab" placeholder="Enter your name">
+                            </div>
+                            <div class="mb-3">
+                                <label for="profileEmail" class="form-label text-muted small font-weight-bold">Email Address</label>
+                                <input type="email" class="form-control form-control-lg rounded-pill" id="profileEmail" value="admin@example.com" placeholder="Enter your email">
+                            </div>
+                            <div class="text-center">
+                                <span class="badge bg-primary text-white px-3 py-1 rounded-pill">Administrator</span>
+                            </div>
+                        </form>
+
+                        <!-- Details Card -->
+                        <div class="card border-0 shadow-sm bg-white rounded-lg mt-4">
+                            <div class="card-body p-3">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <span class="text-muted small">Last Active</span>
+                                    <span class="font-weight-medium text-dark">Today, 14:30</span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="text-muted small">Member Since</span>
+                                    <span class="font-weight-medium text-dark">Jan 15, 2023</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal Footer -->
+                    <div class="modal-footer border-top-0 p-4 bg-light">
+                        <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary rounded-pill px-4">Save Changes</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <style>
+            /* Custom CSS for right-aligned modal */
+            .modal-dialog-right {
+                position: fixed;
+                right: 0;
+                margin-right: 0;
+                max-width: 400px;
+                transition: transform 0.3s ease-out;
+            }
+
+            .modal.fade .modal-dialog-right {
+                transform: translateX(100%);
+            }
+
+            .modal.show .modal-dialog-right {
+                transform: translateX(0);
+            }
+
+            .bg-gradient-primary {
+                background: linear-gradient(45deg, #007bff, #00b4ff);
+            }
+
+            .rounded-lg {
+                border-radius: 0.5rem !important;
+            }
+
+            .shadow-sm {
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
+            }
+
+            .form-control {
+                border-color: #e0e0e0;
+                transition: all 0.3s ease;
+            }
+
+            .form-control:focus {
+                border-color: #007bff;
+                box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+            }
+
+            .btn {
+                transition: all 0.3s ease;
+            }
+
+            .btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            }
+
+            .form-label {
+                margin-bottom: 0.3rem;
+            }
+
+            .profile-img {
+                object-fit: cover;
+                height: 120px;
+            }
+        </style>
+
+        <script>
+            // JavaScript for image preview
+            function previewImage(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const imgElement = document.querySelector('.profile-img');
+                        imgElement.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+        </script>
+
+        <style>
+            /* Custom CSS for right-aligned modal */
+            .modal-dialog-right {
+                position: fixed;
+                right: 0;
+                margin-right: 0;
+                max-width: 400px;
+                transition: transform 0.3s ease-out;
+            }
+
+            .modal.fade .modal-dialog-right {
+                transform: translateX(100%);
+            }
+
+            .modal.show .modal-dialog-right {
+                transform: translateX(0);
+            }
+
+            .bg-gradient-primary {
+                background: linear-gradient(45deg, #007bff, #00b4ff);
+            }
+
+            .rounded-lg {
+                border-radius: 0.5rem !important;
+            }
+
+            .shadow-sm {
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
+            }
+
+            .btn {
+                transition: all 0.3s ease;
+            }
+
+            .btn:hover {
+                transform: translateY(-2px);
+            }
+        </style>
         <style>
             .fas {
                 color: #f0f0f0;

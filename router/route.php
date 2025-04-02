@@ -147,7 +147,10 @@ $route->post("/admin/users/store", [UserController::class, 'store']);
 $route->get("/admin/users/edit/{id}", [UserController::class, 'edit']);
 $route->post("/admin/users/update/{id}", [UserController::class, 'update']);
 $route->post("/admin/users/delete/{id}", [UserController::class, 'delete']);
-
+// Add this to your routes in route.php
+$route->get("/admin/profile", [AdminController::class, 'profile']);
+$route->post("/admin/profile/update", [AdminController::class, 'updateProfile']);
+$route->post("/admin/profile/update-image", [AdminController::class, 'updateProfileImage']);
 // Admin Feedback Management
 $route->get("/admin/feedback", [FeedbackController::class, 'index']);
 $route->get("/admin/feedback/create", [FeedbackController::class, 'create']);
