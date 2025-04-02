@@ -175,6 +175,7 @@
 </head>
 
 <body>
+
     <!-- Sidebar -->
     <ul class="navbar-nav bg-white sidebar sidebar-light accordion" id="accordionSidebar">
         <!-- Sidebar - Brand -->
