@@ -24,6 +24,7 @@ $product_count = $_SESSION['product_count'] ?? 0;
 <body id="page-top">
     <div id="wrapper">
     <?php require './views/admin/Partials/sidebar.php' ?>
+    <?php require './views/admin/Partials/navbar.php' ?>
 
         <!-- Begin Page Content -->
         <div class="container-fluid">
