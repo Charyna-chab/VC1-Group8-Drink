@@ -4,6 +4,7 @@ require_once './Controllers/Admin/Users/UserController.php';
 require_once './Controllers/Admin/Products/ProductController.php';
 require_once './Controllers/Admin/DashboardController.php';
 require_once './Controllers/Admin/FeedbackController.php'; // Add this line
+require_once './Controllers/Connection/ConnectController.php'; // connect function product
 
 $routes = new Router();
 
@@ -28,10 +29,5 @@ $routes->get('/product/delete', [ProductController::class, 'destroy']);
 // feedback
 $routes->get('/feedback', [FeedbackController::class, 'index']);
 $routes->get('/feedback/create', [FeedbackController::class, 'create']);
-// $routes->post('/admin/feedback/store', [FeedbackController::class, 'store']);
-// $routes->get('/admin/feedback/edit', [FeedbackController::class, 'edit']);
-// $routes->put('/admin/feedback/update', [FeedbackController::class, 'update']);
-// $routes->delete('/admin/feedback/delete', [FeedbackController::class, 'destroy']);
 
-// dispatch
 $routes->dispatch();
