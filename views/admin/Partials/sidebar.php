@@ -35,7 +35,7 @@
 
     <!-- Nav Item - Pages Collapse Menu -->
     <li class="nav-item">
-        <a class="nav-link collapsed" href="/product">
+        <a class="nav-link collapsed" href="/views/products/product-list.php">
             <i class="fas fa-fw fa-folder"></i>
             <span>Products</span>
         </a>
