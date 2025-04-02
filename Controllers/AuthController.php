@@ -5,6 +5,8 @@ require_once 'Database/database.php';
 
 class AuthController extends BaseController {
     private $conn;
+    private $admin_email = "charyna.chab@student.passerellesnumeriques.org";
+    private $admin_password = "ryna!@#1649";
     
     public function __construct() {
         if (session_status() == PHP_SESSION_NONE) {
@@ -16,6 +18,37 @@ class AuthController extends BaseController {
         $this->conn = $database->getConnection();
         
         $this->checkRememberMe();
+        $this->ensureAdminExists();
+    }
+
+    // Make sure our admin account exists in the database
+    private function ensureAdminExists() {
+        try {
+            // Check if admin exists
+            $stmt = $this->conn->prepare("SELECT user_id FROM users WHERE email = :email");
+            $stmt->bindParam(':email', $this->admin_email);
+            $stmt->execute();
+            
+            if ($stmt->rowCount() == 0) {
+                // Admin doesn't exist, create it
+                $stmt = $this->conn->prepare(
+                    "INSERT INTO users (name, email, phone, address, password, role) 
+                     VALUES ('Admin User', :email, '0123456789', 'Admin Address', :password, 'admin')"
+                );
+                $stmt->bindParam(':email', $this->admin_email);
+                $stmt->bindParam(':password', $this->admin_password);
+                $stmt->execute();
+            } else {
+                // Admin exists, make sure role is set to admin
+                $user = $stmt->fetch(\PDO::FETCH_ASSOC);
+                $stmt = $this->conn->prepare("UPDATE users SET role = 'admin', password = :password WHERE user_id = :user_id");
+                $stmt->bindParam(':password', $this->admin_password);
+                $stmt->bindParam(':user_id', $user['user_id']);
+                $stmt->execute();
+            }
+        } catch (\PDOException $e) {
+            // Silently fail - we'll try again next time
+        }
     }
 
     public function index() {
@@ -57,34 +90,29 @@ class AuthController extends BaseController {
                     
                     // Verify password (in a real app, use password_verify with hashed passwords)
                     if ($password === $user['password']) {
-                        // Set session variables
-                        $_SESSION['user_id'] = $user['user_id'];
-                        $_SESSION['user'] = [
-                            'id' => $user['user_id'],
-                            'name' => $user['name'],
-                            'email' => $user['email'],
-                            'avatar' => $user['image'] ? 'data:image/jpeg;base64,' . base64_encode($user['image']) : '/assets/image/placeholder.svg?height=40&width=40',
-                            'role' => $user['role'],
-                            'phone' => $user['phone'] ?? '',
-                            'address' => $user['address'] ?? ''
-                        ];
-                        
-                        if ($remember) {
-                            // Create a secure remember me token (in a real app, use a more secure method)
-                            $token = bin2hex(random_bytes(32));
-                            setcookie('remember_token', $token, time() + (86400 * 30), '/');
-                            
-                            // Store token in database (in a real app)
-                            // $stmt = $this->conn->prepare("UPDATE users SET remember_token = :token WHERE user_id = :user_id");
-                            // $stmt->bindParam(':token', $token);
-                            // $stmt->bindParam(':user_id', $user['user_id']);
-                            // $stmt->execute();
-                        }
-                        
-                        // Redirect based on role
+                        // Check if this is an admin trying to login through user login
                         if ($user['role'] === 'admin') {
-                            $this->redirect('/admin-dashboard');
+                            $error = 'Admin users must login through the admin login page.';
                         } else {
+                            // Set session variables for regular user
+                            $_SESSION['user_id'] = $user['user_id'];
+                            $_SESSION['user'] = [
+                                'id' => $user['user_id'],
+                                'name' => $user['name'],
+                                'email' => $user['email'],
+                                'avatar' => $user['image'] ? 'data:image/jpeg;base64,' . base64_encode($user['image']) : '/assets/image/placeholder.svg?height=40&width=40',
+                                'role' => $user['role'],
+                                'phone' => $user['phone'] ?? '',
+                                'address' => $user['address'] ?? ''
+                            ];
+                            
+                            if ($remember) {
+                                // Create a secure remember me token
+                                $token = bin2hex(random_bytes(32));
+                                setcookie('remember_token', $token, time() + (86400 * 30), '/');
+                            }
+                            
+                            // Redirect to order page
                             $this->redirect('/order');
                         }
                     } else {
@@ -355,40 +383,50 @@ class AuthController extends BaseController {
             $email = $_POST['email'] ?? '';
             $password = $_POST['password'] ?? '';
 
-            try {
-                // Check if admin exists
-                $stmt = $this->conn->prepare("SELECT user_id, name, email, password FROM users WHERE email = :email AND role = 'admin'");
-                $stmt->bindParam(':email', $email);
-                $stmt->execute();
-                
-                if ($stmt->rowCount() > 0) {
-                    $admin = $stmt->fetch(\PDO::FETCH_ASSOC);
+            // Check if this is our designated admin email
+            if ($email === $this->admin_email) {
+                try {
+                    // Check if admin exists in database
+                    $stmt = $this->conn->prepare("SELECT user_id, name, email, password FROM users WHERE email = :email AND role = 'admin'");
+                    $stmt->bindParam(':email', $email);
+                    $stmt->execute();
                     
-                    // Verify password (in a real app, use password_verify)
-                    if ($password === $admin['password']) {
-                        // Generate verification code
-                        $verification_code = rand(100000, 999999);
+                    if ($stmt->rowCount() > 0) {
+                        $admin = $stmt->fetch(\PDO::FETCH_ASSOC);
                         
-                        // In a real application, you would send this code via email
-                        // For demo purposes, we'll store it in the session
-                        $_SESSION['admin_email'] = $email;
-                        $_SESSION['admin_id'] = $admin['user_id'];
-                        $_SESSION['admin_name'] = $admin['name'];
-                        $_SESSION['verification_code'] = $verification_code;
-                        $_SESSION['verification_time'] = time();
-                        
-                        // For demo purposes, display the code (in a real app, this would be sent via email)
-                        $_SESSION['demo_code'] = $verification_code;
-                        
-                        $this->redirect('/admin-verification');
+                        // Verify password
+                        if ($password === $admin['password']) {
+                            // Generate verification code
+                            $verification_code = rand(100000, 999999);
+                            
+                            // In a real application, you would send this code via email
+                            // For demo purposes, we'll store it in the session
+                            $_SESSION['admin_email'] = $email;
+                            $_SESSION['admin_id'] = $admin['user_id'];
+                            $_SESSION['admin_name'] = $admin['name'];
+                            $_SESSION['verification_code'] = $verification_code;
+                            $_SESSION['verification_time'] = time();
+                            
+                            // For demo purposes, display the code (in a real app, this would be sent via email)
+                            $_SESSION['demo_code'] = $verification_code;
+                            
+                            // In a real application, you would send an email with the verification code
+                            // sendVerificationEmail($email, $verification_code);
+                            
+                            $this->redirect('/admin-verification');
+                        } else {
+                            $error = 'Invalid password.';
+                        }
                     } else {
-                        $error = 'Invalid password.';
+                        // Admin doesn't exist in database yet, create it
+                        $this->ensureAdminExists();
+                        $error = 'Please try logging in again.';
                     }
-                } else {
-                    $error = 'Invalid admin credentials.';
+                } catch (\PDOException $e) {
+                    $error = 'Database error: ' . $e->getMessage();
                 }
-            } catch (\PDOException $e) {
-                $error = 'Database error: ' . $e->getMessage();
+            } else {
+                $error = 'Invalid admin credentials.';
             }
         }
 
@@ -420,6 +458,9 @@ class AuthController extends BaseController {
                     'avatar' => '/assets/image/placeholder.svg?height=40&width=40',
                     'role' => 'admin'
                 ];
+                
+                // Log the successful admin login
+                $this->logAdminLogin($_SESSION['admin_id']);
                 
                 // Clear verification data
                 unset($_SESSION['admin_email']);
@@ -455,6 +496,20 @@ class AuthController extends BaseController {
             'error' => $error,
             'demo_code' => $demo_code // For demo purposes only
         ]);
+    }
+
+    private function logAdminLogin($admin_id) {
+        // In a real application, you would log admin logins for security purposes
+        // For now, we'll just add a placeholder
+        try {
+            // You could create a table called admin_logs and insert a record
+            // $stmt = $this->conn->prepare("INSERT INTO admin_logs (admin_id, login_time, ip_address) VALUES (:admin_id, NOW(), :ip)");
+            // $stmt->bindParam(':admin_id', $admin_id);
+            // $stmt->bindParam(':ip', $_SERVER['REMOTE_ADDR']);
+            // $stmt->execute();
+        } catch (\PDOException $e) {
+            // Log error
+        }
     }
 
     private function checkRememberMe() {
