@@ -13,7 +13,7 @@
 
     <!-- Nav Item - Dashboard -->
     <li class="nav-item active">
-        <a class="nav-link" href="/">
+        <a class="nav-link" href="/admin-dashboard">
             <i class="fas fa-fw fa-tachometer-alt text-dark"></i>
             <span>Dashboard</span></a>
     </li>
@@ -23,7 +23,7 @@
 
     <!-- Nav Item - Utilities Collapse Menu -->
     <li class="nav-item">
-        <a class="nav-link collapsed" href="/views/user/list.php"
+        <a class="nav-link collapsed" href="/admin/users"
             aria-expanded="true" aria-controls="collapseUtilities">
             <i class="fa fa-user" aria-hidden="true"></i>
             <span>Customers</span>
