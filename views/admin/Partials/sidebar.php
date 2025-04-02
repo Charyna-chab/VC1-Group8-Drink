@@ -23,7 +23,7 @@
 
     <!-- Nav Item - Utilities Collapse Menu -->
     <li class="nav-item">
-        <a class="nav-link collapsed" href="/views/user/list.php"
+        <a class="nav-link collapsed" href="/admin/users"
             aria-expanded="true" aria-controls="collapseUtilities">
             <i class="fa fa-user" aria-hidden="true"></i>
             <span>Customers</span>
