@@ -7,23 +7,65 @@
     <title><?php echo isset($title) ? $title : 'Admin Dashboard - XING FU CHA'; ?></title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-    <link href="/assets/css/sb-admin-2.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/style.css">
-</head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Only add styles that affect the main content layout */
+        body {
+            display: flex;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f8f9fa;
+        }
 
+        .main-content {
+            display: flex;
+            width: 100%;
+        }
+
+        .content-wrapper {
+            flex: 1;
+            padding: 20px;
+            /* Match this with your sidebar width */
+        }
+
+        /* Table specific styles */
+        .table-container {
+            margin-top: 0;
+        }
+
+        td img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #dee2e6;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+        }
+
+        /* Ensure the table header stays aligned */
+        .table thead th {
+            vertical-align: middle;
+        }
+    </style>
 </head>
 
 <body>
-
+    <?php require_once '../admin/Partials/header.php' ?>
 
     <!-- Main Content -->
     <div class="main-content">
-        <!-- Sidebar -->
+        <!-- Sidebar - Left untouched -->
         <div class="sidebar text-dark">
             <?php require '../admin/Partials/sidebar.php' ?>
-
         </div>
-        <div class="container-fluid mt-4">
+
+        <!-- Content Area -->
+        <div class="content-wrapper">
             <div class="card shadow mb-4">
                 <div class="card-header py-3 d-flex justify-content-between align-items-center">
                     <h6 class="m-0 font-weight-bold text-primary">Customers List</h6>
@@ -38,12 +80,14 @@
                                 <tr>
                                     <th colspan="7">
                                         <div class="d-flex justify-content-end">
-                                            <div class="input-group">
+
+                                            <div class="input-group" style="width: 20%;">
                                                 <input type="text" class="form-control form-control-sm" placeholder="Search..." id="searchInput">
                                                 <button class="btn btn-primary btn-sm" type="button" id="searchButton">
                                                     <i class="fas fa-search"></i>
                                                 </button>
                                             </div>
+
                                         </div>
                                     </th>
                                 </tr>
