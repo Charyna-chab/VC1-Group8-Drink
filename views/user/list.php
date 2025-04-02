@@ -112,13 +112,7 @@
             vertical-align: middle;
         }
 
-        .table td img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid #e3e6f0;
-        }
+      
 
         /* Button styling */
         .btn-sm {
@@ -256,7 +250,7 @@
                                 <i class="fas fa-search"></i>
                             </button>
                         </div>
-                        <a href="/user/create" class="btn btn-success btn-sm">
+                        <a href="/admin/users/create" class="btn btn-success btn-sm">
                             <i class="fas fa-plus me-1"></i> Add New
                         </a>
                     </div>
@@ -271,6 +265,7 @@
                                     <th>Name</th>
                                     <th>Phone</th>
                                     <th>Email</th>
+                                    <th>Role</th>
                                     <th>Address</th>
                                 </tr>
                             </thead>
@@ -284,13 +279,12 @@
                                         <tr>
                                             <td><?= $index + 1 ?></td>
                                             <td>
-                                                <img src="<?= htmlspecialchars($user['image']) ?>"
-                                                    onerror="this.src='https://via.placeholder.com/50?text=User'"
-                                                    alt="User Image">
+                                                <img src="<?= htmlspecialchars($user['image']) ?>" alt="User Image">
                                             </td>
                                             <td class="name-user"><?= htmlspecialchars($user['name']) ?></td>
                                             <td class="phone-user"><?= htmlspecialchars($user['phone']) ?></td>
                                             <td class="email-user"><?= htmlspecialchars($user['email']) ?></td>
+                                            <td class="role-user"><?= htmlspecialchars($user['role']) ?></td>
                                             <td class="address-user"><?= htmlspecialchars($user['address']) ?></td>
                                         </tr>
                                     <?php endforeach; ?>
@@ -304,9 +298,9 @@
     </div>
 
     <!-- Bootstrap 5 JS Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script> -->
     <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
 
     <script>
         $(document).ready(function() {
@@ -335,5 +329,4 @@
         });
     </script>
 </body>
-
 </html>
