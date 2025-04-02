@@ -1,6 +1,6 @@
 <?php
-require_once './Models/ProductModel.php';
-require_once './Controllers/BaseController.php';
+require_once 'Models/ProductModel.php';
+require_once 'BaseController.php';
 
 class ProductController extends BaseController
 {
@@ -76,7 +76,6 @@ class ProductController extends BaseController
         }
     }
 
-
     function edit()
     {
         if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
@@ -97,12 +96,18 @@ class ProductController extends BaseController
         $this->views('products/product-edit.php', ['product' => $product]); // Pass product data to the view
     }
     
-
-
-    function update()
+    function update($id)
     {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            $_SESSION['error'] = "Invalid request method!";
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $data = [
+                'product_name' => $_POST['product_name'],
+                'image' => $_POST['image'],
+                'product_detail' => $_POST['product_detail'],
+                'price' => $_POST['price'],
+            ];
+            $this->model->updateProduct($id, $data); // Only call updateProduct
+            // Remove this line: $this->model->createProduct($data);
+
             $this->redirect('/product');
             return;
         }
@@ -152,7 +157,7 @@ class ProductController extends BaseController
     
         $this->redirect('/product');
     }
-    
+
 
     
 

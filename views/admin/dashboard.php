@@ -12,14 +12,14 @@
 <body id="page-top">
     <div id="wrapper">
         <!-- Sidebar -->
-        <?php include 'views/admin/partials/sidebar.php'; ?>
+        <?php include 'views/admin/layouts/sidebar.php'; ?>
         
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
             <!-- Main Content -->
             <div id="content">
                 <!-- Topbar -->
-                <?php include 'views/admin/partials/topbar.php'; ?>
+                <?php include 'views/admin/layouts/topbar.php'; ?>
                 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">

@@ -1,6 +1,5 @@
 
 
-
 <div class="container-fluid py-4">
     <div class="row mb-4">
         <div class="col-12">
@@ -58,7 +57,7 @@
 
                         <div class="col-md-3">
                             <div class="d-flex gap-2">
-                                <a href="../feedback_view.php"> <button class="btn" style="background-color: #E91E63; color: white;">
+                                <a href="/feedback/create"> <button class="btn" style="background-color: #E91E63; color: white;">
                                         <i class="fas fa-plus-circle me-1"></i> Add New Feedback
                                     </button>
                                 </a>

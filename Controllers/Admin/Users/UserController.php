@@ -56,8 +56,11 @@ class UserController extends BaseController
                         'image' => $image_url,
                         'name' => isset($_POST['name']) ? $_POST['name'] : null,
                         'phone' => isset($_POST['phone']) ? $_POST['phone'] : null,
-                        'email' => isset($_POST['email']) ? $_POST['email'] : null,
                         'address' => isset($_POST['address']) ? $_POST['address'] : null,
+                        'email' => isset($_POST['email']) ? $_POST['email'] : null,
+                        'password' => isset($_POST['password']) ? $_POST['password'] : null,
+                        'role' => isset($_POST['role']) ? $_POST['role'] : null,
+                        
                     ];
 
                     // Validate that all required fields are present
@@ -85,7 +88,6 @@ class UserController extends BaseController
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $data = [
                 'name' => $_POST['name'],
-                'phone' => $_POST['phone'],
                 'email' => $_POST['email'],
                 'address' => $_POST['address']
             ];

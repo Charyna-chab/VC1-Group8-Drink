@@ -19,43 +19,73 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Form validation
-    const authForms = document.querySelectorAll('.auth-form');
+    const authForm = document.querySelector(".auth-form")
+    if (authForm) {
+        authForm.addEventListener("submit", (event) => {
+            // Get form type (login or register)
+            const isRegisterForm = window.location.pathname.includes("register")
 
-    authForms.forEach(form => {
-        form.addEventListener('submit', function(event) {
-            const passwordInput = form.querySelector('input[name="password"]');
-            const confirmPasswordInput = form.querySelector('input[name="confirm_password"]');
+            if (isRegisterForm) {
+                // Validate register form
+                const password = document.getElementById("password").value
+                const confirmPassword = document.getElementById("confirm_password").value
 
-            // If this is a registration form with password confirmation
-            if (passwordInput && confirmPasswordInput) {
-                if (passwordInput.value !== confirmPasswordInput.value) {
-                    event.preventDefault();
+                if (password !== confirmPassword) {
+                    event.preventDefault()
+                    showError("Passwords do not match")
+                    return
+                }
 
-                    // Create or update error message
-                    let errorDiv = form.parentElement.querySelector('.auth-error');
+                if (password.length < 8) {
+                    event.preventDefault()
+                    showError("Password must be at least 8 characters long")
+                    return
+                }
 
-                    if (!errorDiv) {
-                        errorDiv = document.createElement('div');
-                        errorDiv.className = 'auth-error';
-                        errorDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i><span></span>';
-                        form.parentElement.insertBefore(errorDiv, form);
-                    }
-
-                    errorDiv.querySelector('span').textContent = 'Passwords do not match';
-
-                    // Scroll to error
-                    errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                const termsCheckbox = document.querySelector('input[name="terms"]')
+                if (!termsCheckbox.checked) {
+                    event.preventDefault()
+                    showError("You must agree to the Terms of Service and Privacy Policy")
+                    return
                 }
             }
-        });
-    });
+        })
+    }
 
-    // Social login buttons (placeholder functionality)
-    const socialButtons = document.querySelectorAll('.social-button');
+    // Social login buttons
+    const socialButtons = document.querySelectorAll(".social-button")
+    socialButtons.forEach((button) => {
+        button.addEventListener("click", function() {
+            const provider = this.classList.contains("google") ? "Google" : "Facebook"
 
-    socialButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            alert('Social login is not implemented in this demo.');
-        });
-    });
-});
+            // In a real application, this would redirect to the OAuth provider
+            alert(`${provider} login is not implemented in this demo.`)
+        })
+    })
+
+    // Function to show error message
+    function showError(message) {
+        // Check if error element already exists
+        let errorElement = document.querySelector(".auth-error")
+
+        if (!errorElement) {
+            // Create error element
+            errorElement = document.createElement("div")
+            errorElement.className = "auth-error"
+            errorElement.innerHTML = `
+                  <i class="fas fa-exclamation-circle"></i>
+                  <span>${message}</span>
+              `
+
+            // Insert after auth-header
+            const authHeader = document.querySelector(".auth-header")
+            authHeader.insertAdjacentElement("afterend", errorElement)
+        } else {
+            // Update existing error message
+            errorElement.querySelector("span").textContent = message
+        }
+
+        // Scroll to error
+        errorElement.scrollIntoView({ behavior: "smooth", block: "center" })
+    }
+})

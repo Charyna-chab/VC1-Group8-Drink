@@ -67,6 +67,7 @@
                                     <textarea id="review_content" name="review_content" rows="5" placeholder="Tell us what you liked or didn't like" required></textarea>
                                 </div>
 
+
                                 <div class="form-group">
                                     <label>Add Photos (Optional)</label>
                                     <div class="photo-upload">
@@ -126,7 +127,8 @@
                             <h3>Report an Issue</h3>
                             <p>Encountered a problem? Let us know so we can fix it!</p>
 
-                            <form id="reportForm">
+
+                            <form id="reportForm" action="/feedback/store">
                                 <div class="form-group">
                                     <label>Issue Type</label>
                                     <select name="issue_type" required>
@@ -191,8 +193,6 @@
     
     </div>
 </div>
-
-
 
 
 <!-- <section class="content">

@@ -22,3 +22,4 @@ class WelcomeController extends BaseController {
         $this->views('welcome/welcome', $data);
     }
 }
+
