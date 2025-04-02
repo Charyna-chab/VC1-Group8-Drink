@@ -1,6 +1,6 @@
 <?php
 require_once 'Router.php';
-require_once './Controllers/Admin/Users/UserController.php';
+// require_once './Controllers/Admin/Users/UserController.php';
 require_once './Controllers/Admin/Products/ProductController.php';
 require_once './Controllers/Admin/DashboardController.php';
 require_once './Controllers/Admin/FeedbackController.php'; // Add this line
@@ -10,12 +10,12 @@ $routes = new Router();
 $routes->get('/', [DashboardController::class, 'index']);
 
 // user 
-$routes->get('/user', [UserController::class, 'index']);
-$routes->get('/user/create', [UserController::class, 'create']);
-$routes->post('/user/store', [UserController::class, 'store']);
-$routes->get('/user/edit', [UserController::class, 'edit']);
-$routes->put('/user/update', [UserController::class, 'update']);
-$routes->delete('/user/delete', [UserController::class, 'destroy']);
+// $routes->get('/user', [UserController::class, 'index']);
+// $routes->get('/user/create', [UserController::class, 'create']);
+// $routes->post('/user/store', [UserController::class, 'store']);
+// $routes->get('/user/edit', [UserController::class, 'edit']);
+// $routes->put('/user/update', [UserController::class, 'update']);
+// $routes->delete('/user/delete', [UserController::class, 'destroy']);
 
 // product
 $routes->get('/product', [ProductController::class, 'index']);
