@@ -249,7 +249,7 @@
                                 <i class="fas fa-search"></i>
                             </button>
                         </div>
-                        <a href="/user/create" class="btn btn-success btn-sm">
+                        <a href="/admin/users/create" class="btn btn-success btn-sm">
                             <i class="fas fa-plus me-1"></i> Add New
                         </a>
                     </div>
