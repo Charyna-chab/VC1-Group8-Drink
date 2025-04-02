@@ -1,98 +1,50 @@
 <?php
-namespace YourNamespace;
 
 class Router {
     private $routes = [];
     
-    public function get($path, $callback) {
-        $this->addRoute('GET', $path, $callback);
+    public function get($uri, $controller) {
+        $this->routes['GET'][$uri] = $controller;
     }
     
-    public function post($path, $callback) {
-        $this->addRoute('POST', $path, $callback);
-    }
-
-    public function put($path, $callback) {
-        $this->addRoute('PUT', $path, $callback);
-    }
-    
-    public function delete($path, $callback) {
-        $this->addRoute('DELETE', $path, $callback);
-    }
-    
-    private function addRoute($method, $path, $callback) {
-        $this->routes[] = [
-            'method' => $method,
-            'path' => $path,
-            'callback' => $callback
-        ];
+    public function post($uri, $controller) {
+        $this->routes['POST'][$uri] = $controller;
     }
     
     public function route() {
-        $this->dispatch();
-    }
-    
-    public function dispatch() {
-        $path = $_SERVER['REQUEST_URI'];
+        $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         $method = $_SERVER['REQUEST_METHOD'];
         
-        // Handle PUT and DELETE methods via POST with _method parameter
-        if ($method === 'POST' && isset($_POST['_method'])) {
-            if (in_array(strtoupper($_POST['_method']), ['PUT', 'DELETE'])) {
-                $method = strtoupper($_POST['_method']);
-            }
-        }
-        
-        // Remove query string if present
-        if (($pos = strpos($path, '?')) !== false) {
-            $path = substr($path, 0, $pos);
-        }
-        
-        // Remove trailing slash if present
-        $path = rtrim($path, '/');
-        
-        // If path is empty, set it to '/'
-        if (empty($path)) {
-            $path = '/';
-        }
-        
-        foreach ($this->routes as $route) {
-            // Skip if method doesn't match
-            if ($route['method'] !== $method) {
-                continue;
-            }
+        // Check for dynamic routes with parameters
+        foreach ($this->routes[$method] ?? [] as $route => $controller) {
+            $pattern = preg_replace('/{[^\/]+}/', '([^/]+)', $route);
+            $pattern = '#^' . $pattern . '$#';
             
-            // Convert route parameters to regex pattern
-            $pattern = $this->convertRouteToRegex($route['path']);
-            
-            if (preg_match($pattern, $path, $matches)) {
-                // Remove the full match
-                array_shift($matches);
+            if (preg_match($pattern, $uri, $matches)) {
+                array_shift($matches); // Remove the full match
                 
-                // Extract the controller and method
-                list($controller, $method) = $route['callback'];
+                // Extract controller class and method
+                list($controllerClass, $method) = $controller;
                 
-                // Create controller instance
-                $controllerInstance = new $controller();
+                // Instantiate controller
+                $controllerInstance = new $controllerClass();
                 
-                // Call the method with parameters
+                // Call method with parameters
                 call_user_func_array([$controllerInstance, $method], $matches);
                 return;
             }
         }
         
-        // No route found
-        header("HTTP/1.0 404 Not Found");
-        echo "404 Not Found";
-    }
-    
-    private function convertRouteToRegex($route) {
-        // Replace route parameters with regex pattern
-        $pattern = preg_replace('/\{([a-zA-Z0-9_]+)\}/', '([^/]+)', $route);
+        // Check for exact route match
+        if (isset($this->routes[$method][$uri])) {
+            list($controllerClass, $method) = $this->routes[$method][$uri];
+            $controllerInstance = new $controllerClass();
+            $controllerInstance->$method();
+            return;
+        }
         
-        // Add start and end delimiters
-        $pattern = '#^' . $pattern . '$#';
-        
-        return $pattern;
+        // Route not found
+        header('HTTP/1.1 404 Not Found');
+        echo '404 Page Not Found';
     }
 }
