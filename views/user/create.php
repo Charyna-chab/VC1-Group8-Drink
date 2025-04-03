@@ -236,69 +236,50 @@
         </li>
     </ul>
 
-    <div class="main-panel">
-        <div class="container">
-            <form action="/admin/users/store" method="POST" enctype="multipart/form-data">
-                <div class="form-group mb-3">
-                    <label for="name" class="form-label">Name:</label>
-                    <input type="name" id="name" name="name" class="form-control">
-                </div>
-                <div class="form-group mb-3">
-                    <label for="phone" class="form-label">Phone:</label>
-                    <input type="phone" id="phone" name="phone" class="form-control">
-                </div>
-                <div class="form-group mb-3">
-                    <label for="email" class="form-label">Email:</label>
-                    <input type="email" id="email" name="email" class="form-control">
-                </div>
-                <div class="form-group mb-3">
-                    <label for="address" class="form-label">Address:</label>
-                    <input type="address" id="address" name="address" class="form-control">
-                </div>
-                <div class="form-group mb-3 ">
-                    <label for="profile" class="form-label">Profile:</label>
-                </div>
-                <input type="file" id="profile" name="image" class="form-control">
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form action="/admin/users/store" method="POST" enctype="multipart/form-data" class="border border-2 rounded p-4 shadow-sm bg-white">
+                    <h3 class="mb-4 text-center text-primary">User Information</h3>
 
-                <button type="submit" class="btn btn-success">Submit</button>
-            </form>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" id="name" name="name" class="form-control" placeholder="Enter your name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Phone</label>
+                        <input type="text" id="phone" name="phone" class="form-control" placeholder="Enter your phone number" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Address</label>
+                        <input type="text" id="address" name="address" class="form-control" placeholder="Enter your address" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email address" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password" required minlength="8">
+                    </div>
+                    <div class="mb-3">
+                        <label for="role" class="form-label">Role</label>
+                        <select id="role" name="role" class="form-control" required>
+                            <option value="" selected disabled>Select your role</option>
+                            <option value="admin">Admin</option>
+                            <option value="user">User</option>
+                        </select>
+                    </div>
 
+                    <div class="mb-3">
+                        <label for="image" class="form-label">Profile Picture</label>
+                        <input type="file" id="image" name="image" class="form-control">
+                    </div>
+
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-success w-100">Submit</button>
+                    </div>
+                </form>
+            </div>
         </div>
-
     </div>
-
-    <style>
-        /* Add these styles to your existing style section */
-
-        .main-panel {
-            margin-left: 50px;
-            /* Same as sidebar width */
-            width: calc(100% - 250px);
-            padding: 20px;
-            transition: all 0.3s;
-        }
-
-        .container {
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: 0;
-            padding: 20px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .main-panel {
-                margin-left: 0;
-                width: 100%;
-            }
-
-            .container {
-                margin-right: auto;
-            }
-        }
-
-       
-    </style>
