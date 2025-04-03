@@ -49,20 +49,16 @@ class UserController extends BaseController {
             $this->redirect('/admin/users');
             return;
         }
-        
-        // Add debug output to verify the submitted role
-        error_log("Submitted role: " . $_POST['role']);
-        
+    
+        // Initialize variables
         $name = $_POST['name'] ?? '';
         $email = $_POST['email'] ?? '';
         $phone = $_POST['phone'] ?? '';
         $address = $_POST['address'] ?? '';
         $password = $_POST['password'] ?? '';
-        $role = $_POST['role'] ?? 'user'; // This should be 'admin' if selected
-        
-        // Debug output
-        error_log("Creating user with role: " . $role);
-        
+        $role = $_POST['role'] ?? 'user';
+        $image = null;
+    
         // Basic validation
         if (empty($name) || empty($email) || empty($password)) {
             $this->views('user/create', [
@@ -71,12 +67,8 @@ class UserController extends BaseController {
             ]);
             return;
         }
-        
-        // Hash the password before storing
-        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-        
-        // Handle image upload if present
-        $image = null;
+    
+        // Handle image upload
         if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
             $uploadDir = 'uploads/user/';
             
@@ -84,16 +76,32 @@ class UserController extends BaseController {
             if (!is_dir($uploadDir)) {
                 mkdir($uploadDir, 0777, true);
             }
+    
+            // Validate file type
+            $allowedTypes = ['jpg', 'jpeg', 'png', 'gif'];
+            $fileExt = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
             
-            $fileName = uniqid() . '_' . basename($_FILES['image']['name']);
+            if (!in_array($fileExt, $allowedTypes)) {
+                $this->views('user/create', [
+                    'error' => 'Only JPG, PNG, and GIF images are allowed',
+                    'title' => 'Create User - XING FU CHA'
+                ]);
+                return;
+            }
+    
+            // Generate unique filename
+            $fileName = uniqid() . '.' . $fileExt;
             $uploadFile = $uploadDir . $fileName;
-            
+    
             if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadFile)) {
                 $image = $uploadFile;
             }
         }
-        
+    
         try {
+            // Hash the password
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+    
             // Check if email already exists
             $stmt = $this->conn->prepare("SELECT user_id FROM users WHERE email = :email");
             $stmt->bindParam(':email', $email);
@@ -106,7 +114,7 @@ class UserController extends BaseController {
                 ]);
                 return;
             }
-            
+    
             // Insert new user
             $stmt = $this->conn->prepare(
                 "INSERT INTO users (name, email, phone, address, password, role, image) 
@@ -117,7 +125,7 @@ class UserController extends BaseController {
             $stmt->bindParam(':email', $email);
             $stmt->bindParam(':phone', $phone);
             $stmt->bindParam(':address', $address);
-            $stmt->bindParam(':password', $hashedPassword); // Use hashed password
+            $stmt->bindParam(':password', $hashedPassword);
             $stmt->bindParam(':role', $role);
             $stmt->bindParam(':image', $image);
             

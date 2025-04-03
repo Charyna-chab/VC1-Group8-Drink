@@ -105,13 +105,12 @@
 </head>
 
 <body>
-  <?php require_once '../admin/Partials/header.php' ?>
+  
 
   <!-- Main Content -->
   <div class="main-content">
     <!-- Sidebar - Left untouched -->
     <div class="sidebar text-dark">
-      <?php require '../admin/Partials/sidebar.php' ?>
     </div>
 
     <!-- Content Area -->

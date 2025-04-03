@@ -42,6 +42,7 @@ use YourNamespace\Controllers\Admin\AdminFeedbackController;
 use YourNamespace\Controllers\GiftCardController;
 use YourNamespace\Controllers\LocationsController;
 use YourNamespace\Controllers\JoinTheTeamController;
+use YourNamespace\Models\ProductModel;
 
 
 $route = new Router();

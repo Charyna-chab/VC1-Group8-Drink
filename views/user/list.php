@@ -7,7 +7,9 @@
     <title><?php echo isset($title) ? $title : 'Admin Dashboard - XING FU CHA'; ?></title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/css/sb-admin-2.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/style.css">
+
     <style>
         body {
             display: flex;
@@ -107,12 +109,13 @@
             vertical-align: middle;
         }
 
-        .table td, .table th {
+        .table td,
+        .table th {
             padding: 12px 15px;
             vertical-align: middle;
         }
 
-      
+
 
         /* Button styling */
         .btn-sm {
@@ -150,17 +153,17 @@
             #accordionSidebar {
                 margin-left: -250px;
             }
-            
+
             .main-content {
                 margin-left: 0;
                 width: 100%;
             }
-            
+
             .input-group {
                 width: 100% !important;
                 margin-top: 10px;
             }
-            
+
             #accordionSidebar.active {
                 margin-left: 0;
             }
@@ -169,71 +172,9 @@
 </head>
 
 <body>
-    <!-- Sidebar -->
-    <ul class="navbar-nav bg-white sidebar sidebar-light accordion" id="accordionSidebar">
-        <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
-            <div class="sidebar-brand-icon rotate-n-15">
-                <img src="/placeholder.svg" alt="">
-            </div>
-            <div class="sidebar-brand-text mx-3 text-dark">XING FU CHA</div>
-        </a>
+    <?php require './views/admin/Partials/sidebar.php' ?>
+    <?php require './views/admin/Partials/navbar.php' ?>
 
-        <!-- Divider -->
-        <hr class="sidebar-divider my-0">
-
-        <!-- Nav Item - Dashboard -->
-        <li class="nav-item active">
-            <a class="nav-link" href="/admin-dashboard">
-                <i class="fas fa-fw fa-tachometer-alt text-dark"></i>
-                <span>Dashboard</span></a>
-        </li>
-
-        <!-- Divider -->
-        <hr class="sidebar-divider">
-
-        <!-- Nav Item - Utilities Collapse Menu -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="/admin/users"
-                aria-expanded="true" aria-controls="collapseUtilities">
-                <i class="fa fa-user" aria-hidden="true"></i>
-                <span>Customers</span>
-            </a>
-        </li>
-
-        <!-- Divider -->
-        <hr class="sidebar-divider">
-
-        <!-- Nav Item - Pages Collapse Menu -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="/product">
-                <i class="fas fa-fw fa-folder"></i>
-                <span>Products</span>
-            </a>
-        </li>
-        <hr class="sidebar-divider">
-
-        <!-- Nav Item - Charts -->
-        <li class="nav-item">
-            <a class="nav-link" href="/feedback">
-                <i class="fas fa-comment-alt feedback-icon"></i>
-                <span>Feedback</span></a>
-        </li>
-
-        <!-- Nav Item - Pages Collapse Menu -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
-                aria-expanded="true" aria-controls="collapsePages">
-                <i class="fas fa-cogs setting-icon"></i>
-                <span>Sitting</span>
-            </a>
-            <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <a href="/logout" class="role-switch-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
-                </div>
-            </div>
-        </li>
-    </ul>
 
     <!-- Main Content -->
     <div class="main-content">
@@ -245,7 +186,7 @@
                     <div class="d-flex flex-column flex-md-row gap-2 mt-2 mt-md-0">
                         <div class="input-group">
                             <input type="text" class="form-control form-control-sm" placeholder="Search..." id="searchInput">
-                            <button class="btn btn-primary btn-sm" type="button" id="searchButton">
+                            <button class="btn btn-primary btn-sm mr-10" type="button" id="searchButton">
                                 <i class="fas fa-search"></i>
                             </button>
                         </div>
@@ -278,7 +219,13 @@
                                         <tr>
                                             <td><?= $index + 1 ?></td>
                                             <td>
-                                                <img src="<?= htmlspecialchars($user['image']) ?>" alt="User Image">
+                                                <?php if (!empty($user['image'])): ?>
+                                                    <img src="<?= htmlspecialchars($user['image']) ?>" alt="User Image" style="width: 50px; height: 50px; object-fit: cover;">
+                                                <?php else: ?>
+                                                    <div style="width: 50px; height: 50px; background: #eee; display: flex; align-items: center; justify-content: center;">
+                                                        <i class="fas fa-user"></i>
+                                                    </div>
+                                                <?php endif; ?>
                                             </td>
                                             <td class="name-user"><?= htmlspecialchars($user['name']) ?></td>
                                             <td class="phone-user"><?= htmlspecialchars($user['phone']) ?></td>
@@ -328,4 +275,5 @@
         });
     </script>
 </body>
+
 </html>
