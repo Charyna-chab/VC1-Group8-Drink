@@ -14,108 +14,278 @@
       min-height: 100vh;
       margin: 0;
       background-color: #f8f9fa;
+      font-family: 'Nunito', sans-serif;
+      overflow-x: hidden;
     }
 
-    .main-content {
+    /* Sidebar styling */
+    #accordionSidebar {
+      width: 250px;
+      min-height: 100vh;
+      background: white;
+      transition: all 0.3s;
+      position: fixed;
+      z-index: 1000;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .sidebar-brand {
+      height: 70px;
       display: flex;
-      width: 100%;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
     }
 
-    .content-wrapper {
-      flex: 1;
+    .sidebar-brand-text {
+      font-size: 1.2rem;
+      font-weight: 800;
+    }
+
+    .sidebar-divider {
+      margin: 10px 15px;
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-item {
+      margin: 5px 0;
+    }
+
+    .nav-link {
+      padding: 10px 15px;
+      color: #333;
+      border-radius: 5px;
+      margin: 0 10px;
+    }
+
+    .nav-link:hover {
+      background-color: #f8f9fa;
+    }
+
+    .nav-link.active {
+      background-color: #4e73df;
+      color: white !important;
+    }
+
+    .nav-link i {
+      margin-right: 10px;
+      width: 20px;
+      text-align: center;
+    }
+
+    /* Main content styling */
+    .main-content {
+      margin-left: 250px;
+      width: calc(100% - 250px);
       padding: 20px;
+      transition: all 0.3s;
     }
 
-    .table-responsive {
-      overflow-x: auto;
-    }
-
+    /* Card styling */
     .card {
       border: none;
-      border-radius: 0.5rem;
-      box-shadow: 0 0.15rem 1.75rem 0 rgba(33, 40, 50, 0.15);
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
     }
 
     .card-header {
-      background-color: #f8f9fa;
+      background-color: #fff;
       border-bottom: 1px solid #e3e6f0;
+      border-radius: 10px 10px 0 0 !important;
+      padding: 1rem 1.5rem;
+    }
+
+    /* Table styling */
+    .table-responsive {
+      border-radius: 10px;
+      overflow: hidden;
     }
 
     .table {
       margin-bottom: 0;
+      width: 100%;
     }
 
-    .table th {
-      border-top: none;
-      border-bottom: 1px solid #e3e6f0;
+    .table thead th {
+      background-color: #f8f9fa;
+      border-bottom-width: 1px;
       font-weight: 600;
       color: #4e73df;
+      vertical-align: middle;
+      padding: 12px 15px;
     }
 
-    .table td {
+    .table td, .table th {
+      padding: 12px 15px;
       vertical-align: middle;
     }
 
-    .table img {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid #dee2e6;
+    .table tbody tr:nth-child(even) {
+      background-color: #f9f9f9;
     }
 
-    .action-buttons {
-      display: flex;
-      gap: 0.5rem;
-      justify-content: center;
+    .table tbody tr:hover {
+      background-color: #f1f1f1;
     }
 
+    /* Button styling */
     .btn-sm {
       padding: 0.25rem 0.5rem;
       font-size: 0.875rem;
     }
 
-    .dropdown-menu {
-      min-width: 120px;
-      border: 1px solid rgba(0, 0, 0, 0.1);
-      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    .btn-success {
+      background-color: #1cc88a;
+      border-color: #1cc88a;
     }
 
-    .dropdown-item {
-      padding: 0.25rem 1rem;
-      font-size: 0.875rem;
+    .btn-success:hover {
+      background-color: #17a673;
+      border-color: #17a673;
     }
 
-    .input-group {
-      max-width: 250px;
+    .btn-primary {
+      background-color: #4e73df;
+      border-color: #4e73df;
     }
 
+    .btn-primary:hover {
+      background-color: #3a5bc7;
+      border-color: #3a5bc7;
+    }
+
+    /* Search input styling */
     .search-container {
       margin-bottom: 1rem;
     }
 
-    .modal-header {
-      border-bottom: 1px solid #e3e6f0;
+    .input-group {
+      width: 250px;
     }
 
-    .modal-footer {
-      border-top: 1px solid #e3e6f0;
+    /* Modal styling */
+    .modal-content {
+      border-radius: 10px;
+    }
+
+    /* Content wrapper */
+    .content-wrapper {
+      width: 100%;
+      padding: 20px;
+      margin-left: 250px;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      #accordionSidebar {
+        margin-left: -250px;
+      }
+      
+      .content-wrapper,
+      .main-content {
+        margin-left: 0;
+        width: 100%;
+      }
+      
+      .input-group {
+        width: 100% !important;
+        margin-top: 10px;
+      }
+      
+      #accordionSidebar.active {
+        margin-left: 0;
+      }
     }
   </style>
 </head>
 
 <body>
-  <?php require_once '../admin/Partials/header.php' ?>
+  <!-- Sidebar -->
+  <ul class="navbar-nav bg-white sidebar sidebar-light accordion" id="accordionSidebar">
 
-  <!-- Main Content -->
-  <div class="main-content">
-    <!-- Sidebar - Left untouched -->
-    <div class="sidebar text-dark">
-      <?php require '../admin/Partials/sidebar.php' ?>
+<!-- Sidebar - Brand -->
+<a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
+    <div class="sidebar-brand-icon rotate-n-15">
+        <img src="/placeholder.svg" alt="">
     </div>
+    <div class="sidebar-brand-text mx-3 text-dark">XING FU CHA</div>
+</a>
 
-    <!-- Content Area -->
-    <div class="content-wrapper">
+<!-- Divider -->
+<hr class="sidebar-divider my-0">
+
+<!-- Nav Item - Dashboard -->
+<li class="nav-item active">
+    <a class="nav-link" href="/admin-dashboard">
+        <i class="fas fa-fw fa-tachometer-alt text-dark"></i>
+        <span>Dashboard</span></a>
+</li>
+
+<!-- Divider -->
+<hr class="sidebar-divider">
+
+<!-- Nav Item - Customers -->
+<li class="nav-item">
+    <a class="nav-link collapsed" href="/admin/users">
+        <i class="fa fa-user" aria-hidden="true"></i>
+        <span>Customers</span>
+    </a>
+</li>
+
+<!-- Divider -->
+<hr class="sidebar-divider">
+
+<!-- Nav Item - Products -->
+<li class="nav-item">
+    <a class="nav-link collapsed" href="/admin/products">
+        <i class="fas fa-fw fa-folder"></i>
+        <span>Products</span>
+    </a>
+</li>
+
+<!-- Divider -->
+<hr class="sidebar-divider">
+
+<!-- Nav Item - Receipts -->
+<li class="nav-item">
+    <a class="nav-link collapsed" href="/admin/receipts">
+        <i class="fas fa-receipt"></i>
+        <span>Receipts</span>
+    </a>
+</li>
+
+<!-- Divider -->
+<hr class="sidebar-divider">
+
+<!-- Nav Item - Feedback -->
+<li class="nav-item">
+    <a class="nav-link" href="#">
+        <i class="fas fa-comment-alt feedback-icon"></i>
+        <span>Feedback</span></a>
+</li>
+
+<!-- Divider -->
+<hr class="sidebar-divider">
+
+<!-- Nav Item - Settings -->
+<li class="nav-item">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
+        aria-expanded="true" aria-controls="collapsePages">
+        <i class="fas fa-cogs setting-icon"></i>
+        <span>Settings</span>
+    </a>
+    <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+            <a href="/logout" class="role-switch-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+    </div>
+</li>
+</ul>
+
+
+  <!-- Content Area -->
+  <div class="content-wrapper">
+    <div class="container-fluid">
       <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex justify-content-between align-items-center">
           <h6 class="m-0 font-weight-bold text-primary">Product List</h6>
@@ -148,7 +318,7 @@
               <tbody>
                 <?php foreach ($products as $index => $product): ?>
                 <tr>
-                  <td><?= 1 + $index ?></td>
+                  <td><?= $product['product_id'] ?></td>
                   <td>
                     <img src="<?= htmlspecialchars($product['image']) ?>" alt="" style="width: 50px; height: 50px; border-radius: 10px; object-fit: cover;">
                   </td>
