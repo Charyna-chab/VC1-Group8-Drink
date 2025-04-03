@@ -1,66 +1,78 @@
 <?php
-// Database connection
-$servername = "127.0.0.1";
-$username = "root";
-$password = "";
-$dbname = "drink_db";
+require_once 'Database.php';
 
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
+class ProfileManager {
+    private $db;
 
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-// Get form data
-$user_id = $_POST['user_id'];
-$name = $_POST['name'];
-$email = $_POST['email'];
-
-// Handle image upload
-$image = null;
-if (isset($_FILES['profileImage']) && $_FILES['profileImage']['error'] == 0) {
-    // Validate file type
-    $allowed_types = ['image/jpeg', 'image/png', 'image/gif'];
-    $file_type = mime_content_type($_FILES['profileImage']['tmp_name']);
-    if (!in_array($file_type, $allowed_types)) {
-        header("Location: admin/profile.php?error=Invalid image type. Only JPEG, PNG, and GIF are allowed.");
-        exit();
+    public function __construct() {
+        $database = new Database();
+        $this->db = $database->getConnection();
     }
 
-    // Validate file size (max 2MB)
-    $max_size = 2 * 1024 * 1024; // 2MB in bytes
-    if ($_FILES['profileImage']['size'] > $max_size) {
-        header("Location: admin/profile.php?error=Image size too large. Maximum 2MB allowed.");
-        exit();
+    public function updateProfile($userId, $fullName, $email, $file) {
+        try {
+            // Handle image upload
+            $imagePath = null;
+            if ($file && $file['error'] === UPLOAD_ERR_OK) {
+                $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+                if (!in_array($file['type'], $allowedTypes)) {
+                    return ['success' => false, 'message' => 'Invalid file type'];
+                }
+
+                $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+                $newFileName = 'profile_' . $userId . '_' . time() . '.' . $ext;
+                $uploadDir = __DIR__ . '/uploads/profiles/';
+                
+                if (!file_exists($uploadDir)) {
+                    mkdir($uploadDir, 0777, true);
+                }
+
+                $imagePath = '/uploads/profiles/' . $newFileName;
+                move_uploaded_file($file['tmp_name'], __DIR__ . $imagePath);
+            }
+
+            // Update database
+            $query = "UPDATE admins SET full_name = :full_name, email = :email";
+            if ($imagePath) {
+                $query .= ", profile_image = :profile_image";
+            }
+            $query .= " WHERE admin_id = :admin_id";
+
+            $stmt = $this->db->prepare($query);
+            $stmt->bindParam(':full_name', $fullName);
+            $stmt->bindParam(':email', $email);
+            $stmt->bindParam(':admin_id', $userId);
+            
+            if ($imagePath) {
+                $stmt->bindParam(':profile_image', $imagePath);
+            }
+
+            $result = $stmt->execute();
+
+            return [
+                'success' => $result,
+                'message' => $result ? 'Profile updated successfully' : 'Failed to update profile'
+            ];
+
+        } catch (Exception $e) {
+            return [
+                'success' => false,
+                'message' => 'Error: ' . $e->getMessage()
+            ];
+        }
     }
-
-    $image = file_get_contents($_FILES['profileImage']['tmp_name']); // Read the image as binary data
 }
 
-// Prepare the SQL query
-if ($image) {
-    // If a new image is uploaded, update all fields including the image
-    $stmt = $conn->prepare("UPDATE users SET name = ?, email = ?, image = ? WHERE user_id = ?");
-    $stmt->bind_param("sssi", $name, $email, $image, $user_id);
-} else {
-    // If no new image, update only name and email
-    $stmt = $conn->prepare("UPDATE users SET name = ?, email = ? WHERE user_id = ?");
-    $stmt->bind_param("ssi", $name, $email, $user_id);
+// Handle the request
+header('Content-Type: application/json');
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $userId = 1; // Replace with actual user ID from session
+    $fullName = $_POST['full_name'] ?? '';
+    $email = $_POST['email'] ?? '';
+    $file = $_FILES['profile_image'] ?? null;
+
+    $profileManager = new ProfileManager();
+    $result = $profileManager->updateProfile($userId, $fullName, $email, $file);
+    echo json_encode($result);
 }
-
-// Execute the query
-if ($stmt->execute()) {
-    // Redirect back to the profile page with a success message
-    header("Location: admin/profile.php?success=Profile updated successfully");
-} else {
-    // Redirect with an error message
-    header("Location: admin/profile.php?error=Failed to update profile: " . $conn->error);
-}
-
-// Close the statement and connection
-$stmt->close();
-$conn->close();
-?>
-

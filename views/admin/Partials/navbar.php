@@ -256,7 +256,7 @@
                     <!-- Modal Footer -->
                     <div class="modal-footer border-top-0 p-4 bg-light">
                         <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-primary rounded-pill px-4">Save Changes</button>
+                        <button type="button" href="sumit" class="btn btn-primary rounded-pill px-4">Save Changes</button>
                     </div>
 
                 </div>
@@ -381,5 +381,7 @@
                 /* Light color */
             }
         </style>
+        
         <!-- End of Topbar -->
         <?php '../layout/footer.php' ?>
+
