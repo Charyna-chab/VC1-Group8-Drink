@@ -56,7 +56,7 @@
 
     <!-- Nav Item - Feedback -->
     <li class="nav-item">
-        <a class="nav-link" href="/feedback">
+        <a class="nav-link" href="#">
             <i class="fas fa-comment-alt feedback-icon"></i>
             <span>Feedback</span></a>
     </li>
