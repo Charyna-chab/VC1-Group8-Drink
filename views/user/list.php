@@ -172,6 +172,7 @@
 </head>
 
 <body>
+    <?php $users = $users ?? []; ?>
     <?php require './views/admin/Partials/sidebar.php' ?>
     <?php require './views/admin/Partials/navbar.php' ?>
 
@@ -219,13 +220,7 @@
                                         <tr>
                                             <td><?= $index + 1 ?></td>
                                             <td>
-                                                <?php if (!empty($user['image'])): ?>
-                                                    <img src="<?= htmlspecialchars($user['image']) ?>" alt="User Image" style="width: 50px; height: 50px; object-fit: cover;">
-                                                <?php else: ?>
-                                                    <div style="width: 50px; height: 50px; background: #eee; display: flex; align-items: center; justify-content: center;">
-                                                        <i class="fas fa-user"></i>
-                                                    </div>
-                                                <?php endif; ?>
+                                                <img src="<?= htmlspecialchars($user['image']) ?>">
                                             </td>
                                             <td class="name-user"><?= htmlspecialchars($user['name']) ?></td>
                                             <td class="phone-user"><?= htmlspecialchars($user['phone']) ?></td>
