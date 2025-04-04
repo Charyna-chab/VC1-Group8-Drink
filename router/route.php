@@ -9,9 +9,7 @@ require_once "controllers/OrdersController.php";
 require_once "controllers/BookingController.php";
 require_once "controllers/AuthController.php";
 require_once "controllers/AdminController.php";
-// require_once "controllers/ProductController.php";
 require_once "controllers/FeedbackController.php";
-// require_once "controllers/UserController.php";
 require_once "controllers/DashboardController.php";
 require_once "controllers/PaymentController.php";
 require_once "controllers/CashController.php";
@@ -23,8 +21,7 @@ require_once "controllers/JoinTheTeamController.php";
 // Add the following lines to include the new controllers
 require_once './controllers/Admin/Users/UserController.php';
 require_once './controllers/Admin/Products/ProductController.php';
-require_once './controllers/Admin/DashboardController.php';
-require_once './controllers/Admin/FeedbackController.php'; // Add this line
+
 
 
 
@@ -36,7 +33,6 @@ use YourNamespace\Controllers\FavoritesController;
 use YourNamespace\Controllers\SettingsController;
 use YourNamespace\Controllers\AuthController;
 use YourNamespace\Controllers\AdminController;
-// use YourNamespace\Controllers\ProductController;
 use YourNamespace\Controllers\FeedbackController;
 use YourNamespace\Controllers\UserController;
 use YourNamespace\Controllers\DashboardController;
@@ -47,7 +43,7 @@ use YourNamespace\Controllers\Admin\AdminFeedbackController;
 use YourNamespace\Controllers\GiftCardController;
 use YourNamespace\Controllers\LocationsController;
 use YourNamespace\Controllers\JoinTheTeamController;
-use YourNamespace\Models\ProductModel;
+use YourNamespace\Controllers\Admin\Products\ProductController;
 
 
 $route = new Router();
@@ -136,12 +132,12 @@ $route->get("/settings", [SettingsController::class, 'index']);
 $route->get("/admin-dashboard", [DashboardController::class, 'index']);
 
 // Admin Product Management
-// $route->get("/admin/products", [ProductController::class, 'index']);
-// $route->get("/admin/products/create", [ProductController::class, 'create']);
-// $route->post("/admin/products/store", [ProductController::class, 'store']);
-// $route->get("/admin/products/edit/{id}", [ProductController::class, 'edit']);
-// $route->post("/admin/products/update/{id}", [ProductController::class, 'update']);
-// $route->post("/admin/products/delete/{id}", [ProductController::class, 'delete']);
+$route->get("/admin/products", [ProductController::class, 'index']);
+$route->get("/admin/products/create", [ProductController::class, 'create']);
+$route->post("/admin/products/store", [ProductController::class, 'store']);
+$route->get("/admin/products/edit/{id}", [ProductController::class, 'edit']);
+$route->post("/admin/products/update/{id}", [ProductController::class, 'update']);
+$route->post("/admin/products/delete/{id}", [ProductController::class, 'delete']);
 
 // Admin User Management
 $route->get("/admin/users", [UserController::class, 'index']);

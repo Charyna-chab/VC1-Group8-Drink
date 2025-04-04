@@ -1,29 +1,35 @@
 <?php
-namespace YourNamespace\Controllers;
+namespace YourNamespace\Controllers\Admin\Products;
 
-require_once __DIR__ . '/../../../Models/ProductModel.php'; // Correct path to ProductModel.php
-require_once __DIR__ . '/../../BaseController.php';
+require_once './Models/ProductModel.php';
+require_once './controllers/BaseController.php';
 
-use YourNamespace\Models\ProductModel;
-use YourNamespace\BaseController;
+use YourNamespace\Models\ProductModel; // Keep this
+use YourNamespace\BaseController; // Keep this
 
 class ProductController extends BaseController
 {
     private $model;
 
-    function __construct()
+    public function __construct()
     {
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
         }
 
-        $this->model = new ProductModel();
+        $this->model = new ProductModel(); // Use the namespaced ProductModel
     }
 
     function index()
     {
         $products = $this->model->getProducts();
-        $this->views('products/product-list', ['products' => $products]);
+        var_dump($products); // Debugging in index method
+        exit;
+        if (empty($products)) {
+            echo "No products found.";
+            exit;
+        }
+        $this->views('products/product-list.php', ['products' => $products]);
     }
 
     function create()

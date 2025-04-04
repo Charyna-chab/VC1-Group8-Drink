@@ -232,5 +232,5 @@
 <script src="/assets/js/cart.js"></script>
 <script src="/assets/js/order.js"></script>
 <script src="/assets/js/notification.js"></script>
-\
+
 
