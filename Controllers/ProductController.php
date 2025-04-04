@@ -22,7 +22,7 @@ class ProductController extends BaseController
     function index()
     {
         $products = $this->model->getProducts();
-        $this->views('products/product-list.php', ['products' => $products]);
+        $this->views('products/product-list', ['products' => $products]);
     }
 
     function create()

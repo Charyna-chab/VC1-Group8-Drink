@@ -30,7 +30,7 @@ use YourNamespace\Controllers\FavoritesController;
 use YourNamespace\Controllers\SettingsController;
 use YourNamespace\Controllers\AuthController;
 use YourNamespace\Controllers\AdminController;
-use YourNamespace\Controllers\ProductController;  // This is now correct
+use YourNamespace\Controllers\ProductController;
 use YourNamespace\Controllers\FeedbackController;
 use YourNamespace\Controllers\UserController;
 use YourNamespace\Controllers\DashboardController;
@@ -43,9 +43,8 @@ use YourNamespace\Controllers\LocationsController;
 use YourNamespace\Controllers\JoinTheTeamController;
 use YourNamespace\Models\ProductModel;
 
-$route = new Router();
 
-// ... rest of your route definitions remain the same ...
+$route = new Router();
 
 // Welcome page as the default route
 $route->get("/", [WelcomeController::class, 'welcome']);

@@ -2,15 +2,16 @@
 
 namespace YourNamespace\Models;
 
-require_once '../Database/database.php';
-
+require_once __DIR__ . '/../Database/database.php';
+use YourNamespace\Database\Database;
+use PDOException;
 class UserModel
 {
     private $pdo;
 
     public function __construct()
     {
-        $database = new \Database();
+        $database = new Database();
         $this->pdo = $database->getConnection();
     }
 

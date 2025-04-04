@@ -1,7 +1,10 @@
 <?php
-require_once './Models/ProductModel.php';
-require_once './Controllers/BaseController.php';
-    
+namespace YourNamespace\Controllers;
+
+require_once __DIR__ . '/../Models/ProductModel.php';
+require_once __DIR__ . '/BaseController.php';
+
+use YourNamespace\Models\ProductModel;
 use YourNamespace\BaseController;
 
 class ProductController extends BaseController
@@ -21,7 +24,7 @@ class ProductController extends BaseController
     function index()
     {
         $products = $this->model->getProducts();
-        $this->views('products/product-list.php', ['products' => $products]);
+        $this->views('products/product-list', ['products' => $products]);
     }
 
     function create()
