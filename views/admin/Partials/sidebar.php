@@ -13,7 +13,7 @@
 
     <!-- Nav Item - Dashboard -->
     <li class="nav-item active">
-        <a class="nav-link" href="/">
+        <a class="nav-link" href="/admin-dashboard">
             <i class="fas fa-fw fa-tachometer-alt text-dark"></i>
             <span>Dashboard</span></a>
     </li>
@@ -21,10 +21,9 @@
     <!-- Divider -->
     <hr class="sidebar-divider">
 
-    <!-- Nav Item - Utilities Collapse Menu -->
+    <!-- Nav Item - Customers -->
     <li class="nav-item">
-        <a class="nav-link collapsed" href="/views/user/list.php"
-            aria-expanded="true" aria-controls="collapseUtilities">
+        <a class="nav-link collapsed" href="/admin/users">
             <i class="fa fa-user" aria-hidden="true"></i>
             <span>Customers</span>
         </a>
@@ -33,39 +32,48 @@
     <!-- Divider -->
     <hr class="sidebar-divider">
 
-    <!-- Nav Item - Pages Collapse Menu -->
+    <!-- Nav Item - Products -->
     <li class="nav-item">
-        <a class="nav-link collapsed" href="/product">
+        <a class="nav-link collapsed" href="/admin/products">
             <i class="fas fa-fw fa-folder"></i>
             <span>Products</span>
         </a>
     </li>
+
+    <!-- Divider -->
     <hr class="sidebar-divider">
 
-    <!-- Nav Item - Charts -->
+    <!-- Nav Item - Receipts -->
     <li class="nav-item">
-        <a class="nav-link" href="/feedback">
+        <a class="nav-link collapsed" href="/admin/receipts">
+            <i class="fas fa-receipt"></i>
+            <span>Receipts</span>
+        </a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Nav Item - Feedback -->
+    <li class="nav-item">
+        <a class="nav-link" href="#">
             <i class="fas fa-comment-alt feedback-icon"></i>
             <span>Feedback</span></a>
     </li>
 
-    <!-- Nav Item - Pages Collapse Menu -->
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Nav Item - Settings -->
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
             aria-expanded="true" aria-controls="collapsePages">
             <i class="fas fa-cogs setting-icon"></i>
-            <span>Sitting</span>
+            <span>Settings</span>
         </a>
         <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Login Screens:</h6>
-                <a class="collapse-item" href="login.html">Login</a>
-                <a class="collapse-item" href="register.html">Register</a>
-                <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
-                <div class="collapse-divider"></div>
-                <h6 class="collapse-header">Other Pages:</h6>
-                <a class="collapse-item" href="404.html">404 Page</a>
-                <a class="collapse-item" href="blank.html">Blank Page</a>
+                <a href="/logout" class="role-switch-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
             </div>
         </div>
     </li>
