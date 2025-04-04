@@ -26,6 +26,10 @@
 .branch-order-sidebar {
     text-align: center;
     margin-bottom: 25px;
+    position: relative;
+    top: 24px;
+    align-items: center;
+    left: 50px;
 }
 
 .branch-logo {
@@ -44,13 +48,13 @@
 }
 
 .nav-list li {
-    margin-bottom: 12px;
+    margin-bottom: 22px;
 }
 
 .nav-list li a {
     display: flex;
     align-items: center;
-    padding: 12px 18px;
+    padding: 18px 26px;
     border-radius: 8px;
     color: #333;
     text-decoration: none;

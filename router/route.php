@@ -1,7 +1,6 @@
 <?php
-namespace YourNamespace;
+require_once "Router.php";
 
-require_once "router/Router.php";
 require_once "controllers/BaseController.php";
 require_once "controllers/WelcomeController.php";
 require_once "controllers/FavoritesController.php";
@@ -21,7 +20,7 @@ require_once "controllers/Admin/AdminFeedbackController.php";
 require_once "controllers/GiftCardController.php";
 require_once "controllers/LocationsController.php";
 require_once "controllers/JoinTheTeamController.php";
-require_once "controllers/MoreController.php";
+
 
 use YourNamespace\Router;
 use YourNamespace\Controllers\WelcomeController;
@@ -42,7 +41,7 @@ use YourNamespace\Controllers\Admin\AdminFeedbackController;
 use YourNamespace\Controllers\GiftCardController;
 use YourNamespace\Controllers\LocationsController;
 use YourNamespace\Controllers\JoinTheTeamController;
-use YourNamespace\Controllers\MoreController;
+
 
 $route = new Router();
 
@@ -81,11 +80,6 @@ $route->get("/join-the-team/apply", [JoinTheTeamController::class, 'apply']);
 $route->post("/join-the-team/apply", [JoinTheTeamController::class, 'apply']);
 $route->get("/join-the-team/success", [JoinTheTeamController::class, 'success']);
 
-$route->get("/more", [MoreController::class, 'index']);
-$route->get("/about-us", [MoreController::class, 'aboutUs']);
-$route->get("/contact-us", [MoreController::class, 'contactUs']);
-$route->get("/faq", [MoreController::class, 'faq']);
-
 // Original routes
 $route->get("/welcome", [WelcomeController::class, 'welcome']);
 $route->get("/order", [OrdersController::class, 'index']);
@@ -116,9 +110,13 @@ $route->get("/booking", [BookingController::class, 'index']);
 $route->get("/booking/details/{id}", [BookingController::class, 'details']);
 $route->post("/booking/create", [BookingController::class, 'createBooking']);
 
-// Order routes
-$route->get("/orders", [OrdersController::class, 'index']);
-$route->get("/orders/details/{id}", [OrdersController::class, 'details']);
+// Product routes - fixed routes
+$route->get("/product", [ProductController::class, 'index']);
+$route->get("/product/create", [ProductController::class, 'create']);
+$route->post("/product/store", [ProductController::class, 'store']);
+$route->get("/product/edit", [ProductController::class, 'edit']);
+$route->post("/product/update", [ProductController::class, 'update']);
+$route->get("/product/delete", [ProductController::class, 'delete']);
 
 // Favorites routes
 $route->get("/favorites", [FavoritesController::class, 'index']);
@@ -131,6 +129,7 @@ $route->post("/feedback/submit-review", [FeedbackController::class, 'submitRevie
 $route->post("/feedback/submit-suggestion", [FeedbackController::class, 'submitSuggestion']);
 $route->post("/feedback/submit-report", [FeedbackController::class, 'submitReport']);
 
+// Settings routes
 $route->get("/settings", [SettingsController::class, 'index']);
 
 // Admin routes
@@ -159,12 +158,6 @@ $route->post("/admin/feedback/store", [FeedbackController::class, 'store']);
 $route->get("/admin/feedback/edit/{id}", [FeedbackController::class, 'edit']);
 $route->post("/admin/feedback/update/{id}", [FeedbackController::class, 'update']);
 $route->post("/admin/feedback/delete/{id}", [FeedbackController::class, 'delete']);
-
-// New navigation routes
-$route->get("/gift-card", [GiftCardController::class, 'index']);
-$route->get("/locations", [LocationsController::class, 'index']);
-$route->get("/join-the-team", [JoinTheTeamController::class, 'index']);
-$route->get("/more", [MoreController::class, 'index']);
 
 // Additional pages from More menu
 $route->get("/about-us", [MoreController::class, 'aboutUs']);

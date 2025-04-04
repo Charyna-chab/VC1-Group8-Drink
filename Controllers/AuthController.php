@@ -1,13 +1,54 @@
 <?php
 namespace YourNamespace\Controllers;
 use YourNamespace\BaseController;
+require_once 'Database/database.php';
 
 class AuthController extends BaseController {
+    private $conn;
+    private $admin_email = "charyna.chab@student.passerellesnumeriques.org";
+    private $admin_password = "ryna!@#1649";
+    
     public function __construct() {
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
         }
+        
+        // Initialize database connection
+        $database = new \Database();
+        $this->conn = $database->getConnection();
+        
         $this->checkRememberMe();
+        $this->ensureAdminExists();
+    }
+
+    // Make sure our admin account exists in the database
+    private function ensureAdminExists() {
+        try {
+            // Check if admin exists
+            $stmt = $this->conn->prepare("SELECT user_id FROM users WHERE email = :email");
+            $stmt->bindParam(':email', $this->admin_email);
+            $stmt->execute();
+            
+            if ($stmt->rowCount() == 0) {
+                // Admin doesn't exist, create it
+                $stmt = $this->conn->prepare(
+                    "INSERT INTO users (name, email, phone, address, password, role) 
+                     VALUES ('Admin User', :email, '0123456789', 'Admin Address', :password, 'admin')"
+                );
+                $stmt->bindParam(':email', $this->admin_email);
+                $stmt->bindParam(':password', $this->admin_password);
+                $stmt->execute();
+            } else {
+                // Admin exists, make sure role is set to admin
+                $user = $stmt->fetch(\PDO::FETCH_ASSOC);
+                $stmt = $this->conn->prepare("UPDATE users SET role = 'admin', password = :password WHERE user_id = :user_id");
+                $stmt->bindParam(':password', $this->admin_password);
+                $stmt->bindParam(':user_id', $user['user_id']);
+                $stmt->execute();
+            }
+        } catch (\PDOException $e) {
+            // Silently fail - we'll try again next time
+        }
     }
 
     public function index() {
@@ -37,54 +78,51 @@ class AuthController extends BaseController {
             $email = $_POST['email'] ?? '';
             $password = $_POST['password'] ?? '';
             $remember = isset($_POST['remember']);
-            $isAdmin = isset($_POST['admin_login']);
 
-            if ($isAdmin) {
-                // Redirect to admin login page if user wants to login as admin
-                $this->redirect('/admin-login');
-                return;
-            }
-
-            // In a real application, you would validate against a database
-            // For now, check if it's the demo user or a registered user
-            if (($email === 'user@example.com' && $password === 'password123') || 
-                (isset($_SESSION['registered_users']) && $this->validateUser($email, $password))) {
+            // Validate user credentials against database
+            try {
+                $stmt = $this->conn->prepare("SELECT user_id, name, email, password, role, phone, address, image FROM users WHERE email = :email");
+                $stmt->bindParam(':email', $email);
+                $stmt->execute();
                 
-                // If it's a registered user, get their data
-                if (isset($_SESSION['registered_users']) && $this->validateUser($email, $password)) {
-                    $userData = $_SESSION['registered_users'][$email];
-                    $_SESSION['user_id'] = $userData['id'];
-                    $_SESSION['user'] = [
-                        'id' => $userData['id'],
-                        'name' => $userData['name'],
-                        'email' => $email,
-                        'avatar' => $userData['avatar'] ?? '/assets/images/avatar.jpg',
-                        'role' => 'user',
-                        'phone' => $userData['phone'] ?? '',
-                        'birthday' => $userData['birthday'] ?? ''
-                    ];
+                if ($stmt->rowCount() > 0) {
+                    $user = $stmt->fetch(\PDO::FETCH_ASSOC);
+                    
+                    // Verify password (in a real app, use password_verify with hashed passwords)
+                    if ($password === $user['password']) {
+                        // Check if this is an admin trying to login through user login
+                        if ($user['role'] === 'admin') {
+                            $error = 'Admin users must login through the admin login page.';
+                        } else {
+                            // Set session variables for regular user
+                            $_SESSION['user_id'] = $user['user_id'];
+                            $_SESSION['user'] = [
+                                'id' => $user['user_id'],
+                                'name' => $user['name'],
+                                'email' => $user['email'],
+                                'avatar' => $user['image'] ? 'data:image/jpeg;base64,' . base64_encode($user['image']) : '/assets/image/placeholder.svg?height=40&width=40',
+                                'role' => $user['role'],
+                                'phone' => $user['phone'] ?? '',
+                                'address' => $user['address'] ?? ''
+                            ];
+                            
+                            if ($remember) {
+                                // Create a secure remember me token
+                                $token = bin2hex(random_bytes(32));
+                                setcookie('remember_token', $token, time() + (86400 * 30), '/');
+                            }
+                            
+                            // Redirect to order page
+                            $this->redirect('/order');
+                        }
+                    } else {
+                        $error = 'Invalid password.';
+                    }
                 } else {
-                    // Demo user
-                    $_SESSION['user_id'] = 1;
-                    $_SESSION['user'] = [
-                        'id' => 1,
-                        'name' => 'Demo User',
-                        'email' => $email,
-                        'avatar' => '/assets/images/avatar.jpg',
-                        'role' => 'user',
-                        'phone' => '',
-                        'birthday' => ''
-                    ];
+                    $error = 'Email not found.';
                 }
-
-                if ($remember) {
-                    setcookie('remember_token', 'demo_token', time() + (86400 * 30), '/');
-                }
-                
-                // Redirect to order page for regular users
-                $this->redirect('/order');
-            } else {
-                $error = 'Invalid email or password.';
+            } catch (\PDOException $e) {
+                $error = 'Database error: ' . $e->getMessage();
             }
         }
 
@@ -93,16 +131,6 @@ class AuthController extends BaseController {
             'error' => $error,
             'success' => $success
         ]);
-    }
-
-    private function validateUser($email, $password) {
-        if (!isset($_SESSION['registered_users']) || !isset($_SESSION['registered_users'][$email])) {
-            return false;
-        }
-        
-        $userData = $_SESSION['registered_users'][$email];
-        // In a real app, you would use password_verify() to check hashed passwords
-        return $userData['password'] === $password;
     }
 
     public function register() {
@@ -120,38 +148,13 @@ class AuthController extends BaseController {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $name = $_POST['name'] ?? '';
             $email = $_POST['email'] ?? '';
+            $phone = $_POST['phone'] ?? '';
+            $address = $_POST['address'] ?? '';
             $password = $_POST['password'] ?? '';
             $confirm_password = $_POST['confirm_password'] ?? '';
             $terms = isset($_POST['terms']);
             
-            // Handle profile image upload
-            $avatar = '/assets/images/default-avatar.jpg'; // Default avatar
-            
-            if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] === UPLOAD_ERR_OK) {
-                $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/assets/images/uploads/';
-                
-                // Create directory if it doesn't exist
-                if (!file_exists($uploadDir)) {
-                    mkdir($uploadDir, 0755, true);
-                }
-                
-                $fileName = uniqid() . '_' . basename($_FILES['profile_image']['name']);
-                $uploadFile = $uploadDir . $fileName;
-                
-                // Check if it's a valid image
-                $imageInfo = getimagesize($_FILES['profile_image']['tmp_name']);
-                if ($imageInfo !== false) {
-                    // Move the uploaded file
-                    if (move_uploaded_file($_FILES['profile_image']['tmp_name'], $uploadFile)) {
-                        $avatar = '/assets/images/uploads/' . $fileName;
-                    } else {
-                        $error = 'Failed to upload profile image. Please try again.';
-                    }
-                } else {
-                    $error = 'The uploaded file is not a valid image.';
-                }
-            }
-
+            // Basic validation
             if (empty($name) || empty($email) || empty($password) || empty($confirm_password)) {
                 $error = 'Please fill in all required fields';
             } elseif ($password !== $confirm_password) {
@@ -161,38 +164,42 @@ class AuthController extends BaseController {
             } elseif (!$terms) {
                 $error = 'You must agree to the Terms of Service.';
             } else {
-                // In a real application, you would save the user to the database
-                // For now, we'll store the registration data in the session
-                
-                // Initialize registered_users array if it doesn't exist
-                if (!isset($_SESSION['registered_users'])) {
-                    $_SESSION['registered_users'] = [];
-                }
-                
-                // Check if email already exists
-                if (isset($_SESSION['registered_users'][$email])) {
-                    $error = 'Email already registered. Please use a different email.';
-                } else {
-                    // Generate a unique ID for the user
-                    $userId = count($_SESSION['registered_users']) + 2; // Start from 2 since demo user is 1
+                try {
+                    // Check if email already exists
+                    $stmt = $this->conn->prepare("SELECT user_id FROM users WHERE email = :email");
+                    $stmt->bindParam(':email', $email);
+                    $stmt->execute();
                     
-                    // Store user data
-                    $_SESSION['registered_users'][$email] = [
-                        'id' => $userId,
-                        'name' => $name,
-                        'email' => $email,
-                        'password' => $password, // In a real app, this would be hashed
-                        'avatar' => $avatar,
-                        'role' => 'user',
-                        'phone' => '',
-                        'birthday' => ''
-                    ];
-                    
-                    // Set a flag to show success message on login page
-                    $_SESSION['registration_success'] = true;
-                    
-                    // Redirect to login page
-                    $this->redirect('/login');
+                    if ($stmt->rowCount() > 0) {
+                        $error = 'Email already registered. Please use a different email.';
+                    } else {
+                        // In a real application, you would hash the password
+                        // $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+                        
+                        // Insert new user
+                        $stmt = $this->conn->prepare(
+                            "INSERT INTO users (name, email, phone, address, password, role) 
+                             VALUES (:name, :email, :phone, :address, :password, 'user')"
+                        );
+                        
+                        $stmt->bindParam(':name', $name);
+                        $stmt->bindParam(':email', $email);
+                        $stmt->bindParam(':phone', $phone);
+                        $stmt->bindParam(':address', $address);
+                        $stmt->bindParam(':password', $password); // In a real app, use $hashedPassword
+                        
+                        if ($stmt->execute()) {
+                            // Set a flag to show success message on login page
+                            $_SESSION['registration_success'] = true;
+                            
+                            // Redirect to login page
+                            $this->redirect('/login');
+                        } else {
+                            $error = 'Registration failed. Please try again.';
+                        }
+                    }
+                } catch (\PDOException $e) {
+                    $error = 'Database error: ' . $e->getMessage();
                 }
             }
         }
@@ -200,187 +207,6 @@ class AuthController extends BaseController {
         $this->views('auth/register', ['title' => 'Register - XING FU CHA', 'error' => $error]);
     }
     
-    public function updateProfile() {
-        if (!isset($_SESSION['user_id'])) {
-            $this->redirect('/login');
-        }
-        
-        $response = ['success' => false, 'message' => 'An error occurred'];
-        
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $name = $_POST['name'] ?? $_SESSION['user']['name'];
-            $email = $_POST['email'] ?? $_SESSION['user']['email'];
-            $phone = $_POST['phone'] ?? '';
-            $birthday = $_POST['birthday'] ?? '';
-            
-            // Handle profile image upload
-            $avatar = $_SESSION['user']['avatar']; // Keep existing avatar by default
-            
-            if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] === UPLOAD_ERR_OK) {
-                $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/assets/images/uploads/';
-                
-                // Create directory if it doesn't exist
-                if (!file_exists($uploadDir)) {
-                    mkdir($uploadDir, 0755, true);
-                }
-                
-                $fileName = uniqid() . '_' . basename($_FILES['profile_image']['name']);
-                $uploadFile = $uploadDir . $fileName;
-                
-                // Check if it's a valid image
-                $imageInfo = getimagesize($_FILES['profile_image']['tmp_name']);
-                if ($imageInfo !== false) {
-                    // Move the uploaded file
-                    if (move_uploaded_file($_FILES['profile_image']['tmp_name'], $uploadFile)) {
-                        $avatar = '/assets/images/uploads/' . $fileName;
-                    } else {
-                        $response = ['success' => false, 'message' => 'Failed to upload profile image'];
-                        echo json_encode($response);
-                        exit;
-                    }
-                } else {
-                    $response = ['success' => false, 'message' => 'The uploaded file is not a valid image'];
-                    echo json_encode($response);
-                    exit;
-                }
-            }
-            
-            // Update user data in session
-            $_SESSION['user']['name'] = $name;
-            $_SESSION['user']['email'] = $email;
-            $_SESSION['user']['phone'] = $phone;
-            $_SESSION['user']['birthday'] = $birthday;
-            $_SESSION['user']['avatar'] = $avatar;
-            
-            // In a real application, you would update the database here
-            // For now, update the registered_users array if the user exists there
-            if (isset($_SESSION['registered_users']) && isset($_SESSION['registered_users'][$_SESSION['user']['email']])) {
-                $oldEmail = $_SESSION['user']['email'];
-                
-                // If email changed, update the key in the array
-                if ($email !== $oldEmail) {
-                    $userData = $_SESSION['registered_users'][$oldEmail];
-                    unset($_SESSION['registered_users'][$oldEmail]);
-                    $_SESSION['registered_users'][$email] = $userData;
-                }
-                
-                // Update user data
-                $_SESSION['registered_users'][$email]['name'] = $name;
-                $_SESSION['registered_users'][$email]['phone'] = $phone;
-                $_SESSION['registered_users'][$email]['birthday'] = $birthday;
-                $_SESSION['registered_users'][$email]['avatar'] = $avatar;
-            }
-            
-            $response = [
-                'success' => true, 
-                'message' => 'Profile updated successfully',
-                'user' => [
-                    'name' => $name,
-                    'email' => $email,
-                    'phone' => $phone,
-                    'birthday' => $birthday,
-                    'avatar' => $avatar
-                ]
-            ];
-        }
-        
-        echo json_encode($response);
-        exit;
-    }
-    
-    public function updatePassword() {
-        if (!isset($_SESSION['user_id'])) {
-            $this->redirect('/login');
-        }
-        
-        $response = ['success' => false, 'message' => 'An error occurred'];
-        
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $currentPassword = $_POST['current_password'] ?? '';
-            $newPassword = $_POST['new_password'] ?? '';
-            $confirmPassword = $_POST['confirm_password'] ?? '';
-            
-            // In a real application, you would verify the current password against the database
-            // For demo purposes, we'll use a hardcoded password or check against registered_users
-            $validCurrentPassword = false;
-            
-            if ($_SESSION['user']['email'] === 'user@example.com' && $currentPassword === 'password123') {
-                $validCurrentPassword = true;
-            } elseif (isset($_SESSION['registered_users']) && isset($_SESSION['registered_users'][$_SESSION['user']['email']])) {
-                $userData = $_SESSION['registered_users'][$_SESSION['user']['email']];
-                if ($userData['password'] === $currentPassword) {
-                    $validCurrentPassword = true;
-                }
-            }
-            
-            if (!$validCurrentPassword) {
-                $response = ['success' => false, 'message' => 'Current password is incorrect'];
-            } elseif (empty($newPassword)) {
-                $response = ['success' => false, 'message' => 'New password cannot be empty'];
-            } elseif ($newPassword !== $confirmPassword) {
-                $response = ['success' => false, 'message' => 'New passwords do not match'];
-            } elseif (strlen($newPassword) < 8) {
-                $response = ['success' => false, 'message' => 'Password must be at least 8 characters long'];
-            } else {
-                // In a real application, you would update the password in the database
-                // For now, update the registered_users array if the user exists there
-                if (isset($_SESSION['registered_users']) && isset($_SESSION['registered_users'][$_SESSION['user']['email']])) {
-                    $_SESSION['registered_users'][$_SESSION['user']['email']]['password'] = $newPassword;
-                }
-                
-                $response = ['success' => true, 'message' => 'Password updated successfully'];
-            }
-        }
-        
-        echo json_encode($response);
-        exit;
-    }
-    
-    public function registerSuccess() {
-        if (!isset($_SESSION['user_id'])) {
-            $this->redirect('/login');
-        }
-        
-        $this->views('auth/register_success', [
-            'title' => 'Registration Successful - XING FU CHA',
-            'user' => $_SESSION['user']
-        ]);
-    }
-
-    public function forgotPassword() {
-        $error = null;
-        $message = null;
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $email = $_POST['email'] ?? '';
-
-            if (empty($email)) {
-                $error = 'Please enter your email address';
-            } else {
-                // In a real application, you would send a password reset email
-                $message = 'Password reset instructions have been sent to your email.';
-            }
-        }
-
-        $this->views('auth/forgot_password', ['title' => 'Forgot Password - XING FU CHA', 'error' => $error, 'message' => $message]);
-    }
-
-    public function logout() {
-        // Unset all session variables
-        $_SESSION = array();
-        
-        // Destroy the session
-        session_destroy();
-
-        // Delete the remember me cookie if it exists
-        if (isset($_COOKIE['remember_token'])) {
-            setcookie('remember_token', '', time() - 3600, '/');
-        }
-
-        // Redirect to login page
-        $this->redirect('/login');
-    }
-
     public function adminLogin() {
         if (isset($_SESSION['user_id']) && isset($_SESSION['user']['role']) && $_SESSION['user']['role'] === 'admin') {
             $this->redirect('/admin-dashboard');
@@ -392,23 +218,50 @@ class AuthController extends BaseController {
             $email = $_POST['email'] ?? '';
             $password = $_POST['password'] ?? '';
 
-            // Use the specific admin credentials provided by the user
-            if ($email === 'vandaleng@student.passerellesnumeriques.org' && $password === 'vanda,123') {
-                // Generate verification code
-                $verification_code = rand(100000, 999999);
-                
-                // In a real application, you would send this code via email
-                // For demo purposes, we'll store it in the session
-                $_SESSION['admin_email'] = $email;
-                $_SESSION['verification_code'] = $verification_code;
-                $_SESSION['verification_time'] = time();
-                
-                // For demo purposes, display the code (in a real app, this would be sent via email)
-                $_SESSION['demo_code'] = $verification_code;
-                
-                $this->redirect('/admin-verification');
+            // Check if this is our designated admin email
+            if ($email === $this->admin_email) {
+                try {
+                    // Check if admin exists in database
+                    $stmt = $this->conn->prepare("SELECT user_id, name, email, password FROM users WHERE email = :email AND role = 'admin'");
+                    $stmt->bindParam(':email', $email);
+                    $stmt->execute();
+                    
+                    if ($stmt->rowCount() > 0) {
+                        $admin = $stmt->fetch(\PDO::FETCH_ASSOC);
+                        
+                        // Verify password
+                        if ($password === $admin['password']) {
+                            // Generate verification code
+                            $verification_code = rand(100000, 999999);
+                            
+                            // In a real application, you would send this code via email
+                            // For demo purposes, we'll store it in the session
+                            $_SESSION['admin_email'] = $email;
+                            $_SESSION['admin_id'] = $admin['user_id'];
+                            $_SESSION['admin_name'] = $admin['name'];
+                            $_SESSION['verification_code'] = $verification_code;
+                            $_SESSION['verification_time'] = time();
+                            
+                            // For demo purposes, display the code (in a real app, this would be sent via email)
+                            $_SESSION['demo_code'] = $verification_code;
+                            
+                            // In a real application, you would send an email with the verification code
+                            // sendVerificationEmail($email, $verification_code);
+                            
+                            $this->redirect('/admin-verification');
+                        } else {
+                            $error = 'Invalid password.';
+                        }
+                    } else {
+                        // Admin doesn't exist in database yet, create it
+                        $this->ensureAdminExists();
+                        $error = 'Please try logging in again.';
+                    }
+                } catch (\PDOException $e) {
+                    $error = 'Database error: ' . $e->getMessage();
+                }
             } else {
-                $error = 'Invalid email or password.';
+                $error = 'Invalid admin credentials.';
             }
         }
 
@@ -432,19 +285,19 @@ class AuthController extends BaseController {
                 (time() - $_SESSION['verification_time']) < 600) {
                 
                 // Set admin session
-                $_SESSION['user_id'] = 999; // Admin ID
+                $_SESSION['user_id'] = $_SESSION['admin_id'];
                 $_SESSION['user'] = [
-                    'id' => 999,
-                    'name' => 'Admin User',
+                    'id' => $_SESSION['admin_id'],
+                    'name' => $_SESSION['admin_name'],
                     'email' => $_SESSION['admin_email'],
-                    'avatar' => '/assets/images/admin-avatar.jpg',
-                    'role' => 'admin',
-                    'phone' => '',
-                    'birthday' => ''
+                    'avatar' => '/assets/image/placeholder.svg?height=40&width=40',
+                    'role' => 'admin'
                 ];
                 
                 // Clear verification data
                 unset($_SESSION['admin_email']);
+                unset($_SESSION['admin_id']);
+                unset($_SESSION['admin_name']);
                 unset($_SESSION['verification_code']);
                 unset($_SESSION['verification_time']);
                 unset($_SESSION['demo_code']);
@@ -456,6 +309,8 @@ class AuthController extends BaseController {
                     $error = 'Verification code has expired. Please try again.';
                     // Clear verification data
                     unset($_SESSION['admin_email']);
+                    unset($_SESSION['admin_id']);
+                    unset($_SESSION['admin_name']);
                     unset($_SESSION['verification_code']);
                     unset($_SESSION['verification_time']);
                     unset($_SESSION['demo_code']);
@@ -480,29 +335,46 @@ class AuthController extends BaseController {
             return;
         }
 
-        if (isset($_COOKIE['remember_token']) && $_COOKIE['remember_token'] === 'demo_token') {
-            $_SESSION['user_id'] = 1;
-            $_SESSION['user'] = [
-                'id' => 1,
-                'name' => 'Demo User',
-                'email' => 'user@example.com',
-                'avatar' => '/assets/images/avatar.jpg',
-                'role' => 'user',
-                'phone' => '',
-                'birthday' => ''
-            ];
+        if (isset($_COOKIE['remember_token'])) {
+            // In a real application, you would verify the token against the database
+            try {
+                // This is a placeholder. In a real app, you would query the database for the token
+                $stmt = $this->conn->prepare("SELECT user_id, name, email, role, phone, address, image FROM users WHERE remember_token = :token");
+                $stmt->bindParam(':token', $_COOKIE['remember_token']);
+                $stmt->execute();
+                
+                if ($stmt->rowCount() > 0) {
+                    $user = $stmt->fetch(\PDO::FETCH_ASSOC);
+                    $_SESSION['user_id'] = $user['user_id'];
+                    $_SESSION['user'] = [
+                        'id' => $user['user_id'],
+                        'name' => $user['name'],
+                        'email' => $user['email'],
+                        'avatar' => $user['image'] ? 'data:image/jpeg;base64,' . base64_encode($user['image']) : '/assets/image/placeholder.svg?height=40&width=40',
+                        'role' => $user['role'],
+                        'phone' => $user['phone'] ?? '',
+                        'address' => $user['address'] ?? ''
+                    ];
+                }
+            } catch (\PDOException $e) {
+                // Log error
+            }
         }
     }
 
-    public function checkAuth() {
-        if (!isset($_SESSION['user_id'])) {
-            $this->redirect('/login');
+    public function logout() {
+        // Unset all session variables
+        $_SESSION = array();
+        
+        // Destroy the session
+        session_destroy();
+
+        // Delete the remember me cookie if it exists
+        if (isset($_COOKIE['remember_token'])) {
+            setcookie('remember_token', '', time() - 3600, '/');
         }
-    }
-    
-    public function checkAdminAuth() {
-        if (!isset($_SESSION['user_id']) || !isset($_SESSION['user']['role']) || $_SESSION['user']['role'] !== 'admin') {
-            $this->redirect('/admin-login');
-        }
+
+        // Redirect to login page
+        $this->redirect('/login');
     }
 }

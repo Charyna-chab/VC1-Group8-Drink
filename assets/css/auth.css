@@ -1,8 +1,8 @@
 /* Auth System Styles - Enhanced with animations and bubble tea theme */
 
 :root {
-    --primary-color: #ff7f50;
-    --primary-dark: #e56a45;
+    --primary-color: #ff1d43;
+    --primary-dark: #e05a9d;
     --secondary-color: #4a3f35;
     --accent-color: #8bc34a;
     --text-color: #333333;
@@ -65,7 +65,7 @@ body {
 .bg-bubble:nth-child(1) {
     width: 150px;
     height: 150px;
-    background: linear-gradient(45deg, var(--primary-color), #ffb347);
+    background: linear-gradient(45deg, var(--primary-color), #ffb6c1);
     top: 10%;
     left: 10%;
     animation-delay: 0s;
@@ -92,7 +92,7 @@ body {
 .bg-bubble:nth-child(4) {
     width: 120px;
     height: 120px;
-    background: linear-gradient(45deg, #ffb347, #ffcc33);
+    background: linear-gradient(45deg, #ffb6c1, #ffc0cb);
     bottom: 10%;
     right: 10%;
     animation-delay: 6s;
@@ -110,7 +110,7 @@ body {
 .bg-bubble:nth-child(6) {
     width: 90px;
     height: 90px;
-    background: linear-gradient(45deg, #ff7f50, #ff6347);
+    background: linear-gradient(45deg, #ff69b4, #ff1493);
     top: 60%;
     right: 25%;
     animation-delay: 10s;
@@ -154,7 +154,7 @@ body {
     position: absolute;
     width: 40px;
     height: 60px;
-    background-color: rgba(255, 127, 80, 0.3);
+    background-color: rgba(255, 105, 180, 0.3);
     border-radius: 5px 5px 20px 20px;
     opacity: 0.5;
     animation: float-cup 20s infinite ease-in-out;
@@ -392,7 +392,7 @@ body {
     transform: translateX(-50%) rotate(-10deg);
     width: 8px;
     height: 150px;
-    background: linear-gradient(to bottom, #ff6b6b, #ff9e9e);
+    background: linear-gradient(to bottom, #ff69b4, #ffb6c1);
     border-radius: 4px;
     z-index: 4;
 }
@@ -402,7 +402,7 @@ body {
     bottom: 0;
     width: 100%;
     height: 70%;
-    background: linear-gradient(to bottom, rgba(255, 127, 80, 0.7), rgba(255, 159, 80, 0.9));
+    background: linear-gradient(to bottom, rgba(255, 105, 180, 0.7), rgba(255, 182, 193, 0.9));
     animation: tea-wave 3s infinite ease-in-out;
 }
 
@@ -533,7 +533,6 @@ body {
     animation-fill-mode: both;
     width: 100%;
     position: relative;
-    overflow: hidden;
 }
 
 .form-group:nth-child(1) {
@@ -574,7 +573,6 @@ body {
 
 .input-with-icon {
     position: relative;
-    overflow: hidden;
     width: 100%;
 }
 
@@ -601,45 +599,17 @@ body {
     font-size: 14px;
     transition: var(--transition);
     box-sizing: border-box;
-    background-color: #f9f9f9;
+    background-color: white;
 }
 
 .input-with-icon input:focus {
     outline: none;
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(255, 127, 80, 0.2);
-    background-color: white;
+    box-shadow: 0 0 0 3px rgba(255, 105, 180, 0.2);
 }
 
 .input-with-icon input:focus+i {
     color: var(--primary-color);
-}
-
-
-/* Input animation on focus */
-
-.input-with-icon input:focus {
-    transform: translateY(-2px);
-}
-
-
-/* Form field liquid animation */
-
-.form-group::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    width: 0;
-    height: 2px;
-    background: linear-gradient(to right, var(--primary-color), var(--accent-color));
-    transition: width 0.5s ease, left 0.5s ease;
-    z-index: 1;
-}
-
-.form-group:focus-within::after {
-    width: 100%;
-    left: 0;
 }
 
 
@@ -713,18 +683,18 @@ body {
     position: relative;
     overflow: hidden;
     animation: form-item-appear 0.5s ease-out 1.2s both;
-    box-shadow: 0 4px 15px rgba(255, 127, 80, 0.3);
+    box-shadow: 0 4px 15px rgba(255, 105, 180, 0.3);
 }
 
 .auth-button:hover {
     background-color: var(--primary-dark);
     transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(255, 127, 80, 0.4);
+    box-shadow: 0 6px 20px rgba(255, 105, 180, 0.4);
 }
 
 .auth-button:active {
     transform: translateY(-1px);
-    box-shadow: 0 3px 10px rgba(255, 127, 80, 0.3);
+    box-shadow: 0 3px 10px rgba(255, 105, 180, 0.3);
 }
 
 .auth-button::after {
@@ -993,7 +963,7 @@ body {
 .verification-code input:focus {
     outline: none;
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(255, 127, 80, 0.2);
+    box-shadow: 0 0 0 3px rgba(255, 105, 180, 0.2);
     transform: translateY(-3px);
 }
 
@@ -1012,10 +982,10 @@ body {
 @keyframes pulse {
     0%,
     100% {
-        box-shadow: 0 0 0 0 rgba(255, 127, 80, 0.4);
+        box-shadow: 0 0 0 0 rgba(255, 105, 180, 0.4);
     }
     50% {
-        box-shadow: 0 0 0 10px rgba(255, 127, 80, 0);
+        box-shadow: 0 0 0 10px rgba(255, 105, 180, 0);
     }
 }
 
