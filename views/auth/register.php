@@ -95,12 +95,6 @@ if (session_status() == PHP_SESSION_NONE) {
 
           <button type="submit" class="auth-button">Create Account</button>
 
-          <div class="divider">
-              class="auth-button">Create Account</button>
-
-          <div class="divider">
-            <span class="divider-text">Or register with</span>
-          </div>
 
           <div class="social-buttons">
             <button type="button" class="social-button google">

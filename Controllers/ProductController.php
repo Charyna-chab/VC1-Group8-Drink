@@ -18,45 +18,42 @@ class ProductController extends BaseController {
     }
     
     public function index() {
-        // In a real application, you would fetch products from a database
-        // For demo purposes, we'll use a session array
-        if (!isset($_SESSION['products'])) {
-            $_SESSION['products'] = [
-                [
-                    'id' => 1,
-                    'name' => 'Classic Milk Tea',
-                    'description' => 'Our signature milk tea with premium tea leaves',
-                    'price' => 4.99,
-                    'category' => 'milk-tea',
-                    'image' => '/assets/images/products/classic-milk-tea.jpg'
-                ],
-                [
-                    'id' => 2,
-                    'name' => 'Taro Milk Tea',
-                    'description' => 'Creamy taro flavor with milk tea',
-                    'price' => 5.49,
-                    'category' => 'milk-tea',
-                    'image' => '/assets/images/products/taro-milk-tea.jpg'
-                ],
-                [
-                    'id' => 3,
-                    'name' => 'Mango Fruit Tea',
-                    'description' => 'Refreshing tea with fresh mango',
-                    'price' => 5.99,
-                    'category' => 'fruit-tea',
-                    'image' => '/assets/images/products/mango-fruit-tea.jpg'
-                ]
-            ];
-        }
+        // Clear existing products and create new ones with correct keys
+        $_SESSION['products'] = [
+            [
+                'product_id' => 1,
+                'product_name' => 'Classic Milk Tea',
+                'product_detail' => 'Our signature milk tea with premium tea leaves',
+                'price' => 4.99,
+                'category' => 'milk-tea',
+                'image' => '/assets/images/products/classic-milk-tea.jpg'
+            ],
+            [
+                'product_id' => 2,
+                'product_name' => 'Taro Milk Tea',
+                'product_detail' => 'Creamy taro flavor with milk tea',
+                'price' => 5.49,
+                'category' => 'milk-tea',
+                'image' => '/assets/images/products/taro-milk-tea.jpg'
+            ],
+            [
+                'product_id' => 3,
+                'product_name' => 'Mango Fruit Tea',
+                'product_detail' => 'Refreshing tea with fresh mango',
+                'price' => 5.99,
+                'category' => 'fruit-tea',
+                'image' => '/assets/images/products/mango-fruit-tea.jpg'
+            ]
+        ];
         
-        $this->views('admin/products/index', [
+        $this->views('products/product-list', [
             'title' => 'Manage Products - XING FU CHA',
             'products' => $_SESSION['products']
         ]);
     }
     
     public function create() {
-        $this->views('admin/products/create', [
+        $this->views('products/create', [
             'title' => 'Add New Product - XING FU CHA'
         ]);
     }
@@ -66,14 +63,14 @@ class ProductController extends BaseController {
             $this->redirect('/admin/products');
         }
         
-        $name = $_POST['name'] ?? '';
-        $description = $_POST['description'] ?? '';
+        // Get form data - make sure these match your form field names
+        $product_name = $_POST['product_name'] ?? '';
+        $product_detail = $_POST['product_detail'] ?? '';
         $price = floatval($_POST['price'] ?? 0);
         $category = $_POST['category'] ?? '';
         
         // Handle image upload
         $image = '/assets/images/products/default.jpg'; // Default image
-      // Default image
         
         if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
             $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/assets/images/products/';
@@ -97,7 +94,7 @@ class ProductController extends BaseController {
         }
         
         // Validate input
-        if (empty($name) || empty($description) || $price <= 0 || empty($category)) {
+        if (empty($product_name) || empty($product_detail) || $price <= 0) {
             // In a real application, you would handle validation errors better
             $_SESSION['error'] = 'Please fill in all required fields';
             $this->redirect('/admin/products/create');
@@ -114,14 +111,14 @@ class ProductController extends BaseController {
         $newId = 1;
         if (!empty($_SESSION['products'])) {
             $lastProduct = end($_SESSION['products']);
-            $newId = $lastProduct['id'] + 1;
+            $newId = $lastProduct['product_id'] + 1;
         }
         
-        // Add the new product
+        // Add the new product with keys matching the view
         $_SESSION['products'][] = [
-            'id' => $newId,
-            'name' => $name,
-            'description' => $description,
+            'product_id' => $newId,
+            'product_name' => $product_name,
+            'product_detail' => $product_detail,
             'price' => $price,
             'category' => $category,
             'image' => $image
@@ -136,7 +133,7 @@ class ProductController extends BaseController {
         $product = null;
         if (isset($_SESSION['products'])) {
             foreach ($_SESSION['products'] as $p) {
-                if ($p['id'] == $id) {
+                if ($p['product_id'] == $id) {
                     $product = $p;
                     break;
                 }
@@ -148,7 +145,7 @@ class ProductController extends BaseController {
             $this->redirect('/admin/products');
         }
         
-        $this->views('admin/products/edit', [
+        $this->views('products/edit', [
             'title' => 'Edit Product - XING FU CHA',
             'product' => $product
         ]);
@@ -163,7 +160,7 @@ class ProductController extends BaseController {
         $productIndex = -1;
         if (isset($_SESSION['products'])) {
             foreach ($_SESSION['products'] as $index => $p) {
-                if ($p['id'] == $id) {
+                if ($p['product_id'] == $id) {
                     $productIndex = $index;
                     break;
                 }
@@ -175,8 +172,9 @@ class ProductController extends BaseController {
             $this->redirect('/admin/products');
         }
         
-        $name = $_POST['name'] ?? '';
-        $description = $_POST['description'] ?? '';
+        // Get form data - make sure these match your form field names
+        $product_name = $_POST['product_name'] ?? '';
+        $product_detail = $_POST['product_detail'] ?? '';
         $price = floatval($_POST['price'] ?? 0);
         $category = $_POST['category'] ?? '';
         
@@ -206,18 +204,18 @@ class ProductController extends BaseController {
         }
         
         // Validate input
-        if (empty($name) || empty($description) || $price <= 0 || empty($category)) {
+        if (empty($product_name) || empty($product_detail) || $price <= 0) {
             // In a real application, you would handle validation errors better
             $_SESSION['error'] = 'Please fill in all required fields';
             $this->redirect('/admin/products/edit/' . $id);
             return;
         }
         
-        // Update the product
+        // Update the product with keys matching the view
         $_SESSION['products'][$productIndex] = [
-            'id' => $id,
-            'name' => $name,
-            'description' => $description,
+            'product_id' => $id,
+            'product_name' => $product_name,
+            'product_detail' => $product_detail,
             'price' => $price,
             'category' => $category,
             'image' => $image
@@ -232,7 +230,7 @@ class ProductController extends BaseController {
         $productIndex = -1;
         if (isset($_SESSION['products'])) {
             foreach ($_SESSION['products'] as $index => $p) {
-                if ($p['id'] == $id) {
+                if ($p['product_id'] == $id) {
                     $productIndex = $index;
                     break;
                 }
@@ -251,4 +249,3 @@ class ProductController extends BaseController {
         $this->redirect('/admin/products');
     }
 }
-
