@@ -1,8 +1,11 @@
 <?php
+namespace YourNamespace\Controllers\Admin\Products;
+
 require_once './Models/ProductModel.php';
 require_once './Controllers/BaseController.php';
     
 use YourNamespace\BaseController;
+use YourNamespace\Models\ProductModel;
 
 class ProductController extends BaseController
 {
@@ -21,6 +24,12 @@ class ProductController extends BaseController
     function index()
     {
         $products = $this->model->getProducts();
+        var_dump($products); // Debugging in index method
+        exit;
+        if (empty($products)) {
+            echo "No products found.";
+            exit;
+        }
         $this->views('products/product-list.php', ['products' => $products]);
     }
 
@@ -53,7 +62,7 @@ class ProductController extends BaseController
                 if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadFile)) {
                     $image_url = $uploadFile;  // Image URL or path saved to the database
 
-                    // Prepare the data for the user
+                    // Prepare the data for the product
                     $data = [
                         'product_name' => isset($_POST['product_name']) ? $_POST['product_name'] : null,
                         'image' => $image_url,
@@ -61,16 +70,31 @@ class ProductController extends BaseController
                         'price' => isset($_POST['price']) ? $_POST['price'] : null,
                     ];
 
+                    var_dump($data); // Debugging in store method
+                    exit;
+
                     // Validate that all required fields are present
                     if (empty($data['product_name']) || empty($data['product_detail']) || empty($data['price'])) {
                         $_SESSION['error'] = 'All fields except the image are required!';
                         $this->views('products/product-create.php', ['error' => $_SESSION['error']]);
                         return;
                     }
-                    
-                    $this->model->createProduct($data);
-                    $this->redirect('/product');
+
+                    // Save the product to the database
+                    if ($this->model->createProduct($data)) {
+                        $_SESSION['success'] = 'Product added successfully!';
+                        $this->redirect('/product');
+                    } else {
+                        $_SESSION['error'] = 'Failed to add product!';
+                        $this->views('products/product-create.php', ['error' => $_SESSION['error']]);
+                    }
+                } else {
+                    $_SESSION['error'] = 'Failed to upload image!';
+                    $this->views('products/product-create.php', ['error' => $_SESSION['error']]);
                 }
+            } else {
+                $_SESSION['error'] = 'Invalid image format! Only JPG, JPEG, PNG, and GIF are allowed.';
+                $this->views('products/product-create.php', ['error' => $_SESSION['error']]);
             }
         }
     }
@@ -82,9 +106,6 @@ class ProductController extends BaseController
             $this->redirect('/product');
             return;
         }
-    
-        $id = $_GET['id'];
-        $product = $this->model->getProduct($id); // Fetch the product by ID
     
         if (!$product) {
             $_SESSION['error'] = "Product not found!";

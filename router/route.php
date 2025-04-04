@@ -9,7 +9,7 @@ require_once "controllers/OrdersController.php";
 require_once "controllers/BookingController.php";
 require_once "controllers/AuthController.php";
 require_once "controllers/AdminController.php";
-require_once "controllers/ProductController.php";
+require_once "controllers/Admin/Products/ProductController.php";
 require_once "controllers/FeedbackController.php";
 require_once "controllers/UserController.php";
 require_once "controllers/DashboardController.php";
@@ -135,13 +135,7 @@ $route->get("/settings", [SettingsController::class, 'index']);
 // Admin routes
 $route->get("/admin-dashboard", [DashboardController::class, 'index']);
 
-// Admin Product Management
-$route->get("/admin/products", [ProductController::class, 'index']);
-$route->get("/admin/products/create", [ProductController::class, 'create']);
-$route->post("/admin/products/store", [ProductController::class, 'store']);
-$route->get("/admin/products/edit/{id}", [ProductController::class, 'edit']);
-$route->post("/admin/products/update/{id}", [ProductController::class, 'update']);
-$route->post("/admin/products/delete/{id}", [ProductController::class, 'delete']);
+
 
 // Admin User Management
 $route->get("/admin/users", [UserController::class, 'index']);

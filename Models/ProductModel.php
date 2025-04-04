@@ -13,8 +13,13 @@ class ProductModel
 
     function getProducts()
     {
-        $products = $this->pdo->query("SELECT * FROM products ORDER BY product_id DESC");
-        return $products->fetchAll();
+        try {
+            $stmt = $this->pdo->query("SELECT * FROM products ORDER BY product_id DESC");
+            return $stmt->fetchAll();
+        } catch (PDOException $e) {
+            error_log("Error fetching products: " . $e->getMessage());
+            return [];
+        }
     }
 
 
