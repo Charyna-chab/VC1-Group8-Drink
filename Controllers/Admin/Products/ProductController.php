@@ -1,6 +1,10 @@
 <?php
+
 require_once './Models/ProductModel.php';
 require_once './Controllers/BaseController.php';
+
+use YourNamespace\BaseController;
+
 
 class ProductController extends BaseController
 {
@@ -16,7 +20,6 @@ class ProductController extends BaseController
 
         $this->model = new ProductModel();
     }
-
 
     function index()
     {
@@ -59,7 +62,6 @@ class ProductController extends BaseController
                         'image' => $image_url,
                         'product_detail' => isset($_POST['product_detail']) ? $_POST['product_detail'] : null,
                         'price' => isset($_POST['price']) ? $_POST['price'] : null,
-
                     ];
 
                     // Validate that all required fields are present
@@ -96,16 +98,19 @@ class ProductController extends BaseController
     
         $this->views('products/product-edit.php', ['product' => $product]); // Pass product data to the view
     }
-    
 
-
-    function update()
+    function update($id)
     {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            $_SESSION['error'] = "Invalid request method!";
-            $this->redirect('/product');
-            return;
-        }
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $data = [
+                'product_name' => $_POST['product_name'],
+                'image' => $_POST['image'],
+                'product_detail' => $_POST['product_detail'],
+                'price' => $_POST['price'],
+            ];
+                $this->model->updateProduct($id, $data); // Only call updateProduct
+            }
+
     
         if (!isset($_POST['product_id']) || !is_numeric($_POST['product_id'])) {
             $_SESSION['error'] = "Invalid product ID!";
@@ -153,12 +158,9 @@ class ProductController extends BaseController
         $this->redirect('/product');
     }
     
-
-    
-
     function destroy()
+  
     {
-
         if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             // Validate product ID
             if (!isset($_GET['product_id']) || !is_numeric($_GET['product_id'])) {
@@ -178,3 +180,4 @@ class ProductController extends BaseController
         }
     }
 }
+                  

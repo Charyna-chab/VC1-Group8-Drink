@@ -1,10 +1,54 @@
 <?php
+namespace YourNamespace\Controllers;
+use YourNamespace\BaseController;
+require_once 'Database/database.php';
+
 class AuthController extends BaseController {
+    private $conn;
+    private $admin_email = "charyna.chab@student.passerellesnumeriques.org";
+    private $admin_password = "ryna!@#1649";
+    
     public function __construct() {
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
         }
+        
+        // Initialize database connection
+        $database = new \Database();
+        $this->conn = $database->getConnection();
+        
         $this->checkRememberMe();
+        $this->ensureAdminExists();
+    }
+
+    // Make sure our admin account exists in the database
+    private function ensureAdminExists() {
+        try {
+            // Check if admin exists
+            $stmt = $this->conn->prepare("SELECT user_id FROM users WHERE email = :email");
+            $stmt->bindParam(':email', $this->admin_email);
+            $stmt->execute();
+            
+            if ($stmt->rowCount() == 0) {
+                // Admin doesn't exist, create it
+                $stmt = $this->conn->prepare(
+                    "INSERT INTO users (name, email, phone, address, password, role) 
+                     VALUES ('Admin User', :email, '0123456789', 'Admin Address', :password, 'admin')"
+                );
+                $stmt->bindParam(':email', $this->admin_email);
+                $stmt->bindParam(':password', $this->admin_password);
+                $stmt->execute();
+            } else {
+                // Admin exists, make sure role is set to admin
+                $user = $stmt->fetch(\PDO::FETCH_ASSOC);
+                $stmt = $this->conn->prepare("UPDATE users SET role = 'admin', password = :password WHERE user_id = :user_id");
+                $stmt->bindParam(':password', $this->admin_password);
+                $stmt->bindParam(':user_id', $user['user_id']);
+                $stmt->execute();
+            }
+        } catch (\PDOException $e) {
+            // Silently fail - we'll try again next time
+        }
     }
 
     public function index() {
@@ -13,49 +57,90 @@ class AuthController extends BaseController {
 
     public function login() {
         if (isset($_SESSION['user_id'])) {
-            $this->redirect('/order');
+            // If user is already logged in, redirect based on role
+            if (isset($_SESSION['user']['role']) && $_SESSION['user']['role'] === 'admin') {
+                $this->redirect('/admin-dashboard');
+            } else {
+                $this->redirect('/order');
+            }
         }
 
         $error = null;
+        $success = null;
+        
+        // Check if redirected from registration
+        if (isset($_SESSION['registration_success'])) {
+            $success = "Registration successful! Please login with your new account.";
+            unset($_SESSION['registration_success']);
+        }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $email = $_POST['email'] ?? '';
             $password = $_POST['password'] ?? '';
             $remember = isset($_POST['remember']);
-            $isAdmin = isset($_POST['admin_login']);
 
-            if ($isAdmin) {
-                // Redirect to admin login page if user wants to login as admin
-                $this->redirect('/admin-login');
-                return;
-            }
-
-            // In a real application, you would validate against a database
-            if ($email === 'user@example.com' && $password === 'password123') {
-                $_SESSION['user_id'] = 1;
-                $_SESSION['user'] = [
-                    'id' => 1,
-                    'name' => 'Demo User',
-                    'email' => $email,
-                    'avatar' => '/assets/images/avatar.jpg',
-                    'role' => 'user'
-                ];
-
-                if ($remember) {
-                    setcookie('remember_token', 'demo_token', time() + (86400 * 30), '/');
+            // Validate user credentials against database
+            try {
+                $stmt = $this->conn->prepare("SELECT user_id, name, email, password, role, phone, address, image FROM users WHERE email = :email");
+                $stmt->bindParam(':email', $email);
+                $stmt->execute();
+                
+                if ($stmt->rowCount() > 0) {
+                    $user = $stmt->fetch(\PDO::FETCH_ASSOC);
+                    
+                    // Verify password (in a real app, use password_verify with hashed passwords)
+                    if ($password === $user['password']) {
+                        // Check if this is an admin trying to login through user login
+                        if ($user['role'] === 'admin') {
+                            $error = 'Admin users must login through the admin login page.';
+                        } else {
+                            // Set session variables for regular user
+                            $_SESSION['user_id'] = $user['user_id'];
+                            $_SESSION['user'] = [
+                                'id' => $user['user_id'],
+                                'name' => $user['name'],
+                                'email' => $user['email'],
+                                'avatar' => $user['image'] ? 'data:image/jpeg;base64,' . base64_encode($user['image']) : '/assets/image/placeholder.svg?height=40&width=40',
+                                'role' => $user['role'],
+                                'phone' => $user['phone'] ?? '',
+                                'address' => $user['address'] ?? ''
+                            ];
+                            
+                            if ($remember) {
+                                // Create a secure remember me token
+                                $token = bin2hex(random_bytes(32));
+                                setcookie('remember_token', $token, time() + (86400 * 30), '/');
+                            }
+                            
+                            // Redirect to order page
+                            $this->redirect('/order');
+                        }
+                    } else {
+                        $error = 'Invalid password.';
+                    }
+                } else {
+                    $error = 'Email not found.';
                 }
-                $this->redirect('/order');
-            } else {
-                $error = 'Invalid email or password.';
+            } catch (\PDOException $e) {
+                $error = 'Database error: ' . $e->getMessage();
             }
         }
 
-        $this->views('auth/login', ['title' => 'Login - XING FU CHA', 'error' => $error]);
+        $this->views('auth/login', [
+            'title' => 'Login - XING FU CHA', 
+            'error' => $error,
+            'success' => $success
+        ]);
     }
 
     public function register() {
         if (isset($_SESSION['user_id'])) {
-            $this->redirect('/order');
+            // If user is already logged in, redirect based on role
+            if (isset($_SESSION['user']['role']) && $_SESSION['user']['role'] === 'admin') {
+                $this->redirect('/admin-dashboard');
+            } else {
+                $this->redirect('/order');
+            }
         }
 
         $error = null;
@@ -63,10 +148,13 @@ class AuthController extends BaseController {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $name = $_POST['name'] ?? '';
             $email = $_POST['email'] ?? '';
+            $phone = $_POST['phone'] ?? '';
+            $address = $_POST['address'] ?? '';
             $password = $_POST['password'] ?? '';
             $confirm_password = $_POST['confirm_password'] ?? '';
             $terms = isset($_POST['terms']);
-
+            
+            // Basic validation
             if (empty($name) || empty($email) || empty($password) || empty($confirm_password)) {
                 $error = 'Please fill in all required fields';
             } elseif ($password !== $confirm_password) {
@@ -76,68 +164,49 @@ class AuthController extends BaseController {
             } elseif (!$terms) {
                 $error = 'You must agree to the Terms of Service.';
             } else {
-                // In a real application, you would save the user to the database
-                $_SESSION['user_id'] = 2; // New user ID
-                $_SESSION['user'] = [
-                    'id' => 2,
-                    'name' => $name,
-                    'email' => $email,
-                    'avatar' => '/assets/images/avatar.jpg',
-                    'role' => 'user'
-                ];
-                
-                $this->redirect('/register-success');
+                try {
+                    // Check if email already exists
+                    $stmt = $this->conn->prepare("SELECT user_id FROM users WHERE email = :email");
+                    $stmt->bindParam(':email', $email);
+                    $stmt->execute();
+                    
+                    if ($stmt->rowCount() > 0) {
+                        $error = 'Email already registered. Please use a different email.';
+                    } else {
+                        // In a real application, you would hash the password
+                        // $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+                        
+                        // Insert new user
+                        $stmt = $this->conn->prepare(
+                            "INSERT INTO users (name, email, phone, address, password, role) 
+                             VALUES (:name, :email, :phone, :address, :password, 'user')"
+                        );
+                        
+                        $stmt->bindParam(':name', $name);
+                        $stmt->bindParam(':email', $email);
+                        $stmt->bindParam(':phone', $phone);
+                        $stmt->bindParam(':address', $address);
+                        $stmt->bindParam(':password', $password); // In a real app, use $hashedPassword
+                        
+                        if ($stmt->execute()) {
+                            // Set a flag to show success message on login page
+                            $_SESSION['registration_success'] = true;
+                            
+                            // Redirect to login page
+                            $this->redirect('/login');
+                        } else {
+                            $error = 'Registration failed. Please try again.';
+                        }
+                    }
+                } catch (\PDOException $e) {
+                    $error = 'Database error: ' . $e->getMessage();
+                }
             }
         }
 
         $this->views('auth/register', ['title' => 'Register - XING FU CHA', 'error' => $error]);
     }
     
-    public function registerSuccess() {
-        if (!isset($_SESSION['user_id'])) {
-            $this->redirect('/login');
-        }
-        
-        $this->views('auth/register_success', [
-            'title' => 'Registration Successful - XING FU CHA',
-            'user' => $_SESSION['user']
-        ]);
-    }
-
-    public function forgotPassword() {
-        $error = null;
-        $message = null;
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $email = $_POST['email'] ?? '';
-
-            if (empty($email)) {
-                $error = 'Please enter your email address';
-            } else {
-                // In a real application, you would send a password reset email
-                $message = 'Password reset instructions have been sent to your email.';
-            }
-        }
-
-        $this->views('auth/forgot_password', ['title' => 'Forgot Password - XING FU CHA', 'error' => $error, 'message' => $message]);
-    }
-
-    public function logout() {
-        // Unset all session variables
-        $_SESSION = array();
-        
-        // Destroy the session
-        session_destroy();
-
-        // Delete the remember me cookie if it exists
-        if (isset($_COOKIE['remember_token'])) {
-            setcookie('remember_token', '', time() - 3600, '/');
-        }
-
-        // Redirect to login page
-        $this->redirect('/login');
-    }
-
     public function adminLogin() {
         if (isset($_SESSION['user_id']) && isset($_SESSION['user']['role']) && $_SESSION['user']['role'] === 'admin') {
             $this->redirect('/admin-dashboard');
@@ -149,23 +218,50 @@ class AuthController extends BaseController {
             $email = $_POST['email'] ?? '';
             $password = $_POST['password'] ?? '';
 
-            // In a real application, you would validate against a database
-            if ($email === 'admin@example.com' && $password === 'admin123') {
-                // Generate verification code
-                $verification_code = rand(100000, 999999);
-                
-                // In a real application, you would send this code via email
-                // For demo purposes, we'll store it in the session
-                $_SESSION['admin_email'] = $email;
-                $_SESSION['verification_code'] = $verification_code;
-                $_SESSION['verification_time'] = time();
-                
-                // For demo purposes, display the code (in a real app, this would be sent via email)
-                $_SESSION['demo_code'] = $verification_code;
-                
-                $this->redirect('/admin-verification');
+            // Check if this is our designated admin email
+            if ($email === $this->admin_email) {
+                try {
+                    // Check if admin exists in database
+                    $stmt = $this->conn->prepare("SELECT user_id, name, email, password FROM users WHERE email = :email AND role = 'admin'");
+                    $stmt->bindParam(':email', $email);
+                    $stmt->execute();
+                    
+                    if ($stmt->rowCount() > 0) {
+                        $admin = $stmt->fetch(\PDO::FETCH_ASSOC);
+                        
+                        // Verify password
+                        if ($password === $admin['password']) {
+                            // Generate verification code
+                            $verification_code = rand(100000, 999999);
+                            
+                            // In a real application, you would send this code via email
+                            // For demo purposes, we'll store it in the session
+                            $_SESSION['admin_email'] = $email;
+                            $_SESSION['admin_id'] = $admin['user_id'];
+                            $_SESSION['admin_name'] = $admin['name'];
+                            $_SESSION['verification_code'] = $verification_code;
+                            $_SESSION['verification_time'] = time();
+                            
+                            // For demo purposes, display the code (in a real app, this would be sent via email)
+                            $_SESSION['demo_code'] = $verification_code;
+                            
+                            // In a real application, you would send an email with the verification code
+                            // sendVerificationEmail($email, $verification_code);
+                            
+                            $this->redirect('/admin-verification');
+                        } else {
+                            $error = 'Invalid password.';
+                        }
+                    } else {
+                        // Admin doesn't exist in database yet, create it
+                        $this->ensureAdminExists();
+                        $error = 'Please try logging in again.';
+                    }
+                } catch (\PDOException $e) {
+                    $error = 'Database error: ' . $e->getMessage();
+                }
             } else {
-                $error = 'Invalid email or password.';
+                $error = 'Invalid admin credentials.';
             }
         }
 
@@ -189,17 +285,19 @@ class AuthController extends BaseController {
                 (time() - $_SESSION['verification_time']) < 600) {
                 
                 // Set admin session
-                $_SESSION['user_id'] = 999; // Admin ID
+                $_SESSION['user_id'] = $_SESSION['admin_id'];
                 $_SESSION['user'] = [
-                    'id' => 999,
-                    'name' => 'Admin User',
+                    'id' => $_SESSION['admin_id'],
+                    'name' => $_SESSION['admin_name'],
                     'email' => $_SESSION['admin_email'],
-                    'avatar' => '/assets/images/admin-avatar.jpg',
+                    'avatar' => '/assets/image/placeholder.svg?height=40&width=40',
                     'role' => 'admin'
                 ];
                 
                 // Clear verification data
                 unset($_SESSION['admin_email']);
+                unset($_SESSION['admin_id']);
+                unset($_SESSION['admin_name']);
                 unset($_SESSION['verification_code']);
                 unset($_SESSION['verification_time']);
                 unset($_SESSION['demo_code']);
@@ -211,6 +309,8 @@ class AuthController extends BaseController {
                     $error = 'Verification code has expired. Please try again.';
                     // Clear verification data
                     unset($_SESSION['admin_email']);
+                    unset($_SESSION['admin_id']);
+                    unset($_SESSION['admin_name']);
                     unset($_SESSION['verification_code']);
                     unset($_SESSION['verification_time']);
                     unset($_SESSION['demo_code']);
@@ -235,28 +335,46 @@ class AuthController extends BaseController {
             return;
         }
 
-        if (isset($_COOKIE['remember_token']) && $_COOKIE['remember_token'] === 'demo_token') {
-            $_SESSION['user_id'] = 1;
-            $_SESSION['user'] = [
-                'id' => 1,
-                'name' => 'Demo User',
-                'email' => 'user@example.com',
-                'avatar' => '/assets/images/avatar.jpg',
-                'role' => 'user'
-            ];
+        if (isset($_COOKIE['remember_token'])) {
+            // In a real application, you would verify the token against the database
+            try {
+                // This is a placeholder. In a real app, you would query the database for the token
+                $stmt = $this->conn->prepare("SELECT user_id, name, email, role, phone, address, image FROM users WHERE remember_token = :token");
+                $stmt->bindParam(':token', $_COOKIE['remember_token']);
+                $stmt->execute();
+                
+                if ($stmt->rowCount() > 0) {
+                    $user = $stmt->fetch(\PDO::FETCH_ASSOC);
+                    $_SESSION['user_id'] = $user['user_id'];
+                    $_SESSION['user'] = [
+                        'id' => $user['user_id'],
+                        'name' => $user['name'],
+                        'email' => $user['email'],
+                        'avatar' => $user['image'] ? 'data:image/jpeg;base64,' . base64_encode($user['image']) : '/assets/image/placeholder.svg?height=40&width=40',
+                        'role' => $user['role'],
+                        'phone' => $user['phone'] ?? '',
+                        'address' => $user['address'] ?? ''
+                    ];
+                }
+            } catch (\PDOException $e) {
+                // Log error
+            }
         }
     }
 
-    public function checkAuth() {
-        if (!isset($_SESSION['user_id'])) {
-            $this->redirect('/login');
+    public function logout() {
+        // Unset all session variables
+        $_SESSION = array();
+        
+        // Destroy the session
+        session_destroy();
+
+        // Delete the remember me cookie if it exists
+        if (isset($_COOKIE['remember_token'])) {
+            setcookie('remember_token', '', time() - 3600, '/');
         }
-    }
-    
-    public function checkAdminAuth() {
-        if (!isset($_SESSION['user_id']) || !isset($_SESSION['user']['role']) || $_SESSION['user']['role'] !== 'admin') {
-            $this->redirect('/admin-login');
-        }
+
+        // Redirect to login page
+        $this->redirect('/login');
     }
 }
-

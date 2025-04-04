@@ -20,6 +20,16 @@
                 </div>
 
                 <div class="mb-3">
+                    <label for="category" class="form-label">Category</label>
+                    <select id="category" name="category" class="form-control">
+                        <option value="milk-tea">Milk Tea</option>
+                        <option value="fruit-tea">Fruit Tea</option>
+                        <option value="coffee">Coffee</option>
+                        <option value="smoothie">Smoothie</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
                     <label for="image" class="form-label">Product Image</label>
                     <input type="file" id="image" name="image" class="form-control">
                 </div>

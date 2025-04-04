@@ -1,12 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
+<?php require_once __DIR__ . '/layouts/header.php'; ?>
+<?php require_once __DIR__ . '/layouts/navbar.php'; ?>
+<?php require_once __DIR__ . '/layouts/sidebar.php'; ?>
 
 <main class="main-content">
     <section class="content">
         <!-- Favorites Header -->
         <div class="favorites-header">
-            <h2>My Favorites</h2>
-            <p>Your favorite Xing Fu Cha drinks and snacks</p>
+            <div class="favorites-header-content">
+                <h2>My Favorites</h2>
+                <p>Your favorite Xing Fu Cha drinks and snacks</p>
+                <div class="sparkle-icon">✨</div>
+            </div>
         </div>
 
         <!-- Empty State (initially hidden if there are favorites) -->
@@ -28,8 +32,10 @@
                             <span class="sr-only">Remove from favorites</span>
                         </button>
 
-  <main>
-      <?php include 'views/partials/sidebar.php'; ?>
+                        <!-- Product Image -->
+                        <div class="favorites-image">
+                            <img src="<?php echo $favorite['image']; ?>" alt="<?php echo $favorite['name']; ?>">
+                        </div>
 
                         <!-- Product Info -->
                         <div class="favorites-content">
@@ -54,88 +60,12 @@
             <?php endif; ?>
         </div>
 
-          <?php 
-          // For demo purposes, we'll show some sample favorites
-          // In a real app, this would come from the database
-          $favorites = [
-              [
-                  'id' => 1,
-                  'name' => 'Taro Milk Tea',
-                  'description' => 'Creamy taro milk tea with chewy tapioca pearls',
-                  'price' => 4.50,
-                  'image' => '/assets/images/products/taro-milk-tea.jpg',
-                  'category' => 'milk-tea'
-              ],
-              [
-                  'id' => 3,
-                  'name' => 'Matcha Latte',
-                  'description' => 'Premium Japanese matcha with creamy milk',
-                  'price' => 5.50,
-                  'image' => '/assets/images/products/matcha-latte.jpg',
-                  'category' => 'milk-tea'
-              ],
-              [
-                  'id' => 6,
-                  'name' => 'Mango Smoothie',
-                  'description' => 'Refreshing mango smoothie with popping boba',
-                  'price' => 5.25,
-                  'image' => '/assets/images/products/mango-smoothie.jpg',
-                  'category' => 'smoothies'
-              ]
-          ];
-          ?>
+        <!-- Toast Container for Notifications -->
+        <div class="favorites-toast-container"></div>
+    </section>
+</main>
 
-          <?php if(empty($favorites)): ?>
-              <div class="empty-state">
-                  <img src="/assets/images/empty-favorites.png" alt="No Favorites">
-                  <h3>No Favorites Yet</h3>
-                  <p>You haven't added any favorites yet. Browse our menu and add items to your favorites!</p>
-                  <a href="/menu" class="btn-primary">Browse Menu</a>
-              </div>
-          <?php else: ?>
-              <div class="favorites-grid">
-                  <?php foreach($favorites as $item): ?>
-                      <div class="favorite-card" data-id="<?php echo $item['id']; ?>">
-                          <button class="remove-favorite" data-id="<?php echo $item['id']; ?>">
-                              <i class="fas fa-times"></i>
-                          </button>
-                          <div class="favorite-image">
-                              <img src="<?php echo $item['image']; ?>" alt="<?php echo $item['name']; ?>">
-                          </div>
-                          <div class="favorite-content">
-                              <h3><?php echo $item['name']; ?></h3>
-                              <p><?php echo $item['description']; ?></p>
-                              <div class="favorite-footer">
-                                  <span class="price">$<?php echo number_format($item['price'], 2); ?></span>
-                                  <button class="order-btn" 
-                                      data-id="<?php echo $item['id']; ?>" 
-                                      data-name="<?php echo $item['name']; ?>" 
-                                      data-price="<?php echo $item['price']; ?>" 
-                                      data-image="<?php echo $item['image']; ?>">
-                                      Order Now
-                                  </button>
-                              </div>
-                          </div>
-                      </div>
-                  <?php endforeach; ?>
-              </div>
-          <?php endif; ?>
-      </section>
-  </main>
-
-  <?php include 'views/partials/order_panel.php'; ?>
-  <?php include 'views/partials/notification_panel.php'; ?>
-  <?php include 'views/partials/user_menu.php'; ?>
-  <?php include 'views/partials/toast.php'; ?>
-  <?php include 'views/partials/overlay.php'; ?>
-
-  <script src="/assets/js/app.js"></script>
-  <script src="/assets/js/favorites.js"></script>
-</body>
-
-</html>
-
+<link rel="stylesheet" href="/assets/css/favorites.css">
 <script src="/assets/js/favorites.js"></script>
 
 <?php require_once __DIR__ . '/layouts/footer.php'; ?>
-

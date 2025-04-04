@@ -1,6 +1,19 @@
 <?php
+require_once 'Database/database.php';
 
 class HomeController {
+    private $db;
+    
+    public function __construct() {
+        // $this->db = Database::getInstance();
+    }
+    
+    public function index() {
+        // $featuredProducts = $this->db->getFeaturedProducts();
+        // $categories = $this->db->getAllCategories();
+        
+        // Get current user if logged in
+        $user = null;
   private $db;
   
   public function __construct() {
@@ -67,5 +80,20 @@ class HomeController {
   public function faq() {
       require 'views/faq.php';
   }
+}
+
+class HomeController extends BaseController {
+    public function index() {
+        // Check if user is logged in
+        if (isset($_SESSION['user_id'])) {
+            // Redirect to order page
+            header('Location: /order');
+            exit;
+        } else {
+            // Redirect to login page
+            header('Location: /login');
+            exit;
+        }
+    }
 }
 

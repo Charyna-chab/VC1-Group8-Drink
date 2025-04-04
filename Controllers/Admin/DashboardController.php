@@ -1,10 +1,14 @@
 <?php
-require_once './Controllers/BaseController.php';
-class DashboardController extends BaseController{
-    function index()
+require_once './controllers/BaseController.php'; // Correct path to BaseController.php
+
+use YourNamespace\BaseController; // Ensure the namespace matches BaseController
+
+class DashboardController extends BaseController
+{
+    public function index()
     {
-        
-        $this->views('dashboard/list.php');
+        // Example view rendering
+        $this->views('dashboard/index.php');
     }
 }
 ?>

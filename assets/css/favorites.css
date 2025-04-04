@@ -15,13 +15,8 @@
 }
 
 .favorites-header {
-<<<<<<< HEAD
     background: linear-gradient(105deg, var(--favorites-primary), var( --favorites-primary));
     width: 160vh;
-=======
-    background: linear-gradient(135deg, var(--favorites-gradient-start), var(--favorites-gradient-end));
-    width: 164vh;
->>>>>>> feature/dashboad
     height: 30vh;
     display: flex;
     justify-content: center;
@@ -31,12 +26,11 @@
     padding: 2rem;
     box-shadow: 0 4px 15px rgba(255, 94, 98, 0.2);
     position: relative;
-    overflow: hidden;
     border-radius: var(--favorites-radius);
     transition: var(--favorites-transition);
     position: relative;
-    bottom: 16px;
-    right: 50px;
+    bottom: 306px;
+    right: 10px;
 }
 
 .favorites-header h2 {
@@ -196,6 +190,8 @@
     box-shadow: var(--favorites-shadow);
     max-width: 600px;
     margin: 2rem auto;
+    position: relative;
+    bottom: 280px;
 }
 
 .favorites-empty img {
@@ -245,6 +241,8 @@
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 1.5rem;
     margin-top: 2rem;
+    position: relative;
+    bottom: 300px;
 }
 
 
@@ -253,7 +251,6 @@
 .favorites-card {
     background: white;
     border-radius: var(--favorites-radius);
-    overflow: hidden;
     box-shadow: var(--favorites-shadow);
     transition: var(--favorites-transition);
     position: relative;
@@ -306,7 +303,6 @@
 
 .favorites-image {
     height: 200px;
-    overflow: hidden;
 }
 
 .favorites-image img {
@@ -342,7 +338,6 @@
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
-    overflow: hidden;
 }
 
 

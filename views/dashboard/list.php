@@ -7,10 +7,12 @@ $products = $products ?? [];
 $total = isset($_SESSION['product_total']) ? $_SESSION['product_total'] : 0;
 $product_count = $_SESSION['product_count'] ?? 0;
 ?>
+
 <body id="page-top">
     <div id="wrapper">
         <!-- Begin Page Content -->
         <div class="container-fluid">
+            
 
             <!-- Page Heading -->
             <div class="d-sm-flex align-items-center justify-content-between mb-4">

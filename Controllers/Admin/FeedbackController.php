@@ -1,6 +1,8 @@
 <?php
 require_once 'Models/FeedbackModel.php';
-require_once './Controllers/BaseController.php';
+require_once './controllers/BaseController.php'; // Correct path to BaseController.php
+
+use YourNamespace\BaseController; // Ensure the namespace matches BaseController
 
 class FeedbackController extends BaseController {
     private $model;
@@ -14,10 +16,10 @@ class FeedbackController extends BaseController {
         $this->model = new FeedbackModel();
     }
 
-    function index()
+    public function index()
     {
-        $feedbacks = $this->model->getFeedbacks();
-        $this->views('/feedback/feedback_view.php', ['feedback' => $feedbacks]);
+        // Example view rendering
+        $this->views('feedback/index.php');
     }
 
     function create()
