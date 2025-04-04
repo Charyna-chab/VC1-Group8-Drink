@@ -23,12 +23,6 @@ class ProductController extends BaseController
     function index()
     {
         $products = $this->model->getProducts();
-        var_dump($products); // Debugging in index method
-        exit;
-        if (empty($products)) {
-            echo "No products found.";
-            exit;
-        }
         $this->views('products/product-list.php', ['products' => $products]);
     }
 

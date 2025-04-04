@@ -24,23 +24,10 @@ class ProductModel
 
     public function createProduct($data)
     {
-        try {
-            $query = "INSERT INTO products (product_name, image, product_detail, price)
-                      VALUES (:product_name, :image, :product_detail, :price)";
-
-            $stmt = $this->pdo->prepare($query);
-            $stmt->execute([
-                'product_name' => $data['product_name'],
-                'image' => $data['image'],
-                'product_detail' => $data['product_detail'],
-                'price' => $data['price'],
-            ]);
-
-            return $stmt->rowCount() > 0;
-        } catch (\PDOException $e) {
-            error_log("Error creating product: " . $e->getMessage());
-            return false;
-        }
+        $query = "INSERT INTO products (product_name, image, product_detail, price)
+                  VALUES (:product_name, :image, :product_detail, :price)";
+        $stmt = $this->pdo->prepare($query);
+        return $stmt->execute($data);
     }
 
     public function getProduct($id)
@@ -52,39 +39,20 @@ class ProductModel
 
     public function updateProduct($id, $data)
     {
-        try {
-            $query = "UPDATE products SET 
-                      product_name = :product_name, 
-                      image = :image, 
-                      product_detail = :product_detail, 
-                      price = :price 
-                      WHERE product_id = :product_id";
-
-            $stmt = $this->pdo->prepare($query);
-            $stmt->execute([
-                'product_name' => $data['product_name'],
-                'image' => $data['image'],
-                'product_detail' => $data['product_detail'],
-                'price' => $data['price'],
-                'product_id' => $id,
-            ]);
-
-            return $stmt->rowCount() > 0;
-        } catch (\PDOException $e) {
-            error_log("Error updating product: " . $e->getMessage());
-            return false;
-        }
+        $query = "UPDATE products SET 
+                  product_name = :product_name, 
+                  image = :image, 
+                  product_detail = :product_detail, 
+                  price = :price 
+                  WHERE product_id = :product_id";
+        $stmt = $this->pdo->prepare($query);
+        $data['product_id'] = $id;
+        return $stmt->execute($data);
     }
 
     public function deleteProduct($id)
     {
-        try {
-            $stmt = $this->pdo->prepare("DELETE FROM products WHERE product_id = :product_id");
-            $stmt->execute(['product_id' => $id]);
-            return $stmt->rowCount() > 0;
-        } catch (\PDOException $e) {
-            error_log("Error deleting product: " . $e->getMessage());
-            return false;
-        }
+        $stmt = $this->pdo->prepare("DELETE FROM products WHERE product_id = :product_id");
+        return $stmt->execute(['product_id' => $id]);
     }
 }
