@@ -14,48 +14,50 @@
             background-color: #f8f9fc;
             overflow-x: hidden;
         }
-        
+
         #wrapper {
             display: flex;
             width: 100%;
         }
-        
+
         #sidebar {
             min-width: 250px;
             max-width: 250px;
             min-height: 100vh;
         }
-        
+
         #content {
             width: 100%;
-           
+
             min-height: 100vh;
         }
-        
+
         .card {
             border: none;
             border-radius: 0.35rem;
             box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
         }
-        
+
         .product-image {
             width: 50px;
             height: 50px;
             border-radius: 10px;
             object-fit: cover;
         }
-        
+
         .dropdown-toggle::after {
             display: none;
         }
-        
+
         @media (max-width: 768px) {
             #sidebar {
                 margin-left: -250px;
             }
+
             #sidebar.active {
                 margin-left: 0;
             }
+
             #content {
                 width: 100%;
             }
@@ -66,10 +68,10 @@
 <body id="page-top">
     <div id="wrapper">
         <?php require './views/admin/Partials/sidebar.php' ?>
-        
+
         <div id="content" class="bg-light">
             <?php require './views/admin/Partials/navbar.php' ?>
-            
+
             <div class="container-fluid">
                 <div class="card shadow mb-4">
                     <div class="card-header py-3 d-flex justify-content-between align-items-center">
@@ -101,11 +103,11 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    
+
                                     <?php if (!empty($products)): ?>
                                         <?php foreach ($products as $index => $product): ?>
                                             <tr>
-                                                <td><?= htmlspecialchars($product['product_id']) ?></td>
+                                                <td><?= $index + 1 ?></td>
                                                 <td>
                                                     <img src="<?= htmlspecialchars($product['image']) ?>" alt="Product Image" class="product-image">
                                                 </td>
@@ -161,4 +163,5 @@
         });
     </script>
 </body>
+
 </html>
