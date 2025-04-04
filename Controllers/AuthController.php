@@ -2,6 +2,7 @@
 namespace YourNamespace\Controllers;
 use YourNamespace\BaseController;
 require_once 'Database/database.php';
+use YourNamespace\Database\Database;  
 
 class AuthController extends BaseController {
     private $conn;
@@ -14,7 +15,7 @@ class AuthController extends BaseController {
         }
         
         // Initialize database connection
-        $database = new \Database();
+        $database = new Database();
         $this->conn = $database->getConnection();
         
         $this->checkRememberMe();

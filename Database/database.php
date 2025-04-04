@@ -1,26 +1,46 @@
 <?php
-class Database {
-    private $host = 'localhost';
-    private $db_name = 'drink_db';
-    private $username = 'root';
-    private $password = '';
-    private $conn;
+namespace YourNamespace\Database;
 
-    public function getConnection() {
-        $this->conn = null;
+use PDO;
+use PDOException;
 
+class Database
+{
+    private $pdo;
+
+    public function __construct()
+    {
+        // Configure your database connection
+        $dsn = 'mysql:host=localhost;dbname=drink_db;charset=utf8';
+        $username = 'root';
+        $password = '';
+        
         try {
-            $this->conn = new PDO(
-                "mysql:host=" . $this->host . ";dbname=" . $this->db_name,
-                $this->username,
-                $this->password
-            );
-            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        } catch(PDOException $e) {
-            echo "Connection Error: " . $e->getMessage();
+            $this->pdo = new PDO($dsn, $username, $password);
+            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            die("Database connection failed: " . $e->getMessage());
         }
+    }
 
-        return $this->conn;
+    /**
+     * Helper method to execute queries with parameters
+     */
+    public function query($sql, $params = [])
+    {
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($params);
+        return $stmt;
+    }
+
+    public function getConnection()
+    {
+        return $this->pdo;
+    }
+
+    public function lastInsertId()
+    {
+        return $this->pdo->lastInsertId();
     }
 }
-

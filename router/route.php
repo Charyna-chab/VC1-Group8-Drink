@@ -1,6 +1,5 @@
 <?php
 require_once "Router.php";
-require_once "router/Router.php";
 
 require_once "controllers/BaseController.php";
 require_once "controllers/WelcomeController.php";
@@ -31,7 +30,7 @@ use YourNamespace\Controllers\FavoritesController;
 use YourNamespace\Controllers\SettingsController;
 use YourNamespace\Controllers\AuthController;
 use YourNamespace\Controllers\AdminController;
-use YourNamespace\Controllers\ProductController;
+use YourNamespace\Controllers\ProductController;  // This is now correct
 use YourNamespace\Controllers\FeedbackController;
 use YourNamespace\Controllers\UserController;
 use YourNamespace\Controllers\DashboardController;
@@ -44,8 +43,9 @@ use YourNamespace\Controllers\LocationsController;
 use YourNamespace\Controllers\JoinTheTeamController;
 use YourNamespace\Models\ProductModel;
 
-
 $route = new Router();
+
+// ... rest of your route definitions remain the same ...
 
 // Welcome page as the default route
 $route->get("/", [WelcomeController::class, 'welcome']);
@@ -112,9 +112,13 @@ $route->get("/booking", [BookingController::class, 'index']);
 $route->get("/booking/details/{id}", [BookingController::class, 'details']);
 $route->post("/booking/create", [BookingController::class, 'createBooking']);
 
-// Order routes
-$route->get("/orders", [OrdersController::class, 'index']);
-$route->get("/orders/details/{id}", [OrdersController::class, 'details']);
+// Product routes - fixed routes
+$route->get("/product", [ProductController::class, 'index']);
+$route->get("/product/create", [ProductController::class, 'create']);
+$route->post("/product/store", [ProductController::class, 'store']);
+$route->get("/product/edit", [ProductController::class, 'edit']);
+$route->post("/product/update", [ProductController::class, 'update']);
+$route->get("/product/delete", [ProductController::class, 'delete']);
 
 // Favorites routes
 $route->get("/favorites", [FavoritesController::class, 'index']);
@@ -134,12 +138,12 @@ $route->get("/settings", [SettingsController::class, 'index']);
 $route->get("/admin-dashboard", [DashboardController::class, 'index']);
 
 // Admin Product Management
-$route->get("/admin/products", [ProductController::class, 'index']);
-$route->get("/admin/products/create", [ProductController::class, 'create']);
-$route->post("/admin/products/store", [ProductController::class, 'store']);
-$route->get("/admin/products/edit/{id}", [ProductController::class, 'edit']);
-$route->post("/admin/products/update/{id}", [ProductController::class, 'update']);
-$route->post("/admin/products/delete/{id}", [ProductController::class, 'delete']);
+// $route->get("/admin/products", [ProductController::class, 'index']);
+// $route->get("/admin/products/create", [ProductController::class, 'create']);
+// $route->post("/admin/products/store", [ProductController::class, 'store']);
+// $route->get("/admin/products/edit/{id}", [ProductController::class, 'edit']);
+// $route->post("/admin/products/update/{id}", [ProductController::class, 'update']);
+// $route->post("/admin/products/delete/{id}", [ProductController::class, 'delete']);
 
 // Admin User Management
 $route->get("/admin/users", [UserController::class, 'index']);
@@ -157,12 +161,6 @@ $route->get("/admin/feedback/edit/{id}", [FeedbackController::class, 'edit']);
 $route->post("/admin/feedback/update/{id}", [FeedbackController::class, 'update']);
 $route->post("/admin/feedback/delete/{id}", [FeedbackController::class, 'delete']);
 
-// New navigation routes
-$route->get("/gift-card", [GiftCardController::class, 'index']);
-$route->get("/locations", [LocationsController::class, 'index']);
-$route->get("/join-the-team", [JoinTheTeamController::class, 'index']);
-$route->get("/more", [MoreController::class, 'index']);
-
 // Additional pages from More menu
 $route->get("/about-us", [MoreController::class, 'aboutUs']);
 $route->get("/menu", [MoreController::class, 'menu']);
@@ -174,5 +172,3 @@ $route->get("/faq", [MoreController::class, 'faq']);
 $route->get("/blog", [MoreController::class, 'blog']);
 
 $route->route();
-
-

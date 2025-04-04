@@ -1,6 +1,6 @@
 <?php
 namespace YourNamespace\Controllers;
-
+use YourNamespace\Database\Database; 
 use YourNamespace\BaseController;
 
 class UserController extends BaseController {
@@ -12,7 +12,7 @@ class UserController extends BaseController {
         }
         
         // Initialize database connection
-        $database = new \Database();
+        $database = new Database();
         $this->conn = $database->getConnection();
         
         // Check admin authentication for admin routes

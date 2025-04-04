@@ -1,10 +1,11 @@
 <?php
 require_once './Models/ProductModel.php';
 require_once './Controllers/BaseController.php';
+    
+use YourNamespace\BaseController;
 
 class ProductController extends BaseController
 {
-
     private $model;
 
     function __construct()
@@ -16,7 +17,6 @@ class ProductController extends BaseController
 
         $this->model = new ProductModel();
     }
-
 
     function index()
     {
@@ -59,23 +59,21 @@ class ProductController extends BaseController
                         'image' => $image_url,
                         'product_detail' => isset($_POST['product_detail']) ? $_POST['product_detail'] : null,
                         'price' => isset($_POST['price']) ? $_POST['price'] : null,
-
                     ];
 
                     // Validate that all required fields are present
                     if (empty($data['product_name']) || empty($data['product_detail']) || empty($data['price'])) {
                         $_SESSION['error'] = 'All fields except the image are required!';
-                        $this->views('product/product_create.php', ['error' => $_SESSION['error']]); // Removed .php extension
+                        $this->views('products/product-create.php', ['error' => $_SESSION['error']]);
                         return;
                     }
+                    
+                    $this->model->createProduct($data);
+                    $this->redirect('/product');
                 }
             }
-
-            $this->model->createProduct($data);
-            $this->redirect('/product');
         }
     }
-
 
     function edit()
     {
@@ -96,8 +94,6 @@ class ProductController extends BaseController
     
         $this->views('products/product-edit.php', ['product' => $product]); // Pass product data to the view
     }
-    
-
 
     function update()
     {
@@ -152,13 +148,9 @@ class ProductController extends BaseController
     
         $this->redirect('/product');
     }
-    
 
-    
-
-    function destroy()
+    function delete()
     {
-
         if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             // Validate product ID
             if (!isset($_GET['product_id']) || !is_numeric($_GET['product_id'])) {
