@@ -220,7 +220,11 @@
                                         <tr>
                                             <td><?= $index + 1 ?></td>
                                             <td>
-                                                <img src="<?= htmlspecialchars($user['image']) ?>">
+                                                <?php if (file_exists($user['image'])): ?>
+                                                    <img src="<?= htmlspecialchars($user['image']) ?>" alt="User Image" style="width: 100px; height: 100px; object-fit: cover;">
+                                                <?php else: ?>
+                                                    <img src="/path/to/image.jpg" alt="Image Description" style="width: 100px; height: 100px; object-fit: cover;">
+                                                <?php endif; ?>
                                             </td>
                                             <td class="name-user"><?= htmlspecialchars($user['name']) ?></td>
                                             <td class="phone-user"><?= htmlspecialchars($user['phone']) ?></td>

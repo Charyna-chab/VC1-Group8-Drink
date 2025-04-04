@@ -29,7 +29,7 @@ class UserController extends BaseController
 
     function create()
     {
-        $this->views('user/create.php');
+        $this->views('user/create');
     }
 
     function store()
@@ -44,7 +44,15 @@ class UserController extends BaseController
                 'password' => $_POST['password'],
             ];
 
+            // Check if the email already exists
+            if ($this->model->emailExists($data['email'])) {
+                $_SESSION['error'] = 'The email address is already in use.';
+                $this->redirect('/admin/users/create');
+                return;
+            }
+
             $this->model->createUser($data);
+            $_SESSION['success'] = 'User created successfully.';
             $this->redirect('/admin/users');
         }
     }

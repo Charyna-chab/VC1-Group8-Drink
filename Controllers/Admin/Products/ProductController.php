@@ -20,18 +20,18 @@ class ProductController extends BaseController
         $this->model = new ProductModel(); // Use the namespaced ProductModel
     }
 
-    function index()
+    public function index()
     {
-        $products = $this->model->getProducts();
-        $this->views('products/product-list', ['products' => $products]);
+        $products = $this->model->getProducts(); // Fetch products from the database
+        $this->views('products/product-list', ['products' => $products]); // Pass products to the view
     }
 
-    function create()
+    public function create()
     {
-        $this->views('products/product-create.php');
+        $this->views('products/product-create');
     }
 
-    function store()
+    public function store()
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $uploadDir = 'uploads/product/';
@@ -56,13 +56,13 @@ class ProductController extends BaseController
         }
     }
 
-    function edit($id)
+    public function edit($id)
     {
         $product = $this->model->getProduct($id);
-        $this->views('products/product-edit.php', ['product' => $product]);
+        $this->views('products/product-edit', ['product' => $product]);
     }
 
-    function update($id)
+    public function update($id)
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $image = $_POST['existing_image'];
@@ -89,7 +89,7 @@ class ProductController extends BaseController
         }
     }
 
-    function destroy($id)
+    public function destroy($id)
     {
         $this->model->deleteProduct($id);
         $this->redirect('/admin/products');

@@ -12,7 +12,7 @@ class ProductModel
 
     public function __construct()
     {
-        $database = new \Database();
+        $database = new Database();
         $this->pdo = $database->getConnection();
     }
 

@@ -18,11 +18,8 @@ require_once "controllers/Admin/AdminFeedbackController.php";
 require_once "controllers/GiftCardController.php";
 require_once "controllers/LocationsController.php";
 require_once "controllers/JoinTheTeamController.php";
-// Add the following lines to include the new controllers
 require_once './controllers/Admin/Users/UserController.php';
 require_once './controllers/Admin/Products/ProductController.php';
-
-
 
 
 use YourNamespace\Router;
@@ -131,13 +128,14 @@ $route->get("/settings", [SettingsController::class, 'index']);
 // Admin routes
 $route->get("/admin-dashboard", [DashboardController::class, 'index']);
 
-// Admin Product Management
+// Admin Product Management Routes
+$route->get("/product", [ProductController::class, 'index']);
 $route->get("/admin/products", [ProductController::class, 'index']);
 $route->get("/admin/products/create", [ProductController::class, 'create']);
 $route->post("/admin/products/store", [ProductController::class, 'store']);
 $route->get("/admin/products/edit/{id}", [ProductController::class, 'edit']);
 $route->post("/admin/products/update/{id}", [ProductController::class, 'update']);
-$route->post("/admin/products/delete/{id}", [ProductController::class, 'delete']);
+$route->post("/admin/products/delete/{id}", [ProductController::class, 'destroy']);
 
 // Admin User Management
 $route->get("/admin/users", [UserController::class, 'index']);
@@ -164,5 +162,8 @@ $route->post("/admin/feedback/delete/{id}", [FeedbackController::class, 'delete'
 // $route->get("/contact", [MoreController::class, 'contact']);
 // $route->get("/faq", [MoreController::class, 'faq']);
 // $route->get("/blog", [MoreController::class, 'blog']);
+
+
+
 
 $route->route();

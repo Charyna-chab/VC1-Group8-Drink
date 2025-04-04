@@ -255,6 +255,11 @@
     <div class="container my-5">
         <div class="row justify-content-center">
             <div class="col-md-6">
+                <?php if (isset($_SESSION['error'])): ?>
+                    <div class="alert alert-danger">
+                        <?= $_SESSION['error']; unset($_SESSION['error']); ?>
+                    </div>
+                <?php endif; ?>
                 <form action="/admin/users/store" method="POST" enctype="multipart/form-data" class="border border-2 rounded p-4 shadow-sm bg-white">
                     <h3 class="mb-4 text-center text-primary">User Information</h3>
 
@@ -299,3 +304,5 @@
             </div>
         </div>
     </div>
+</body>
+</html>

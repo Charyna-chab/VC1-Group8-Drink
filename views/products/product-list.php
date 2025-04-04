@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo isset($title) ? $title : 'Admin Dashboard - XING FU CHA'; ?></title>
+    <title><?php echo isset($title) ? $title : 'Product List'; ?></title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
     <link href="/assets/css/sb-admin-2.min.css" rel="stylesheet">
@@ -101,6 +101,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    
                                     <?php if (!empty($products)): ?>
                                         <?php foreach ($products as $index => $product): ?>
                                             <tr>
@@ -112,8 +113,8 @@
                                                 <td><?= htmlspecialchars($product['product_detail']) ?></td>
                                                 <td>$<?= htmlspecialchars($product['price']) ?></td>
                                                 <td>
-                                                    <a href="/product/edit?id=<?= $product['product_id'] ?>" class="btn btn-sm btn-primary">Edit</a>
-                                                    <a href="/product/delete?product_id=<?= $product['product_id'] ?>" class="btn btn-sm btn-danger">Delete</a>
+                                                    <a href="/admin/products/edit?id=<?= $product['product_id'] ?>" class="btn btn-sm btn-primary">Edit</a>
+                                                    <a href="/admin/products/delete?product_id=<?= $product['product_id'] ?>" class="btn btn-sm btn-danger">Delete</a>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>
