@@ -1,4 +1,6 @@
 <?php
+namespace YourNamespace\Models;
+
 require_once './Database/database.php';
 
 class UserModel

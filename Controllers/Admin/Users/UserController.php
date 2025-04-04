@@ -1,8 +1,11 @@
 <?php
+namespace YourNamespace\Controllers;
+
 require_once './controllers/BaseController.php'; // Correct path to BaseController.php
 require_once './Models/UserModel.php';
 
 use YourNamespace\BaseController; // Ensure the namespace matches BaseController
+use YourNamespace\Models\UserModel; // Add this line
 
 class UserController extends BaseController
 {
@@ -15,7 +18,7 @@ class UserController extends BaseController
             session_start();
         }
 
-        $this->model = new UserModel();
+        $this->model = new UserModel(); // Use the namespaced UserModel
     }
 
     function index()
