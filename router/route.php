@@ -1,6 +1,5 @@
 <?php
 require_once "Router.php";
-require_once "router/Router.php";
 
 require_once "controllers/BaseController.php";
 require_once "controllers/WelcomeController.php";
@@ -111,9 +110,13 @@ $route->get("/booking", [BookingController::class, 'index']);
 $route->get("/booking/details/{id}", [BookingController::class, 'details']);
 $route->post("/booking/create", [BookingController::class, 'createBooking']);
 
-// Order routes
-$route->get("/orders", [OrdersController::class, 'index']);
-$route->get("/orders/details/{id}", [OrdersController::class, 'details']);
+// Product routes - fixed routes
+$route->get("/product", [ProductController::class, 'index']);
+$route->get("/product/create", [ProductController::class, 'create']);
+$route->post("/product/store", [ProductController::class, 'store']);
+$route->get("/product/edit", [ProductController::class, 'edit']);
+$route->post("/product/update", [ProductController::class, 'update']);
+$route->get("/product/delete", [ProductController::class, 'delete']);
 
 // Favorites routes
 $route->get("/favorites", [FavoritesController::class, 'index']);
@@ -159,12 +162,6 @@ $route->get("/admin/feedback/edit/{id}", [FeedbackController::class, 'edit']);
 $route->post("/admin/feedback/update/{id}", [FeedbackController::class, 'update']);
 $route->post("/admin/feedback/delete/{id}", [FeedbackController::class, 'delete']);
 
-// New navigation routes
-$route->get("/gift-card", [GiftCardController::class, 'index']);
-$route->get("/locations", [LocationsController::class, 'index']);
-$route->get("/join-the-team", [JoinTheTeamController::class, 'index']);
-$route->get("/more", [MoreController::class, 'index']);
-
 // Additional pages from More menu
 $route->get("/about-us", [MoreController::class, 'aboutUs']);
 $route->get("/menu", [MoreController::class, 'menu']);
@@ -176,5 +173,3 @@ $route->get("/faq", [MoreController::class, 'faq']);
 $route->get("/blog", [MoreController::class, 'blog']);
 
 $route->route();
-
-

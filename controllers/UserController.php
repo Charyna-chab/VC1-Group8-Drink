@@ -29,8 +29,8 @@ class UserController extends BaseController {
 
     public function index() {
         try {
-            // Fetch all users from the database
-            $stmt = $this->conn->prepare("SELECT * FROM users WHERE role = 'user' ORDER BY user_id DESC");
+            // Fetch all users from the database (remove the role='user' filter)
+            $stmt = $this->conn->prepare("SELECT * FROM users ORDER BY user_id DESC");
             $stmt->execute();
             $users = $stmt->fetchAll(\PDO::FETCH_ASSOC);
             
@@ -46,25 +46,34 @@ class UserController extends BaseController {
 
     public function store() {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            $this->redirect('/user');
+            $this->redirect('/admin/users');
             return;
         }
+        
+        // Add debug output to verify the submitted role
+        error_log("Submitted role: " . $_POST['role']);
         
         $name = $_POST['name'] ?? '';
         $email = $_POST['email'] ?? '';
         $phone = $_POST['phone'] ?? '';
         $address = $_POST['address'] ?? '';
         $password = $_POST['password'] ?? '';
-        $role = $_POST['role'] ?? 'user';
+        $role = $_POST['role'] ?? 'user'; // This should be 'admin' if selected
+        
+        // Debug output
+        error_log("Creating user with role: " . $role);
         
         // Basic validation
-        if (empty($name) || empty($email)) {
+        if (empty($name) || empty($email) || empty($password)) {
             $this->views('user/create', [
-                'error' => 'Name and email are required fields',
+                'error' => 'Name, email and password are required fields',
                 'title' => 'Create User - XING FU CHA'
             ]);
             return;
         }
+        
+        // Hash the password before storing
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
         
         // Handle image upload if present
         $image = null;
@@ -108,12 +117,12 @@ class UserController extends BaseController {
             $stmt->bindParam(':email', $email);
             $stmt->bindParam(':phone', $phone);
             $stmt->bindParam(':address', $address);
-            $stmt->bindParam(':password', $password);
+            $stmt->bindParam(':password', $hashedPassword); // Use hashed password
             $stmt->bindParam(':role', $role);
             $stmt->bindParam(':image', $image);
             
             if ($stmt->execute()) {
-                $this->redirect('/user');
+                $this->redirect('/admin/users');
             } else {
                 $this->views('user/create', [
                     'error' => 'Failed to create user',
@@ -139,7 +148,7 @@ class UserController extends BaseController {
                 $user = $stmt->fetch(\PDO::FETCH_ASSOC);
                 $this->views('user/edit', ['user' => $user, 'title' => 'Edit User - XING FU CHA']);
             } else {
-                $this->redirect('/user');
+                $this->redirect('/admin/users');
             }
         } catch (\PDOException $e) {
             $this->views('user/edit', [
@@ -151,7 +160,7 @@ class UserController extends BaseController {
 
     public function update($id) {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            $this->redirect('/user');
+            $this->redirect('/admin/users');
             return;
         }
         
@@ -250,12 +259,12 @@ class UserController extends BaseController {
             $stmt->bindParam(':id', $id);
             
             if ($stmt->execute()) {
-                $this->redirect('/user');
+                $this->redirect('/admin/users');
             } else {
-                $this->redirect('/user?error=Failed to delete user');
+                $this->redirect('/admin/users?error=Failed to delete user');
             }
         } catch (\PDOException $e) {
-            $this->redirect('/user?error=Database error: ' . urlencode($e->getMessage()));
+            $this->redirect('/admin/users?error=Database error: ' . urlencode($e->getMessage()));
         }
     }
 }

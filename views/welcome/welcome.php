@@ -6310,6 +6310,68 @@ p {
 .delay-500 {
     animation-delay: 0.5s;
 }
+    /* Auth buttons container */
+    .auth-buttons {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+    }
+
+    /* Play Button (No border) */
+    .play-button {
+        background: black;
+        color: white;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 14px;
+    }
+
+    /* Sign In Button (White - No border) */
+    .sign-in-button {
+        background: white;
+        color:  #ff2a2a;
+        padding: 10px 22px;
+        border-radius: 15px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: none;
+    }
+
+    /* Sign Out Button (Black - No border) */
+    .sign-out-button {
+        background:  #ff2a2a;
+        color: white;
+        padding: 10px 22px;
+        border-radius: 15px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: none;
+    }
+
+    /* Hover effects */
+    .play-button:hover {
+        background: #333;
+        transform: scale(1.05);
+    }
+
+    .sign-in-button:hover {
+        background: #f5f5f5;
+        transform: translateY(-2px);
+    }
+
+    .sign-out-button:hover {
+        background: #333;
+        transform: translateY(-2px);
+    }
 </style>
 <header>
     <img src="/assets/image/logo/logo.png" alt="XING FU CHA Logo">
@@ -6318,21 +6380,16 @@ p {
             <li><a href="/gift-card">Gift Card</a></li>
             <li><a href="/locations">Locations</a></li>
             <li><a href="/join-the-team">Join The Team</a></li>
-
         </ul>
     </nav>
-    <div class="search-bar">
-        <input type="text" placeholder="What do you want to eat today...">
-    </div>
 
-    <div class="user-profile" id="userProfileBtn">
-        <img src="<?php echo isset($_SESSION['user']) ? $_SESSION['user']['avatar'] : '/assets/image/placeholder.svg?height=40&width=40'; ?>" alt="User Profile">
-    </div>
-    <div class="notification-icon" id="notificationBtn">
-        <a href="/"></a><i class="fas fa-bell"></i>
-        <span class="notification-badge" id="notificationBadge">0</span>
+    <div class="auth-buttons">
+        <button class="sign-in-button" onclick="window.location.href='/login'">Sign In</button>
+        <button class="sign-out-button" onclick="window.location.href='/register'">Sign Out</button>
     </div>
 </header>
+
+
 <section class="content-welcome">
     
     <!-- Hero Section -->
