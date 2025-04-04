@@ -35,4 +35,38 @@ class BaseController {
         header('Location: ' . $uri);
         exit();
     }
+
+    /* Additional requested functionality below */
+    /* These methods are added without modifying any existing code */
+
+    protected function isLoggedIn() {
+        return isset($_SESSION['user_id']);
+    }
+
+    protected function validateCsrfToken() {
+        if (empty($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+            $_SESSION['error'] = "Invalid CSRF token!";
+            $this->redirect('/');
+            exit();
+        }
+    }
+
+    protected function generateCsrfToken() {
+        if (empty($_SESSION['csrf_token'])) {
+            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+        }
+        return $_SESSION['csrf_token'];
+    }
+
+    protected function handleError($message, $redirectUrl = '/') {
+        $_SESSION['error'] = $message;
+        $this->redirect($redirectUrl);
+        exit();
+    }
+
+    protected function handleSuccess($message, $redirectUrl = '/') {
+        $_SESSION['success'] = $message;
+        $this->redirect($redirectUrl);
+        exit();
+    }
 }

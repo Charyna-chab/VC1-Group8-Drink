@@ -63,6 +63,18 @@
 
     <!-- Divider -->
     <hr class="sidebar-divider">
+    
+  <!-- Add this to your sidebar.php file -->
+    <li class="nav-item">
+        <a class="nav-link" href="/order-list">
+            <i class="fas fa-shopping-cart"></i>
+            <span>Order List</span>
+        </a>
+    </li>
+
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
 
     <!-- Nav Item - Settings -->
     <li class="nav-item">

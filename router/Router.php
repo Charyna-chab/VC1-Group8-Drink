@@ -1,5 +1,10 @@
 <?php
-namespace YourNamespace;
+// Router.php
+define('BASE_DIR', __DIR__);  // Define the base directory globally
+
+// namespace YourNamespace;
+
+use YourNamespace\Controllers\OrderListController; // Ensure the correct namespace
 
 class Router {
     private $routes = [];
@@ -25,22 +30,37 @@ class Router {
                 array_shift($matches); // Remove the full match
                 
                 // Extract controller class and method
-                list($controllerClass, $method) = $controller;
+                list($controllerClass, $controllerMethod) = $controller;
                 
+                // Ensure class exists
+                if (!class_exists($controllerClass)) {
+                    header('HTTP/1.1 500 Internal Server Error');
+                    echo "Error: Controller '$controllerClass' not found.";
+                    return;
+                }
+
                 // Instantiate controller
                 $controllerInstance = new $controllerClass();
                 
                 // Call method with parameters
-                call_user_func_array([$controllerInstance, $method], $matches);
+                call_user_func_array([$controllerInstance, $controllerMethod], $matches);
                 return;
             }
         }
         
         // Check for exact route match
         if (isset($this->routes[$method][$uri])) {
-            list($controllerClass, $method) = $this->routes[$method][$uri];
+            list($controllerClass, $controllerMethod) = $this->routes[$method][$uri];
+            
+            // Ensure class exists
+            if (!class_exists($controllerClass)) {
+                header('HTTP/1.1 500 Internal Server Error');
+                echo "Error: Controller '$controllerClass' not found.";
+                return;
+            }
+
             $controllerInstance = new $controllerClass();
-            $controllerInstance->$method();
+            $controllerInstance->$controllerMethod();
             return;
         }
         
