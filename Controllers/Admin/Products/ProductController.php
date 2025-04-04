@@ -2,8 +2,8 @@
 namespace YourNamespace\Controllers\Admin\Products;
 
 require_once './Models/ProductModel.php';
-require_once './Controllers/BaseController.php';
-    
+require_once './controllers/BaseController.php';
+
 use YourNamespace\BaseController;
 use YourNamespace\Models\ProductModel;
 
@@ -11,14 +11,13 @@ class ProductController extends BaseController
 {
     private $model;
 
-    function __construct()
+    public function __construct()
     {
-        // Make sure sessions are started if you're using $_SESSION
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
         }
 
-        $this->model = new ProductModel();
+        $this->model = new ProductModel(); // Use the namespaced ProductModel
     }
 
     function index()
@@ -41,153 +40,84 @@ class ProductController extends BaseController
     function store()
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            // Set up the target directory for image uploads
-            $uploadDir = 'uploads/product/';
-
-            // Check if the directory exists, if not create it
-            if (!is_dir($uploadDir)) {
-                mkdir($uploadDir, 0777, true); // Creates the directory if it doesn't exist
-            }
-
-            // Set the image file path
-            $imageName = basename($_FILES['image']['name']);
-            $uploadFile = $uploadDir . $imageName;
-
-            // Check if file is an image
-            $imageFileType = strtolower(pathinfo($uploadFile, PATHINFO_EXTENSION));
-            $allowedTypes = ['jpg', 'jpeg', 'png', 'gif'];
-
-            if (in_array($imageFileType, $allowedTypes)) {
-                // Try to upload the file
-                if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadFile)) {
-                    $image_url = $uploadFile;  // Image URL or path saved to the database
-
-                    // Prepare the data for the product
-                    $data = [
-                        'product_name' => isset($_POST['product_name']) ? $_POST['product_name'] : null,
-                        'image' => $image_url,
-                        'product_detail' => isset($_POST['product_detail']) ? $_POST['product_detail'] : null,
-                        'price' => isset($_POST['price']) ? $_POST['price'] : null,
-                    ];
-
-                    var_dump($data); // Debugging in store method
-                    exit;
-
-                    // Validate that all required fields are present
-                    if (empty($data['product_name']) || empty($data['product_detail']) || empty($data['price'])) {
-                        $_SESSION['error'] = 'All fields except the image are required!';
-                        $this->views('products/product-create.php', ['error' => $_SESSION['error']]);
-                        return;
-                    }
-
-                    // Save the product to the database
-                    if ($this->model->createProduct($data)) {
-                        $_SESSION['success'] = 'Product added successfully!';
-                        $this->redirect('/product');
-                    } else {
-                        $_SESSION['error'] = 'Failed to add product!';
-                        $this->views('products/product-create.php', ['error' => $_SESSION['error']]);
-                    }
-                } else {
-                    $_SESSION['error'] = 'Failed to upload image!';
-                    $this->views('products/product-create.php', ['error' => $_SESSION['error']]);
-                }
-            } else {
-                $_SESSION['error'] = 'Invalid image format! Only JPG, JPEG, PNG, and GIF are allowed.';
-                $this->views('products/product-create.php', ['error' => $_SESSION['error']]);
-            }
-        }
-    }
-
-    function edit()
-    {
-        if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
-            $_SESSION['error'] = "Invalid product ID!";
-            $this->redirect('/product');
-            return;
-        }
-    
-        if (!$product) {
-            $_SESSION['error'] = "Product not found!";
-            $this->redirect('/product');
-            return;
-        }
-    
-        $this->views('products/product-edit.php', ['product' => $product]); // Pass product data to the view
-    }
-
-    function update()
-    {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            $_SESSION['error'] = "Invalid request method!";
-            $this->redirect('/product');
-            return;
-        }
-    
-        if (!isset($_POST['product_id']) || !is_numeric($_POST['product_id'])) {
-            $_SESSION['error'] = "Invalid product ID!";
-            $this->redirect('/product');
-            return;
-        }
-    
-        $id = $_POST['product_id'];
-    
-        // Handle file upload
-        if (!empty($_FILES['image']['name'])) {
             $uploadDir = 'uploads/product/';
             if (!is_dir($uploadDir)) {
                 mkdir($uploadDir, 0777, true);
             }
-    
+
             $imageName = basename($_FILES['image']['name']);
-            $imagePath = $uploadDir . $imageName;
-            
-            if (move_uploaded_file($_FILES['image']['tmp_name'], $imagePath)) {
-                $image = $imagePath;
+            $uploadFile = $uploadDir . $imageName;
+
+            if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadFile)) {
+                $data = [
+                    'product_name' => $_POST['product_name'],
+                    'product_detail' => $_POST['product_detail'],
+                    'price' => $_POST['price'],
+                    'image' => $uploadFile,
+                ];
+
+                $this->model->createProduct($data);
+                $this->redirect('/admin/products');
             } else {
-                $_SESSION['error'] = "Image upload failed!";
-                $this->redirect('/product/edit?id=' . $id);
-                return;
+                $_SESSION['error'] = 'Failed to upload image.';
+                $this->redirect('/admin/products/create');
             }
-        } else {
-            $image = $_POST['existing_image']; // Keep existing image if no new one is uploaded
         }
-    
-        $data = [
-            'product_name' => $_POST['product_name'],
-            'product_detail' => $_POST['product_detail'],
-            'price' => $_POST['price'],
-            'image' => $image
-        ];
-    
-        // Update the product
-        if ($this->model->updateProduct($id, $data)) {
-            $_SESSION['success'] = "Product updated successfully!";
-        } else {
-            $_SESSION['error'] = "Failed to update product!";
-        }
-    
-        $this->redirect('/product');
     }
 
-    function delete()
+    function edit($id)
     {
-        if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-            // Validate product ID
-            if (!isset($_GET['product_id']) || !is_numeric($_GET['product_id'])) {
-                $_SESSION['error'] = 'Invalid product ID!';
-                return $this->redirect('/product');
+        $product = $this->model->getProduct($id);
+        $this->views('products/product-edit.php', ['product' => $product]);
+    }
+
+    function update($id)
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $image = $_POST['existing_image'];
+
+            if (!empty($_FILES['image']['name'])) {
+                $uploadDir = 'uploads/product/';
+                $imageName = basename($_FILES['image']['name']);
+                $imagePath = $uploadDir . $imageName;
+
+                if (move_uploaded_file($_FILES['image']['tmp_name'], $imagePath)) {
+                    $image = $imagePath;
+                }
             }
 
-            $id = $_GET['product_id'];
+            $data = [
+                'product_name' => $_POST['product_name'],
+                'product_detail' => $_POST['product_detail'],
+                'price' => $_POST['price'],
+                'image' => $image,
+            ];
 
-            if ($this->model->deleteProduct($id)) {
-                $_SESSION['success'] = 'Product deleted successfully!';
-            } else {
-                $_SESSION['error'] = 'Failed to delete product! It may not exist.';
-            }
-
-            $this->redirect('/product');
+            $this->model->updateProduct($id, $data);
+            $this->redirect('/admin/products');
         }
+    }
+
+    function destroy($id)
+    {
+        $this->model->deleteProduct($id);
+        $this->redirect('/admin/products');
+    }
+
+    public function views($views, $data = []) {
+        // Extract data into variables
+        extract($data);
+
+        // Ensure the view path is correct
+        $viewPath = 'views/' . $views;
+        if (!str_ends_with($viewPath, '.php')) {
+            $viewPath .= '.php';
+        }
+
+        if (!file_exists($viewPath)) {
+            die("View file not found: {$viewPath}. Please create this file.");
+        }
+
+        require_once $viewPath;
     }
 }

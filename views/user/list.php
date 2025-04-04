@@ -4,11 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo isset($title) ? $title : 'Admin Dashboard - XING FU CHA'; ?></title>
+    <title><?php echo isset($title) ? $title : 'User List'; ?></title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
     <link href="/assets/css/sb-admin-2.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         /* Custom styles for full-width table */
         body {
@@ -145,7 +146,7 @@
             <div class="container-fluid">
                 <div class="card shadow mb-4">
                     <div class="card-header py-3 d-flex flex-column flex-md-row justify-content-between align-items-center">
-                        <h6 class="m-0 font-weight-bold text-primary">Customers List</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">User List</h6>
                         <div class="d-flex flex-column flex-md-row gap-2 mt-2 mt-md-0">
                             <div class="input-group">
                                 <input type="text" class="form-control form-control-sm" placeholder="Search..." id="searchInput">
@@ -154,7 +155,7 @@
                                 </button>
                             </div>
                             <a href="/admin/users/create" class="btn btn-success btn-sm">
-                                <i class="fas fa-plus me-1"></i> Add New
+                                <i class="fas fa-plus me-1"></i> Add New User
                             </a>
                         </div>
                     </div>
@@ -166,29 +167,34 @@
                                         <th>ID</th>
                                         <th>Image</th>
                                         <th>Name</th>
-                                        <th>Phone</th>
                                         <th>Email</th>
-                                        <th>Role</th>
+                                        <th>Phone</th>
                                         <th>Address</th>
+                                        <th>Role</th>
+                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php if (empty($users)): ?>
                                         <tr>
-                                            <td colspan="7" class="text-center py-4">No customers found</td>
+                                            <td colspan="8" class="text-center py-4">No users found</td>
                                         </tr>
                                     <?php else: ?>
-                                        <?php foreach ($users as $index => $user): ?>
+                                        <?php foreach ($users as $user): ?>
                                             <tr>
-                                                <td><?= $index + 1 ?></td>
+                                                <td><?= htmlspecialchars($user['user_id']) ?></td>
                                                 <td>
-                                                    <img src="<?= htmlspecialchars($user['image']) ?>" alt="User Image" class="user-avatar">
+                                                    <img src="<?= htmlspecialchars($user['image']) ?>" alt="User Image" style="width: 50px; height: 50px; object-fit: cover;">
                                                 </td>
                                                 <td class="name-user"><?= htmlspecialchars($user['name']) ?></td>
-                                                <td class="phone-user"><?= htmlspecialchars($user['phone']) ?></td>
                                                 <td class="email-user"><?= htmlspecialchars($user['email']) ?></td>
-                                                <td class="role-user"><?= htmlspecialchars($user['role']) ?></td>
+                                                <td class="phone-user"><?= htmlspecialchars($user['phone']) ?></td>
                                                 <td class="address-user"><?= htmlspecialchars($user['address']) ?></td>
+                                                <td class="role-user"><?= htmlspecialchars($user['role']) ?></td>
+                                                <td>
+                                                    <a href="/admin/users/edit/<?= $user['user_id'] ?>" class="btn btn-sm btn-warning">Edit</a>
+                                                    <a href="/admin/users/delete/<?= $user['user_id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this user?')">Delete</a>
+                                                </td>
                                             </tr>
                                         <?php endforeach; ?>
                                     <?php endif; ?>
