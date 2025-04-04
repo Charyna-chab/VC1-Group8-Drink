@@ -24,8 +24,8 @@ class ProductModel
 
     public function createProduct($data)
     {
-        $query = "INSERT INTO products (product_name, image, product_detail, price)
-                  VALUES (:product_name, :image, :product_detail, :price)";
+        $query = "INSERT INTO products (product_name, product_detail, price, image)
+                  VALUES (:product_name, :product_detail, :price, :image)";
         $stmt = $this->pdo->prepare($query);
         return $stmt->execute($data);
     }
@@ -39,12 +39,7 @@ class ProductModel
 
     public function updateProduct($id, $data)
     {
-        $query = "UPDATE products SET 
-                  product_name = :product_name, 
-                  image = :image, 
-                  product_detail = :product_detail, 
-                  price = :price 
-                  WHERE product_id = :product_id";
+        $query = "UPDATE products SET product_name = :product_name, product_detail = :product_detail, price = :price, image = :image WHERE product_id = :product_id";
         $stmt = $this->pdo->prepare($query);
         $data['product_id'] = $id;
         return $stmt->execute($data);
