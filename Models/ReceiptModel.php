@@ -7,7 +7,7 @@ class ReceiptModel
 
     function __construct()
     {
-        $this->pdo = new Database();
+        $this->pdo = (new Database())->getConnection();
     }
 
     function getReceiptsByUser($userId)
@@ -19,8 +19,9 @@ class ReceiptModel
                  WHERE r.user_id = :user_id
                  ORDER BY r.receipt_id DESC";
                  
-        $stmt = $this->pdo->query($query, ['user_id' => $userId]);
-        return $stmt->fetchAll();
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute(['user_id' => $userId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     function getReceipt($id)
@@ -32,28 +33,19 @@ class ReceiptModel
                  JOIN users u ON r.user_id = u.user_id
                  WHERE r.receipt_id = :receipt_id";
                  
-        $stmt = $this->pdo->query($query, ['receipt_id' => $id]);
-        return $stmt->fetch();
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute(['receipt_id' => $id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    function createReceipt($data)
+    function deleteReceipt($id)
     {
         try {
-            $query = "INSERT INTO receipts (user_id, order_id, amount, payment_method, payment_status, transaction_id)
-                      VALUES (:user_id, :order_id, :amount, :payment_method, :payment_status, :transaction_id)";
-
-            $result = $this->pdo->query($query, [
-                'user_id' => $data['user_id'],
-                'order_id' => $data['order_id'],
-                'amount' => $data['amount'],
-                'payment_method' => $data['payment_method'],
-                'payment_status' => $data['payment_status'],
-                'transaction_id' => $data['transaction_id']
-            ]);
-
-            return $this->pdo->lastInsertId();
+            $query = "DELETE FROM receipts WHERE receipt_id = :receipt_id";
+            $stmt = $this->pdo->prepare($query);
+            return $stmt->execute(['receipt_id' => $id]);
         } catch (PDOException $e) {
-            error_log("Error creating receipt: " . $e->getMessage());
+            error_log("Error deleting receipt: " . $e->getMessage());
             return false;
         }
     }
