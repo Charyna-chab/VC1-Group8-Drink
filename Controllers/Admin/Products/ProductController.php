@@ -1,21 +1,18 @@
 <?php
 namespace YourNamespace\Controllers;
 
-require_once __DIR__ . '/../Models/ProductModel.php';
-require_once __DIR__ . '/BaseController.php';
+require_once __DIR__ . '/../../../Models/ProductModel.php'; // Correct path to ProductModel.php
+require_once __DIR__ . '/../../BaseController.php';
 
 use YourNamespace\Models\ProductModel;
 use YourNamespace\BaseController;
 
-
 class ProductController extends BaseController
 {
-
     private $model;
 
     function __construct()
     {
-        // Make sure sessions are started if you're using $_SESSION
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
         }
@@ -102,10 +99,8 @@ class ProductController extends BaseController
     }
 
     public function views($views, $data = []) {
-        // Extract data into variables
         extract($data);
 
-        // Ensure the view path is correct
         $viewPath = 'views/' . $views;
         if (!str_ends_with($viewPath, '.php')) {
             $viewPath .= '.php';
