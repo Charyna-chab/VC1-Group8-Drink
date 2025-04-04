@@ -47,6 +47,7 @@ use YourNamespace\Controllers\Admin\AdminFeedbackController;
 use YourNamespace\Controllers\GiftCardController;
 use YourNamespace\Controllers\LocationsController;
 use YourNamespace\Controllers\JoinTheTeamController;
+use YourNamespace\Models\ProductModel;
 
 
 $route = new Router();
@@ -135,12 +136,12 @@ $route->get("/settings", [SettingsController::class, 'index']);
 $route->get("/admin-dashboard", [DashboardController::class, 'index']);
 
 // Admin Product Management
-$route->get("/admin/products", [ProductController::class, 'index']);
-$route->get("/admin/products/create", [ProductController::class, 'create']);
-$route->post("/admin/products/store", [ProductController::class, 'store']);
-$route->get("/admin/products/edit/{id}", [ProductController::class, 'edit']);
-$route->post("/admin/products/update/{id}", [ProductController::class, 'update']);
-$route->post("/admin/products/delete/{id}", [ProductController::class, 'destroy']);
+// $route->get("/admin/products", [ProductController::class, 'index']);
+// $route->get("/admin/products/create", [ProductController::class, 'create']);
+// $route->post("/admin/products/store", [ProductController::class, 'store']);
+// $route->get("/admin/products/edit/{id}", [ProductController::class, 'edit']);
+// $route->post("/admin/products/update/{id}", [ProductController::class, 'update']);
+// $route->post("/admin/products/delete/{id}", [ProductController::class, 'delete']);
 
 // Admin User Management
 $route->get("/admin/users", [UserController::class, 'index']);

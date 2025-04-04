@@ -2,44 +2,48 @@
 namespace YourNamespace\Controllers;
 
 use YourNamespace\BaseController;
+use YourNamespace\Database\Database;  // Proper namespace import
 
-class DashboardController extends BaseController {
+class DashboardController extends BaseController 
+{
     private $conn;
 
-    public function __construct() {
+    public function __construct() 
+    {
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
         }
         
-        // Initialize database connection
-        $database = new \Database();
+        // Initialize database connection with proper class
+        $database = new Database();  // Now using the properly namespaced class
         $this->conn = $database->getConnection();
         
         $this->checkAdminAuth();
     }
     
-    private function checkAdminAuth() {
+    private function checkAdminAuth() 
+    {
         if (!isset($_SESSION['user_id']) || !isset($_SESSION['user']['role']) || $_SESSION['user']['role'] !== 'admin') {
             $this->redirect('/admin-login');
         }
     }
     
-    public function index() {
+    public function index() 
+    {
         try {
             // Get statistics for dashboard
-            $userCount = $this->getUserCount();
-            $productCount = $this->getProductCount();
-            $totalSales = $this->getTotalSales();
-            $monthlySales = $this->getMonthlySales();
+            $stats = [
+                'userCount' => $this->getUserCount(),
+                'productCount' => $this->getProductCount(),
+                'totalSales' => $this->getTotalSales(),
+                'monthlySales' => $this->getMonthlySales()
+            ];
             
-            $this->views('admin/dashboard', [
+            $this->views('admin/dashboard', array_merge([
                 'title' => 'Admin Dashboard - XING FU CHA',
-                'user' => $_SESSION['user'],
-                'userCount' => $userCount,
-                'productCount' => $productCount,
-                'totalSales' => $totalSales,
-                'monthlySales' => $monthlySales
-            ]);
+                'user' => $_SESSION['user']
+            ], $stats));
+            
         } catch (\PDOException $e) {
             $this->views('admin/dashboard', [
                 'title' => 'Admin Dashboard - XING FU CHA',
@@ -49,28 +53,32 @@ class DashboardController extends BaseController {
         }
     }
     
-    private function getUserCount() {
+    private function getUserCount() 
+    {
         $stmt = $this->conn->prepare("SELECT COUNT(*) as count FROM users WHERE role = 'user'");
         $stmt->execute();
-        $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+        $result = $stmt->fetch();
         return $result['count'] ?? 0;
     }
     
-    private function getProductCount() {
+    private function getProductCount() 
+    {
         $stmt = $this->conn->prepare("SELECT COUNT(*) as count FROM products");
         $stmt->execute();
-        $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+        $result = $stmt->fetch();
         return $result['count'] ?? 0;
     }
     
-    private function getTotalSales() {
+    private function getTotalSales() 
+    {
         $stmt = $this->conn->prepare("SELECT SUM(total_price) as total FROM orders");
         $stmt->execute();
-        $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+        $result = $stmt->fetch();
         return $result['total'] ?? 0;
     }
     
-    private function getMonthlySales() {
+    private function getMonthlySales() 
+    {
         $stmt = $this->conn->prepare(
             "SELECT MONTH(created_at) as month, SUM(total_price) as total 
              FROM orders 
@@ -79,6 +87,6 @@ class DashboardController extends BaseController {
              ORDER BY month"
         );
         $stmt->execute();
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        return $stmt->fetchAll();
     }
 }

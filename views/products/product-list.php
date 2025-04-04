@@ -74,7 +74,7 @@
                 <div class="card shadow mb-4">
                     <div class="card-header py-3 d-flex justify-content-between align-items-center">
                         <h6 class="m-0 font-weight-bold text-primary">Product List</h6>
-                        <a href="/product/create" class="btn btn-primary btn-sm">
+                        <a href="/admin/products/create" class="btn btn-primary btn-sm">
                             <i class="fas fa-plus me-1"></i> Add New
                         </a>
                     </div>

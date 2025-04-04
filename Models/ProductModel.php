@@ -1,6 +1,9 @@
 <?php
-require_once './Database/database.php';
+namespace YourNamespace\Models;
 
+require_once __DIR__ . '/../Database/database.php';
+use YourNamespace\Database\Database;
+use PDOException;
 class ProductModel
 {
     private $pdo;
