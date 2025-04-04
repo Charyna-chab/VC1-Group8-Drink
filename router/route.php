@@ -176,5 +176,12 @@ $route->get("/contact", [MoreController::class, 'contact']);
 $route->get("/faq", [MoreController::class, 'faq']);
 $route->get("/blog", [MoreController::class, 'blog']);
 
+
+// Define routes
+$route->get("/order-list", [OrderListController::class, 'index']);
+$route->get("/order-list/details", [OrderListController::class, 'details']);
+$route->post("/update-order-status", [OrderListController::class, 'updateStatus']);
+$route->post("/delete-order", [OrderListController::class, 'deleteOrder']);
+
 $route->route();
 
