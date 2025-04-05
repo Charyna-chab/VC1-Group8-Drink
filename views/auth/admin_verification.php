@@ -151,6 +151,29 @@
      
       z-index: 1;
     }
+    .auth-error {
+      background-color: #ffebee;
+      color: #d32f2f;
+      padding: 12px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+    }
+    .auth-error i {
+      margin-right: 10px;
+      font-size: 18px;
+    }
+    /* For development purposes - display verification code */
+    .dev-code {
+      margin-top: 15px;
+      padding: 10px;
+      background-color: #f8f9fa;
+      border: 1px dashed #ddd;
+      border-radius: 5px;
+      text-align: center;
+      font-family: monospace;
+    }
     @media (max-width: 768px) {
       .auth-container {
         flex-direction: column;
@@ -213,6 +236,13 @@
           <a href="/admin-login" class="resend-link">Didn't receive the code? Try again</a>
         </form>
 
+        <?php if (isset($demo_code)): ?>
+        <div class="dev-code">
+          <p>Development Mode: Verification Code</p>
+          <strong><?php echo $demo_code; ?></strong>
+        </div>
+        <?php endif; ?>
+
         <div class="auth-footer">
           <p>Not an admin? <a href="/login">User Login</a></p>
         </div>
@@ -224,6 +254,17 @@
     </div>
   </div>
 
-  <script src="/assets/js/auth.js"></script>
+  <script>
+    // Auto focus on verification code input
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('verification_code').focus();
+    });
+
+    // Format verification code input to only accept numbers
+    document.getElementById('verification_code').addEventListener('input', function(e) {
+      this.value = this.value.replace(/[^0-9]/g, '');
+    });
+  </script>
 </body>
 </html>
+

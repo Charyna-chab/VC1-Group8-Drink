@@ -250,6 +250,7 @@ class AuthController extends BaseController {
                             
                             // Log the attempt
                             error_log("Admin login attempt: Email sending " . ($emailSent ? "successful" : "failed"));
+                            error_log("Verification code: " . $verification_code); // For debugging
                             
                             $this->redirect('/admin-verification');
                         } else {
