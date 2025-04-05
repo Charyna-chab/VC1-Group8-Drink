@@ -37,9 +37,7 @@
             <div class="product-card" data-category="<?php echo $product['category']; ?>">
                 <div class="product-image">
                     <img src="<?php echo $product['image']; ?>" alt="<?php echo $product['name']; ?>">
-                    <button class="favorite-btn">
-                        <i class="<?php echo in_array($product['id'], $favorites) ? 'fas' : 'far'; ?> fa-heart"></i>
-                    </button>
+
                 </div>
                 <div class="product-info">
                     <h3><?php echo $product['name']; ?></h3>
