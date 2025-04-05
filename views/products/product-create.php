@@ -1,7 +1,7 @@
 <div class="container my-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <form action="/product/store" method="POST" enctype="multipart/form-data" class="border border-2 rounded p-4 shadow-sm bg-light">
+            <form action="/admin/products/store" method="POST" enctype="multipart/form-data" class="border border-2 rounded p-4 shadow-sm bg-light">
                 <h3 class="mb-4 text-center text-primary">Add a New Product</h3>
                 
                 <div class="mb-3">

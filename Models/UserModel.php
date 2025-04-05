@@ -102,19 +102,12 @@ class UserModel
         }
     }
 
-    public function emailExists($email, $excludeId = null)
+    public function emailExists($email)
     {
-        $query = "SELECT user_id FROM users WHERE email = :email";
-        $params = ['email' => $email];
-
-        if ($excludeId) {
-            $query .= " AND user_id != :user_id";
-            $params['user_id'] = $excludeId;
-        }
-
+        $query = "SELECT COUNT(*) FROM users WHERE email = :email";
         $stmt = $this->pdo->prepare($query);
-        $stmt->execute($params);
-        return $stmt->rowCount() > 0;
+        $stmt->execute(['email' => $email]);
+        return $stmt->fetchColumn() > 0;
     }
 }
 

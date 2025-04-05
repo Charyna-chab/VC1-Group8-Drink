@@ -15,7 +15,6 @@ class Router {
     public function route() {
         $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         $method = $_SERVER['REQUEST_METHOD'];
-        
         // Check for dynamic routes with parameters
         foreach ($this->routes[$method] ?? [] as $route => $controller) {
             $pattern = preg_replace('/{[^\/]+}/', '([^/]+)', $route);
