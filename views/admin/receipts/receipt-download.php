@@ -1,20 +1,23 @@
-<?php require_once 'views/layouts/header.php'; ?>
+<?php require_once 'views/layouts/admin/header.php'; ?>
 
-<div class="container mt-4">
-    <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <h4>Receipt #<?= $receipt['receipt_id'] ?></h4>
+<div class="container-fluid">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary">Receipt #<?= $receipt['receipt_id'] ?></h6>
             <div>
-                <button onclick="window.print()" class="btn btn-primary">
+                <button onclick="window.print()" class="btn btn-sm btn-primary">
                     <i class="fas fa-print"></i> Print
                 </button>
-                <a href="/receipt" class="btn btn-secondary">
+                <button onclick="generatePDF()" class="btn btn-sm btn-success">
+                    <i class="fas fa-file-pdf"></i> Save as PDF
+                </button>
+                <a href="/admin/receipts" class="btn btn-sm btn-secondary">
                     <i class="fas fa-arrow-left"></i> Back
                 </a>
             </div>
         </div>
         <div class="card-body">
-            <div class="receipt-container p-4 border rounded">
+            <div id="receipt-container" class="receipt-container p-4 border rounded">
                 <div class="text-center mb-4">
                     <h2>XING FU CHA</h2>
                     <p>123 Bubble Tea Street, Tea City</p>
@@ -27,6 +30,11 @@
                         <p><strong>Receipt ID:</strong> #<?= $receipt['receipt_id'] ?></p>
                         <p><strong>Date:</strong> <?= date('M d, Y H:i', strtotime($receipt['order_date'])) ?></p>
                         <p><strong>Transaction ID:</strong> <?= $receipt['transaction_id'] ?></p>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Customer Information</h5>
+                        <p><strong>Name:</strong> <?= $receipt['username'] ?></p>
+                        <p><strong>Email:</strong> <?= $receipt['email'] ?></p>
                     </div>
                 </div>
                 
@@ -61,11 +69,65 @@
                 
                 <div class="text-center mt-4">
                     <p>Thank you for your purchase!</p>
+                    <p class="small text-muted">This is an official receipt from Xing Fu Cha.</p>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<?php require_once 'views/layouts/footer.php'; ?>
+<!-- Add script for PDF generation -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+function generatePDF() {
+    // Get the receipt container
+    const element = document.getElementById('receipt-container');
+    
+    // Configure html2pdf options
+    const opt = {
+        margin: 1,
+        filename: 'receipt-<?= $receipt['receipt_id'] ?>.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+    };
+    
+    // Generate and download PDF
+    html2pdf().set(opt).from(element).save();
+}
 
+// Add print-specific styles
+window.onbeforeprint = function() {
+    document.querySelectorAll('.btn, .no-print').forEach(el => {
+        el.style.display = 'none';
+    });
+};
+
+window.onafterprint = function() {
+    document.querySelectorAll('.btn, .no-print').forEach(el => {
+        el.style.display = '';
+    });
+};
+</script>
+
+<style>
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    #receipt-container, #receipt-container * {
+        visibility: visible;
+    }
+    #receipt-container {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+    }
+    .no-print {
+        display: none !important;
+    }
+}
+</style>
+
+<?php require_once 'views/layouts/admin/footer.php'; ?>
