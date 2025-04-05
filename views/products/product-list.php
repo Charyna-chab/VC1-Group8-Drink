@@ -103,59 +103,59 @@
                                 </thead>
                                 <tbody>
                                     <?php foreach ($products as $index => $product): ?>
-                                    <tr>
-                                        <td><?= $product['product_id'] ?></td>
-                                        <td>
-                                            <img src="<?= htmlspecialchars($product['image']) ?>" alt="Product Image" class="product-image" style="object-fit: cover;">
-                                        </td>
-                                        <td><?= htmlspecialchars($product['product_name']) ?></td>
-                                        <td><?= htmlspecialchars($product['product_detail']) ?></td>
-                                        <td>$<?= htmlspecialchars($product['price']) ?></td>
-                                        <td>
-                                            <div class="dropdown">
-                                                <button class="btn btn-sm p-0 border-0 bg-transparent dropdown-toggle"
-                                                    type="button"
-                                                    id="dropdownMenuButton<?= $index ?>"
-                                                    data-bs-toggle="dropdown"
-                                                    aria-expanded="false">
-                                                    <i class="fas fa-ellipsis-v text-dark"></i>
-                                                </button>
-                                                <ul class="dropdown-menu dropdown-menu-end shadow"
-                                                    aria-labelledby="dropdownMenuButton<?= $index ?>">
-                                                    <li>
-                                                        <a class="dropdown-item py-2" href="/admin/products/edit?id=<?= $product['product_id'] ?>">
-                                                            <i class="fas fa-edit me-2 text-primary"></i> Edit
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a class="dropdown-item py-2 text-danger" href="#"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#deleteModal<?= $index ?>">
-                                                            <i class="fas fa-trash me-2 text-danger"></i> Delete
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
+                                        <tr>
+                                            <td><?= $index + 1 ?></td>
+                                            <td>
+                                                <img src="<?= htmlspecialchars($product['image']) ?>" alt="Product Image" class="product-image" style="object-fit: cover;">
+                                            </td>
+                                            <td><?= htmlspecialchars($product['product_name']) ?></td>
+                                            <td><?= htmlspecialchars($product['product_detail']) ?></td>
+                                            <td>$<?= htmlspecialchars($product['price']) ?></td>
+                                            <td>
+                                                <div class="dropdown">
+                                                    <button class="btn btn-sm p-0 border-0 bg-transparent dropdown-toggle"
+                                                        type="button"
+                                                        id="dropdownMenuButton<?= $index ?>"
+                                                        data-bs-toggle="dropdown"
+                                                        aria-expanded="false">
+                                                        <i class="fas fa-ellipsis-v text-dark"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu dropdown-menu-end shadow"
+                                                        aria-labelledby="dropdownMenuButton<?= $index ?>">
+                                                        <li>
+                                                            <a class="dropdown-item py-2" href="/admin/products/edit?id=<?= $product['product_id'] ?>">
+                                                                <i class="fas fa-edit me-2 text-primary"></i> Edit
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="dropdown-item py-2 text-danger" href="#"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#deleteModal<?= $index ?>">
+                                                                <i class="fas fa-trash me-2 text-danger"></i> Delete
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
 
-                                            <div class="modal fade" id="deleteModal<?= $index ?>" tabindex="-1" aria-hidden="true">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title">Confirm Deletion</h5>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            Are you sure you want to delete "<?= htmlspecialchars($product['product_name']) ?>"?
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                                            <a href="/admin/products/delete?product_id=<?= $product['product_id'] ?>" class="btn btn-danger">Delete</a>
+                                                <div class="modal fade" id="deleteModal<?= $index ?>" tabindex="-1" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title">Confirm Deletion</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                Are you sure you want to delete "<?= htmlspecialchars($product['product_name']) ?>"?
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                                <a href="/admin/products/delete?product_id=<?= $product['product_id'] ?>" class="btn btn-danger">Delete</a>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                            </td>
+                                        </tr>
                                     <?php endforeach; ?>
                                 </tbody>
                             </table>

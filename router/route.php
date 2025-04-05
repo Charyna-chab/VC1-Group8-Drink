@@ -10,7 +10,6 @@ require_once "controllers/BookingController.php";
 require_once "controllers/AuthController.php";
 require_once "controllers/AdminController.php";
 require_once "controllers/FeedbackController.php";
-require_once "controllers/DashboardController.php";
 require_once "controllers/PaymentController.php";
 require_once "controllers/CashController.php";
 require_once "controllers/ReceiptController.php";
@@ -20,7 +19,7 @@ require_once "controllers/LocationsController.php";
 require_once "controllers/JoinTheTeamController.php";
 require_once './controllers/Admin/Users/UserController.php';
 require_once './controllers/Admin/Products/ProductController.php';
-
+require_once "./controllers/Admin/DashboardController.php";
 
 use YourNamespace\Router;
 use YourNamespace\Controllers\WelcomeController;
@@ -31,8 +30,6 @@ use YourNamespace\Controllers\SettingsController;
 use YourNamespace\Controllers\AuthController;
 use YourNamespace\Controllers\AdminController;
 use YourNamespace\Controllers\FeedbackController;
-use YourNamespace\Controllers\UserController;
-use YourNamespace\Controllers\DashboardController;
 use YourNamespace\Controllers\PaymentController;
 use YourNamespace\Controllers\CashController;
 use YourNamespace\Controllers\ReceiptController;
@@ -41,6 +38,7 @@ use YourNamespace\Controllers\GiftCardController;
 use YourNamespace\Controllers\LocationsController;
 use YourNamespace\Controllers\JoinTheTeamController;
 use YourNamespace\Controllers\Admin\Products\ProductController;
+use YourNamespace\Controllers\Admin\DashboardController;
 
 
 $route = new Router();
