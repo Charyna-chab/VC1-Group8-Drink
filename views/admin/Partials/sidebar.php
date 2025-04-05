@@ -56,7 +56,7 @@
 
     <!-- Nav Item - Feedback -->
     <li class="nav-item">
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="/admin/feedback">
             <i class="fas fa-comment-alt feedback-icon"></i>
             <span>Feedback</span></a>
     </li>
@@ -78,3 +78,4 @@
         </div>
     </li>
 </ul>
+

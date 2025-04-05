@@ -35,6 +35,7 @@ class UserController extends BaseController
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $data = [
+                'image' => $_POST['image'],
                 'name' => $_POST['name'],
                 'phone' => $_POST['phone'],
                 'email' => $_POST['email'],
@@ -66,6 +67,7 @@ class UserController extends BaseController
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $data = [
+                'image' => $_POST['image'],
                 'name' => $_POST['name'],
                 'phone' => $_POST['phone'],
                 'email' => $_POST['email'],
