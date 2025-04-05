@@ -9,10 +9,7 @@ require_once "controllers/OrdersController.php";
 require_once "controllers/BookingController.php";
 require_once "controllers/AuthController.php";
 require_once "controllers/AdminController.php";
-require_once "controllers/ProductController.php";
 require_once "controllers/FeedbackController.php";
-require_once "controllers/UserController.php";
-require_once "controllers/DashboardController.php";
 require_once "controllers/PaymentController.php";
 require_once "controllers/CashController.php";
 require_once "controllers/ReceiptController.php";
@@ -20,7 +17,9 @@ require_once "controllers/Admin/AdminFeedbackController.php";
 require_once "controllers/GiftCardController.php";
 require_once "controllers/LocationsController.php";
 require_once "controllers/JoinTheTeamController.php";
-
+require_once __DIR__ . '/../controllers/Admin/Users/UserController.php';
+require_once './controllers/Admin/Products/ProductController.php';
+require_once "./controllers/Admin/DashboardController.php";
 
 use YourNamespace\Router;
 use YourNamespace\Controllers\WelcomeController;
@@ -30,10 +29,7 @@ use YourNamespace\Controllers\FavoritesController;
 use YourNamespace\Controllers\SettingsController;
 use YourNamespace\Controllers\AuthController;
 use YourNamespace\Controllers\AdminController;
-use YourNamespace\Controllers\ProductController;
 use YourNamespace\Controllers\FeedbackController;
-use YourNamespace\Controllers\UserController;
-use YourNamespace\Controllers\DashboardController;
 use YourNamespace\Controllers\PaymentController;
 use YourNamespace\Controllers\CashController;
 use YourNamespace\Controllers\ReceiptController;
@@ -41,7 +37,9 @@ use YourNamespace\Controllers\Admin\AdminFeedbackController;
 use YourNamespace\Controllers\GiftCardController;
 use YourNamespace\Controllers\LocationsController;
 use YourNamespace\Controllers\JoinTheTeamController;
-use YourNamespace\Models\ProductModel;
+use YourNamespace\Controllers\Admin\Users\UserController;
+use YourNamespace\Controllers\Admin\Products\ProductController;
+use YourNamespace\Controllers\Admin\DashboardController;
 
 
 $route = new Router();
@@ -102,22 +100,15 @@ $route->get("/cash", [CashController::class, 'index']);
 $route->post("/cash/process", [CashController::class, 'process']);
 $route->get("/cash/confirm/{id}", [CashController::class, 'confirm']);
 
-// Receipt routes
-$route->get("/receipt", [ReceiptController::class, 'index']);
-$route->get("/receipt/download/{id}", [ReceiptController::class, 'download']);
+// // Receipt routes
+// $route->get("/receipt", [ReceiptController::class, 'index']);
+// $route->get("/receipt/download/{id}", [ReceiptController::class, 'download']);
 
 // Booking routes
 $route->get("/booking", [BookingController::class, 'index']);
 $route->get("/booking/details/{id}", [BookingController::class, 'details']);
 $route->post("/booking/create", [BookingController::class, 'createBooking']);
 
-// Product routes - fixed routes
-$route->get("/product", [ProductController::class, 'index']);
-$route->get("/product/create", [ProductController::class, 'create']);
-$route->post("/product/store", [ProductController::class, 'store']);
-$route->get("/product/edit", [ProductController::class, 'edit']);
-$route->post("/product/update", [ProductController::class, 'update']);
-$route->get("/product/delete", [ProductController::class, 'delete']);
 
 // Favorites routes
 $route->get("/favorites", [FavoritesController::class, 'index']);
@@ -136,22 +127,23 @@ $route->get("/settings", [SettingsController::class, 'index']);
 // Admin routes
 $route->get("/admin-dashboard", [DashboardController::class, 'index']);
 
-// Admin Product Management
-// $route->get("/admin/products", [ProductController::class, 'index']);
-// $route->get("/admin/products/create", [ProductController::class, 'create']);
-// $route->post("/admin/products/store", [ProductController::class, 'store']);
-// $route->get("/admin/products/edit/{id}", [ProductController::class, 'edit']);
-// $route->post("/admin/products/update/{id}", [ProductController::class, 'update']);
-// $route->post("/admin/products/delete/{id}", [ProductController::class, 'delete']);
+// Admin Product Management Routes
+$route->get("/product", [ProductController::class, 'index']);
+$route->get("/admin/products", [ProductController::class, 'index']);
+$route->get("/admin/products/create", [ProductController::class, 'create']);
+$route->post("/admin/products/store", [ProductController::class, 'store']);
+$route->get("/admin/products/edit/{id}", [ProductController::class, 'edit']);
+$route->post("/admin/products/update/{id}", [ProductController::class, 'update']);
+$route->post("/admin/products/delete/{id}", [ProductController::class, 'destroy']);
 
 // Admin User Management
+// Fix the user routes to match your controller's expectations
 $route->get("/admin/users", [UserController::class, 'index']);
 $route->get("/admin/users/create", [UserController::class, 'create']);
 $route->post("/admin/users/store", [UserController::class, 'store']);
 $route->get("/admin/users/edit/{id}", [UserController::class, 'edit']);
 $route->post("/admin/users/update/{id}", [UserController::class, 'update']);
-$route->post("/admin/users/delete/{id}", [UserController::class, 'delete']);
-
+$route->post("/admin/users/delete/{id}", [UserController::class, 'destroy']); // Changed from 'delete' to 'destroy' to match your controller
 // Admin Feedback Management
 $route->get("/admin/feedback", [FeedbackController::class, 'index']);
 $route->get("/admin/feedback/create", [FeedbackController::class, 'create']);
@@ -161,13 +153,16 @@ $route->post("/admin/feedback/update/{id}", [FeedbackController::class, 'update'
 $route->post("/admin/feedback/delete/{id}", [FeedbackController::class, 'delete']);
 
 // Additional pages from More menu
-$route->get("/about-us", [MoreController::class, 'aboutUs']);
-$route->get("/menu", [MoreController::class, 'menu']);
-$route->get("/rewards", [MoreController::class, 'rewards']);
-$route->get("/catering", [MoreController::class, 'catering']);
-$route->get("/franchising", [MoreController::class, 'franchising']);
-$route->get("/contact", [MoreController::class, 'contact']);
-$route->get("/faq", [MoreController::class, 'faq']);
-$route->get("/blog", [MoreController::class, 'blog']);
+// $route->get("/about-us", [MoreController::class, 'aboutUs']);
+// $route->get("/menu", [MoreController::class, 'menu']);
+// $route->get("/rewards", [MoreController::class, 'rewards']);
+// $route->get("/catering", [MoreController::class, 'catering']);
+// $route->get("/franchising", [MoreController::class, 'franchising']);
+// $route->get("/contact", [MoreController::class, 'contact']);
+// $route->get("/faq", [MoreController::class, 'faq']);
+// $route->get("/blog", [MoreController::class, 'blog']);
+
+
+
 
 $route->route();

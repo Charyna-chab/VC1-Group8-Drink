@@ -69,7 +69,7 @@ $product_count = $_SESSION['product_count'] ?? 0;
                                         Total Price Product</div>
                                     <div class="h5 mb-0 font-weight-bold text-gray-800">
 
-                                        $<span id="total-price"><?= number_format($total, 2) ?></span>
+                                        $<span id="total-price"><?= number_format($totalPrice, 2) ?></span>
                                     </div>
                                 </div>
                                 <div class="col-auto">
@@ -89,7 +89,7 @@ $product_count = $_SESSION['product_count'] ?? 0;
                                     </div>
                                     <div class="row no-gutters align-items-center">
                                         <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                            <span><?= $product_count ?></span>
+                                            <span><?= $totalProducts ?></span>
                                         </div>
 
                                     </div>

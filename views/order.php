@@ -34,24 +34,21 @@
         <h3>Order Drinks & Snacks</h3>
       
         <div class="products-grid">
+            <?php foreach ($products as $product): ?>
+            <div class="product-card" data-category="<?php echo $product['category']; ?>">
+                <div class="product-image">
+                    <img src="<?php echo $product['image']; ?>" alt="<?php echo $product['name']; ?>">
 
-            <?php foreach ($products as $index => $product): ?>
-                <div class="product-card" data-category="<?php echo $product['category']; ?>">
-                    <div class="product-image">
-                        <img src="<?php htmlspecialchars($product['image']) ?>" alt="Product Image" class="product-image">
-                        <button class="favorite-btn">
-                            <i class="<?php echo in_array($product['id'], $favorites) ? 'fas' : 'far'; ?> fa-heart"></i>
-                        </button>
-                    </div>
-                    <div class="product-info">
-                        <h3><?php htmlspecialchars($product['product_name']) ?></h3>
-                        <p class="product-desc"><?php htmlspecialchars($product['product_detail'])  ?></p>
-                        <div class="product-price">$<?php htmlspecialchars($product['price'], 2); ?></div>
-                    </div>
-                    <div class="product-actions">
-                        <button class="order-btn" data-product-id="<?php htmlspecialchars($product['product_id'])  ?>">Order Now</button>
-                    </div>
                 </div>
+                <div class="product-info">
+                    <h3><?php echo $product['name']; ?></h3>
+                    <p class="product-desc"><?php echo $product['description']; ?></p>
+                    <div class="product-price">$<?php echo number_format($product['price'], 2); ?></div>
+                </div>
+                <div class="product-actions">
+                    <button class="order-btn" data-product-id="<?php echo $product['id']; ?>">Order Now</button>
+                </div>
+            </div>
             <?php endforeach; ?>
 
             <div id="no-product-message">No products found matching your criteria.</div>
@@ -235,3 +232,5 @@
 <script src="/assets/js/cart.js"></script>
 <script src="/assets/js/order.js"></script>
 <script src="/assets/js/notification.js"></script>
+
+

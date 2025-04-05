@@ -235,19 +235,23 @@ class AuthController extends BaseController {
                             // Generate verification code
                             $verification_code = rand(100000, 999999);
                             
-                            // In a real application, you would send this code via email
-                            // For demo purposes, we'll store it in the session
+                            // Store verification data in session
                             $_SESSION['admin_email'] = $email;
                             $_SESSION['admin_id'] = $admin['user_id'];
                             $_SESSION['admin_name'] = $admin['name'];
                             $_SESSION['verification_code'] = $verification_code;
                             $_SESSION['verification_time'] = time();
                             
-                            // For demo purposes, display the code (in a real app, this would be sent via email)
+                            // For development purposes, store the code in session
+                            // This will allow login without email in case email sending fails
                             $_SESSION['demo_code'] = $verification_code;
                             
-                            // In a real application, you would send an email with the verification code
-                            // sendVerificationEmail($email, $verification_code);
+                            // Try to send verification code via email
+                            $emailSent = $this->sendVerificationEmail($email, $verification_code, $admin['name']);
+                            
+                            // Log the attempt
+                            error_log("Admin login attempt: Email sending " . ($emailSent ? "successful" : "failed"));
+                            error_log("Verification code: " . $verification_code); // For debugging
                             
                             $this->redirect('/admin-verification');
                         } else {
@@ -269,6 +273,64 @@ class AuthController extends BaseController {
         $this->views('auth/admin_login', ['title' => 'Admin Login - XING FU CHA', 'error' => $error]);
     }
     
+    private function sendVerificationEmail($email, $code, $name) {
+        try {
+            // Email subject
+            $subject = 'XING FU CHA Admin Verification Code';
+            
+            // Email message
+            $message = '
+            <html>
+            <head>
+                <title>Admin Verification Code</title>
+                <style>
+                    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+                    .container { max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px; }
+                    .header { text-align: center; padding: 20px 0; border-bottom: 1px solid #eee; }
+                    .content { padding: 20px 0; }
+                    .code { font-size: 32px; font-weight: bold; text-align: center; padding: 15px; background-color: #f5f5f5; border-radius: 5px; letter-spacing: 5px; margin: 20px 0; }
+                    .footer { text-align: center; padding-top: 20px; font-size: 12px; color: #777; border-top: 1px solid #eee; }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <div class="header">
+                        <h2>XING FU CHA Admin Verification</h2>
+                    </div>
+                    <div class="content">
+                        <p>Hello ' . htmlspecialchars($name) . ',</p>
+                        <p>You are receiving this email because you attempted to log in to the XING FU CHA admin panel.</p>
+                        <p>Please use the following verification code to complete your login:</p>
+                        <div class="code">' . $code . '</div>
+                        <p>This code will expire in 10 minutes.</p>
+                        <p>If you did not attempt to log in, please ignore this email or contact support.</p>
+                    </div>
+                    <div class="footer">
+                        <p>&copy; ' . date('Y') . ' XING FU CHA. All rights reserved.</p>
+                    </div>
+                </div>
+            </body>
+            </html>
+            ';
+            
+            // Set content-type header for sending HTML email
+            $headers = "MIME-Version: 1.0" . "\r\n";
+            $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+            $headers .= "From: XING FU CHA <no-reply@xingfucha.com>" . "\r\n";
+            
+            // Try to send email
+            $mailSent = mail($email, $subject, $message, $headers);
+            
+            // Log the attempt
+            error_log("Email sending attempt to $email: " . ($mailSent ? "Success" : "Failed"));
+            
+            return $mailSent;
+        } catch (\Exception $e) {
+            error_log("Error sending email: " . $e->getMessage());
+            return false;
+        }
+    }
+    
     public function adminVerification() {
         // Check if admin email is set in session
         if (!isset($_SESSION['admin_email']) || !isset($_SESSION['verification_code'])) {
@@ -276,7 +338,7 @@ class AuthController extends BaseController {
         }
         
         $error = null;
-        $demo_code = $_SESSION['demo_code'] ?? null; // For demo purposes only
+        $demo_code = $_SESSION['demo_code'] ?? null; // For development purposes
         
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $verification_code = $_POST['verification_code'] ?? '';
@@ -327,7 +389,7 @@ class AuthController extends BaseController {
         $this->views('auth/admin_verification', [
             'title' => 'Admin Verification - XING FU CHA', 
             'error' => $error,
-            'demo_code' => $demo_code // For demo purposes only
+            'demo_code' => $demo_code // For development purposes
         ]);
     }
 
@@ -379,3 +441,4 @@ class AuthController extends BaseController {
         $this->redirect('/login');
     }
 }
+
