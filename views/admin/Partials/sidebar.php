@@ -45,7 +45,7 @@
 
     <!-- Nav Item - Receipts -->
     <li class="nav-item">
-        <a class="nav-link collapsed" href="/admin/receipts">
+        <a class="nav-link collapsed" href="/receipt">
             <i class="fas fa-receipt"></i>
             <span>Receipts</span>
         </a>

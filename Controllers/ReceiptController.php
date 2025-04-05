@@ -1,9 +1,11 @@
 <?php
+namespace YourNamespace\Controllers;
 
 require_once './Controllers/BaseController.php';
+require_once './Models/ReceiptModel.php';
 
+use YourNamespace\Models\ReceiptModel;
 use YourNamespace\BaseController;
-
 class ReceiptController extends BaseController
 {
     private $model;
@@ -30,7 +32,7 @@ class ReceiptController extends BaseController
         }
         
         $receipts = $this->model->getReceiptsByUser($userId);
-        $this->views('receipts/receipt-list.php', ['receipts' => $receipts]);
+        $this->views('receipts/receipt-list', ['receipts' => $receipts]);
     }
 
     function download($id = null)

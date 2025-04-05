@@ -3,7 +3,7 @@ namespace YourNamespace\Controllers;
 require_once './Models/ProductModel.php';
 require_once './Controllers/BaseController.php';
 use YourNamespace\Models\ProductModel;  
-use YourNamespace\BaseController;
+ use YourNamespace\BaseController;
 
 class ProductController extends BaseController
 {
