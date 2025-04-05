@@ -1,8 +1,6 @@
 <?php
 
-namespace YourNamespace\Models;
-
-require_once '../Database/database.php';
+require_once './Database/database.php';
 
 class UserModel
 {
@@ -10,14 +8,14 @@ class UserModel
 
     public function __construct()
     {
-        $database = new \Database();
+        $database = new Database();
         $this->pdo = $database->getConnection();
     }
 
     public function getUsers()
     {
         $stmt = $this->pdo->query("SELECT * FROM users ORDER BY user_id DESC");
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function createUser($data) {
@@ -46,7 +44,7 @@ class UserModel
             }
             
             return $result;
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             error_log("Error creating user: " . $e->getMessage());
             return false;
         }
@@ -56,7 +54,7 @@ class UserModel
     {
         $stmt = $this->pdo->prepare("SELECT * FROM users WHERE user_id = :user_id");
         $stmt->execute(['user_id' => $id]);
-        return $stmt->fetch(\PDO::FETCH_ASSOC);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     public function updateUser($id, $data)
@@ -87,7 +85,7 @@ class UserModel
 
             $stmt = $this->pdo->prepare($query);
             return $stmt->execute($params);
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             error_log("Error updating user: " . $e->getMessage());
             return false;
         }
@@ -98,7 +96,7 @@ class UserModel
         try {
             $stmt = $this->pdo->prepare("DELETE FROM users WHERE user_id = :user_id");
             return $stmt->execute(['user_id' => $id]);
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             error_log("Error deleting user: " . $e->getMessage());
             return false;
         }
@@ -119,3 +117,4 @@ class UserModel
         return $stmt->rowCount() > 0;
     }
 }
+

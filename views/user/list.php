@@ -7,13 +7,13 @@
     <title><?php echo isset($title) ? $title : 'Admin Dashboard - XING FU CHA'; ?></title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="/assets/css/sb-admin-2.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/style.css">
     <style>
-        /* Custom styles for full-width table */
         body {
+            padding-top: 0;
             overflow-x: hidden;
-            background-color: #f8f9fc;
         }
         
         #wrapper {
@@ -22,215 +22,178 @@
             align-items: stretch;
         }
         
-        #sidebar {
-            min-width: 250px;
-            max-width: 250px;
-            min-height: 100vh;
-        }
-        
         .main-content {
             width: 100%;
-      
-            min-height: 100vh;
+            padding: 20px;
+            margin-left: 250px; /* Adjust this to match your sidebar width */
             transition: all 0.3s;
-        }
-        
-        @media (max-width: 768px) {
-            #sidebar {
-                margin-left: -250px;
-            }
-            #sidebar.active {
-                margin-left: 0;
-            }
-            .main-content {
-                width: 100%;
-            }
-            #sidebarCollapse span {
-                display: none;
-            }
         }
         
         .card {
             border: none;
-            border-radius: 0.35rem;
-            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
-            margin-bottom: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
         }
         
         .card-header {
-            background-color: #f8f9fc;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
             border-bottom: 1px solid #e3e6f0;
-            padding: 1rem 1.35rem;
-            border-radius: 0.35rem 0.35rem 0 0 !important;
+            padding: 1.25rem 1.5rem;
         }
         
-        .card-body {
-            padding: 0;
+        .search-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
         
-        .table-responsive {
-            display: block;
-            width: 100%;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-        
-        #dataTable {
-            width: 100%;
-            margin-bottom: 0;
-            color: #6e707e;
-        }
-        
-        #dataTable th {
-            padding: 1rem;
-            vertical-align: middle;
-            border-top: 1px solid #e3e6f0;
-            background-color: #f8f9fc;
-            color: #4e73df;
-            text-transform: uppercase;
-            font-size: 0.65rem;
-            letter-spacing: 0.1rem;
-        }
-        
-        #dataTable td {
-            padding: 1rem;
-            vertical-align: middle;
-            border-top: 1px solid #e3e6f0;
-        }
-        
-        #dataTable tbody tr:hover {
-            background-color: #f6f9ff;
+        .search-input {
+            width: 300px;
         }
         
         .user-avatar {
             width: 40px;
             height: 40px;
-            object-fit: cover;
             border-radius: 50%;
+            object-fit: cover;
         }
         
-        .btn-sm {
-            padding: 0.25rem 0.5rem;
-            font-size: 0.875rem;
-            line-height: 1.5;
-            border-radius: 0.2rem;
+        .badge-admin {
+            background-color: #4e73df;
+            color: white;
         }
         
-        .form-control-sm {
-            height: calc(1.5em + 0.5rem + 2px);
-            padding: 0.25rem 0.5rem;
-            font-size: 0.875rem;
-            line-height: 1.5;
-            border-radius: 0.2rem;
+        .badge-user {
+            background-color: #1cc88a;
+            color: white;
         }
         
-        .input-group {
-            width: auto;
-        }
-        
-        .gap-2 {
-            gap: 0.5rem;
+        @media (max-width: 768px) {
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .search-container {
+                flex-direction: column;
+                align-items: flex-start;
+                width: 100%;
+            }
+            
+            .search-input {
+                width: 100%;
+            }
         }
     </style>
 </head>
 
-<body id="page-top">
+<body>
     <div id="wrapper">
         <?php require './views/admin/Partials/sidebar.php' ?>
         
-        <!-- Main Content -->
-        <div id="content" class="main-content">
-            <?php require './views/admin/Partials/navbar.php' ?>
-            
-            <div class="container-fluid">
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3 d-flex flex-column flex-md-row justify-content-between align-items-center">
-                        <h6 class="m-0 font-weight-bold text-primary">Customers List</h6>
-                        <div class="d-flex flex-column flex-md-row gap-2 mt-2 mt-md-0">
-                            <div class="input-group">
-                                <input type="text" class="form-control form-control-sm" placeholder="Search..." id="searchInput">
-                                <button class="btn btn-primary btn-sm" type="button" id="searchButton">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                            </div>
-                            <a href="/admin/users/create" class="btn btn-success btn-sm">
-                                <i class="fas fa-plus me-1"></i> Add New
-                            </a>
-                        </div>
+        <div id="content-wrapper" class="d-flex flex-column">
+            <div id="content">
+                <?php require './views/admin/Partials/navbar.php' ?>
+                
+                <div class="container-fluid">
+                    <?php if(isset($error)): ?>
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-circle"></i> <?php echo $error; ?>
                     </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Image</th>
-                                        <th>Name</th>
-                                        <th>Phone</th>
-                                        <th>Email</th>
-                                        <th>Role</th>
-                                        <th>Address</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php if (empty($users)): ?>
+                    <?php endif; ?>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="m-0 font-weight-bold text-primary">User Management</h5>
+                            <div class="search-container">
+                                <div class="input-group search-input">
+                                    <input type="text" class="form-control" placeholder="Search users..." id="searchInput">
+                                    <button class="btn btn-primary" type="button" id="searchButton">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                                <a href="/admin/users/create" class="btn btn-success">
+                                    <i class="fas fa-plus"></i> Add User
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover" id="userTable" width="100%" cellspacing="0">
+                                    <thead class="thead-light">
                                         <tr>
-                                            <td colspan="7" class="text-center py-4">No customers found</td>
+                                            <th>ID</th>
+                                            <th>Image</th>
+                                            <th>Name</th>
+                                            <th>Email</th>
+                                            <th>Phone</th>
+                                            <th>Role</th>
+                                            <th>Address</th>
                                         </tr>
-                                    <?php else: ?>
-                                        <?php foreach ($users as $index => $user): ?>
+                                    </thead>
+                                    <tbody>
+                                        <?php if(empty($users)): ?>
                                             <tr>
-                                                <td><?= $index + 1 ?></td>
-                                                <td>
-                                                    <img src="<?= htmlspecialchars($user['image']) ?>" alt="User Image" class="user-avatar">
-                                                </td>
-                                                <td class="name-user"><?= htmlspecialchars($user['name']) ?></td>
-                                                <td class="phone-user"><?= htmlspecialchars($user['phone']) ?></td>
-                                                <td class="email-user"><?= htmlspecialchars($user['email']) ?></td>
-                                                <td class="role-user"><?= htmlspecialchars($user['role']) ?></td>
-                                                <td class="address-user"><?= htmlspecialchars($user['address']) ?></td>
+                                                <td colspan="7" class="text-center">No users found</td>
                                             </tr>
-                                        <?php endforeach; ?>
-                                    <?php endif; ?>
-                                </tbody>
-                            </table>
+                                        <?php else: ?>
+                                            <?php foreach($users as $index => $user): ?>
+                                                <tr>
+                                                    <td><?php echo $index + 1; ?></td>
+                                                    <td>
+                                                        <?php if(!empty($user['image'])): ?>
+                                                            <img src="<?php echo htmlspecialchars($user['image']); ?>" alt="User Avatar" class="user-avatar">
+                                                        <?php else: ?>
+                                                            <img src="/placeholder.svg?height=40&width=40" alt="Default Avatar" class="user-avatar">
+                                                        <?php endif; ?>
+                                                    </td>
+                                                    <td><?php echo htmlspecialchars($user['name']); ?></td>
+                                                    <td><?php echo htmlspecialchars($user['email']); ?></td>
+                                                    <td><?php echo htmlspecialchars($user['phone'] ?? 'N/A'); ?></td>
+                                                    <td>
+                                                        <span class="badge <?php echo $user['role'] === 'admin' ? 'badge-admin' : 'badge-user'; ?>">
+                                                            <?php echo ucfirst(htmlspecialchars($user['role'] ?? 'user')); ?>
+                                                        </span>
+                                                    </td>
+                                                    <td><?php echo htmlspecialchars($user['address'] ?? 'N/A'); ?></td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        <?php endif; ?>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- Bootstrap 5 JS Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script> 
-    <!-- jQuery -->
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
     <script>
         $(document).ready(function() {
             // Search functionality
             $('#searchButton').click(function() {
                 filterTable();
             });
-
+            
             $('#searchInput').keyup(function(e) {
                 if (e.keyCode === 13) {
                     filterTable();
                 }
             });
-
+            
             function filterTable() {
                 const value = $('#searchInput').val().toLowerCase();
-                $('tbody tr').each(function() {
-                    const $row = $(this);
-                    if ($row.find('td').text().toLowerCase().indexOf(value) > -1) {
-                        $row.show();
-                    } else {
-                        $row.hide();
-                    }
+                $('#userTable tbody tr').filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
                 });
             }
         });
     </script>
 </body>
+
 </html>
