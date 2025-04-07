@@ -1,26 +1,51 @@
 <?php
 namespace YourNamespace\Controllers;
 
+require_once './Models/ProductModel.php';
+require_once './controllers/BaseController.php';
+
+use YourNamespace\Models\ProductModel;
 use YourNamespace\BaseController;
 
-class DashboardController extends BaseController {
-    public function __construct() {
+class DashboardController extends BaseController
+{
+    private $productModel;
+
+    public function __construct()
+    {
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
         }
-        $this->checkAdminAuth();
+
+        $this->productModel = new ProductModel();
     }
-    
-    private function checkAdminAuth() {
-        if (!isset($_SESSION['user_id']) || !isset($_SESSION['user']['role']) || $_SESSION['user']['role'] !== 'admin') {
-            $this->redirect('/admin-login');
-        }
-    }
-    
-    public function index() {
-        $this->views('admin/dashboard', [
-            'title' => 'Admin Dashboard - XING FU CHA',
-            'user' => $_SESSION['user']
+
+    public function index()
+    {
+        // Fetch total price and total product count
+        $totalPrice = $this->productModel->getTotalPrice();
+        $totalProducts = $this->productModel->getTotalProducts();
+
+        // Pass data to the dashboard view
+        $this->views('dashboard/list', [
+            'totalPrice' => $totalPrice,
+            'totalProducts' => $totalProducts,
         ]);
+    }
+
+    public function views($views, $data = [])
+    {
+        extract($data);
+
+        $viewPath = 'views/' . $views;
+        if (!str_ends_with($viewPath, '.php')) {
+            $viewPath .= '.php';
+        }
+
+        if (!file_exists($viewPath)) {
+            die("View file not found: {$viewPath}. Please create this file.");
+        }
+
+        require_once $viewPath;
     }
 }
