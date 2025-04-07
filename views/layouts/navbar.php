@@ -64,7 +64,9 @@
 
 </style>
 <header>
-    <img src="/assets/image/logo/logo.png" alt="XING FU CHA Logo">
+    <a href="/welcome">
+  <img src="/assets/image/logo/logo.png" alt="XING FU CHA Logo" class="logo">
+</a>
     <nav>
         <ul>
             <li><a href="/gift-card">Gift Card</a></li>

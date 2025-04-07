@@ -188,68 +188,96 @@ nav ul li a:hover {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-/* Auth buttons container */
-.auth-buttons {
-        display: flex;
-        gap: 15px;
-        align-items: center;
-    }
 
-    /* Play Button (No border) */
-    .play-button {
-        background: black;
-        color: white;
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: none;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        font-size: 14px;
-    }
+/* Language Selector */
 
-    /* Sign In Button (White - No border) */
-    .sign-in-button {
-        background: white;
-        color:  #ff2a2a;
-        padding: 10px 22px;
-        border-radius: 15px;
-        font-weight: bold;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        border: none;
-    }
+.language-selector {
+    position: relative;
+    margin-left: 15px;
+    cursor: pointer;
+}
 
-    /* Sign Out Button (Black - No border) */
-    .sign-out-button {
-        background:  #ff2a2a;
-        color: white;
-        padding: 10px 22px;
-        border-radius: 15px;
-        font-weight: bold;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        border: none;
-    }
+.selected-language {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 10px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.3);
+    transition: all 0.3s;
+}
 
-    /* Hover effects */
-    .play-button:hover {
-        background: #333;
-        transform: scale(1.05);
-    }
+.selected-language:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
 
-    .sign-in-button:hover {
-        background: #f5f5f5;
-        transform: translateY(-2px);
-    }
+.selected-language img {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    object-fit: cover;
+}
 
-    .sign-out-button:hover {
-        background: #333;
-        transform: translateY(-2px);
-    }
+.selected-language span {
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+}
+
+.selected-language i {
+    color: white;
+}
+
+.language-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 150px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    margin-top: 10px;
+    display: none;
+    z-index: 1001;
+}
+
+.language-selector:hover .language-dropdown {
+    display: block;
+}
+
+.language-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px;
+    border-radius: 5px;
+    transition: all 0.3s;
+    text-decoration: none;
+    color: #333;
+}
+
+.language-option:hover {
+    background: #f5f5f5;
+}
+
+.language-option img {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.language-option span {
+    font-size: 14px;
+}
+
+.content-welcome {
+    width: 80%;
+    margin: auto;
+    position: relative;
+    top: 100px;
+}
 
 
 /* Discount Banner */
