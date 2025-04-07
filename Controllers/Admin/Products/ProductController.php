@@ -52,6 +52,8 @@ class ProductController extends BaseController
 
                 $this->model->createProduct($data);
                 $this->redirect('/admin/products');
+            } else {
+                die("Failed to upload the image.");
             }
         }
     }
@@ -59,6 +61,9 @@ class ProductController extends BaseController
     public function edit($id)
     {
         $product = $this->model->getProduct($id);
+        if (!$product) {
+            die("Product not found.");
+        }
         $this->views('products/product-edit', ['product' => $product]);
     }
 
@@ -91,6 +96,11 @@ class ProductController extends BaseController
 
     public function destroy($id)
     {
+        $product = $this->model->getProduct($id);
+        if (!$product) {
+            die("Product not found.");
+        }
+
         $this->model->deleteProduct($id);
         $this->redirect('/admin/products');
     }
