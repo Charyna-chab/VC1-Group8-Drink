@@ -1,3 +1,5 @@
+<?php require_once('../../views/admin/Partials/header.php'); ?>
+
 <div class="container my-5">
     <div class="row justify-content-center">
         <div class="col-md-6">

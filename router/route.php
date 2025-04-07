@@ -146,17 +146,17 @@ $route->get("/admin/products", [ProductController::class, 'index']);
 $route->get("/admin/products/create", [ProductController::class, 'create']);
 $route->post("/admin/products/store", [ProductController::class, 'store']);
 $route->get("/admin/products/edit/{id}", [ProductController::class, 'edit']);
-$route->post("/admin/products/update/{id}", [ProductController::class, 'update']);
+$route->post("/admin/products/update/", [ProductController::class, 'update']);
 $route->post("/admin/products/delete/{id}", [ProductController::class, 'destroy']);
 
 // Admin User Management
-// Fix the user routes to match your controller's expectations
-$route->get("/admin/users", [UserController::class, 'index']);
-$route->get("/admin/users/create", [UserController::class, 'create']);
-$route->post("/admin/users/store", [UserController::class, 'store']);
-$route->get("/admin/users/edit/{id}", [UserController::class, 'edit']);
-$route->post("/admin/users/update/{id}", [UserController::class, 'update']);
-$route->post("/admin/users/delete/{id}", [UserController::class, 'destroy']); // Changed from 'delete' to 'destroy' to match your controller
+// $route->get("/admin/users", [UserController::class, 'index']);
+// $route->get("/admin/users/create", [UserController::class, 'create']);
+// $route->post("/admin/users/store", [UserController::class, 'store']);
+// $route->get("/admin/users/edit/{id}", [UserController::class, 'edit']);
+// $route->post("/admin/users/update/{id}", [UserController::class, 'update']);
+// $route->post("/admin/users/delete/{id}", [UserController::class, 'delete']);
+
 // Admin Feedback Management
 $route->get("/admin/feedback", [FeedbackController::class, 'index']);
 $route->get("/admin/feedback/create", [FeedbackController::class, 'create']);
