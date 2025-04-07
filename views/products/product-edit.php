@@ -38,6 +38,7 @@
 
                 <button type="submit" class="btn btn-success mt-3" data-bs-toggle="modal" data-bs-target="#updateModal">Update</button>
             </form>
+
         </div>
     </div>
 </div>
@@ -56,6 +57,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
             </div>
+
         </div>
     </div>
 </div>

@@ -3,6 +3,7 @@ namespace YourNamespace\Database;
 
 use PDO;
 use PDOException;
+use Exception;
 
 class Database
 {
