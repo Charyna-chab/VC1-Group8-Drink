@@ -1,9 +1,15 @@
 <?php
+
 namespace YourNamespace\Models;
+
 use PDO;
 use PDOException;
+use Exception;
+
 require_once './Database/database.php';
+
 use YourNamespace\Database\Database;
+
 class UserModel
 {
     private $pdo;
@@ -20,32 +26,27 @@ class UserModel
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function createUser($data) {
+    public function createUser($data)
+    {
         try {
-            // Debug output
-            error_log("Model creating user with role: " . $data['role']);
-            
+            // Validate required fields
+            if (empty($data['name']) || empty($data['email']) || empty($data['password'])) {
+                throw new Exception('Required fields are missing');
+            }
+
             $query = "INSERT INTO users (image, name, phone, email, address, password, role)
                       VALUES (:image, :name, :phone, :email, :address, :password, :role)";
-            
+
             $stmt = $this->pdo->prepare($query);
-            $result = $stmt->execute([
+            return $stmt->execute([
                 'image' => $data['image'] ?? null,
-                'name' => $data['name'],
-                'phone' => $data['phone'] ?? null,
-                'email' => $data['email'],
-                'address' => $data['address'] ?? null,
+                'name' => htmlspecialchars($data['name']),
+                'phone' => htmlspecialchars($data['phone'] ?? ''),
+                'email' => filter_var($data['email'], FILTER_SANITIZE_EMAIL),
+                'address' => htmlspecialchars($data['address'] ?? ''),
                 'password' => password_hash($data['password'], PASSWORD_DEFAULT),
-                'role' => $data['role'] // Make sure this is coming through
+                'role' => in_array($data['role'], ['admin', 'user']) ? $data['role'] : 'user'
             ]);
-            
-            // Debug output
-            error_log("User creation result: " . ($result ? "Success" : "Failure"));
-            if (!$result) {
-                error_log("PDO error info: " . print_r($stmt->errorInfo(), true));
-            }
-            
-            return $result;
         } catch (PDOException $e) {
             error_log("Error creating user: " . $e->getMessage());
             return false;
@@ -94,15 +95,15 @@ class UserModel
     }
 
     public function deleteUser($id)
-    {
-        try {
-            $stmt = $this->pdo->prepare("DELETE FROM users WHERE user_id = :user_id");
-            return $stmt->execute(['user_id' => $id]);
-        } catch (PDOException $e) {
-            error_log("Error deleting user: " . $e->getMessage());
-            return false;
-        }
+{
+    try {
+        $stmt = $this->pdo->prepare("DELETE FROM users WHERE user_id = :user_id");
+        return $stmt->execute(['user_id' => $id]);
+    } catch (PDOException $e) {
+        error_log("Error deleting user: " . $e->getMessage());
+        return false;
     }
+}
 
     public function emailExists($email)
     {
@@ -112,4 +113,3 @@ class UserModel
         return $stmt->fetchColumn() > 0;
     }
 }
-

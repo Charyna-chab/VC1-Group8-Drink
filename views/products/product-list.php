@@ -66,10 +66,10 @@
 
 <body id="page-top">
     <div id="wrapper">
-        <?php require './views/admin/Partials/sidebar.php' ?>
+        <?php require_once __DIR__ . '/../admin/Partials/sidebar.php'; ?>
 
         <div id="content" class="bg-light">
-            <?php require './views/admin/Partials/navbar.php' ?>
+            <?php require_once __DIR__ . '/../admin/Partials/navbar.php'; ?>
 
             <div class="container-fluid">
                 <div class="card shadow mb-4">
@@ -123,7 +123,7 @@
                                                     <ul class="dropdown-menu dropdown-menu-end shadow"
                                                         aria-labelledby="dropdownMenuButton<?= $index ?>">
                                                         <li>
-                                                            <a class="dropdown-item py-2" href="/admin/products/edit?id=<?= $product['product_id'] ?>">
+                                                            <a class="dropdown-item py-2" href="/admin/products/edit/<?= $product['product_id'] ?>">
                                                                 <i class="fas fa-edit me-2 text-primary"></i> Edit
                                                             </a>
                                                         </li>
@@ -136,7 +136,6 @@
                                                         </li>
                                                     </ul>
                                                 </div>
-
                                                 <div class="modal fade" id="deleteModal<?= $index ?>" tabindex="-1" aria-hidden="true">
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
@@ -149,7 +148,7 @@
                                                             </div>
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                                                <a href="/admin/products/delete?product_id=<?= $product['product_id'] ?>" class="btn btn-danger">Delete</a>
+                                                                <a href="/admin/products/delete/<?= $product['product_id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this product?')">Delete</a>
                                                             </div>
                                                         </div>
                                                     </div>

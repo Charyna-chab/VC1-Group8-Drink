@@ -1,15 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo isset($title) ? $title : 'User List'; ?></title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/assets/css/sb-admin-2.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/style.css">
 
     <style>
         body {
@@ -89,7 +78,8 @@
             }
         }
     </style>
-</head>
+
+<?php require './views/admin/Partials/header.php' ?>
 
 <body>
     <div id="wrapper">
@@ -133,6 +123,7 @@
                                             <th>Phone</th>
                                             <th>Role</th>
                                             <th>Address</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -144,12 +135,18 @@
                                             <?php foreach ($users as $index => $user): ?>
                                                 <tr>
                                                     <td><?php echo $index + 1; ?></td>
-                                                    <td>
-                                                        <?php if (!empty($user['image'])): ?>
-                                                            <img src="<?php echo htmlspecialchars($user['image']); ?>" alt="User Avatar" class="user-avatar" style="width:40px;height:40px;object-fit:cover;">
-                                                        <?php else: ?>
-                                                            <img src="/assets/images/default-avatar.jpg" alt="Default Avatar" class="user-avatar" style="width:40px;height:40px;object-fit:cover;">
-                                                        <?php endif; ?>
+                                                    <td style="text-align: center; vertical-align: middle;">
+                                                        <div style="display: inline-block; width: 60px; height: 60px; border-radius: 100%; overflow: hidden;">
+                                                            <?php if (!empty($user['image']) && file_exists($_SERVER['DOCUMENT_ROOT'] . '/' . $user['image'])): ?>
+                                                                <img src="/<?= htmlspecialchars($user['image']) ?>"
+                                                                    style="width: 100%; height: 100%; object-fit: cover;"
+                                                                    alt="User Image">
+                                                            <?php else: ?>
+                                                                <img src="/assets/images/default-user.png"
+                                                                    style="width: 100%; height: 100%; object-fit: cover;"
+                                                                    alt="Default User">
+                                                            <?php endif; ?>
+                                                        </div>
                                                     </td>
                                                     <td><?php echo htmlspecialchars($user['name']); ?></td>
                                                     <td><?php echo htmlspecialchars($user['email']); ?></td>
@@ -160,7 +157,34 @@
                                                         </span>
                                                     </td>
                                                     <td><?php echo htmlspecialchars($user['address'] ?? 'N/A'); ?></td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#users<?= $user['user_id'] ?>">
+                                                            Delete
+                                                        </button>
+                                                    </td>
                                                 </tr>
+
+                                                <!-- Place the modal HTML right here, after the closing </tr> tag -->
+                                                <div class="modal fade" id="users<?= $user['user_id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLabel">Delete User</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                Are you sure you want to delete <?= htmlspecialchars($user['name']) ?>?
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <form action="/admin/users/delete" method="POST">
+                                                                    <input type="hidden" name="user_id" value="<?= $user['user_id'] ?>">
+                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             <?php endforeach; ?>
                                         <?php endif; ?>
                                     </tbody>
@@ -196,6 +220,8 @@
             }
         });
     </script>
+
+
 </body>
 
 </html>

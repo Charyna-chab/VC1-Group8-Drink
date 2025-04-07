@@ -1,7 +1,8 @@
+<?php require_once __DIR__ . '/../admin/Partials/header.php'; ?>
 <div class="card shadow mb-4 ml-3 mr-3" style="width:50%;">
     <div class="card-body ">
         <div class="container ">
-            <form action="/product/update" method="POST" enctype="multipart/form-data">
+            <form action="/admin/products/update/<?= $product['product_id'] ?>" method="POST" enctype="multipart/form-data">
                 <input type="hidden" name="product_id" value="<?= $product['product_id'] ?>">
 
                 <div class="form-group mb-3 col">
@@ -11,8 +12,7 @@
 
                 <div class="form-group mb-3 col">
                     <label for="product_detail" class="form-label">Product Detail:</label>
-                    <input type="text" value="<?= $product['product_detail'] ?>" name="product_detail"
-                        class="form-control">
+                    <input type="text" value="<?= $product['product_detail'] ?>" name="product_detail" class="form-control">
                 </div>
 
                 <div class="form-group mb-3 col">
@@ -36,8 +36,27 @@
                     <input type="hidden" name="existing_image" value="<?= $product['image'] ?>">
                 </div>
 
-                <button type="submit" class="btn btn-success mt-3">Update</button>
+                <button type="submit" class="btn btn-success mt-3" data-bs-toggle="modal" data-bs-target="#updateModal">Update</button>
             </form>
+
+        </div>
+    </div>
+</div>
+
+<!-- Update Modal -->
+<div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateModalLabel">Success</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Product has been successfully updated!
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+            </div>
 
         </div>
     </div>
