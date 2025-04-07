@@ -24,6 +24,8 @@ require_once './controllers/Admin/Products/ProductController.php';
 require_once "./controllers/Admin/DashboardController.php";
 require_once "./controllers/Admin/AdminReceiptController.php";
 require_once "controllers/OrderListController.php";
+// require_once "./controllers/Admin/Receipts/AdminReceiptController.php";
+require_once "controllers/Customer/OrdersController.php";
 
 
 use YourNamespace\Router;
@@ -113,7 +115,7 @@ $route->post("/feedback/submit-review", [FeedbackController::class, 'submitRevie
 $route->post("/feedback/submit-suggestion", [FeedbackController::class, 'submitSuggestion']);
 $route->post("/feedback/submit-report", [FeedbackController::class, 'submitReport']);
 
-// Settings
+// Settings routes
 $route->get("/settings", [SettingsController::class, 'index']);
 
 // Admin Dashboard
@@ -137,24 +139,15 @@ $route->get("/admin/users/create", [UserController::class, 'create']);
 $route->post("/admin/users/store", [UserController::class, 'store']);
 $route->get("/admin/users/edit/{id}", [UserController::class, 'edit']);
 $route->post("/admin/users/update/{id}", [UserController::class, 'update']);
+$route->post("/admin/users/delete", [UserController::class, 'destroy']);// Changed from 'delete' to 'destroy' to match your controller
 
-$route->post("/admin/users/delete/{id}", [UserController::class, 'destroy']);
 
-
-// Admin Feedback
+// Admin Feedback Management
 $route->get("/admin/feedback", [FeedbackController::class, 'index']);
 $route->get("/admin/feedback/create", [FeedbackController::class, 'create']);
 $route->post("/admin/feedback/store", [FeedbackController::class, 'store']);
 $route->get("/admin/feedback/edit/{id}", [FeedbackController::class, 'edit']);
 $route->post("/admin/feedback/update/{id}", [FeedbackController::class, 'update']);
 $route->post("/admin/feedback/delete/{id}", [FeedbackController::class, 'delete']);
-
-// Order List
-$route->get("/admin/order-list", [OrderListController::class, 'index']);
-$route->get("/admin/order/create", [OrderListController::class, 'create']);
-$route->post("/admin/order/store", [OrderListController::class, 'store']);
-$route->get("/admin/order/edit/{id}", [OrderListController::class, 'edit']);
-$route->post("/admin/order/update", [OrderListController::class, 'update']);
-$route->post("/admin/order/delete", [OrderListController::class, 'delete']);
 
 $route->route();

@@ -6,7 +6,7 @@ require_once __DIR__ . '/../Database/database.php';
 use YourNamespace\Database\Database;
 use PDOException;
 
-class OrderListModel
+class OderListModel
 {
     private $pdo;
 
