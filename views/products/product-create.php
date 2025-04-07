@@ -1,3 +1,4 @@
+
 <?php require_once __DIR__ . '/../admin/Partials/header.php'; ?>
 
 <div class="container my-5">
@@ -37,9 +38,27 @@
                 </div>
 
                 <div class="text-center">
-                    <button type="submit" class="btn btn-success w-100">Submit</button>
+                    <button type="submit" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#successModal">Submit</button>
                 </div>
             </form>
+        </div>
+    </div>
+</div>
+
+<!-- Success Modal -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="successModalLabel">Success</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Product has been successfully added!
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+            </div>
         </div>
     </div>
 </div>

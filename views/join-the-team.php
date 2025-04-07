@@ -85,7 +85,7 @@
     <div class="container">
         <div class="values-content">
             <div class="values-image">
-                <img src="/assets/image/team/team-values.jpg" alt="Our Team Values">
+                <img src="assets/image/values-image.png" alt="Our Team Values">
             </div>
             <div class="values-text">
                 <h2>Our Values</h2>
@@ -268,67 +268,6 @@
                 </div>
             </div>
         </div>
-    </div>
-</section>
-
-<section class="testimonials">
-    <div class="container">
-        <div class="section-header">
-            <h2>What Our Team Says</h2>
-            <p>Hear from the people who make XING FU CHA special</p>
-        </div>
-        
-        <div class="testimonials-slider">
-            <div class="testimonial-item">
-                <div class="testimonial-image">
-                    <img src="/assets/image/team/team1.jpg" alt="Team Member">
-                </div>
-                <div class="testimonial-content">
-                    <div class="testimonial-quote">
-                        <i class="fas fa-quote-left"></i>
-                        <p>"Working at XING FU CHA has been an amazing experience. I've learned so much about bubble tea and customer service, and the team feels like a second family."</p>
-                    </div>
-                    <div class="testimonial-author">
-                        <h4>Sophea Chen</h4>
-                        <p class="testimonial-position">Bubble Tea Barista, 2 years</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="testimonial-item">
-                <div class="testimonial-image">
-                    <img src="/assets/image/team/team2.jpg" alt="Team Member">
-                </div>
-                <div class="testimonial-content">
-                    <div class="testimonial-quote">
-                        <i class="fas fa-quote-left"></i>
-                        <p>"I started as a part-time barista while in college, and now I'm a store manager. XING FU CHA truly values growth and development of their employees."</p>
-                    </div>
-                    <div class="testimonial-author">
-                        <h4>Dara Kim</h4>
-                        <p class="testimonial-position">Store Manager, 4 years</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="testimonial-item">
-                <div class="testimonial-image">
-                    <img src="/assets/image/team/team3.jpg" alt="Team Member">
-                </div>
-                <div class="testimonial-content">
-                    <div class="testimonial-quote">
-                        <i class="fas fa-quote-left"></i>
-                        <p>"The flexible scheduling has been perfect for my university studies. I love the positive environment and the skills I've developed working here."</p>
-                    </div>
-                    <div class="testimonial-author">
-                        <h4>Virak Phan</h4>
-                        <p class="testimonial-position">Kitchen Staff, 1 year</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="testimonial-dots"></div>
     </div>
 </section>
 

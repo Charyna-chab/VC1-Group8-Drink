@@ -253,7 +253,11 @@
       </div>
     </div>
   </div>
+<!-- Add this inside the email-sent-info div -->
+<p class="small">Code expires in: <span id="verification-timer" class="fw-bold">10:00</span></p>
 
+<!-- Add this at the bottom of the file, before the closing </body> tag -->
+<script src="/assets/js/verification.js"></script>
   <script>
     // Auto focus on verification code input
     document.addEventListener('DOMContentLoaded', function() {
