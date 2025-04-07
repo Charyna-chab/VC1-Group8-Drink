@@ -16,26 +16,27 @@
             padding-top: 0;
             overflow-x: hidden;
         }
-        
+
         #wrapper {
             display: flex;
             width: 100%;
             align-items: stretch;
         }
-        
+
         .main-content {
             width: 100%;
             padding: 20px;
-            margin-left: 250px; /* Adjust this to match your sidebar width */
+            margin-left: 250px;
+            /* Adjust this to match your sidebar width */
             transition: all 0.3s;
         }
-        
+
         .card {
             border: none;
             border-radius: 10px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
         }
-        
+
         .card-header {
             display: flex;
             justify-content: space-between;
@@ -44,45 +45,45 @@
             border-bottom: 1px solid #e3e6f0;
             padding: 1.25rem 1.5rem;
         }
-        
+
         .search-container {
             display: flex;
             align-items: center;
             gap: 15px;
         }
-        
+
         .search-input {
             width: 300px;
         }
-        
+
         .user-avatar {
             width: 40px;
             height: 40px;
             border-radius: 50%;
             object-fit: cover;
         }
-        
+
         .badge-admin {
             background-color: #4e73df;
             color: white;
         }
-        
+
         .badge-user {
             background-color: #1cc88a;
             color: white;
         }
-        
+
         @media (max-width: 768px) {
             .main-content {
                 margin-left: 0;
             }
-            
+
             .search-container {
                 flex-direction: column;
                 align-items: flex-start;
                 width: 100%;
             }
-            
+
             .search-input {
                 width: 100%;
             }
@@ -93,18 +94,18 @@
 <body>
     <div id="wrapper">
         <?php require './views/admin/Partials/sidebar.php' ?>
-        
+
         <div id="content-wrapper" class="d-flex flex-column">
             <div id="content">
                 <?php require './views/admin/Partials/navbar.php' ?>
-                
+
                 <div class="container-fluid">
-                    <?php if(isset($error)): ?>
-                    <div class="alert alert-danger">
-                        <i class="fas fa-exclamation-circle"></i> <?php echo $error; ?>
-                    </div>
+                    <?php if (isset($error)): ?>
+                        <div class="alert alert-danger">
+                            <i class="fas fa-exclamation-circle"></i> <?php echo $error; ?>
+                        </div>
                     <?php endif; ?>
-                    
+
                     <div class="card">
                         <div class="card-header">
                             <h5 class="m-0 font-weight-bold text-primary">User Management</h5>
@@ -132,22 +133,23 @@
                                             <th>Phone</th>
                                             <th>Role</th>
                                             <th>Address</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php if(empty($users)): ?>
+                                        <?php if (empty($users)): ?>
                                             <tr>
                                                 <td colspan="7" class="text-center">No users found</td>
                                             </tr>
                                         <?php else: ?>
-                                            <?php foreach($users as $index => $user): ?>
+                                            <?php foreach ($users as $index => $user): ?>
                                                 <tr>
                                                     <td><?php echo $index + 1; ?></td>
                                                     <td>
-                                                        <?php if(!empty($user['image'])): ?>
-                                                            <img src="<?php echo htmlspecialchars($user['image']); ?>" alt="User Avatar" class="user-avatar">
+                                                        <?php if (!empty($user['image'])): ?>
+                                                            <img src="<?php echo htmlspecialchars($user['image']); ?>" alt="User Avatar" class="user-avatar" style="width:40px;height:40px;object-fit:cover;">
                                                         <?php else: ?>
-                                                            <img src="/placeholder.svg?height=40&width=40" alt="Default Avatar" class="user-avatar">
+                                                            <img src="/assets/images/default-avatar.jpg" alt="Default Avatar" class="user-avatar" style="width:40px;height:40px;object-fit:cover;">
                                                         <?php endif; ?>
                                                     </td>
                                                     <td><?php echo htmlspecialchars($user['name']); ?></td>
@@ -159,6 +161,9 @@
                                                         </span>
                                                     </td>
                                                     <td><?php echo htmlspecialchars($user['address'] ?? 'N/A'); ?></td>
+                                                    <td><button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#users<?= $user['user_id'] ?>">Delete</button>
+                                                        <!-- Modal -->
+                                                        <?php include 'delete.php' ?></td>
                                                 </tr>
                                             <?php endforeach; ?>
                                         <?php endif; ?>
@@ -171,7 +176,7 @@
             </div>
         </div>
     </div>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
@@ -180,13 +185,13 @@
             $('#searchButton').click(function() {
                 filterTable();
             });
-            
+
             $('#searchInput').keyup(function(e) {
                 if (e.keyCode === 13) {
                     filterTable();
                 }
             });
-            
+
             function filterTable() {
                 const value = $('#searchInput').val().toLowerCase();
                 $('#userTable tbody tr').filter(function() {
@@ -195,6 +200,8 @@
             }
         });
     </script>
+
+
 </body>
 
 </html>

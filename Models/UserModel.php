@@ -1,7 +1,9 @@
 <?php
-
+namespace YourNamespace\Models;
+use PDO;
+use PDOException;
 require_once './Database/database.php';
-
+use YourNamespace\Database\Database;
 class UserModel
 {
     private $pdo;
