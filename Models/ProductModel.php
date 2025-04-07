@@ -24,10 +24,14 @@ class ProductModel
 
     public function createProduct($data)
     {
-        $query = "INSERT INTO products (product_name, product_detail, price, image)
-                  VALUES (:product_name, :product_detail, :price, :image)";
-        $stmt = $this->pdo->prepare($query);
-        return $stmt->execute($data);
+        try {
+            $query = "INSERT INTO products (product_name, product_detail, price, image)
+                      VALUES (:product_name, :product_detail, :price, :image)";
+            $stmt = $this->pdo->prepare($query);
+            return $stmt->execute($data);
+        } catch (PDOException $e) {
+            die("Database error: " . $e->getMessage());
+        }
     }
 
     public function getProduct($id)

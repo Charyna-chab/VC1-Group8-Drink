@@ -146,7 +146,7 @@ $route->get("/admin/products", [ProductController::class, 'index']);
 $route->get("/admin/products/create", [ProductController::class, 'create']);
 $route->post("/admin/products/store", [ProductController::class, 'store']);
 $route->get("/admin/products/edit/{id}", [ProductController::class, 'edit']);
-$route->post("/admin/products/update/", [ProductController::class, 'update']);
+$route->post("/admin/products/update/{id}", [ProductController::class, 'update']);
 $route->post("/admin/products/delete/{id}", [ProductController::class, 'destroy']);
 
 // Admin User Management
