@@ -77,7 +77,7 @@
     <div class="container">
         <div class="results-container">
             <div class="map-container">
-                <div id="storeMap"></div>
+                <div id="storeMap"><img src="assets/image/Location-team.jpg" alt=""></div>
             </div>
             
             <div class="locations-list">
@@ -97,7 +97,7 @@
                     <?php foreach ($locations as $location): ?>
                         <div class="location-card" data-id="<?php echo $location['id']; ?>" data-lat="<?php echo $location['lat']; ?>" data-lng="<?php echo $location['lng']; ?>">
                             <div class="location-image">
-                                <img src="assets/image/location.PTT.png<?php echo $location['image']; ?>" alt="<?php echo $location['name']; ?>">
+                                <img src=" assets/image/location.PTT.png<?php  echo $location['image']; ?>" alt="<?php echo $location['name']; ?>">
                                 <div class="location-badge">
                                     <?php if (isset($location['isNew']) && $location['isNew']): ?>
                                         <span class="badge new-badge">New</span>
@@ -182,7 +182,7 @@
                 <div class="featured-image">
                     <img src="assets/image/location.PTT.png" alt="PTT Location">
                     <div class="featured-overlay">
-                        <h3 >PTT</h3>
+                        <h3>PTT</h3>
                         <p>Our flagship store with a full menu</p>
                         <a href="/locations/details/1" class="featured-btn">Learn More</a>
                     </div>
@@ -191,7 +191,7 @@
             
             <div class="featured-location">
                 <div class="featured-image">
-                    <img src="/assets/image/locations/featured2.jpg" alt="Toul Kork Location">
+                    <img src="assets/image/location-toul-kok.png" alt="Toul Kork Location">
                     <div class="featured-overlay">
                         <h3>Toul Kork</h3>
                         <p>Cozy atmosphere with indoor seating</p>
@@ -202,7 +202,7 @@
             
             <div class="featured-location">
                 <div class="featured-image">
-                    <img src="/assets/image/locations/featured3.jpg" alt="BKK Location">
+                    <img src="assets/image/location-BKK.png" alt="BKK Location">
                     <div class="featured-overlay">
                         <h3>BKK</h3>
                         <p>Student-friendly with study spaces</p>
@@ -212,9 +212,9 @@
             </div>
             <div class="featured-location">
                 <div class="featured-image">
-                    <img src="/assets/image/locations/featured3.jpg" alt="BKK Location">
+                    <img src="assets/image/Steng Meanchey.png" alt="BKK Location">
                     <div class="featured-overlay">
-                        <h3>TK</h3>
+                        <h3>Steng-Meanchey</h3>
                         <p>Student-friendly with study spaces</p>
                         <a href="/locations/details/4" class="featured-btn">Learn More</a>
                     </div>
@@ -264,4 +264,3 @@
 
 <?php $pageScript = '/assets/js/locations.js'; ?>
 <?php require_once __DIR__ . '/layouts/footer.php'; ?>
-
