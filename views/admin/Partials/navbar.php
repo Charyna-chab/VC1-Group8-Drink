@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8011827d832c0f03dada7cdeab3d6aac0069fce0
 <!-- End of Sidebar -->
 
 <!-- Content Wrapper -->
@@ -7,17 +11,15 @@
     <div id="content">
 
         <!-- Topbar -->
-        <nav class="navbar navbar-expand navbar-light bg-info topbar mb-4 static-top shadow ">
+        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
             <!-- Sidebar Toggle (Topbar) -->
-            <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3 ">
+            <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                 <i class="fa fa-bars"></i>
             </button>
 
-
-
             <!-- Topbar Navbar -->
-            <ul class="navbar-nav ml-auto ">
+            <ul class="navbar-nav ml-auto">
 
                 <!-- Nav Item - Search Dropdown (Visible Only XS) -->
                 <li class="nav-item dropdown no-arrow d-sm-none">
@@ -166,8 +168,14 @@
                 <li class="nav-item dropdown no-arrow">
                     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+<<<<<<< HEAD
                         <span class="mr-2 d-none d-lg-inline text-light small">Charyna Chab</span>
                         <img class="img-profile rounded-circle" src="/assets/image/07.jpg">
+=======
+                        <span class="mr-2 d-none d-lg-inline text-dark small">Charyna Chab</span>
+                        <img class="img-profile rounded-circle"
+                            src="/assets/image/07.jpg">
+>>>>>>> 8011827d832c0f03dada7cdeab3d6aac0069fce0
                     </a>
                     <!-- Dropdown - User Information -->
                     <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -191,9 +199,7 @@
                         </a>
                     </div>
                 </li>
-
             </ul>
-
         </nav>
 
         <!-- Admin Profile Modal -->
@@ -376,12 +382,37 @@
             }
         </style>
         <style>
-            .fas {
-                color: #f0f0f0;
-                /* Light color */
+            /* Make topbar icons black */
+            .navbar .fas, .navbar .fa {
+                color:rgb(41, 33, 33); /* Bootstrap's default dark color */
+            }
+            
+            /* Make sidebar icons pink */
+            .sidebar .fas, .sidebar .fa {
+                color:rgb(255, 0, 128); /* Hot pink color */
+            }
+            .sidebar .fas, .sidebar .fa-fw{
+
+            /* Make sure sidebar text is dark */
+            .sidebar .nav-item .nav-link span {
+                color:rgb(41, 33, 35);
+            }
+            
+            /* Update sidebar-divider color for better visibility on white background */
+            .sidebar-divider {
+                border-top: 1px solid rgba(0, 0, 0, 0.1);
+            }
+            
+            /* Ensure active items have proper styling */
+            .sidebar .nav-item.active .nav-link {
+                color: #4e73df;
+            }
+            
+            /* Fix any remaining light text */
+            .text-light {
+                color: #212529 !important;
             }
         </style>
         
         <!-- End of Topbar -->
         <?php '../layout/footer.php' ?>
-

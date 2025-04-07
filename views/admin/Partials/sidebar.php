@@ -34,7 +34,7 @@
 
     <!-- Nav Item - Products -->
     <li class="nav-item">
-        <a class="nav-link collapsed" href="/admin/products">
+        <a class="nav-link collapsed" href="/product">
             <i class="fas fa-fw fa-folder"></i>
             <span>Products</span>
         </a>
@@ -45,7 +45,7 @@
 
     <!-- Nav Item - Receipts -->
     <li class="nav-item">
-        <a class="nav-link collapsed" href="/admin/receipts">
+        <a class="nav-link collapsed" href="/receipt">
             <i class="fas fa-receipt"></i>
             <span>Receipts</span>
         </a>
@@ -56,7 +56,7 @@
 
     <!-- Nav Item - Feedback -->
     <li class="nav-item">
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="/admin/feedback">
             <i class="fas fa-comment-alt feedback-icon"></i>
             <span>Feedback</span></a>
     </li>
@@ -78,3 +78,4 @@
         </div>
     </li>
 </ul>
+

@@ -121,6 +121,23 @@ INSERT INTO `users` (`user_id`, `image`, `name`, `phone`, `email`, `address`, `r
 --
 -- Indexes for dumped tables
 --
+-- Create receipts table if it doesn't exist
+CREATE TABLE IF NOT EXISTS `receipts` (
+  `receipt_id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `amount` decimal(10,2) NOT NULL,
+  `payment_method` varchar(50) NOT NULL,
+  `payment_status` varchar(20) NOT NULL,
+  `transaction_id` varchar(100) NOT NULL,
+  `created_at` datetime DEFAULT current_timestamp(),
+  PRIMARY KEY (`receipt_id`),
+  KEY `order_id` (`order_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `receipts_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`),
+  CONSTRAINT `receipts_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 
 --
 -- Indexes for table `carts`

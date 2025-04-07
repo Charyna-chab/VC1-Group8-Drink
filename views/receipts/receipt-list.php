@@ -1,4 +1,4 @@
-<?php require_once 'partials/header.php'; ?>
+<?php require_once 'views/layouts/header.php'; ?>
 
 <div class="container mt-4">
     <h2>Your Receipts</h2>
@@ -26,22 +26,33 @@
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($receipts as $receipt): ?>
-                <tr>
-                    <td><?= htmlspecialchars($receipt['receipt_id']) ?></td>
-                    <td><?= date('M d, Y', strtotime($receipt['order_date'])) ?></td>
-                    <td><?= htmlspecialchars($receipt['product_name']) ?></td>
-                    <td>$<?= number_format($receipt['price'], 2) ?></td>
-                    <td><?= htmlspecialchars($receipt['payment_status']) ?></td>
-                    <td>
-                        <a href="/receipt/download/<?= $receipt['receipt_id'] ?>" class="btn btn-sm btn-primary">Download</a>
-                        <a href="/receipt/delete/<?= $receipt['receipt_id'] ?>" class="btn btn-sm btn-danger">Delete</a>
-                    </td>
-                </tr>
-                <?php endforeach; ?>
+                <?php if (empty($receipts)): ?>
+                    <tr>
+                        <td colspan="6" class="text-center">No receipts found</td>
+                    </tr>
+                <?php else: ?>
+                    <?php foreach ($receipts as $receipt): ?>
+                        <tr>
+                            <td><?= htmlspecialchars($receipt['receipt_id']) ?></td>
+                            <td><?= date('M d, Y', strtotime($receipt['order_date'])) ?></td>
+                            <td><?= htmlspecialchars($receipt['product_name']) ?></td>
+                            <td>$<?= number_format($receipt['amount'], 2) ?></td>
+                            <td><?= htmlspecialchars($receipt['payment_status']) ?></td>
+                            <td>
+                                <a href="/receipt/download/<?= $receipt['receipt_id'] ?>" class="btn btn-sm btn-primary">
+                                    <i class="fas fa-download"></i> Download
+                                </a>
+                                <a href="/receipt/delete/<?= $receipt['receipt_id'] ?>" class="btn btn-sm btn-danger">
+                                    <i class="fas fa-trash"></i> Delete
+                                </a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </tbody>
         </table>
     </div>
 </div>
 
-<?php require_once 'partials/footer.php'; ?>
+<?php require_once 'views/layouts/footer.php'; ?>
+

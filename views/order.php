@@ -1,7 +1,7 @@
 <?php require_once __DIR__ . '/layouts/header.php'; ?>
 <?php require_once __DIR__ . '/layouts/navbar.php'; ?>
 <?php require_once __DIR__ . '/layouts/sidebar.php'; ?>
-
+<?php $products = []; ?>
 <section class="content">
     <!-- Discount Banner -->
     <div class="discount-banner">
@@ -28,18 +28,17 @@
         <div class="product-filters">
             <div class="search-filter">
                 <input type="text" id="productSearch" placeholder="Search drinks...">
-                <i class="fas fa-search"></i>   
+                <i class="fas fa-search"></i>
             </div>
         </div>
         <h3>Order Drinks & Snacks</h3>
+      
         <div class="products-grid">
             <?php foreach ($products as $product): ?>
             <div class="product-card" data-category="<?php echo $product['category']; ?>">
                 <div class="product-image">
                     <img src="<?php echo $product['image']; ?>" alt="<?php echo $product['name']; ?>">
-                    <button class="favorite-btn">
-                        <i class="<?php echo in_array($product['id'], $favorites) ? 'fas' : 'far'; ?> fa-heart"></i>
-                    </button>
+
                 </div>
                 <div class="product-info">
                     <h3><?php echo $product['name']; ?></h3>
@@ -51,7 +50,7 @@
                 </div>
             </div>
             <?php endforeach; ?>
-            
+
             <div id="no-product-message">No products found matching your criteria.</div>
         </div>
     </div>
@@ -95,7 +94,7 @@
             <h4 id="productName">Product Name</h4>
             <p id="productPrice">$0.00</p>
         </div>
-        
+
         <!-- Quantity Control -->
         <div class="quantity-control">
             <label>Quantity:</label>
@@ -105,7 +104,7 @@
                 <button class="quantity-btn plus">+</button>
             </div>
         </div>
-        
+
         <div class="customize-options">
             <div class="option-group">
                 <label>Size:</label>
@@ -138,12 +137,13 @@
                 <label>Toppings:</label>
                 <div id="toppings" class="toppings-grid">
                     <?php foreach ($toppings as $topping): ?>
-                    <label class="topping-item">
-                        <input type="checkbox" name="topping" value="<?php echo $topping['name']; ?>" data-price="<?php echo $topping['price']; ?>">
-                        <span><?php echo $topping['name']; ?></span>
-                        <span class="topping-price">$<?php echo number_format($topping['price'], 2); ?></span>
-                    </label>
+                        <label class="topping-item">
+                            <input type="checkbox" name="topping" value="<?php echo $topping['name']; ?>" data-price="<?php echo $topping['price']; ?>">
+                            <span><?php echo $topping['name']; ?></span>
+                            <span class="topping-price">$<?php echo number_format($topping['price'], 2); ?></span>
+                        </label>
                     <?php endforeach; ?>
+
                 </div>
             </div>
         </div>
@@ -232,5 +232,5 @@
 <script src="/assets/js/cart.js"></script>
 <script src="/assets/js/order.js"></script>
 <script src="/assets/js/notification.js"></script>
-\
+
 

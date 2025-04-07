@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 document.addEventListener('DOMContentLoaded', function() {
     // Product search functionality
     const searchInput = document.getElementById('productSearch');
@@ -362,3 +364,4 @@ document.addEventListener('DOMContentLoaded', function() {
         searchInput.dispatchEvent(event);
     });
 });
+>>>>>>> a7d8e72c601b720eeee2ccd2637bc75f06de2eb8

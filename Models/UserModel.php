@@ -1,23 +1,23 @@
 <?php
-
 namespace YourNamespace\Models;
-
-require_once '../Database/database.php';
-
+use PDO;
+use PDOException;
+require_once './Database/database.php';
+use YourNamespace\Database\Database;
 class UserModel
 {
     private $pdo;
 
     public function __construct()
     {
-        $database = new \Database();
+        $database = new Database();
         $this->pdo = $database->getConnection();
     }
 
     public function getUsers()
     {
         $stmt = $this->pdo->query("SELECT * FROM users ORDER BY user_id DESC");
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function createUser($data) {
@@ -46,7 +46,7 @@ class UserModel
             }
             
             return $result;
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             error_log("Error creating user: " . $e->getMessage());
             return false;
         }
@@ -56,7 +56,7 @@ class UserModel
     {
         $stmt = $this->pdo->prepare("SELECT * FROM users WHERE user_id = :user_id");
         $stmt->execute(['user_id' => $id]);
-        return $stmt->fetch(\PDO::FETCH_ASSOC);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     public function updateUser($id, $data)
@@ -87,7 +87,7 @@ class UserModel
 
             $stmt = $this->pdo->prepare($query);
             return $stmt->execute($params);
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             error_log("Error updating user: " . $e->getMessage());
             return false;
         }
@@ -98,24 +98,18 @@ class UserModel
         try {
             $stmt = $this->pdo->prepare("DELETE FROM users WHERE user_id = :user_id");
             return $stmt->execute(['user_id' => $id]);
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             error_log("Error deleting user: " . $e->getMessage());
             return false;
         }
     }
 
-    public function emailExists($email, $excludeId = null)
+    public function emailExists($email)
     {
-        $query = "SELECT user_id FROM users WHERE email = :email";
-        $params = ['email' => $email];
-
-        if ($excludeId) {
-            $query .= " AND user_id != :user_id";
-            $params['user_id'] = $excludeId;
-        }
-
+        $query = "SELECT COUNT(*) FROM users WHERE email = :email";
         $stmt = $this->pdo->prepare($query);
-        $stmt->execute($params);
-        return $stmt->rowCount() > 0;
+        $stmt->execute(['email' => $email]);
+        return $stmt->fetchColumn() > 0;
     }
 }
+
