@@ -7,7 +7,7 @@ require_once "controllers/BaseController.php";
 require_once "controllers/WelcomeController.php";
 require_once "controllers/FavoritesController.php";
 require_once "controllers/SettingsController.php";
-require_once "controllers/OrdersController.php";
+require_once "controllers/Customer/OrdersController.php";
 require_once "controllers/BookingController.php";
 require_once "controllers/AuthController.php";
 require_once "controllers/AdminController.php";
