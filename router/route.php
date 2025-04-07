@@ -150,6 +150,12 @@ $route->post("/admin/products/update/{id}", [ProductController::class, 'update']
 $route->post("/admin/products/delete/{id}", [ProductController::class, 'destroy']);
 
 // Admin User Management
+$route->get("/admin/users", [UserController::class, 'index']);
+$route->get("/admin/users/create", [UserController::class, 'create']);
+$route->post("/admin/users/store", [UserController::class, 'store']);
+$route->get("/admin/users/edit/{id}", [UserController::class, 'edit']);
+$route->post("/admin/users/update/{id}", [UserController::class, 'update']);
+$route->post("/admin/users/delete/{id}", [UserController::class, 'delete']);
 
 
 // Fix the user routes to match your controller's expectations
