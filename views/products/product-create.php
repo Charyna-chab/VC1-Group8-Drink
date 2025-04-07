@@ -1,4 +1,4 @@
-<?php require_once('../../views/admin/Partials/header.php'); ?>
+<?php require_once __DIR__ . '/../admin/Partials/header.php'; ?>
 
 <div class="container my-5">
     <div class="row justify-content-center">
