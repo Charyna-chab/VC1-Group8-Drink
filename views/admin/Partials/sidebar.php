@@ -40,6 +40,15 @@
         </a>
     </li>
 
+    <hr class="sidebar-divider">
+
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="/order">
+            <i class="fas fa-fw fa-folder"></i>
+            <span>Orders</span>
+        </a>
+    </li>
+
     <!-- Divider -->
     <hr class="sidebar-divider">
 
@@ -78,4 +87,3 @@
         </div>
     </li>
 </ul>
-
