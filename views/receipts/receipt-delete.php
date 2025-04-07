@@ -1,5 +1,3 @@
-<?php require_once 'views/layouts/header.php'; ?>
-
 <div class="container mt-4">
     <div class="card">
         <div class="card-header">
@@ -32,6 +30,3 @@
         </div>
     </div>
 </div>
-
-<?php require_once 'views/layouts/footer.php'; ?>
-

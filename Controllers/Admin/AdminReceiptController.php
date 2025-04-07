@@ -17,25 +17,27 @@ class AdminReceiptController extends BaseController
             session_start();
         }
 
+        // Check if user is admin
+        if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
+            $_SESSION['error'] = "You don't have permission to access this page.";
+            header('Location: /login');
+            exit;
+        }
+
         $this->model = new \ReceiptModel();
+        
+        // Create receipts table if it doesn't exist
+        $this->model->createReceiptsTableIfNotExists();
     }
 
     function index()
     {
-        
         $receipts = $this->model->getAllReceipts();
-        $this->views('admin/receipts/receipt-list', ['receipts' => $receipts]);
+        $this->views('admin/receipts/receipt-list', ['receipts' => $receipts, 'title' => 'Receipt Management']);
     }
 
     function download($id = null)
     {
-        // Check if user is admin
-        if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
-            $_SESSION['error'] = "You don't have permission to access this page.";
-            $this->redirect('/login');
-            return;
-        }
-        
         if (!$id && isset($_GET['id'])) {
             $id = $_GET['id'];
         }
@@ -54,18 +56,11 @@ class AdminReceiptController extends BaseController
             return;
         }
         
-        $this->views('admin/receipts/receipt-download', ['receipt' => $receipt]);
+        $this->views('admin/receipts/receipt-download', ['receipt' => $receipt, 'title' => 'Receipt Details']);
     }
     
     function delete($id = null)
     {
-        // Check if user is admin
-        if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
-            $_SESSION['error'] = "You don't have permission to access this page.";
-            $this->redirect('/login');
-            return;
-        }
-        
         if (!$id && isset($_GET['id'])) {
             $id = $_GET['id'];
         }
@@ -99,19 +94,12 @@ class AdminReceiptController extends BaseController
             return;
         }
         
-        $this->views('admin/receipts/receipt-delete', ['receipt' => $receipt]);
+        $this->views('admin/receipts/receipt-delete', ['receipt' => $receipt, 'title' => 'Delete Receipt']);
     }
     
     // Add a new method to export receipts to CSV
     function exportCSV() 
     {
-        // Check if user is admin
-        if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
-            $_SESSION['error'] = "You don't have permission to access this page.";
-            $this->redirect('/login');
-            return;
-        }
-        
         $receipts = $this->model->getAllReceipts();
         
         // Set headers for CSV download

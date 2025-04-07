@@ -22,7 +22,7 @@ require_once "controllers/JoinTheTeamController.php";
 require_once __DIR__ . '/../controllers/Admin/Users/UserController.php';
 require_once './controllers/Admin/Products/ProductController.php';
 require_once "./controllers/Admin/DashboardController.php";
-require_once "./controllers/Admin/Receipts/AdminReceiptController.php"; // Fixed path
+require_once "./controllers/Admin/AdminReceiptController.php"; // Fixed path
 
 use YourNamespace\Router;
 use YourNamespace\Controllers\WelcomeController;

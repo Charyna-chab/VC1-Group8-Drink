@@ -97,7 +97,7 @@
                     <?php foreach ($locations as $location): ?>
                         <div class="location-card" data-id="<?php echo $location['id']; ?>" data-lat="<?php echo $location['lat']; ?>" data-lng="<?php echo $location['lng']; ?>">
                             <div class="location-image">
-                                <img src="<?php echo $location['image']; ?>" alt="<?php echo $location['name']; ?>">
+                                <img src="assets/image/location.PTT.png<?php echo $location['image']; ?>" alt="<?php echo $location['name']; ?>">
                                 <div class="location-badge">
                                     <?php if (isset($location['isNew']) && $location['isNew']): ?>
                                         <span class="badge new-badge">New</span>
@@ -180,9 +180,9 @@
         <div class="featured-slider">
             <div class="featured-location">
                 <div class="featured-image">
-                    <img src="/assets/image/locations/featured1.jpg" alt="PTT Location">
+                    <img src="assets/image/location.PTT.png" alt="PTT Location">
                     <div class="featured-overlay">
-                        <h3>PTT</h3>
+                        <h3 >PTT</h3>
                         <p>Our flagship store with a full menu</p>
                         <a href="/locations/details/1" class="featured-btn">Learn More</a>
                     </div>

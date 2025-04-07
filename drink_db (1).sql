@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 28, 2025 at 01:11 PM
+-- Generation Time: Apr 07, 2025 at 02:45 AM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.1.25
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -85,15 +85,21 @@ CREATE TABLE `products` (
   `product_name` varchar(255) NOT NULL,
   `image` blob DEFAULT NULL,
   `product_detail` text DEFAULT NULL,
-  `price` decimal(10,2) NOT NULL
+  `price` decimal(10,2) NOT NULL,
+  `category` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `products`
 --
 
-INSERT INTO `products` (`product_id`, `product_name`, `image`, `product_detail`, `price`) VALUES
-(46, 'Marcha', 0x75706c6f6164732f70726f647563742f3561642e6a7067, 'So sweet', 2.00);
+INSERT INTO `products` (`product_id`, `product_name`, `image`, `product_detail`, `price`, `category`) VALUES
+(46, 'milk coffee', 0x75706c6f6164732f70726f647563742f70686f746f5f323032352d30342d30345f32332d34342d31372e6a7067, 'So sweet', 1.00, NULL),
+(49, 'coffee', 0x75706c6f6164732f70726f647563742f70686f746f5f323032352d30332d32355f31362d32372d30352e6a7067, 'coffee', 1.00, NULL),
+(50, 'coffee', 0x75706c6f6164732f70726f647563742f70686f746f5f323032352d30332d32355f31362d31392d33312e6a7067, 'so sweet', 1.00, NULL),
+(51, 'coffee', 0x75706c6f6164732f70726f647563742f70686f746f5f323032352d30342d30345f32332d34342d31372e6a7067, 'sooooo', 1.00, 'milk-tea'),
+(52, 'milk coffee', 0x75706c6f6164732f70726f647563742f70686f746f5f323032352d30342d30345f32332d34342d31372e6a7067, 'nini', 1.00, NULL),
+(53, 'coffee', 0x75706c6f6164732f70726f647563742f70686f746f5f323032352d30332d32355f31362d31392d33312e6a7067, 'coffee\r\n', 1.00, NULL);
 
 -- --------------------------------------------------------
 
@@ -108,36 +114,22 @@ CREATE TABLE `users` (
   `phone` varchar(15) DEFAULT NULL,
   `email` varchar(100) NOT NULL,
   `address` varchar(255) DEFAULT NULL,
-  `role` enum('admin','user') DEFAULT 'user'
+  `role` enum('admin','user') DEFAULT 'user',
+  `password` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`user_id`, `image`, `name`, `phone`, `email`, `address`, `role`) VALUES
-(125, 0x75706c6f6164732f757365722f79612e6a7067, 'Nehru Hayes', '+1 (773) 742-76', 'sohece@mailinator.com', 'Culpa labore quas n', 'user');
+INSERT INTO `users` (`user_id`, `image`, `name`, `phone`, `email`, `address`, `role`, `password`) VALUES
+(3, NULL, 'Admin User', '098765432', 'sreyneath.rom@student.passerellesnumeriques.org', 'Admin Address', 'admin', '@neath*12'),
+(126, NULL, 'Admin User', '0123456789', 'charyna.chab@student.passerellesnumeriques.org', 'Admin Address', 'admin', 'ryna!@#1649'),
+(132, NULL, 'Sreyneath ROM', '0962504227', 'romsreyneath4@gmail.com', 'sensok', 'user', '90909090');
 
 --
 -- Indexes for dumped tables
 --
--- Create receipts table if it doesn't exist
-CREATE TABLE IF NOT EXISTS `receipts` (
-  `receipt_id` int(11) NOT NULL AUTO_INCREMENT,
-  `order_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `amount` decimal(10,2) NOT NULL,
-  `payment_method` varchar(50) NOT NULL,
-  `payment_status` varchar(20) NOT NULL,
-  `transaction_id` varchar(100) NOT NULL,
-  `created_at` datetime DEFAULT current_timestamp(),
-  PRIMARY KEY (`receipt_id`),
-  KEY `order_id` (`order_id`),
-  KEY `user_id` (`user_id`),
-  CONSTRAINT `receipts_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`),
-  CONSTRAINT `receipts_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
 
 --
 -- Indexes for table `carts`
@@ -216,14 +208,14 @@ ALTER TABLE `orders`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
+  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=126;
-ALTER TABLE users ADD COLUMN password VARCHAR(255) NOT NULL;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=133;
+
 --
 -- Constraints for dumped tables
 --
