@@ -6137,6 +6137,18 @@ p {
     color: #6c757d;
 }
 
+.product-actions{
+    margin-left: 20px;
+}
+.favorite-btn{
+    color: #ff2a2a;
+    margin-left: 200px;
+}
+.btn-outline {
+    justify-content: center;
+}
+
+
 
 /* Responsive Adjustments */
 
@@ -6372,8 +6384,11 @@ p {
         background: #333;
         transform: translateY(-2px);
     }
+
 </style>
 <header>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
     <img src="/assets/image/logo/logo.png" alt="XING FU CHA Logo">
     <nav>
         <ul>
@@ -6388,8 +6403,6 @@ p {
         <button class="sign-out-button" onclick="window.location.href='/register'">Sign Out</button>
     </div>
 </header>
-
-
 <section class="content-welcome">
     
     <!-- Hero Section -->
@@ -6412,21 +6425,11 @@ p {
                 <button class="btn-outline order-now-btn">Order Now</button>
             </div>
 
-            <div class="social-media">  <!-- New social media section -->
-                <a href="#" class="social-btn"></a>
-                <a href="#" class="social-btn"></a>
-                <a href="#" class="social-btn"></a>
-            </div>
-
         </div>
-
         <div class="header-banner">
             <img src="/assets/image/Header-banner.png" alt="Xing Fu Cha Bubble Tea">
         </div>
-
     </div>
-
-
     <!-- Category Section -->
     <div class="category-section">
         <div class="category-list">
@@ -6442,7 +6445,6 @@ p {
             <i class="fas fa-search"></i>
         </div>
     </div>
-
     <!-- Popular dishes section -->
     <div class="popular-dishes">
         <h3>Popular Drinks & Snacks</h3>
@@ -6452,9 +6454,8 @@ p {
                 <div class="product-image">
                     <img src="/assets/image/products/milk-tea-macha.png" alt="Strawberry Smoothie">
                 </div>
-                <button class="favorite-btn">
-                        <i class="far fa-heart"></i>
-                    </button>
+
+
                 <div class="product-info">
                     <h4>Strawberry Smoothie</h4>
                     <p class="description">Delicious strawberry smoothie with a creamy texture.</p>
@@ -6468,10 +6469,8 @@ p {
             <div class="product-card" data-category="smoothie">
                 <div class="product-image">
                     <img src="/assets/image/products/Almond Puff 55baht.png" alt="Mango Smoothie">
-                    <button class="favorite-btn">
-                        <i class="far fa-heart"></i>
-                    </button>
                 </div>
+
                 <div class="product-info">
                     <h4>Almond Puff</h4>
                     <p class="description">A refreshing mango smoothie for your hot day.</p>
@@ -6485,10 +6484,8 @@ p {
             <div class="product-card" data-category="milk-tea">
                 <div class="product-image">
                     <img src="/assets/image/products/coffee-cream.png" alt="Classic Milk Tea">
-                    <button class="favorite-btn">
-                        <i class="far fa-heart"></i>
-                    </button>
                 </div>
+
                 <div class="product-info">
                     <h4>Classic Milk Tea</h4>
                     <p class="description">Our signature milk tea with premium black tea and creamy milk.</p>
@@ -6499,25 +6496,10 @@ p {
                 </div>
             </div>
             
-            <div class="product-card" data-category="milk-tea">
-                <div class="product-image">
-                    <img src="/assets/image/products/1.png" alt="Taro Milk Tea">
-                    <button class="favorite-btn">
-                        <i class="far fa-heart"></i>
-                    </button>
-                </div>
-                <div class="product-info">
-                    <h4>Taro Milk Tea</h4>
-                    <p class="description">Creamy taro flavor blended with our premium milk tea.</p>
-                    <div class="product-price">$5.00</div>
-                </div>
-                <div class="product-actions">
-                    <button class="btn-primary order-btn" data-product-id="2">Order Now</button>
-                </div>
-            </div>
+
             
             <!-- No products found message -->
-            <div id="no-product-message" style="display: none;">No products found matching your search.</div>
+
         </div>
     </div>
 </section>
