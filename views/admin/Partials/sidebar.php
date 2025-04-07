@@ -7,15 +7,16 @@
         </div>
         <div class="sidebar-brand-text mx-3 text-dark">XING FU CHA</div>
     </a>
-
+    
     <!-- Divider -->
     <hr class="sidebar-divider my-0">
 
     <!-- Nav Item - Dashboard -->
-    <li class="nav-item active">
-        <a class="nav-link" href="/admin-dashboard">
-            <i class="fas fa-fw fa-tachometer-alt text-dark"></i>
-            <span>Dashboard</span></a>
+    <li class="nav-item active" style="background: #ff5e62">
+        <a class="nav-link" href="/admin-dashboard" style="color: white !important;">
+            <i class="fas fa-fw fa-tachometer-alt" style="color: white !important;"></i>
+            <span>Dashboard</span>
+        </a>
     </li>
 
     <!-- Divider -->
@@ -34,9 +35,23 @@
 
     <!-- Nav Item - Products -->
     <li class="nav-item">
-        <a class="nav-link collapsed" href="/product">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+            aria-expanded="true" aria-controls="collapseTwo">
             <i class="fas fa-fw fa-folder"></i>
             <span>Products</span>
+        </a>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <a class="collapse-item" href="/product">Products</a>
+                <a class="collapse-item" href="/topping">Toppings</a>
+            </div>
+        </div>
+    </li>
+    <hr class="sidebar-divider">
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="/order">
+            <i class="fas fa-shopping-cart"></i>
+            <span>Orders</span>
         </a>
     </li>
 
