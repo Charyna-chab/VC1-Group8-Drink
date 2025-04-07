@@ -1,7 +1,7 @@
 <?php
 namespace YourNamespace;
 
-require_once "Router.php";
+require_once __DIR__ . "/Router.php";  // Ensure the correct path
 
 require_once "controllers/BaseController.php";
 require_once "controllers/WelcomeController.php";
@@ -22,13 +22,13 @@ require_once "controllers/JoinTheTeamController.php";
 require_once __DIR__ . '/../controllers/Admin/Users/UserController.php';
 require_once './controllers/Admin/Products/ProductController.php';
 require_once "./controllers/Admin/DashboardController.php";
-require_once "./controllers/Admin/Receipts/AdminReceiptController.php";
+// require_once __DIR__ . '/../controllers/Admin/Receipts/AdminReceiptController.php';
 require_once "controllers/OrderListController.php";
 
 
 use YourNamespace\Router;
 use YourNamespace\Controllers\WelcomeController;
-use YourNamespace\Controllers\OrdersController;
+use YourNamespace\Controllers\OrderListController;
 use YourNamespace\Controllers\BookingController;
 use YourNamespace\Controllers\FavoritesController;
 use YourNamespace\Controllers\SettingsController;
@@ -46,7 +46,6 @@ use YourNamespace\Controllers\Admin\Users\UserController;
 use YourNamespace\Controllers\Admin\Products\ProductController;
 use YourNamespace\Controllers\Admin\DashboardController;
 use YourNamespace\Controllers\Admin\AdminReceiptController;
-use YourNamespace\Controllers\OrderListController;
 
 $route = new Router();
 
@@ -156,5 +155,8 @@ $route->post("/admin/order/store", [OrderListController::class, 'store']);
 $route->get("/admin/order/edit/{id}", [OrderListController::class, 'edit']);
 $route->post("/admin/order/update", [OrderListController::class, 'update']);
 $route->post("/admin/order/delete", [OrderListController::class, 'delete']);
+
+// Admin Dashboard route
+$route->get("/admin-dashboard", [DashboardController::class, 'index']);
 
 $route->route();
