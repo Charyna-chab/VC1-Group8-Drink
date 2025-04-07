@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo isset($title) ? $title : 'Product List'; ?></title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
     <link href="/assets/css/sb-admin-2.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/style.css">
     <style>
@@ -82,7 +84,8 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-end mb-3">
                             <div class="input-group" style="width: 300px;">
-                                <input type="text" class="form-control form-control-sm" placeholder="Search..." id="searchInput">
+                                <input type="text" class="form-control form-control-sm" placeholder="Search..."
+                                    id="searchInput">
                                 <button class="btn btn-primary btn-sm" type="button" id="searchButton">
                                     <i class="fas fa-search"></i>
                                 </button>
@@ -106,7 +109,8 @@
                                         <tr>
                                             <td><?= $index + 1 ?></td>
                                             <td>
-                                                <img src="<?= htmlspecialchars($product['image']) ?>" alt="Product Image" class="product-image" style="object-fit: cover;">
+                                                <img src="<?= htmlspecialchars($product['image']) ?>" alt="Product Image"
+                                                    class="product-image" style="object-fit: cover;">
                                             </td>
                                             <td><?= htmlspecialchars($product['product_name']) ?></td>
                                             <td><?= htmlspecialchars($product['product_detail']) ?></td>
@@ -114,16 +118,16 @@
                                             <td>
                                                 <div class="dropdown">
                                                     <button class="btn btn-sm p-0 border-0 bg-transparent dropdown-toggle"
-                                                        type="button"
-                                                        id="dropdownMenuButton<?= $index ?>"
-                                                        data-bs-toggle="dropdown"
-                                                        aria-expanded="false">
+                                                        type="button" id="dropdownMenuButton<?= $index ?>"
+                                                        data-bs-toggle="dropdown" aria-expanded="false">
                                                         <i class="fas fa-ellipsis-v text-dark"></i>
                                                     </button>
                                                     <ul class="dropdown-menu dropdown-menu-end shadow"
                                                         aria-labelledby="dropdownMenuButton<?= $index ?>">
                                                         <li>
-                                                            <a class="dropdown-item py-2" href="/admin/products/edit?id=<?= $product['product_id'] ?>">
+                                                            <a class="dropdown-item py-2"
+                                                                href="/admin/products/edit/<?= $product['product_id'] ?>">
+
                                                                 <i class="fas fa-edit me-2 text-primary"></i> Edit
                                                             </a>
                                                         </li>
@@ -136,23 +140,31 @@
                                                         </li>
                                                     </ul>
                                                 </div>
-                                                <div class="modal fade" id="deleteModal<?= $index ?>" tabindex="-1" aria-hidden="true">
+                                                <div class="modal fade" id="deleteModal<?= $index ?>" tabindex="-1"
+                                                    aria-hidden="true">
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
                                                                 <h5 class="modal-title">Confirm Deletion</h5>
-                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                <button type="button" class="btn-close"
+                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
                                                             </div>
                                                             <div class="modal-body">
-                                                                Are you sure you want to delete "<?= htmlspecialchars($product['product_name']) ?>"?
+                                                                Are you sure you want to delete
+                                                                "<?= htmlspecialchars($product['product_name']) ?>"?
                                                             </div>
                                                             <div class="modal-footer">
-                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                                                <a href="/admin/products/delete/<?= $product['product_id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this product?')">Delete</a>
+                                                                <button type="button" class="btn btn-secondary"
+                                                                    data-bs-dismiss="modal">Cancel</button>
+                                                                <form
+                                                                    action="/admin/products/delete/<?= $product['product_id'] ?>"
+                                                                    method="POST">
+                                                                    <button type="submit"
+                                                                        class="btn btn-danger">Delete</button>
+                                                                </form>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
