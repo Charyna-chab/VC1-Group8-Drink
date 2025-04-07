@@ -136,7 +136,6 @@
                                                         </li>
                                                     </ul>
                                                 </div>
-
                                                 <div class="modal fade" id="deleteModal<?= $index ?>" tabindex="-1" aria-hidden="true">
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
