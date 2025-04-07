@@ -61,6 +61,15 @@
             <span>Feedback</span></a>
     </li>
 
+    <!-- Nav Item - Order List -->
+    <li class="nav-item">
+        <a class="nav-link" href="/admin/order-list">
+            <i class="fas fa-list order-list-icon"></i>
+            <span>Order List</span>
+        </a>
+    </li>
+
+
     <!-- Divider -->
     <hr class="sidebar-divider">
 
