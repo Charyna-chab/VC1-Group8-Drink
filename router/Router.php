@@ -1,6 +1,7 @@
 <?php
 
-namespace OrderController;
+namespace YourNamespace;
+
 
 class Router {
     private $routes = [];

@@ -22,7 +22,7 @@ require_once "controllers/JoinTheTeamController.php";
 require_once __DIR__ . '/../controllers/Admin/Users/UserController.php';
 require_once './controllers/Admin/Products/ProductController.php';
 require_once "./controllers/Admin/DashboardController.php";
-require_once "./controllers/Admin/Receipts/AdminReceiptController.php";
+require_once "./controllers/Admin/AdminReceiptController.php";
 require_once "controllers/OrderListController.php";
 
 
