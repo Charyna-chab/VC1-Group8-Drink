@@ -1,32 +1,33 @@
 <?php require_once __DIR__ . '/../admin/Partials/header.php'; ?>
-<div class="card shadow mb-4 ml-3 mr-3" style="width:50%;">
-    <div class="card-body ">
-        <div class="container ">
+
+<div class="card shadow mb-4 ml-3 mr-3" style="width: 50%;">
+    <div class="card-body">
+        <div class="container">
             <form action="/admin/products/update/<?= $product['product_id'] ?>" method="POST" enctype="multipart/form-data">
                 <input type="hidden" name="product_id" value="<?= $product['product_id'] ?>">
 
                 <div class="form-group mb-3 col">
                     <label for="product_name" class="form-label">Name:</label>
-                    <input type="text" value="<?= $product['product_name'] ?>" name="product_name" class="form-control">
+                    <input type="text" value="<?= htmlspecialchars($product['product_name']) ?>" name="product_name" class="form-control" required>
                 </div>
 
                 <div class="form-group mb-3 col">
                     <label for="product_detail" class="form-label">Product Detail:</label>
-                    <input type="text" value="<?= $product['product_detail'] ?>" name="product_detail" class="form-control">
+                    <input type="text" value="<?= htmlspecialchars($product['product_detail']) ?>" name="product_detail" class="form-control" required>
                 </div>
 
                 <div class="form-group mb-3 col">
                     <label for="price" class="form-label">Price:</label>
-                    <input type="number" value="<?= $product['price'] ?>" name="price" class="form-control">
+                    <input type="number" value="<?= $product['price'] ?>" name="price" class="form-control" step="0.01" required>
                 </div>
 
                 <div class="form-group mb-3 col">
                     <label for="category" class="form-label">Category:</label>
-                    <select name="category" class="form-control">
-                        <option value="milk-tea" <?= $product['category'] == 'milk-tea' ? 'selected' : '' ?>>Milk Tea</option>
-                        <option value="fruit-tea" <?= $product['category'] == 'fruit-tea' ? 'selected' : '' ?>>Fruit Tea</option>
-                        <option value="coffee" <?= $product['category'] == 'coffee' ? 'selected' : '' ?>>Coffee</option>
-                        <option value="smoothie" <?= $product['category'] == 'smoothie' ? 'selected' : '' ?>>Smoothie</option>
+                    <select name="category" class="form-control" required>
+                        <option value="milk-tea" <?= $product['category'] === 'milk-tea' ? 'selected' : '' ?>>Milk Tea</option>
+                        <option value="fruit-tea" <?= $product['category'] === 'fruit-tea' ? 'selected' : '' ?>>Fruit Tea</option>
+                        <option value="coffee" <?= $product['category'] === 'coffee' ? 'selected' : '' ?>>Coffee</option>
+                        <option value="smoothie" <?= $product['category'] === 'smoothie' ? 'selected' : '' ?>>Smoothie</option>
                     </select>
                 </div>
 
@@ -36,27 +37,8 @@
                     <input type="hidden" name="existing_image" value="<?= $product['image'] ?>">
                 </div>
 
-                <button type="submit" class="btn btn-success mt-3" data-bs-toggle="modal" data-bs-target="#updateModal">Update</button>
+                <button type="submit" class="btn btn-success mt-3">Update</button>
             </form>
-
-        </div>
-    </div>
-</div>
-
-<!-- Update Modal -->
-<div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="updateModalLabel">Success</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Product has been successfully updated!
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
-            </div>
 
         </div>
     </div>
