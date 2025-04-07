@@ -145,12 +145,18 @@
                                             <?php foreach ($users as $index => $user): ?>
                                                 <tr>
                                                     <td><?php echo $index + 1; ?></td>
-                                                    <td>
-                                                        <?php if (!empty($user['image'])): ?>
-                                                            <img src="<?php echo htmlspecialchars($user['image']); ?>" alt="User Avatar" class="user-avatar" style="width:40px;height:40px;object-fit:cover;">
-                                                        <?php else: ?>
-                                                            <img src="/assets/images/default-avatar.jpg" alt="Default Avatar" class="user-avatar" style="width:40px;height:40px;object-fit:cover;">
-                                                        <?php endif; ?>
+                                                    <td style="text-align: center; vertical-align: middle;">
+                                                        <div style="display: inline-block; width: 60px; height: 60px; border-radius: 100%; overflow: hidden;">
+                                                            <?php if (!empty($user['image']) && file_exists($_SERVER['DOCUMENT_ROOT'] . '/' . $user['image'])): ?>
+                                                                <img src="/<?= htmlspecialchars($user['image']) ?>"
+                                                                    style="width: 100%; height: 100%; object-fit: cover;"
+                                                                    alt="User Image">
+                                                            <?php else: ?>
+                                                                <img src="/assets/images/default-user.png"
+                                                                    style="width: 100%; height: 100%; object-fit: cover;"
+                                                                    alt="Default User">
+                                                            <?php endif; ?>
+                                                        </div>
                                                     </td>
                                                     <td><?php echo htmlspecialchars($user['name']); ?></td>
                                                     <td><?php echo htmlspecialchars($user['email']); ?></td>
