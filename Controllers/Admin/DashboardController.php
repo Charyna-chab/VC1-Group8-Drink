@@ -1,14 +1,25 @@
 <?php
-require_once './controllers/BaseController.php'; // Correct path to BaseController.php
 
-use YourNamespace\BaseController; // Ensure the namespace matches BaseController
+namespace YourNamespace\Controllers\Admin;
+
+require_once './controllers/BaseController.php';
+require_once './Models/ProductModel.php';
+
+use YourNamespace\BaseController;
 
 class DashboardController extends BaseController
 {
+    private $productModel;
+    public function __construct()
+    {
+        $this->productModel = new \YourNamespace\Models\ProductModel();
+    }
     public function index()
     {
-        // Example view rendering
-        $this->views('dashboard/index.php');
+        $prodCount = count($this->productModel->getProducts());
+        $prodPrice = array_reduce($this->productModel->getProducts(), function ($carry, $item) {
+            return $carry + $item['price'];
+        }, 0);
+        $this->views('admin/dashboard', ['totalProducts' => $prodCount, 'totalPrice' => $prodPrice]);	
     }
 }
-?>

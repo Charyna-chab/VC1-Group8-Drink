@@ -50,4 +50,28 @@ class ProductModel
         $stmt = $this->pdo->prepare("DELETE FROM products WHERE product_id = :product_id");
         return $stmt->execute(['product_id' => $id]);
     }
+
+    public function getTotalPrice()
+    {
+        try {
+            $stmt = $this->pdo->query("SELECT SUM(price) AS total_price FROM products");
+            $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+            return $result['total_price'] ?? 0;
+        } catch (PDOException $e) {
+            // Handle exception
+            return 0;
+        }
+    }
+
+    public function getTotalProducts()
+    {
+        try {
+            $stmt = $this->pdo->query("SELECT COUNT(*) AS total_products FROM products");
+            $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+            return $result['total_products'] ?? 0;
+        } catch (PDOException $e) {
+            // Handle exception
+            return 0;
+        }
+    }
 }
