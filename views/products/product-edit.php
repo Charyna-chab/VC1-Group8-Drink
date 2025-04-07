@@ -1,7 +1,8 @@
+<?php require_once('views/admin/Partials/header.php'); ?>
 <div class="card shadow mb-4 ml-3 mr-3" style="width:50%;">
     <div class="card-body ">
         <div class="container ">
-            <form action="/product/update" method="POST" enctype="multipart/form-data">
+            <form action="/admin/products/update/" method="POST" enctype="multipart/form-data">
                 <input type="hidden" name="product_id" value="<?= $product['product_id'] ?>">
 
                 <div class="form-group mb-3 col">
