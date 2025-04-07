@@ -158,7 +158,7 @@ $route->get("/admin/users/create", [UserController::class, 'create']);
 $route->post("/admin/users/store", [UserController::class, 'store']);
 $route->get("/admin/users/edit/{id}", [UserController::class, 'edit']);
 $route->post("/admin/users/update/{id}", [UserController::class, 'update']);
-$route->post("/admin/users/delete/{id}", [UserController::class, 'destroy']); // Changed from 'delete' to 'destroy' to match your controller
+$route->post("/admin/users/delete", [UserController::class, 'destroy']);// Changed from 'delete' to 'destroy' to match your controller
 
 
 // Admin Feedback Management

@@ -167,10 +167,34 @@
                                                         </span>
                                                     </td>
                                                     <td><?php echo htmlspecialchars($user['address'] ?? 'N/A'); ?></td>
-                                                    <td><button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#users<?= $user['user_id'] ?>">Delete</button>
-                                                        <!-- Modal -->
-                                                        <?php include 'delete.php' ?></td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#users<?= $user['user_id'] ?>">
+                                                            Delete
+                                                        </button>
+                                                    </td>
                                                 </tr>
+
+                                                <!-- Place the modal HTML right here, after the closing </tr> tag -->
+                                                <div class="modal fade" id="users<?= $user['user_id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLabel">Delete User</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                Are you sure you want to delete <?= htmlspecialchars($user['name']) ?>?
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <form action="/admin/users/delete" method="POST">
+                                                                    <input type="hidden" name="user_id" value="<?= $user['user_id'] ?>">
+                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             <?php endforeach; ?>
                                         <?php endif; ?>
                                     </tbody>
