@@ -12,7 +12,7 @@ class AdminController extends BaseController {
     }
     
     private function checkAdminAuth() {
-        if (!isset($_SESSION['user_id']) || !isset($_SESSION['user']['role']) || $_SESSION['user']['role'] !== 'admin') {
+        if (!isset($_SESSION['user_id']) || !isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
             $this->redirect('/admin-login');
         }
     }

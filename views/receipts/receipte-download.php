@@ -1,5 +1,3 @@
-<?php require_once 'views/layouts/header.php'; ?>
-
 <div class="container mt-4">
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
@@ -8,13 +6,16 @@
                 <button onclick="window.print()" class="btn btn-primary">
                     <i class="fas fa-print"></i> Print
                 </button>
+                <button onclick="generatePDF()" class="btn btn-success">
+                    <i class="fas fa-file-pdf"></i> Save as PDF
+                </button>
                 <a href="/receipt" class="btn btn-secondary">
                     <i class="fas fa-arrow-left"></i> Back
                 </a>
             </div>
         </div>
         <div class="card-body">
-            <div class="receipt-container p-4 border rounded">
+            <div id="receipt-container" class="receipt-container p-4 border rounded">
                 <div class="text-center mb-4">
                     <h2>XING FU CHA</h2>
                     <p>123 Bubble Tea Street, Tea City</p>
@@ -67,5 +68,56 @@
     </div>
 </div>
 
-<?php require_once 'views/layouts/footer.php'; ?>
+<!-- PDF Generation -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+function generatePDF() {
+    // Get the receipt container
+    const element = document.getElementById('receipt-container');
+    
+    // Configure html2pdf options
+    const opt = {
+        margin: 1,
+        filename: 'receipt-<?= $receipt['receipt_id'] ?>.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+    };
+    
+    // Generate and download PDF
+    html2pdf().set(opt).from(element).save();
+}
 
+// Add print-specific styles
+window.onbeforeprint = function() {
+    document.querySelectorAll('.btn, .no-print').forEach(el => {
+        el.style.display = 'none';
+    });
+};
+
+window.onafterprint = function() {
+    document.querySelectorAll('.btn, .no-print').forEach(el => {
+        el.style.display = '';
+    });
+};
+</script>
+
+<style>
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    #receipt-container, #receipt-container * {
+        visibility: visible;
+    }
+    #receipt-container {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+    }
+    .no-print {
+        display: none !important;
+    }
+}
+</style>
