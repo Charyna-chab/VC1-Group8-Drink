@@ -18,6 +18,9 @@ class ReceiptController extends BaseController
         }
 
         $this->model = new \ReceiptModel();
+        
+        // Create receipts table if it doesn't exist
+        $this->model->createReceiptsTableIfNotExists();
     }
 
     function index()
@@ -32,7 +35,9 @@ class ReceiptController extends BaseController
         }
         
         $receipts = $this->model->getReceiptsByUser($userId);
-        $this->views('receipts/receipt-list', ['receipts' => $receipts]);
+        
+        // Pass title to the view
+        $this->views('receipts/receipt-list', ['receipts' => $receipts, 'title' => 'Your Receipts']);
     }
 
     function download($id = null)
@@ -63,7 +68,7 @@ class ReceiptController extends BaseController
             return;
         }
         
-        $this->views('receipts/receipt-download', ['receipt' => $receipt]);
+        $this->views('receipts/receipt-download', ['receipt' => $receipt, 'title' => 'Receipt Details']);
     }
     
     function delete($id = null)
@@ -131,6 +136,6 @@ class ReceiptController extends BaseController
             return;
         }
         
-        $this->views('receipts/receipt-delete', ['receipt' => $receipt]);
+        $this->views('receipts/receipt-delete', ['receipt' => $receipt, 'title' => 'Delete Receipt']);
     }
 }

@@ -123,7 +123,7 @@
                                                     <ul class="dropdown-menu dropdown-menu-end shadow"
                                                         aria-labelledby="dropdownMenuButton<?= $index ?>">
                                                         <li>
-                                                            <a class="dropdown-item py-2" href="/admin/products/edit/<?= $product['product_id'] ?>">
+                                                            <a class="dropdown-item py-2" href="/admin/products/edit?id=<?= $product['product_id'] ?>">
                                                                 <i class="fas fa-edit me-2 text-primary"></i> Edit
                                                             </a>
                                                         </li>
@@ -136,7 +136,6 @@
                                                         </li>
                                                     </ul>
                                                 </div>
-
                                                 <div class="modal fade" id="deleteModal<?= $index ?>" tabindex="-1" aria-hidden="true">
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">

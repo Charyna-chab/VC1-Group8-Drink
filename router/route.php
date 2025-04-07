@@ -7,7 +7,7 @@ require_once "controllers/BaseController.php";
 require_once "controllers/WelcomeController.php";
 require_once "controllers/FavoritesController.php";
 require_once "controllers/SettingsController.php";
-require_once "controllers/OrdersController.php";
+require_once "controllers/Customer/OrdersController.php";
 require_once "controllers/BookingController.php";
 require_once "controllers/AuthController.php";
 require_once "controllers/AdminController.php";
@@ -24,6 +24,7 @@ require_once './controllers/Admin/Products/ProductController.php';
 require_once "./controllers/Admin/DashboardController.php";
 require_once "./controllers/Admin/Receipts/AdminReceiptController.php";
 require_once "controllers/OrderListController.php";
+
 
 use YourNamespace\Router;
 use YourNamespace\Controllers\WelcomeController;
@@ -127,13 +128,18 @@ $route->get("/admin/products/edit/{id}", [ProductController::class, 'edit']);
 $route->post("/admin/products/update/{id}", [ProductController::class, 'update']);
 $route->post("/admin/products/delete/{id}", [ProductController::class, 'destroy']);
 
-// Admin Users
+
+
+// Fix the user routes to match your controller's expectations
+
 $route->get("/admin/users", [UserController::class, 'index']);
 $route->get("/admin/users/create", [UserController::class, 'create']);
 $route->post("/admin/users/store", [UserController::class, 'store']);
 $route->get("/admin/users/edit/{id}", [UserController::class, 'edit']);
 $route->post("/admin/users/update/{id}", [UserController::class, 'update']);
+
 $route->post("/admin/users/delete/{id}", [UserController::class, 'destroy']);
+
 
 // Admin Feedback
 $route->get("/admin/feedback", [FeedbackController::class, 'index']);
