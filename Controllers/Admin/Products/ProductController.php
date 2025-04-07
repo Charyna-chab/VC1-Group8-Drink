@@ -52,7 +52,7 @@ class ProductController extends BaseController
                 ];
 
                 $this->model->createProduct($data);
-                $this->redirect('/admin/products');
+                $this->redirect('/product');
             } else {
                 die("Failed to upload the image.");
             }
@@ -66,64 +66,69 @@ class ProductController extends BaseController
             $_SESSION['error'] = "Product not found!";
             return $this->redirect('/product');
         }
-        $this->views('products/product-edit.php', ['product' => $product]);
+        $this->views('products/product-edit', ['product' => $product]);
     }
 
 
-    function update()
-    {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            $_SESSION['error'] = "Invalid request method!";
-            $this->redirect('/product');
-            return;
+    public function update($id)
+{
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $product = $this->model->getProduct($id);
+
+        if (!$product) {
+            $_SESSION['error'] = "Product not found!";
+            return $this->redirect('/product');
         }
 
-        if (!isset($_POST['product_id']) || !is_numeric($_POST['product_id'])) {
-            $_SESSION['error'] = "Invalid product ID!";
-            $this->redirect('/product');
-            return;
-        }
-
-        $id = $_POST['product_id'];
+        $product_name = $_POST['product_name'];
+        $product_detail = $_POST['product_detail'];
+        $price = $_POST['price'];
+        $category = $_POST['category'];
+        $existing_image = $_POST['existing_image'];
 
         // Handle file upload
+        $image = $existing_image;
         if (!empty($_FILES['image']['name'])) {
-            $uploadDir = 'uploads/product/';
-            if (!is_dir($uploadDir)) {
-                mkdir($uploadDir, 0777, true);
+            $upload_dir = __DIR__ . '/../public/uploads/';
+            if (!is_dir($upload_dir)) {
+                mkdir($upload_dir, 0755, true);
             }
 
-            $imageName = basename($_FILES['image']['name']);
-            $imagePath = $uploadDir . $imageName;
+            $filename = time() . '_' . basename($_FILES['image']['name']);
+            $target_file = $upload_dir . $filename;
 
-            if (move_uploaded_file($_FILES['image']['tmp_name'], $imagePath)) {
-                $image = $imagePath;
-            } else {
-                $_SESSION['error'] = "Image upload failed!";
-                $this->redirect('/product/edit?id=' . $id);
-                return;
+            if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
+                $image = $filename;
+
+                // Optionally delete the old image
+                $old_image_path = $upload_dir . $existing_image;
+                if (file_exists($old_image_path) && $existing_image !== '') {
+                    unlink($old_image_path);
+                }
             }
-        } else {
-            $image = $_POST['existing_image']; // Keep existing image if no new one is uploaded
         }
 
         $data = [
-            'product_name' => $_POST['product_name'],
-            'product_detail' => $_POST['product_detail'],
-            'price' => $_POST['price'],
-            'image' => $image
+            'product_name' => $product_name,
+            'product_detail' => $product_detail,
+            'price' => $price,
+            'category' => $category,
+            'image' => $image,
         ];
 
-        // Update the product
-        if ($this->model->updateProduct($id, $data)) {
+        $updated = $this->model->updateProduct($id, $data);
+
+        if ($updated) {
             $_SESSION['success'] = "Product updated successfully!";
         } else {
-            $_SESSION['error'] = "Failed to update product!";
+            $_SESSION['error'] = "Failed to update product.";
         }
 
-        $this->redirect('/product');
+        return $this->redirect("/admin/products/edit/");
     }
 
+    return $this->redirect('/product');
+}
 
 
 

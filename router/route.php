@@ -142,7 +142,7 @@ $route->get("/admin-dashboard", [DashboardController::class, 'index']);
 
 // Admin Product Management Routes
 $route->get("/product", [ProductController::class, 'index']);
-$route->get("/admin/products", [ProductController::class, 'index']);
+// $route->get("/admin/products", [ProductController::class, 'index']);
 $route->get("/admin/products/create", [ProductController::class, 'create']);
 $route->post("/admin/products/store", [ProductController::class, 'store']);
 $route->get("/admin/products/edit/{id}", [ProductController::class, 'edit']);
