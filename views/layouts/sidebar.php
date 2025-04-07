@@ -54,7 +54,7 @@
 <style>
     /* Base Sidebar Styles */
     .sidebar {
-        width: 260px;
+        width: 250px;
         height: 100vh;
         background: #ffffff;
         box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
