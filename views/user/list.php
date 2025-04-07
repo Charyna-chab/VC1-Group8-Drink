@@ -133,6 +133,7 @@
                                             <th>Phone</th>
                                             <th>Role</th>
                                             <th>Address</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -160,6 +161,9 @@
                                                         </span>
                                                     </td>
                                                     <td><?php echo htmlspecialchars($user['address'] ?? 'N/A'); ?></td>
+                                                    <td><button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#users<?= $user['user_id'] ?>">Delete</button>
+                                                        <!-- Modal -->
+                                                        <?php include 'delete.php' ?></td>
                                                 </tr>
                                             <?php endforeach; ?>
                                         <?php endif; ?>
@@ -196,6 +200,8 @@
             }
         });
     </script>
+
+
 </body>
 
 </html>
