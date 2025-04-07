@@ -139,3 +139,11 @@ class ReceiptController extends BaseController
         $this->views('receipts/receipt-delete', ['receipt' => $receipt, 'title' => 'Delete Receipt']);
     }
 }
+
+namespace YourNamespace\Controllers\Admin\Receipts;
+
+class AdminReceiptController {
+    public function index() {
+        echo "Admin Receipt Controller Index";
+    }
+}

@@ -845,8 +845,6 @@ document.addEventListener("DOMContentLoaded", () => {
           <h4>Payment Successful!</h4>
           <p>Your payment for order #${booking.id} has been processed.</p>
         </div>
-        <button class="close-notification">&times;</button  has been processed.</p>
-        </div>
         <button class="close-notification">&times;</button>
       </div>
     `;
@@ -887,25 +885,28 @@ document.addEventListener("DOMContentLoaded", () => {
       <div class="receipt-modal-content">
         <div class="receipt-paper">
           <div class="receipt-header">
-            <h2>CASH RECEIPT</h2>
+            <div class="receipt-logo">
+              <img src="/placeholder.svg?height=80&width=80" alt="Logo">
+            </div>
+            <h2>BUBBLE TEA SHOP</h2>
             <div class="receipt-info">
               <div class="shop-info">
-                <p>Shop Name</p>
+                <p class="shop-name">Premium Bubble Tea</p>
+                <p>123 Tea Street, Bubble City</p>
+                <p>Tel: (123) 456-7890</p>
                 <p>Date: ${formattedDate}</p>
-                <p>Manager: John Doe</p>
-                <p>Cashier: Jane Doe</p>
-              </div>
-              <div class="shop-address">
-                <p>Shop Address</p>
-                <p>XXXXXXXXXX</p>
+                <p>Receipt #: ${receiptId}</p>
+                <p>Order #: ${booking.id}</p>
               </div>
             </div>
-            <div class="receipt-divider">- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -</div>
+            <div class="receipt-divider"></div>
           </div>
           
           <div class="receipt-body">
             <div class="receipt-items-header">
-              <span class="item-description">Description</span>
+              <span class="item-image-header"></span>
+              <span class="item-name">Item</span>
+              <span class="item-qty">Qty</span>
               <span class="item-price">Price</span>
             </div>
             
@@ -913,50 +914,53 @@ document.addEventListener("DOMContentLoaded", () => {
               .map(
                 (item) => `
               <div class="receipt-item-row">
-                <div class="item-description">
-                  <div class="item-image-small">
-                    <img src="${item.image}" alt="${item.name}">
-                  </div>
-                  <div class="item-text">
-                    <p>${item.name}</p>
-                    <p class="item-details">Size: ${item.size.name} | Sugar: ${item.sugar.name} | Ice: ${item.ice.name}</p>
-                    ${
-                      item.toppings && item.toppings.length > 0
-                        ? `<p class="item-details">Toppings: ${item.toppings.map((t) => t.name).join(", ")}</p>`
-                        : ""
-                    }
-                    <p class="item-quantity">x${item.quantity}</p>
-                  </div>
+                <div class="item-image-container">
+                  <img src="${item.image}" alt="${item.name}" class="item-thumbnail">
                 </div>
+                <div class="item-name">
+                  <p class="item-title">${item.name}</p>
+                  <p class="item-details">Size: ${item.size.name} | Sugar: ${item.sugar.name} | Ice: ${item.ice.name}</p>
+                  ${
+                    item.toppings && item.toppings.length > 0
+                      ? `<p class="item-details">+ ${item.toppings.map((t) => t.name).join(", ")}</p>`
+                      : ""
+                  }
+                </div>
+                <div class="item-qty">${item.quantity}</div>
                 <div class="item-price">$${item.totalPrice.toFixed(2)}</div>
               </div>
             `
               )
               .join("")}
             
-            <div class="receipt-divider">- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -</div>
+            <div class="receipt-divider"></div>
             
             <div class="receipt-total-section">
               <div class="total-row">
-                <span>Total</span>
+                <span>Subtotal</span>
                 <span>$${booking.subtotal.toFixed(2)}</span>
               </div>
               <div class="total-row">
-                <span>Tax</span>
+                <span>Tax (8%)</span>
                 <span>$${booking.tax.toFixed(2)}</span>
               </div>
               <div class="total-row grand-total">
-                <span>Grand Total</span>
+                <span>Total</span>
                 <span>$${booking.total.toFixed(2)}</span>
+              </div>
+              <div class="payment-method-row">
+                <span>Payment Method</span>
+                <span>${booking.paymentMethod ? booking.paymentMethod.replace(/-/g, ' ').toUpperCase() : 'Cash'}</span>
               </div>
             </div>
             
-            <div class="receipt-divider">- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -</div>
+            <div class="receipt-divider"></div>
             
             <div class="receipt-footer">
-              <p>Thank you for shopping!</p>
+              <p>Thank you for your purchase!</p>
+              <p>We hope to see you again soon.</p>
               <div class="receipt-barcode">
-                <img src="/placeholder.svg?height=50&width=200" alt="Barcode">
+                <img src="/placeholder.svg?height=40&width=200" alt="Barcode">
                 <p>${receiptId}</p>
               </div>
             </div>
@@ -965,10 +969,10 @@ document.addEventListener("DOMContentLoaded", () => {
         
         <div class="receipt-actions">
           <button class="btn-secondary print-receipt">
-            <i class="fas fa-print"></i> Print Receipt
+            <i class="fas fa-print"></i> Print
           </button>
           <button class="btn-secondary download-receipt">
-            <i class="fas fa-download"></i> Download Receipt
+            <i class="fas fa-download"></i> Download
           </button>
           <button class="btn-primary continue-order" data-id="${booking.id}">
             <i class="fas fa-check"></i> Done
@@ -981,56 +985,92 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Print button
     receiptModal.querySelector(".print-receipt").addEventListener("click", () => {
-      // Print the receipt
-      const receiptContent = receiptModal.querySelector(".receipt-paper");
-      const originalContents = document.body.innerHTML;
-
-      document.body.innerHTML = `
-        <div class="print-only">
-          ${receiptContent.outerHTML}
-        </div>
-      `;
-
+      // Create a printable version of the receipt
+      const printContent = document.createElement('div');
+      printContent.className = 'print-only-receipt';
+      
+      // Clone the receipt paper for printing
+      const receiptPaper = receiptModal.querySelector(".receipt-paper").cloneNode(true);
+      printContent.appendChild(receiptPaper);
+      
+      // Store the current page content
+      const originalContent = document.body.innerHTML;
+      
+      // Replace with print-friendly content
+      document.body.innerHTML = '';
+      document.body.appendChild(printContent);
+      
+      // Print
       window.print();
-
-      // Restore the page
-      document.body.innerHTML = originalContents;
-
+      
+      // Restore original content
+      document.body.innerHTML = originalContent;
+      
       // Show receipt modal again
       showReceiptModal(bookingId);
     });
 
-    // Download button
+    // Download button - PDF version
     receiptModal.querySelector(".download-receipt").addEventListener("click", () => {
-      // Create a canvas from the receipt
-      const receiptContent = receiptModal.querySelector(".receipt-paper");
-      // Ensure html2canvas is available before using it
-      if (typeof html2canvas !== "undefined") {
-        html2canvas(receiptContent).then((canvas) => {
-          // Convert canvas to image
-          const imgData = canvas.toDataURL("image/png");
-
-          // Create download link
-          const link = document.createElement("a");
-          link.download = `Receipt-${receiptId}.png`;
-          link.href = imgData;
-          link.click();
-        });
+      // Check if jsPDF is loaded
+      if (typeof window.jspdf === "undefined") {
+        // Load jsPDF dynamically if not already loaded
+        const jsPDFScript = document.createElement("script");
+        jsPDFScript.src = "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";
+        jsPDFScript.onload = () => {
+          // Load html2canvas if not already loaded
+          if (typeof html2canvas === "undefined") {
+            const html2canvasScript = document.createElement("script");
+            html2canvasScript.src = "https://html2canvas.hertzen.com/dist/html2canvas.min.js";
+            html2canvasScript.onload = () => {
+              generatePDF();
+            };
+            html2canvasScript.onerror = () => {
+              alert("Failed to load html2canvas. Please try again or use the print option.");
+            };
+            document.head.appendChild(html2canvasScript);
+          } else {
+            generatePDF();
+          }
+        };
+        jsPDFScript.onerror = () => {
+          alert("Failed to load PDF generator. Please try again or use the print option.");
+        };
+        document.head.appendChild(jsPDFScript);
       } else {
-        console.error("html2canvas is not loaded. Please check your internet connection or script inclusion.");
-        alert("Failed to download receipt. html2canvas is not available.");
+        generatePDF();
+      }
+
+      function generatePDF() {
+        const receiptContent = receiptModal.querySelector(".receipt-paper");
+        
+        html2canvas(receiptContent).then((canvas) => {
+          const imgData = canvas.toDataURL("image/png");
+          const pdf = new window.jspdf.jsPDF({
+            orientation: "portrait",
+            unit: "mm",
+            format: "a4"
+          });
+          
+          // Calculate dimensions to fit the receipt on the PDF
+          const imgWidth = 210; // A4 width in mm (210mm)
+          const imgHeight = canvas.height * imgWidth / canvas.width;
+          
+          pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+          pdf.save(`Receipt-${receiptId}.pdf`);
+        });
       }
     });
 
-    // Continue Order button
+    // Continue Order button - Ensure it always works properly
     receiptModal.querySelector(".continue-order").addEventListener("click", function () {
       const id = this.getAttribute("data-id");
 
+      // First remove the modal to prevent any issues
+      receiptModal.remove();
+
       // Complete the booking
       completeBooking(id);
-
-      // Close the receipt modal
-      receiptModal.remove();
 
       // Show thank you notification
       showThankYouNotification();
@@ -1126,25 +1166,28 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="receipt-interface-content">
           <div class="receipt-paper">
             <div class="receipt-header">
-              <h2>CASH RECEIPT</h2>
+              <div class="receipt-logo">
+                <img src="/placeholder.svg?height=80&width=80" alt="Logo">
+              </div>
+              <h2>BUBBLE TEA SHOP</h2>
               <div class="receipt-info">
                 <div class="shop-info">
-                  <p>Shop Name</p>
+                  <p class="shop-name">Premium Bubble Tea</p>
+                  <p>123 Tea Street, Bubble City</p>
+                  <p>Tel: (123) 456-7890</p>
                   <p>Date: ${formattedDate}</p>
-                  <p>Manager: John Doe</p>
-                  <p>Cashier: Jane Doe</p>
-                </div>
-                <div class="shop-address">
-                  <p>Shop Address</p>
-                  <p>XXXXXXXXXX</p>
+                  <p>Receipt #: ${receiptId}</p>
+                  <p>Order #: ${booking.id}</p>
                 </div>
               </div>
-              <div class="receipt-divider">- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -</div>
+              <div class="receipt-divider"></div>
             </div>
             
             <div class="receipt-body">
               <div class="receipt-items-header">
-                <span class="item-description">Description</span>
+                <span class="item-image-header"></span>
+                <span class="item-name">Item</span>
+                <span class="item-qty">Qty</span>
                 <span class="item-price">Price</span>
               </div>
               
@@ -1152,50 +1195,53 @@ document.addEventListener("DOMContentLoaded", () => {
                 .map(
                   (item) => `
                 <div class="receipt-item-row">
-                  <div class="item-description">
-                    <div class="item-image-small">
-                      <img src="${item.image}" alt="${item.name}">
-                    </div>
-                    <div class="item-text">
-                      <p>${item.name}</p>
-                      <p class="item-details">Size: ${item.size.name} | Sugar: ${item.sugar.name} | Ice: ${item.ice.name}</p>
-                      ${
-                        item.toppings && item.toppings.length > 0
-                          ? `<p class="item-details">Toppings: ${item.toppings.map((t) => t.name).join(", ")}</p>`
-                          : ""
-                      }
-                      <p class="item-quantity">x${item.quantity}</p>
-                    </div>
+                  <div class="item-image-container">
+                    <img src="${item.image}" alt="${item.name}" class="item-thumbnail">
                   </div>
+                  <div class="item-name">
+                    <p class="item-title">${item.name}</p>
+                    <p class="item-details">Size: ${item.size.name} | Sugar: ${item.sugar.name} | Ice: ${item.ice.name}</p>
+                    ${
+                      item.toppings && item.toppings.length > 0
+                        ? `<p class="item-details">+ ${item.toppings.map((t) => t.name).join(", ")}</p>`
+                        : ""
+                    }
+                  </div>
+                  <div class="item-qty">${item.quantity}</div>
                   <div class="item-price">$${item.totalPrice.toFixed(2)}</div>
                 </div>
               `
                 )
                 .join("")}
               
-              <div class="receipt-divider">- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -</div>
+              <div class="receipt-divider"></div>
               
               <div class="receipt-total-section">
                 <div class="total-row">
-                  <span>Total</span>
+                  <span>Subtotal</span>
                   <span>$${booking.subtotal.toFixed(2)}</span>
                 </div>
                 <div class="total-row">
-                  <span>Tax</span>
+                  <span>Tax (8%)</span>
                   <span>$${booking.tax.toFixed(2)}</span>
                 </div>
                 <div class="total-row grand-total">
-                  <span>Grand Total</span>
+                  <span>Total</span>
                   <span>$${booking.total.toFixed(2)}</span>
+                </div>
+                <div class="payment-method-row">
+                  <span>Payment Method</span>
+                  <span>${booking.paymentMethod ? booking.paymentMethod.replace(/-/g, ' ').toUpperCase() : 'Cash'}</span>
                 </div>
               </div>
               
-              <div class="receipt-divider">- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -</div>
+              <div class="receipt-divider"></div>
               
               <div class="receipt-footer">
-                <p>Thank you for shopping!</p>
+                <p>Thank you for your purchase!</p>
+                <p>We hope to see you again soon.</p>
                 <div class="receipt-barcode">
-                  <img src="/placeholder.svg?height=50&width=200" alt="Barcode">
+                  <img src="/placeholder.svg?height=40&width=200" alt="Barcode">
                   <p>${receiptId}</p>
                 </div>
               </div>
@@ -1204,10 +1250,10 @@ document.addEventListener("DOMContentLoaded", () => {
           
           <div class="receipt-actions">
             <button class="btn-secondary print-receipt">
-              <i class="fas fa-print"></i> Print Receipt
+              <i class="fas fa-print"></i> Print
             </button>
             <button class="btn-secondary download-receipt">
-              <i class="fas fa-download"></i> Download Receipt
+              <i class="fas fa-download"></i> Download
             </button>
             <button class="btn-primary continue-order" data-id="${booking.id}">
               <i class="fas fa-check"></i> Done
@@ -1235,48 +1281,84 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Print button
     document.querySelector(".print-receipt").addEventListener("click", () => {
-      // Print the receipt
-      const receiptContent = document.querySelector(".receipt-paper");
-      const originalContents = document.body.innerHTML;
-
-      document.body.innerHTML = `
-        <div class="print-only">
-          ${receiptContent.outerHTML}
-        </div>
-      `;
-
+      // Create a printable version of the receipt
+      const printContent = document.createElement('div');
+      printContent.className = 'print-only-receipt';
+      
+      // Clone the receipt paper for printing
+      const receiptPaper = document.querySelector(".receipt-paper").cloneNode(true);
+      printContent.appendChild(receiptPaper);
+      
+      // Store the current page content
+      const originalContent = document.body.innerHTML;
+      
+      // Replace with print-friendly content
+      document.body.innerHTML = '';
+      document.body.appendChild(printContent);
+      
+      // Print
       window.print();
-
-      // Restore the page
-      document.body.innerHTML = originalContents;
-
+      
+      // Restore original content
+      document.body.innerHTML = originalContent;
+      
       // Show receipt interface again
       showReceiptInterface(bookingId);
     });
 
-    // Download button
+    // Download button - PDF version
     document.querySelector(".download-receipt").addEventListener("click", () => {
-      // Create a canvas from the receipt
-      const receiptContent = document.querySelector(".receipt-paper");
-      // Ensure html2canvas is available before using it
-      if (typeof html2canvas !== "undefined") {
-        html2canvas(receiptContent).then((canvas) => {
-          // Convert canvas to image
-          const imgData = canvas.toDataURL("image/png");
-
-          // Create download link
-          const link = document.createElement("a");
-          link.download = `Receipt-${receiptId}.png`;
-          link.href = imgData;
-          link.click();
-        });
+      // Check if jsPDF is loaded
+      if (typeof window.jspdf === "undefined") {
+        // Load jsPDF dynamically if not already loaded
+        const jsPDFScript = document.createElement("script");
+        jsPDFScript.src = "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";
+        jsPDFScript.onload = () => {
+          // Load html2canvas if not already loaded
+          if (typeof html2canvas === "undefined") {
+            const html2canvasScript = document.createElement("script");
+            html2canvasScript.src = "https://html2canvas.hertzen.com/dist/html2canvas.min.js";
+            html2canvasScript.onload = () => {
+              generatePDF();
+            };
+            html2canvasScript.onerror = () => {
+              alert("Failed to load html2canvas. Please try again or use the print option.");
+            };
+            document.head.appendChild(html2canvasScript);
+          } else {
+            generatePDF();
+          }
+        };
+        jsPDFScript.onerror = () => {
+          alert("Failed to load PDF generator. Please try again or use the print option.");
+        };
+        document.head.appendChild(jsPDFScript);
       } else {
-        console.error("html2canvas is not loaded. Please check your internet connection or script inclusion.");
-        alert("Failed to download receipt. html2canvas is not available.");
+        generatePDF();
+      }
+
+      function generatePDF() {
+        const receiptContent = document.querySelector(".receipt-paper");
+        
+        html2canvas(receiptContent).then((canvas) => {
+          const imgData = canvas.toDataURL("image/png");
+          const pdf = new window.jspdf.jsPDF({
+            orientation: "portrait",
+            unit: "mm",
+            format: "a4"
+          });
+          
+          // Calculate dimensions to fit the receipt on the PDF
+          const imgWidth = 210; // A4 width in mm (210mm)
+          const imgHeight = canvas.height * imgWidth / canvas.width;
+          
+          pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+          pdf.save(`Receipt-${receiptId}.pdf`);
+        });
       }
     });
 
-    // Continue Order button
+    // Continue Order button - Ensure it always works properly
     document.querySelector(".continue-order").addEventListener("click", function () {
       const id = this.getAttribute("data-id");
 
@@ -1286,7 +1368,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // Show thank you notification
       showThankYouNotification();
 
-      // Return to original bookings list
+      // Return to original bookings list immediately
       if (sessionStorage.getItem("originalBookingsContent")) {
         bookingsList.innerHTML = sessionStorage.getItem("originalBookingsContent");
         sessionStorage.removeItem("originalBookingsContent");
@@ -2074,9 +2156,10 @@ document.addEventListener("DOMContentLoaded", () => {
       padding: 30px;
     }
 
+    /* Enhanced Modern Receipt Styles */
     .receipt-paper {
       background-color: white;
-      border-radius: 10px;
+      border-radius: 12px;
       box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
       padding: 30px 20px;
       width: 100%;
@@ -2085,125 +2168,168 @@ document.addEventListener("DOMContentLoaded", () => {
       overflow: hidden;
     }
 
-    .receipt-paper::before,
-    .receipt-paper::after {
-      content: "";
-      position: absolute;
-      width: 100%;
-      height: 20px;
-      left: 0;
-      background-image: radial-gradient(circle, transparent 0, transparent 10px, white 10px);
-      background-size: 20px 20px;
-      background-position: 0 -10px;
-    }
-
-    .receipt-paper::before {
-      top: 0;
-    }
-
-    .receipt-paper::after {
-      bottom: 0;
-      transform: rotate(180deg);
-    }
-
     .receipt-header {
       text-align: center;
-      margin-bottom: 15px;
+      margin-bottom: 20px;
     }
 
     .receipt-header h2 {
-      font-size: 20px;
-      margin: 0 0 10px;
+      font-size: 24px;
+      margin: 0 0 15px;
       font-weight: 700;
+      color: #333;
+      letter-spacing: 1px;
+    }
+
+    .receipt-logo {
+      margin: 0 auto 15px;
+      width: 80px;
+      height: 80px;
+      background-color: #f5f5f5;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+
+    .receipt-logo img {
+      width: 80%;
+      height: 80%;
+      object-fit: contain;
     }
 
     .receipt-info {
-      display: flex;
-      justify-content: space-between;
-      font-size: 12px;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .shop-info {
+      margin: 0 auto;
+    }
+
+    .shop-info p {
+      margin: 3px 0;
+      font-size: 14px;
       color: #666;
     }
 
-    .shop-info p, .shop-address p {
-      margin: 3px 0;
+    .shop-name {
+      font-size: 16px !important;
+      font-weight: 600;
+      color: #333 !important;
     }
 
     .receipt-divider {
-      margin: 10px 0;
-      color: #999;
-      font-size: 12px;
-      text-align: center;
+      height: 1px;
+      background: linear-gradient(to right, transparent, #ddd, transparent);
+      margin: 15px 0;
     }
 
     .receipt-items-header {
-      display: flex;
-      justify-content: space-between;
+      display: grid;
+      grid-template-columns: 50px 1fr 40px 70px;
       font-weight: 600;
       margin-bottom: 10px;
       font-size: 14px;
+      color: #555;
+      padding-bottom: 5px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .item-image-header {
+      width: 50px;
     }
 
     .receipt-item-row {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 10px;
+      display: grid;
+      grid-template-columns: 50px 1fr 40px 70px;
+      margin-bottom: 12px;
       align-items: center;
+      padding-bottom: 8px;
+      border-bottom: 1px dashed #eee;
     }
 
-    .item-description {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex: 1;
+    .receipt-item-row:last-child {
+      border-bottom: none;
     }
 
-    .item-image-small {
+    .item-image-container {
       width: 40px;
       height: 40px;
-      border-radius: 5px;
+      border-radius: 8px;
       overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
 
-    .item-image-small img {
+    .item-thumbnail {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
 
-    .item-text {
-      flex: 1;
+    .item-name {
+      padding-right: 10px;
     }
 
-    .item-text p {
+    .item-title {
       margin: 0 0 3px;
       font-size: 14px;
+      font-weight: 500;
+      color: #333;
     }
 
     .item-details {
       font-size: 12px;
-      color: #666;
+      color: #777;
+      margin: 2px 0;
     }
 
-    .item-quantity {
-      font-size: 12px;
-      color: #666;
-      font-style: italic;
+    .item-qty {
+      text-align: center;
+      font-size: 14px;
+      color: #555;
+    }
+
+    .item-price {
+      text-align: right;
+      font-size: 14px;
+      font-weight: 500;
+      color: #333;
     }
 
     .receipt-total-section {
-      margin: 10px 0;
+      padding: 10px 0;
     }
 
     .total-row {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 5px;
+      margin-bottom: 8px;
       font-size: 14px;
+      color: #555;
     }
 
     .grand-total {
       font-weight: 700;
       font-size: 16px;
+      color: #333;
+      margin-top: 5px;
+    }
+
+    .grand-total span:last-child {
+      color: #ff5e62;
+    }
+
+    .payment-method-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      color: #555;
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed #eee;
     }
 
     .receipt-footer {
@@ -2212,19 +2338,19 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     .receipt-footer p {
-      margin: 0 0 10px;
+      margin: 0 0 8px;
       font-size: 14px;
+      color: #666;
     }
 
     .receipt-barcode {
-      margin: 10px auto;
-      max-width: 180px;
+      margin: 15px auto 0;
+      max-width: 200px;
     }
 
-    .receipt-barcode p {
-      font-size: 12px;
-      color: #666;
-      margin-top: 5px;
+    .receipt-barcode img {
+      width: 100%;
+      height: auto;
     }
 
     .receipt-actions {
@@ -2237,8 +2363,15 @@ document.addEventListener("DOMContentLoaded", () => {
     .receipt-actions button {
       padding: 10px 20px;
       font-size: 14px;
-      min-width: 150px;
+      min-width: 120px;
       font-weight: 500;
+    }
+
+    /* Print Styles */
+    .print-only-receipt {
+      padding: 20px;
+      max-width: 400px;
+      margin: 0 auto;
     }
 
     /* Order Success Notification */
@@ -2381,10 +2514,10 @@ document.addEventListener("DOMContentLoaded", () => {
       body * {
         visibility: hidden;
       }
-      .print-only, .print-only * {
+      .print-only-receipt, .print-only-receipt * {
         visibility: visible;
       }
-      .print-only {
+      .print-only-receipt {
         position: absolute;
         left: 0;
         top: 0;
@@ -2394,7 +2527,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     @media (max-width: 768px) {
       .payment-methods-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr 1fr;
       }
       
       .form-row {
@@ -2415,20 +2548,43 @@ document.addEventListener("DOMContentLoaded", () => {
       .receipt-actions button {
         width: 100%;
       }
+      
+      .receipt-items-header,
+      .receipt-item-row {
+        grid-template-columns: 40px 1fr 30px 60px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .payment-methods-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .receipt-paper {
+        padding: 20px 15px;
+      }
+      
+      .receipt-items-header,
+      .receipt-item-row {
+        grid-template-columns: 30px 1fr 30px 60px;
+        font-size: 13px;
+      }
+      
+      .item-details {
+        font-size: 11px;
+      }
     }
   `;
   document.head.appendChild(style);
 
+  // Add jsPDF script for PDF generation
+  const jsPDFScript = document.createElement("script");
+  jsPDFScript.src = "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";
+  document.head.appendChild(jsPDFScript);
+
   // Add html2canvas script for receipt download functionality
-  let html2canvas;
   const html2canvasScript = document.createElement("script");
   html2canvasScript.src = "https://html2canvas.hertzen.com/dist/html2canvas.min.js";
-  html2canvasScript.onload = () => {
-    html2canvas = window.html2canvas;
-  };
-  html2canvasScript.onerror = () => {
-    console.error("Failed to load html2canvas. Please check your internet connection.");
-  };
   document.head.appendChild(html2canvasScript);
 
   // Check if we need to create a booking from cart

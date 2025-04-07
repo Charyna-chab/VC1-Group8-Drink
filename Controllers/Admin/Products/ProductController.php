@@ -1,4 +1,5 @@
 <?php
+
 namespace YourNamespace\Controllers\Admin\Products;
 
 require_once './Models/ProductModel.php';
@@ -51,7 +52,7 @@ class ProductController extends BaseController
                 ];
 
                 $this->model->createProduct($data);
-                $this->redirect('/admin/products');
+                $this->redirect('/product');
             } else {
                 die("Failed to upload the image.");
             }
@@ -62,61 +63,88 @@ class ProductController extends BaseController
     {
         $product = $this->model->getProduct($id);
         if (!$product) {
-            die("Product not found.");
+            $_SESSION['error'] = "Product not found!";
+            return $this->redirect('/product');
         }
         $this->views('products/product-edit', ['product' => $product]);
     }
 
+
     public function update($id)
-    {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $image = $_POST['existing_image'];
+{
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $product = $this->model->getProduct($id);
 
-            if (!empty($_FILES['image']['name'])) {
-                $uploadDir = 'uploads/product/';
-                $imageName = basename($_FILES['image']['name']);
-                $imagePath = $uploadDir . $imageName;
+        if (!$product) {
+            $_SESSION['error'] = "Product not found!";
+            return $this->redirect('/product');
+        }
 
-                if (move_uploaded_file($_FILES['image']['tmp_name'], $imagePath)) {
-                    $image = $imagePath;
-                }
+        $product_name = $_POST['product_name'];
+        $product_detail = $_POST['product_detail'];
+        $price = $_POST['price'];
+        $category = $_POST['category'];
+        $existing_image = $_POST['existing_image'];
+
+        // Handle file upload
+        $image = $existing_image;
+        if (!empty($_FILES['image']['name'])) {
+            $upload_dir = __DIR__ . '/../public/uploads/';
+            if (!is_dir($upload_dir)) {
+                mkdir($upload_dir, 0755, true);
             }
 
-            $data = [
-                'product_name' => $_POST['product_name'],
-                'product_detail' => $_POST['product_detail'],
-                'price' => $_POST['price'],
-                'image' => $image,
-            ];
+            $filename = time() . '_' . basename($_FILES['image']['name']);
+            $target_file = $upload_dir . $filename;
 
-            $this->model->updateProduct($id, $data);
-            $this->redirect('/admin/products');
+            if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
+                $image = $filename;
+
+                // Optionally delete the old image
+                $old_image_path = $upload_dir . $existing_image;
+                if (file_exists($old_image_path) && $existing_image !== '') {
+                    unlink($old_image_path);
+                }
+            }
         }
+
+        $data = [
+            'product_name' => $product_name,
+            'product_detail' => $product_detail,
+            'price' => $price,
+            'category' => $category,
+            'image' => $image,
+        ];
+
+        $updated = $this->model->updateProduct($id, $data);
+
+        if ($updated) {
+            $_SESSION['success'] = "Product updated successfully!";
+        } else {
+            $_SESSION['error'] = "Failed to update product.";
+        }
+
+        return $this->redirect("/admin/products/edit/");
     }
 
-    public function destroy($id)
+    return $this->redirect('/product');
+}
+
+
+
+    function delete($id)
     {
-        $product = $this->model->getProduct($id);
-        if (!$product) {
-            die("Product not found.");
+        if (!is_numeric($id)) {
+            $_SESSION['error'] = 'Invalid product ID!';
+            return $this->redirect('/product');
         }
 
-        $this->model->deleteProduct($id);
-        $this->redirect('/admin/products');
-    }
-
-    public function views($views, $data = []) {
-        extract($data);
-
-        $viewPath = 'views/' . $views;
-        if (!str_ends_with($viewPath, '.php')) {
-            $viewPath .= '.php';
+        if ($this->model->deleteProduct($id)) {
+            $_SESSION['success'] = 'Product deleted successfully!';
+        } else {
+            $_SESSION['error'] = 'Failed to delete product!';
         }
 
-        if (!file_exists($viewPath)) {
-            die("View file not found: {$viewPath}. Please create this file.");
-        }
-
-        require_once $viewPath;
+        $this->redirect('/product');
     }
 }
