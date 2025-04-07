@@ -116,9 +116,16 @@ class UserController extends BaseController
         }
     }
 
-    function destroy($id)
-    {
-        $this->model->deleteUser($id);
-        $this->redirect('/admin/users');
+    function destroy()
+{
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'])) {
+        $id = $_POST['user_id'];
+        if ($this->model->deleteUser($id)) {
+            $_SESSION['success'] = 'User deleted successfully';
+        } else {
+            $_SESSION['error'] = 'Failed to delete user';
+        }
     }
+    $this->redirect('/admin/users');
+}
 }
