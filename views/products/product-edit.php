@@ -1,8 +1,8 @@
-<?php require_once('views/admin/Partials/header.php'); ?>
+<?php require_once __DIR__ . '/../admin/Partials/header.php'; ?>
 <div class="card shadow mb-4 ml-3 mr-3" style="width:50%;">
     <div class="card-body ">
         <div class="container ">
-            <form action="/admin/products/update/" method="POST" enctype="multipart/form-data">
+            <form action="/admin/products/update/<?= $product['product_id'] ?>" method="POST" enctype="multipart/form-data">
                 <input type="hidden" name="product_id" value="<?= $product['product_id'] ?>">
 
                 <div class="form-group mb-3 col">
@@ -12,8 +12,7 @@
 
                 <div class="form-group mb-3 col">
                     <label for="product_detail" class="form-label">Product Detail:</label>
-                    <input type="text" value="<?= $product['product_detail'] ?>" name="product_detail"
-                        class="form-control">
+                    <input type="text" value="<?= $product['product_detail'] ?>" name="product_detail" class="form-control">
                 </div>
 
                 <div class="form-group mb-3 col">

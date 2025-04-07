@@ -1,6 +1,5 @@
 <?php
-namespace YourNamespace\Controllers;
-
+namespace YourNamespace\Controllers\Admin\Users;
 require_once './controllers/BaseController.php'; // Correct path to BaseController.php
 require_once './Models/UserModel.php';
 
@@ -36,6 +35,7 @@ class UserController extends BaseController
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $data = [
+                'image' => $_POST['image'],
                 'name' => $_POST['name'],
                 'phone' => $_POST['phone'],
                 'email' => $_POST['email'],
@@ -67,6 +67,7 @@ class UserController extends BaseController
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $data = [
+                'image' => $_POST['image'],
                 'name' => $_POST['name'],
                 'phone' => $_POST['phone'],
                 'email' => $_POST['email'],
