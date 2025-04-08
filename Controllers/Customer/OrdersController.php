@@ -28,7 +28,7 @@ class OrdersController extends BaseController
         }, $this->productModel->getProducts());
 
 
-        $toppings = [
+        $toppings =  [
             [
                 'id' => 1,
                 'name' => 'Boba Pearls',
