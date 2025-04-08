@@ -1,7 +1,10 @@
 <?php
-// Start session if not already started
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
+}
+if (isset($_SESSION['user_id'])) {
+    header("Location: /dashboard");
+    exit();
 }
 ?>
 <!DOCTYPE html>
@@ -9,12 +12,16 @@ if (session_status() == PHP_SESSION_NONE) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><?php echo isset($title) ? $title : 'Register - XING FU CHA'; ?></title>
+  <title><?php echo isset($title) ? htmlspecialchars($title) : 'Register - XING FU CHA'; ?></title>
   <link rel="icon" type="image/png" href="/assets/image/logo/logo.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
   <link rel="stylesheet" href="/assets/css/style.css">
   <link rel="stylesheet" href="/assets/css/auth.css">
+  <!-- Prevent caching -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
 </head>
 <body>
   <div class="main-container">
@@ -31,7 +38,7 @@ if (session_status() == PHP_SESSION_NONE) {
         <?php if(isset($error)): ?>
           <div class="auth-error">
             <i class="fas fa-exclamation-circle"></i>
-            <span><?php echo $error; ?></span>
+            <span><?php echo htmlspecialchars($error); ?></span>
           </div>
         <?php endif; ?>
 
@@ -95,7 +102,6 @@ if (session_status() == PHP_SESSION_NONE) {
 
           <button type="submit" class="auth-button">Create Account</button>
 
-
           <div class="social-buttons">
             <button type="button" class="social-button google">
               <i class="fab fa-google"></i>
@@ -115,6 +121,21 @@ if (session_status() == PHP_SESSION_NONE) {
     </div>
   </div>
 
-  <script src="/assets/js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Toggle password visibility
+        const togglePasswordButtons = document.querySelectorAll('.toggle-password');
+        
+        togglePasswordButtons.forEach(function(button) {
+            button.addEventListener('click', function() {
+                const passwordField = this.previousElementSibling;
+                const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordField.setAttribute('type', type);
+                this.classList.toggle('fa-eye-slash');
+                this.classList.toggle('fa-eye');
+            });
+        });
+    });
+  </script>
 </body>
 </html>
