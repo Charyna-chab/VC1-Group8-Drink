@@ -30,6 +30,7 @@ if (isset($_COOKIE['user_token'])) {
 if (isset($_COOKIE['admin_ID'])) {
     setcookie('admin_ID', '', time() - 3600, '/');
 }
+// Clear user-specific
 if (isset($_COOKIE['user_id'])) {
     setcookie('user_id', '', time() - 3600, '/');
 }
