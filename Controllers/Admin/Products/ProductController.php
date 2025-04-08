@@ -30,6 +30,7 @@ class ProductController extends BaseController
     public function create()
     {
         $this->views('products/product-create');
+        
     }
 
     public function store()
@@ -124,10 +125,10 @@ class ProductController extends BaseController
             $_SESSION['error'] = "Failed to update product.";
         }
 
-        return $this->redirect("/admin/products/edit/");
+        return $this->redirect('/product');
     }
 
-    return $this->redirect('/product');
+    
 }
 
 
