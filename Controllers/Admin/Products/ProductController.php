@@ -148,4 +148,20 @@ class ProductController extends BaseController
 
         $this->redirect('/product');
     }
+
+    public function destroy($id)
+    {
+        if (!is_numeric($id)) {
+            $_SESSION['error'] = 'Invalid product ID!';
+            return $this->redirect('/product');
+        }
+
+        if ($this->model->deleteProduct($id)) {
+            $_SESSION['success'] = 'Product deleted successfully!';
+        } else {
+            $_SESSION['error'] = 'Failed to delete product!';
+        }
+
+        $this->redirect('/product');
+    }
 }
