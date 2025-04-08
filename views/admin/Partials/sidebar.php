@@ -15,7 +15,7 @@
     <li class="nav-item active" style="background: #ff5e62">
         <a class="nav-link" href="/admin-dashboard" style="color: white !important;">
             <i class="fas fa-fw fa-tachometer-alt" style="color: white !important;"></i>
-            <span>Dashboard</span>
+            <span style="color: white !important;">Dashboard</span>
         </a>
     </li>
 
@@ -25,7 +25,7 @@
     <!-- Nav Item - Customers -->
     <li class="nav-item">
         <a class="nav-link collapsed" href="/admin/users">
-            <i class="fa fa-user" aria-hidden="true"></i>
+            <i class="fa fa-user" aria-hidden="true" style="color: black !important;"></i>
             <span>Customers</span>
         </a>
     </li>
@@ -37,7 +37,7 @@
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
             aria-expanded="true" aria-controls="collapseTwo">
-            <i class="fas fa-fw fa-folder"></i>
+            <i class="fas fa-fw fa-folder" style="color: black !important;"></i>
             <span>Products</span>
         </a>
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
@@ -50,7 +50,7 @@
     <hr class="sidebar-divider">
     <li class="nav-item">
         <a class="nav-link collapsed" href="/order">
-            <i class="fas fa-shopping-cart"></i>
+            <i class="fas fa-shopping-cart" style="color: black !important;"></i>
             <span>Orders</span>
         </a>
     </li>
@@ -61,7 +61,7 @@
     <!-- Nav Item - Receipts -->
     <li class="nav-item">
         <a class="nav-link collapsed" href="/receipt">
-            <i class="fas fa-receipt"></i>
+            <i class="fas fa-receipt" style="color: black !important;"></i>
             <span>Receipts</span>
         </a>
     </li>
@@ -72,14 +72,14 @@
     <!-- Nav Item - Feedback -->
     <li class="nav-item">
         <a class="nav-link" href="/admin/feedback">
-            <i class="fas fa-comment-alt feedback-icon"></i>
+            <i class="fas fa-comment-alt feedback-icon" style="color: black !important;"></i>
             <span>Feedback</span></a>
     </li>
 
     <!-- Nav Item - Order List -->
     <li class="nav-item">
         <a class="nav-link" href="/admin/order-list">
-            <i class="fas fa-list order-list-icon"></i>
+            <i class="fas fa-list order-list-icon" style="color: black !important;"></i>
             <span>Order List</span>
         </a>
     </li>
@@ -92,7 +92,7 @@
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
             aria-expanded="true" aria-controls="collapsePages">
-            <i class="fas fa-cogs setting-icon"></i>
+            <i class="fas fa-cogs setting-icon" style="color: black !important;"></i>
             <span>Settings</span>
         </a>
         <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
