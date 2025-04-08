@@ -6387,22 +6387,36 @@ p {
 
 </style>
 <header>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+  <div class="mobile-menu-icon">
+    <i class="fas fa-bars" id="menuToggle"></i>
+  </div>
 
-    <img src="/assets/image/logo/logo.png" alt="XING FU CHA Logo">
-    <nav>
-        <ul>
-            <li><a href="/gift-card">Gift Card</a></li>
-            <li><a href="/locations">Locations</a></li>
-            <li><a href="/join-the-team">Join The Team</a></li>
-        </ul>
-    </nav>
+  <img src="/assets/image/logo/logo.png" alt="XING FU CHA Logo" class="logo">
 
-    <div class="auth-buttons">
-        <button class="sign-in-button" onclick="window.location.href='/login'">Sign In</button>
-        <button class="sign-out-button" onclick="window.location.href='/register'">Sign Out</button>
-    </div>
+  <nav id="navLinks">
+    <ul>
+      <li><a href="/gift-card">Gift Card</a></li>
+      <li><a href="/locations">Locations</a></li>
+      <li><a href="/join-the-team">Join The Team</a></li>
+    </ul>
+  </nav>
+
+  <div class="auth-buttons">
+    <button class="sign-in-button" onclick="window.location.href='/login'">Sign In</button>
+    <button class="sign-out-button" onclick="window.location.href='/register'">Sign Out</button>
+  </div>
 </header>
+
+<!-- Sidebar for Mobile -->
+<div id="mobileSidebar" class="mobile-sidebar">
+  <ul>
+    <li><a href="/gift-card">Gift Card</a></li>
+    <li><a href="/locations">Locations</a></li>
+    <li><a href="/join-the-team">Join The Team</a></li>
+  </ul>
+</div>
+
+
 <section class="content-welcome">
     
     <!-- Hero Section -->
@@ -6610,5 +6624,26 @@ p {
 
 <!-- Notification Toast -->
 <div class="toast-container" id="toastContainer"></div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const menuToggle = document.getElementById('menuToggle');
+    const navLinks = document.getElementById('navLinks');
+    const authButtons = document.querySelector('.auth-buttons');
+    
+    menuToggle.addEventListener('click', function() {
+        navLinks.classList.toggle('show');
+        authButtons.classList.toggle('show');
+    });
+    
+    // Close mobile menu when clicking on a link
+    const navItems = document.querySelectorAll('#navLinks a');
+    navItems.forEach(item => {
+        item.addEventListener('click', function() {
+            navLinks.classList.remove('show');
+            authButtons.classList.remove('show');
+        });
+    });
+});
+  </script>
 
 <script src="/assets/js/welcome.js"></script>

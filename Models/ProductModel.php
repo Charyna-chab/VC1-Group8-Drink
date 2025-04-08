@@ -43,11 +43,26 @@ class ProductModel
 
     public function updateProduct($id, $data)
     {
-        $query = "UPDATE products SET product_name = :product_name, product_detail = :product_detail, price = :price, image = :image WHERE product_id = :product_id";
-        $stmt = $this->pdo->prepare($query);
-        $data['product_id'] = $id;
-        return $stmt->execute($data);
+        $sql = "UPDATE products SET 
+                    product_name = :product_name,
+                    product_detail = :product_detail,
+                    price = :price,
+                    category = :category,
+                    image = :image
+                WHERE product_id = :id";
+    
+        $stmt = $this->pdo->prepare($sql); // <-- Use $this->pdo, not $this->db
+        return $stmt->execute([
+            ':product_name' => $data['product_name'],
+            ':product_detail' => $data['product_detail'],
+            ':price' => $data['price'],
+            ':category' => $data['category'],
+            ':image' => $data['image'],
+            ':id' => $id
+        ]);
     }
+    
+    
 
     public function deleteProduct($id)
     {

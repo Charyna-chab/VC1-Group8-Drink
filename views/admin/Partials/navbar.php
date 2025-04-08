@@ -158,6 +158,13 @@
                     </div>
                 </li>
 
+                <li class="nav-item dropdown no-arrow">
+                <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-shopping-cart"></i>
+                    </a>
+                </li>
+
                 <div class="topbar-divider d-none d-sm-block"></div>
 
                 <!-- Nav Item - User Information -->
@@ -337,36 +344,42 @@
         </style>
         <style>
             /* Make topbar icons black */
-            .navbar .fas, .navbar .fa {
-                color:rgb(41, 33, 33); /* Bootstrap's default dark color */
+            .navbar .fas,
+            .navbar .fa {
+                color: rgb(41, 33, 33);
+                /* Bootstrap's default dark color */
             }
-            
-            /* Make sidebar icons pink */
-            .sidebar .fas, .sidebar .fa {
-                color:rgb(255, 0, 128); /* Hot pink color */
-            }
-            .sidebar .fas, .sidebar .fa-fw{
 
-            /* Make sure sidebar text is dark */
-            .sidebar .nav-item .nav-link span {
-                color:rgb(41, 33, 35);
+            /* Make sidebar icons pink */
+            .sidebar .fas,
+            .sidebar .fa {
+                color: rgb(255, 0, 128);
+                /* Hot pink color */
             }
-            
-            /* Update sidebar-divider color for better visibility on white background */
-            .sidebar-divider {
-                border-top: 1px solid rgba(0, 0, 0, 0.1);
-            }
-            
-            /* Ensure active items have proper styling */
-            .sidebar .nav-item.active .nav-link {
-                color: #4e73df;
-            }
-            
-            /* Fix any remaining light text */
-            .text-light {
-                color: #212529 !important;
-            }
+
+            .sidebar .fas,
+            .sidebar .fa-fw {
+
+                /* Make sure sidebar text is dark */
+                .sidebar .nav-item .nav-link span {
+                    color: rgb(41, 33, 35);
+                }
+
+                /* Update sidebar-divider color for better visibility on white background */
+                .sidebar-divider {
+                    border-top: 1px solid rgba(0, 0, 0, 0.1);
+                }
+
+                /* Ensure active items have proper styling */
+                .sidebar .nav-item.active .nav-link {
+                    color: #4e73df;
+                }
+
+                /* Fix any remaining light text */
+                .text-light {
+                    color: #212529 !important;
+                }
         </style>
-        
+
         <!-- End of Topbar -->
         <?php '../layout/footer.php' ?>

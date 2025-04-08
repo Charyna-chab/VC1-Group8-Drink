@@ -1,95 +1,84 @@
-<!DOCTYPE html>
-<html lang="en">
+<link rel="stylesheet" href="/assets/css/sidebar.css">
+<style>
+    body {
+        padding-top: 0;
+        overflow-x: hidden;
+    }
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo isset($title) ? $title : 'User List'; ?></title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/assets/css/sb-admin-2.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/style.css">
+    #wrapper {
+        display: flex;
+        width: 100%;
+        align-items: stretch;
+    }
 
-    <style>
-        body {
-            padding-top: 0;
-            overflow-x: hidden;
-        }
+    .main-content {
+        width: 100%;
+        padding: 20px;
+        margin-left: 250px;
+        /* Adjust this to match your sidebar width */
+        transition: all 0.3s;
+    }
 
-        #wrapper {
-            display: flex;
-            width: 100%;
-            align-items: stretch;
-        }
+    .card {
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
 
+    .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #fff;
+        border-bottom: 1px solid #e3e6f0;
+        padding: 1.25rem 1.5rem;
+    }
+
+    .search-container {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .search-input {
+        width: 300px;
+    }
+
+    .user-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .badge-admin {
+        background-color: #4e73df;
+        color: white;
+    }
+
+    .badge-user {
+        background-color: #1cc88a;
+        color: white;
+    }
+
+    @media (max-width: 768px) {
         .main-content {
-            width: 100%;
-            padding: 20px;
-            margin-left: 250px;
-            /* Adjust this to match your sidebar width */
-            transition: all 0.3s;
-        }
-
-        .card {
-            border: none;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #fff;
-            border-bottom: 1px solid #e3e6f0;
-            padding: 1.25rem 1.5rem;
+            margin-left: 0;
         }
 
         .search-container {
-            display: flex;
-            align-items: center;
-            gap: 15px;
+            flex-direction: column;
+            align-items: flex-start;
+            width: 100%;
         }
 
         .search-input {
-            width: 300px;
+            width: 100%;
         }
+    }
+</style>
 
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .badge-admin {
-            background-color: #4e73df;
-            color: white;
-        }
-
-        .badge-user {
-            background-color: #1cc88a;
-            color: white;
-        }
-
-        @media (max-width: 768px) {
-            .main-content {
-                margin-left: 0;
-            }
-
-            .search-container {
-                flex-direction: column;
-                align-items: flex-start;
-                width: 100%;
-            }
-
-            .search-input {
-                width: 100%;
-            }
-        }
-    </style>
-</head>
+<?php require './views/admin/Partials/header.php' ?>
 
 <body>
     <div id="wrapper">
@@ -158,7 +147,7 @@
                                                             <?php endif; ?>
                                                         </div>
                                                     </td>
-                                                    <td><?php echo htmlspecialchars($user['name']); ?></td>
+                                                    <td class="user-name"><?php echo htmlspecialchars($user['name']); ?></td>
                                                     <td><?php echo htmlspecialchars($user['email']); ?></td>
                                                     <td><?php echo htmlspecialchars($user['phone'] ?? 'N/A'); ?></td>
                                                     <td>
@@ -167,10 +156,34 @@
                                                         </span>
                                                     </td>
                                                     <td><?php echo htmlspecialchars($user['address'] ?? 'N/A'); ?></td>
-                                                    <td><button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#users<?= $user['user_id'] ?>">Delete</button>
-                                                        <!-- Modal -->
-                                                        <?php include 'delete.php' ?></td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#users<?= $user['user_id'] ?>">
+                                                            Delete
+                                                        </button>
+                                                    </td>
                                                 </tr>
+
+                                                <!-- Place the modal HTML right here, after the closing </tr> tag -->
+                                                <div class="modal fade" id="users<?= $user['user_id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLabel">Delete User</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                Are you sure you want to delete <?= htmlspecialchars($user['name']) ?>?
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <form action="/admin/users/delete" method="POST">
+                                                                    <input type="hidden" name="user_id" value="<?= $user['user_id'] ?>">
+                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             <?php endforeach; ?>
                                         <?php endif; ?>
                                     </tbody>
@@ -193,21 +206,36 @@
             });
 
             $('#searchInput').keyup(function(e) {
-                if (e.keyCode === 13) {
-                    filterTable();
-                }
+                filterTable();
             });
 
             function filterTable() {
-                const value = $('#searchInput').val().toLowerCase();
-                $('#userTable tbody tr').filter(function() {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                const searchTerm = $('#searchInput').val().toLowerCase().trim();
+                
+                if (searchTerm === '') {
+                    // Show all rows if search is empty
+                    $('#userTable tbody tr').show();
+                    return;
+                }
+                
+                $('#userTable tbody tr').each(function() {
+                    const $row = $(this);
+                    const userName = $row.find('.user-name').text().toLowerCase();
+                    
+                    // Check if the name contains the search term
+                    if (userName.includes(searchTerm)) {
+                        $row.show();
+                        
+                        // If the name matches exactly, move it to the top
+                        if (userName === searchTerm) {
+                            $row.prependTo($('#userTable tbody'));
+                        }
+                    } else {
+                        $row.hide();
+                    }
                 });
             }
         });
     </script>
-
-
 </body>
-
 </html>

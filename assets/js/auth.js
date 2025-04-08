@@ -59,3 +59,45 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+// verification.js
+document.addEventListener('DOMContentLoaded', function() {
+    const verificationInput = document.getElementById('verification_code');
+
+    if (verificationInput) {
+        // Auto focus on verification code input
+        verificationInput.focus();
+
+        // Format verification code input to only accept numbers
+        verificationInput.addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^0-9]/g, '');
+
+            // Auto-submit when 6 digits are entered
+            if (this.value.length === 6) {
+                document.querySelector('.auth-form').submit();
+            }
+        });
+
+        // Add countdown timer for code expiration
+        const timerElement = document.getElementById('verification-timer');
+        if (timerElement) {
+            let timeLeft = 600; // 10 minutes in seconds
+
+            const updateTimer = function() {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    timerElement.textContent = 'Expired';
+                    timerElement.classList.add('text-danger');
+                }
+
+                timeLeft--;
+            };
+
+            updateTimer();
+            const timerInterval = setInterval(updateTimer, 1000);
+        }
+    }
+});
