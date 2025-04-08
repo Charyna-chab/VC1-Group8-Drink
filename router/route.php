@@ -1,4 +1,6 @@
 <?php
+// File: router/route.php
+
 namespace YourNamespace;
 
 require_once __DIR__ . "/Router.php";  // Ensure the correct path
@@ -23,12 +25,12 @@ require_once __DIR__ . '/../controllers/Admin/Users/UserController.php';
 require_once './controllers/Admin/Products/ProductController.php';
 require_once "./controllers/Admin/DashboardController.php";
 // require_once __DIR__ . '/../controllers/Admin/Receipts/AdminReceiptController.php';
-require_once "controllers/OrderListController.php";
+require_once "controllers/OrderListController.php";  // Make sure this path is correct
 
 
 use YourNamespace\Router;
 use YourNamespace\Controllers\WelcomeController;
-use YourNamespace\Controllers\OrderListController;
+use YourNamespace\Controllers\OrderListController;  // Add this line
 use YourNamespace\Controllers\BookingController;
 use YourNamespace\Controllers\FavoritesController;
 use YourNamespace\Controllers\SettingsController;
@@ -127,18 +129,13 @@ $route->get("/admin/products/edit/{id}", [ProductController::class, 'edit']);
 $route->post("/admin/products/update/{id}", [ProductController::class, 'update']);
 $route->post("/admin/products/delete/{id}", [ProductController::class, 'delete']);
 
-
-
 // Fix the user routes to match your controller's expectations
-
 $route->get("/admin/users", [UserController::class, 'index']);
 $route->get("/admin/users/create", [UserController::class, 'create']);
 $route->post("/admin/users/store", [UserController::class, 'store']);
 $route->get("/admin/users/edit/{id}", [UserController::class, 'edit']);
 $route->post("/admin/users/update/{id}", [UserController::class, 'update']);
-
 $route->post("/admin/users/delete/{id}", [UserController::class, 'destroy']);
-
 
 // Admin Feedback
 $route->get("/admin/feedback", [FeedbackController::class, 'index']);
@@ -149,12 +146,16 @@ $route->post("/admin/feedback/update/{id}", [FeedbackController::class, 'update'
 $route->post("/admin/feedback/delete/{id}", [FeedbackController::class, 'delete']);
 
 // Order List
-$route->get("/admin/order-list", [OrderListController::class, 'index']);
-$route->get("/admin/order/create", [OrderListController::class, 'create']);
-$route->post("/admin/order/store", [OrderListController::class, 'store']);
-$route->get("/admin/order/edit/{id}", [OrderListController::class, 'edit']);
-$route->post("/admin/order/update", [OrderListController::class, 'update']);
-$route->post("/admin/order/delete", [OrderListController::class, 'delete']);
+// ============================
+//  Admin Order List Routes
+// ============================
+$route->get("/admin/order-list", [OrderListController::class, 'index']);          // List all orders
+$route->get("/admin/order/create", [OrderListController::class, 'create']);       // Show create form
+$route->post("/admin/order/store", [OrderListController::class, 'store']);        // Handle create
+$route->get("/admin/order/edit/{id}", [OrderListController::class, 'edit']);      // Show edit form
+$route->post("/admin/order/update/{id}", [OrderListController::class, 'update']); // Handle update
+$route->post("/admin/order/delete/{id}", [OrderListController::class, 'delete']); // Delete by ID
+$route->get("/admin/order/details/{id}", [OrderListController::class, 'details']); // Optional: View order details
 
 // Admin Dashboard route
 $route->get("/admin-dashboard", [DashboardController::class, 'index']);
