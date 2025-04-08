@@ -45,7 +45,7 @@
                     <div class="product-price">$<?php echo number_format($product['price'], 2); ?></div>
                 </div>
                 <div class="product-actions">
-                    <button class="order-btn" data-product-id="<?php echo $product['id']; ?>">Order Now</button>
+                    <button class="order-btn" data-product-id="order.php?product_id=<?php echo $product['id']; ?>">Order Now</button>
                 </div>
             </div>
             <?php endforeach; ?>
