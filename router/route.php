@@ -1,4 +1,6 @@
 <?php
+// File: router/route.php
+
 namespace YourNamespace;
 
 require_once "Router.php";
@@ -28,6 +30,7 @@ require_once "controllers/ProfileController.php"; // Add this line for ProfileCo
 
 use YourNamespace\Router;
 use YourNamespace\Controllers\WelcomeController;
+use YourNamespace\Controllers\OrderListController;  // Add this line
 use YourNamespace\Controllers\OrdersController;
 use YourNamespace\Controllers\BookingController;
 use YourNamespace\Controllers\FavoritesController;
@@ -152,6 +155,9 @@ $route->get("/admin/products/create", [ProductController::class, 'create']);
 $route->post("/admin/products/store", [ProductController::class, 'store']);
 $route->get("/admin/products/edit/{id}", [ProductController::class, 'edit']);
 $route->post("/admin/products/update/{id}", [ProductController::class, 'update']);
+$route->post("/admin/products/delete/{id}", [ProductController::class, 'delete']);
+
+// Fix the user routes to match your controller's expectations
 $route->post("/admin/products/delete/{id}", [ProductController::class, 'destroy']);
 
 // Admin User Management
@@ -160,6 +166,9 @@ $route->get("/admin/users/create", [UserController::class, 'create']);
 $route->post("/admin/users/store", [UserController::class, 'store']);
 $route->get("/admin/users/edit/{id}", [UserController::class, 'edit']);
 $route->post("/admin/users/update/{id}", [UserController::class, 'update']);
+$route->post("/admin/users/delete/{id}", [UserController::class, 'destroy']);
+
+// Admin Feedback
 $route->post("/admin/users/delete", [UserController::class, 'destroy']);
 
 // Admin Feedback Management
