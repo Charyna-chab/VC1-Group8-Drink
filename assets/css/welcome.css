@@ -29,7 +29,18 @@
     z-index: 1;
     max-width: 600px;
 }
-
+.team-intro{
+    position: relative;
+    bottom: 1150px;
+}
+.why-join{
+    position: relative;
+    bottom: 1150px;
+}
+.team-values{
+    position: relative;
+    bottom: 1150px;
+}
 .discount-banner img {
     position: absolute;
     top: 0;
