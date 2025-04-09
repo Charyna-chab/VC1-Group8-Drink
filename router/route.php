@@ -196,6 +196,4 @@ $route->post("/admin/orders/update-status/{id}", [OrderListController::class, 'u
 $route->post("/admin/orders/delete/{id}", [OrderListController::class, 'delete']);
 $route->get("/admin/orders/export-csv", [OrderListController::class, 'exportCSV']); // New route for CSV export
 
-
-
 $route->route();
