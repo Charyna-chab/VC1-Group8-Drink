@@ -1,9 +1,19 @@
+<?php
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+// If already logged in as admin, redirect to dashboard
+if (isset($_SESSION['user_id']) && isset($_SESSION['user']['role']) && $_SESSION['user']['role'] === 'admin') {
+    header("Location: /admin-dashboard");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><?php echo isset($title) ? $title : 'Admin Login - XING FU CHA'; ?></title>
+  <title><?php echo isset($title) ? htmlspecialchars($title) : 'Admin Login - XING FU CHA'; ?></title>
   <link rel="icon" type="image/png" href="/assets/image/logo/logo.png">
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -11,6 +21,10 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Prevent caching -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <style>
     body {
       font-family: 'Poppins', sans-serif;
@@ -190,7 +204,7 @@
       <?php if(isset($error)): ?>
         <div class="alert alert-danger d-flex align-items-center mb-3 py-2"> <!-- Smaller alert -->
           <i class="fas fa-exclamation-circle me-2"></i>
-          <span><?php echo $error; ?></span>
+          <span><?php echo htmlspecialchars($error); ?></span>
         </div>
       <?php endif; ?>
 
@@ -253,4 +267,3 @@
   </script>
 </body>
 </html>
-
