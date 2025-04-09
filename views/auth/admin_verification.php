@@ -1,3 +1,18 @@
+<?php
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+// If already logged in as admin, redirect to dashboard
+if (isset($_SESSION['user_id']) && isset($_SESSION['user']['role']) && $_SESSION['user']['role'] === 'admin') {
+    header("Location: /admin-dashboard");
+    exit();
+}
+// If verification data is not set, redirect to admin login
+if (!isset($_SESSION['admin_email']) || !isset($_SESSION['verification_code'])) {
+    header("Location: /admin-login");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,6 +24,10 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
   <link rel="stylesheet" href="/assets/css/style.css">
   <link rel="stylesheet" href="/assets/css/auth.css">
+  <!-- Prevent caching -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <style>
     body {
       margin: 0;
@@ -148,7 +167,6 @@
       left: 0;
       right: 0;
       bottom: 0;
-     
       z-index: 1;
     }
     .auth-error {
@@ -223,6 +241,7 @@
             }
           ?>
           <p class="small">Please check your inbox and spam folder</p>
+          <p class="small">Code expires in: <span id="verification-timer" class="fw-bold">10:00</span></p>
         </div>
 
         <form action="/admin-verification" method="post" class="auth-form">
@@ -253,22 +272,41 @@
       </div>
     </div>
   </div>
-<!-- Add this inside the email-sent-info div -->
-<p class="small">Code expires in: <span id="verification-timer" class="fw-bold">10:00</span></p>
 
-<!-- Add this at the bottom of the file, before the closing </body> tag -->
-<script src="/assets/js/verification.js"></script>
   <script>
     // Auto focus on verification code input
     document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('verification_code').focus();
-    });
-
-    // Format verification code input to only accept numbers
-    document.getElementById('verification_code').addEventListener('input', function(e) {
-      this.value = this.value.replace(/[^0-9]/g, '');
+      
+      // Format verification code input to only accept numbers
+      document.getElementById('verification_code').addEventListener('input', function(e) {
+        this.value = this.value.replace(/[^0-9]/g, '');
+      });
+      
+      // Countdown timer
+      let timeLeft = 600; // 10 minutes in seconds
+      const timerElement = document.getElementById('verification-timer');
+      
+      const countdownTimer = setInterval(function() {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        
+        timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        
+        if (timeLeft <= 0) {
+          clearInterval(countdownTimer);
+          timerElement.textContent = "Expired";
+          timerElement.style.color = "#d32f2f";
+          
+          // Redirect to login after expiration
+          setTimeout(function() {
+            window.location.href = "/admin-login";
+          }, 3000);
+        }
+        
+        timeLeft--;
+      }, 1000);
     });
   </script>
 </body>
 </html>
-

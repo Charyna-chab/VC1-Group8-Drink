@@ -163,6 +163,7 @@ $route->post("/admin/users/update/{id}", [UserController::class, 'update']);
 $route->post("/admin/users/delete", [UserController::class, 'destroy']);// Changed from 'delete' to 'destroy' to match your controller
 
 
+
 // Admin Feedback Management
 $route->get("/admin/feedback", [FeedbackController::class, 'index']);
 $route->get("/admin/feedback/create", [FeedbackController::class, 'create']);

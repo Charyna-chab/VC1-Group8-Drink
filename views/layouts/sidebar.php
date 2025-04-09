@@ -8,13 +8,13 @@
 
         <!-- Navigation Menu -->
         <ul class="nav-list">
-            <li><a href="/order"><i class="fas fa-mug-hot" style="color: #ff5e62;"></i> Order drink</a></li>
-            <li><a href="/booking"><i class="fas fa-calendar-check" style="color: #ff5e62;"></i> Booking</a></li>
-            <li><a href="/favorites"><i class="fas fa-heart" style="color: #ff5e62;"></i> Favorite</a></li>
-            <li><a href="/feedback"><i class="fas fa-comment-alt" style="color: #ff5e62;"></i> Feedback</a></li>
+            <li style="margin-bottom: 16px;"><a href="/order"><i class="fas fa-mug-hot" style="color: #ff5e62;"></i> Order drink</a></li>
+            <li style="margin-bottom: 16px;"><a href="/booking"><i class="fas fa-calendar-check" style="color: #ff5e62;"></i> Booking</a></li>
+            <li style="margin-bottom: 16px;"><a href="/favorites"><i class="fas fa-heart" style="color: #ff5e62;"></i> Favorite</a></li>
+            <li style="margin-bottom: 16px;"><a href="/feedback"><i class="fas fa-comment-alt" style="color: #ff5e62;"></i> Feedback</a></li>
             
             <!-- Settings Item with Role Info -->
-            <li class="settings-item">
+            <li class="settings-item" style="margin-bottom: 16px;">
                 <a href="#" class="settings-trigger">
                     <i class="fas fa-user-cog" style="color: #ff5e62;"></i> Account
                     <i class="fas fa-chevron-down arrow" style="color: #ff5e62;"></i>
@@ -64,7 +64,7 @@
         z-index: 1000;
         display: flex;
         flex-direction: column;
-        padding: 20px 0;
+        padding: 30px 0;
         transition: transform 0.3s ease;
     }
 
@@ -72,19 +72,28 @@
         display: flex;
         flex-direction: column;
         height: 100%;
-        padding: 0 20px;
+        padding: 0 30px;
     }
 
     .branch-order-sidebar {
         text-align: center;
-        margin-bottom: 25px;
+        margin-bottom: 55px;
     }
-
+    .sidebar .nav-list a {
+        margin-bottom:20px;
+        position: relative;
+        bottom: 40px;
+        
+    }
     .branch-logo {
         width: 100px;
         height: auto;
         border-radius: 8px;
         transition: transform 0.3s ease;
+        position: relative;
+        left:30px;
+        
+  
     }
 
     .branch-logo:hover {
@@ -97,10 +106,11 @@
         padding: 0;
         margin: 0;
         flex-grow: 1;
+        
     }
 
     .nav-list li {
-        margin-bottom: 8px;
+        margin-bottom: 16px; /* Changed from 8px to 16px */
     }
 
     .nav-list a {
@@ -129,6 +139,7 @@
     /* Settings Item Styles */
     .settings-item {
         position: relative;
+      
     }
 
     .settings-trigger {
@@ -151,6 +162,8 @@
         border: 1px solid #ffd6d6;
         border-top: none;
         animation: fadeIn 0.3s ease;
+        position: relative;
+          bottom:40px;
     }
 
     .settings-item.active .settings-dropdown {
@@ -342,4 +355,4 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
-</script>
+</script> 
