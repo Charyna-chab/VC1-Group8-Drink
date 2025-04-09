@@ -106,13 +106,16 @@ class AuthController extends BaseController
                             $error = 'Admin users must login through the admin login page.';
                         } else {
                             // Set session variables for regular user
-                            // In your login method, after successful authentication:
                             $_SESSION['user_id'] = $user['user_id'];
+                            
+                            // Prepare the avatar URL
+                            $avatarUrl = !empty($user['image']) ? '/' . $user['image'] : '/assets/image/placeholder.svg?height=40&width=40';
+                            
                             $_SESSION['user'] = [
                                 'id' => $user['user_id'],
                                 'name' => $user['name'],
                                 'email' => $user['email'],
-                                'avatar' => $user['image'] ? 'data:image/jpeg;base64,' . base64_encode($user['image']) : '/assets/image/placeholder.svg?height=40&width=40',
+                                'avatar' => $avatarUrl,
                                 'role' => $user['role'],
                                 'phone' => $user['phone'] ?? '',
                                 'address' => $user['address'] ?? ''
@@ -246,40 +249,43 @@ class AuthController extends BaseController
             if ($email === $this->admin_email) {
                 try {
                     // Check if admin exists in database
-                    $stmt = $this->conn->prepare("SELECT user_id, name, email, password FROM users WHERE email = :email AND role = 'admin'");
+                    $stmt = $this->conn->prepare("SELECT user_id, name, email, password, image FROM users WHERE email = :email AND role = 'admin'");
                     $stmt->bindParam(':email', $email);
                     $stmt->execute();
 
                     if ($stmt->rowCount() > 0) {
                         $admin = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-                        // Verify password
-                        if ($password === $admin['password']) {
-                            // Generate verification code
-                            $verification_code = rand(100000, 999999);
+                            // Verify password
+                            if ($password === $admin['password']) {
+                                // Generate verification code
+                                $verification_code = rand(100000, 999999);
 
-                            // Store verification data in session
-                            $_SESSION['admin_email'] = $email;
-                            $_SESSION['admin_id'] = $admin['user_id'];
-                            $_SESSION['admin_name'] = $admin['name'];
-                            $_SESSION['verification_code'] = $verification_code;
-                            $_SESSION['verification_time'] = time();
+                                // Store verification data in session
+                                $_SESSION['admin_email'] = $email;
+                                $_SESSION['admin_id'] = $admin['user_id'];
+                                $_SESSION['admin_name'] = $admin['name'];
+                                $_SESSION['verification_code'] = $verification_code;
+                                $_SESSION['verification_time'] = time();
 
-                            // For development purposes, store the code in session
-                            // This will allow login without email in case email sending fails
-                            $_SESSION['demo_code'] = $verification_code;
+                                // Prepare admin avatar URL
+                                $avatarUrl = !empty($admin['image']) ? '/' . $admin['image'] : '/assets/image/placeholder.svg?height=40&width=40';
 
-                            // Try to send verification code via email
-                            $emailSent = $this->sendVerificationEmail($email, $verification_code, $admin['name']);
+                                // For development purposes, store the code in session
+                                // This will allow login without email in case email sending fails
+                                $_SESSION['demo_code'] = $verification_code;
 
-                            // Log the attempt
-                            error_log("Admin login attempt: Email sending " . ($emailSent ? "successful" : "failed"));
-                            error_log("Verification code: " . $verification_code); // For debugging
+                                // Try to send verification code via email
+                                $emailSent = $this->sendVerificationEmail($email, $verification_code, $admin['name']);
 
-                            $this->redirect('/admin-verification');
-                        } else {
-                            $error = 'Invalid password.';
-                        }
+                                // Log the attempt
+                                error_log("Admin login attempt: Email sending " . ($emailSent ? "successful" : "failed"));
+                                error_log("Verification code: " . $verification_code); // For debugging
+
+                                $this->redirect('/admin-verification');
+                            } else {
+                                $error = 'Invalid password.';
+                            }
                     } else {
                         // Admin doesn't exist in database yet, create it
                         $this->ensureAdminExists();
@@ -373,6 +379,22 @@ class AuthController extends BaseController
                 $verification_code == $_SESSION['verification_code'] &&
                 (time() - $_SESSION['verification_time']) < 600
             ) {
+                // Prepare admin avatar URL
+                $avatarUrl = '/assets/image/placeholder.svg?height=40&width=40';
+                
+                // Get admin image if available
+                try {
+                    $stmt = $this->conn->prepare("SELECT image FROM users WHERE user_id = :user_id");
+                    $stmt->bindParam(':user_id', $_SESSION['admin_id']);
+                    $stmt->execute();
+                    $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+                    
+                    if ($result && !empty($result['image'])) {
+                        $avatarUrl = '/' . $result['image'];
+                    }
+                } catch (\PDOException $e) {
+                    // Silently fail and use default avatar
+                }
 
                 // Set admin session
                 $_SESSION['user_id'] = $_SESSION['admin_id'];
@@ -380,7 +402,7 @@ class AuthController extends BaseController
                     'id' => $_SESSION['admin_id'],
                     'name' => $_SESSION['admin_name'],
                     'email' => $_SESSION['admin_email'],
-                    'avatar' => '/assets/image/placeholder.svg?height=40&width=40',
+                    'avatar' => $avatarUrl,
                     'role' => 'admin'
                 ];
 
@@ -436,12 +458,16 @@ class AuthController extends BaseController
 
                 if ($stmt->rowCount() > 0) {
                     $user = $stmt->fetch(\PDO::FETCH_ASSOC);
+                    
+                    // Prepare avatar URL
+                    $avatarUrl = !empty($user['image']) ? '/' . $user['image'] : '/assets/image/placeholder.svg?height=40&width=40';
+                    
                     $_SESSION['user_id'] = $user['user_id'];
                     $_SESSION['user'] = [
                         'id' => $user['user_id'],
                         'name' => $user['name'],
                         'email' => $user['email'],
-                        'avatar' => $user['image'] ? 'data:image/jpeg;base64,' . base64_encode($user['image']) : '/assets/image/placeholder.svg?height=40&width=40',
+                        'avatar' => $avatarUrl,
                         'role' => $user['role'],
                         'phone' => $user['phone'] ?? '',
                         'address' => $user['address'] ?? ''
