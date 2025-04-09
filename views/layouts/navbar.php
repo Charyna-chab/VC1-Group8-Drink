@@ -6,6 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>XING FU CHA</title>
     <style>
+        /* Reset default styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
         /* Header actions */
         .header-actions {
             display: flex;
@@ -99,14 +107,45 @@
             }
         }
 
-        .profile-pic {
+        /* Profile Picture Container */
+        .profile-pic-container {
+            position: relative;
             width: 120px;
             height: 120px;
+            margin: 0 auto 20px;
+        }
+
+        .profile-pic {
+            width: 100%;
+            height: 100%;
             border-radius: 50%;
             object-fit: cover;
-            margin: 0 auto 20px;
             border: 4px solid #ff2a2a;
             box-shadow: 0 3px 10px rgba(255, 42, 42, 0.2);
+        }
+
+        /* Camera Icon */
+        .camera-icon {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background-color: #ff2a2a;
+            color: white;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 16px;
+            border: 2px solid white;
+            transition: all 0.3s ease;
+        }
+
+        .camera-icon:hover {
+            background-color: #e60000;
+            transform: scale(1.1);
         }
 
         .profile-name {
@@ -144,7 +183,15 @@
             color: #888;
         }
 
-        .close-btn {
+        /* Profile Actions (Cancel and Upgrade buttons) */
+        .profile-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .cancel-btn {
             background: #ff2a2a;
             color: white;
             border: none;
@@ -153,11 +200,26 @@
             cursor: pointer;
             font-weight: 500;
             transition: all 0.3s ease;
-            margin-top: 10px;
         }
 
-        .close-btn:hover {
+        .cancel-btn:hover {
             background: #e60000;
+            transform: translateY(-2px);
+        }
+
+        .upgrade-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .upgrade-btn:hover {
+            background: #45a049;
             transform: translateY(-2px);
         }
 
@@ -340,7 +402,18 @@
         <!-- Profile Modal -->
         <div class="profile-modal" id="profileModal">
             <div class="profile-card">
-                <img src="<?php echo isset($_SESSION['user']['avatar']) ? $_SESSION['user']['avatar'] : 'https://via.placeholder.com/150'; ?>" class="profile-pic" id="profilePic">
+                <!-- Profile picture with camera icon for changing the image -->
+                <div class="profile-pic-container">
+                    <img src="<?php echo isset($_SESSION['user']['avatar']) ? $_SESSION['user']['avatar'] : 'https://via.placeholder.com/150'; ?>" class="profile-pic" id="profilePic">
+                    <label for="profileImageInput" class="camera-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M15 12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h1.172a3 3 0 0 0 2.12-.879l.83-.828A1 1 0 0 1 6.827 3h2.344a1 1 0 0 1 .707.293l.828.828A3 3 0 0 0 12.828 5H14a1 1 0 0 1 1 1v6zM2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4H2z"/>
+                            <path d="M8 11a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5zm0 1a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM3 6.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z"/>
+                        </svg>
+                    </label>
+                    <input type="file" id="profileImageInput" accept="image/*" style="display: none;" onchange="updateProfileImage(event)">
+                </div>
+
                 <h3 class="profile-name" id="profileName"><?php echo isset($_SESSION['user']['name']) ? htmlspecialchars($_SESSION['user']['name']) : ''; ?></h3>
                 <p class="profile-email" id="profileEmail"><?php echo isset($_SESSION['user']['email']) ? htmlspecialchars($_SESSION['user']['email']) : ''; ?></p>
 
@@ -359,7 +432,11 @@
                     </div>
                 </div>
 
-                <button class="close-btn" onclick="hideProfile()">Close</button>
+                <!-- Action buttons: Cancel and Upgrade -->
+                <div class="profile-actions">
+                    <button class="cancel-btn" onclick="cancelProfileChanges()">Cancel</button>
+                    <button class="upgrade-btn" onclick="saveProfileChanges()" id="saveBtn" style="display: none;">Save Changes</button>
+                </div>
             </div>
         </div>
     </header>
@@ -370,8 +447,8 @@
         const profileModal = document.getElementById('profileModal');
         const notificationModal = document.getElementById('notificationModal');
         const notificationIcon = document.querySelector('.notification-icon');
+        let originalProfileImage = ''; // To store the original image URL for canceling
 
-        // Show profile modal
         // Show profile modal
         function showProfile() {
             // Check if user is logged in (you might need to adjust this based on your actual session structure)
@@ -388,21 +465,93 @@
                 document.getElementById('profileName').textContent = userData.name;
                 document.getElementById('profileEmail').textContent = userData.email;
                 document.getElementById('profilePic').src = userData.avatar;
+                profileBtn.src = userData.avatar; // Update sidebar profile image
+                originalProfileImage = userData.avatar; // Store the original image
             } else {
                 // Default values for non-logged-in users
                 document.getElementById('profileName').textContent = 'Guest';
                 document.getElementById('profileEmail').textContent = 'guest@example.com';
                 document.getElementById('profilePic').src = 'https://via.placeholder.com/150';
+                profileBtn.src = 'https://via.placeholder.com/150'; // Update sidebar profile image
+                originalProfileImage = 'https://via.placeholder.com/150'; // Store the default image
             }
+
+            // Reset the save button visibility
+            document.getElementById('saveBtn').style.display = 'none';
 
             // Close notification modal if open
             notificationModal.style.display = 'none';
             profileModal.style.display = 'flex';
         }
 
-        // Hide profile modal
-        function hideProfile() {
-            profileModal.style.display = 'none';
+        // Update profile image when a new image is selected
+        function updateProfileImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const profilePic = document.getElementById('profilePic');
+                    profilePic.src = e.target.result; // Update the profile image
+                    document.getElementById('saveBtn').style.display = 'block'; // Show the Save button
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Cancel profile changes and close the modal
+        function cancelProfileChanges() {
+            // Reset the image to the original
+            document.getElementById('profilePic').src = originalProfileImage;
+            document.getElementById('saveBtn').style.display = 'none'; // Hide the Save button
+            profileModal.style.display = 'none'; // Close the modal
+        }
+
+        // Handle the save action
+        function saveProfileChanges() {
+            // Get the new image source
+            const newImageSrc = document.getElementById('profilePic').src;
+            
+            // Update the sidebar profile image immediately
+            profileBtn.src = newImageSrc;
+            
+            // Here you would typically save the new image to the server
+            // For this example, we'll simulate a successful save
+            originalProfileImage = newImageSrc; // Update the original image to the new one
+            
+            // Show success message
+            alert('Profile picture updated successfully!');
+            
+            // Reset the modal state
+            document.getElementById('saveBtn').style.display = 'none'; // Hide the Save button
+            profileModal.style.display = 'none'; // Close the modal
+            
+            // In a real application, you would send the image to the server here
+            // Example using fetch:
+            /*
+            const formData = new FormData();
+            formData.append('profileImage', document.getElementById('profileImageInput').files[0]);
+            
+            fetch('/update-profile-image', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    originalProfileImage = data.newImageUrl;
+                    profileBtn.src = data.newImageUrl;
+                    alert('Profile picture updated successfully!');
+                    document.getElementById('saveBtn').style.display = 'none';
+                    profileModal.style.display = 'none';
+                } else {
+                    alert('Error updating profile picture: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while updating your profile picture');
+            });
+            */
         }
 
         // Toggle notification modal
@@ -437,7 +586,7 @@
         window.addEventListener('click', function(e) {
             // Close profile modal
             if (e.target === profileModal) {
-                hideProfile();
+                cancelProfileChanges(); // Use cancelProfileChanges to reset the image
             }
 
             // Close notification modal
