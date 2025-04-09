@@ -3,6 +3,11 @@ namespace YourNamespace;
 
 class BaseController {
     public function views($views, $data = []) {
+        // Make sure session is started
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+        
         // Extract data into variables
         extract($data);
         

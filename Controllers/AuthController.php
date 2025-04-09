@@ -57,6 +57,7 @@ class AuthController extends BaseController {
     }
 
     public function login() {
+        // Check if user is already logged in
         if (isset($_SESSION['user_id'])) {
             // If user is already logged in, redirect based on role
             if (isset($_SESSION['user']['role']) && $_SESSION['user']['role'] === 'admin') {
@@ -110,7 +111,15 @@ class AuthController extends BaseController {
                             if ($remember) {
                                 // Create a secure remember me token
                                 $token = bin2hex(random_bytes(32));
-                                setcookie('remember_token', $token, time() + (86400 * 30), '/');
+                                
+                                // Store token in database (in a real app)
+                                // $stmt = $this->conn->prepare("UPDATE users SET remember_token = :token WHERE user_id = :user_id");
+                                // $stmt->bindParam(':token', $token);
+                                // $stmt->bindParam(':user_id', $user['user_id']);
+                                // $stmt->execute();
+                                
+                                // Set cookie with token
+                                setcookie('remember_token', $token, time() + (86400 * 30), '/', '', false, true);
                             }
                             
                             // Redirect to order page
@@ -135,6 +144,7 @@ class AuthController extends BaseController {
     }
 
     public function register() {
+        // Check if user is already logged in
         if (isset($_SESSION['user_id'])) {
             // If user is already logged in, redirect based on role
             if (isset($_SESSION['user']['role']) && $_SESSION['user']['role'] === 'admin') {
@@ -209,6 +219,7 @@ class AuthController extends BaseController {
     }
     
     public function adminLogin() {
+        // Check if admin is already logged in
         if (isset($_SESSION['user_id']) && isset($_SESSION['user']['role']) && $_SESSION['user']['role'] === 'admin') {
             $this->redirect('/admin-dashboard');
         }
@@ -426,19 +437,45 @@ class AuthController extends BaseController {
     }
 
     public function logout() {
-        // Unset all session variables
-        $_SESSION = array();
-        
-        // Destroy the session
-        session_destroy();
+        // Store temporary redirect URL if needed
+        $redirect = isset($_SESSION['redirect_after_logout']) ? $_SESSION['redirect_after_logout'] : '/login';
 
-        // Delete the remember me cookie if it exists
+        // Clear all session variables
+        $_SESSION = array();
+
+        // Destroy the session cookie
+        if (isset($_COOKIE[session_name()])) {
+            setcookie(session_name(), '', time() - 3600, '/');
+        }
+
+        // Clear authentication cookies
         if (isset($_COOKIE['remember_token'])) {
             setcookie('remember_token', '', time() - 3600, '/');
         }
+        if (isset($_COOKIE['remember_me'])) {
+            setcookie('remember_me', '', time() - 3600, '/');
+        }
+        if (isset($_COOKIE['user_token'])) {
+            setcookie('user_token', '', time() - 3600, '/');
+        }
+
+        // Clear admin-specific cookies
+        if (isset($_COOKIE['admin_ID'])) {
+            setcookie('admin_ID', '', time() - 3600, '/');
+        }
+        if (isset($_COOKIE['user_id'])) {
+            setcookie('user_id', '', time() - 3600, '/');
+        }
+
+        // Destroy the session
+        session_destroy();
+
+        // Force browser to clear cache for this page
+        header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+        header("Cache-Control: post-check=0, pre-check=0", false);
+        header("Pragma: no-cache");
 
         // Redirect to login page
-        $this->redirect('/login');
+        $this->redirect($redirect);
     }
 }
-

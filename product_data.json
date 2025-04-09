@@ -1,0 +1,36 @@
+{
+    "product_summary": {
+        "total_price_product": 72,
+        "total_product": 7
+    },
+    "products": [
+        {
+            "name": "Product A",
+            "price": 10
+        },
+        {
+            "name": "Product B",
+            "price": 20
+        },
+        {
+            "name": "Product C",
+            "price": 15
+        },
+        {
+            "name": "Product D",
+            "price": 12
+        },
+        {
+            "name": "Product E",
+            "price": 5
+        },
+        {
+            "name": "Product F",
+            "price": 8
+        },
+        {
+            "name": "Product G",
+            "price": 2
+        }
+    ]
+}

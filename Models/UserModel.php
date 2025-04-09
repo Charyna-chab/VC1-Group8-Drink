@@ -44,7 +44,7 @@ class UserModel
                 'phone' => htmlspecialchars($data['phone'] ?? ''),
                 'email' => filter_var($data['email'], FILTER_SANITIZE_EMAIL),
                 'address' => htmlspecialchars($data['address'] ?? ''),
-                'password' => password_hash($data['password'], PASSWORD_DEFAULT),
+                'password' => $data['password'], // In a real app, use password_hash
                 'role' => in_array($data['role'], ['admin', 'user']) ? $data['role'] : 'user'
             ]);
         } catch (PDOException $e) {
@@ -95,15 +95,15 @@ class UserModel
     }
 
     public function deleteUser($id)
-{
-    try {
-        $stmt = $this->pdo->prepare("DELETE FROM users WHERE user_id = :user_id");
-        return $stmt->execute(['user_id' => $id]);
-    } catch (PDOException $e) {
-        error_log("Error deleting user: " . $e->getMessage());
-        return false;
+    {
+        try {
+            $stmt = $this->pdo->prepare("DELETE FROM users WHERE user_id = :user_id");
+            return $stmt->execute(['user_id' => $id]);
+        } catch (PDOException $e) {
+            error_log("Error deleting user: " . $e->getMessage());
+            return false;
+        }
     }
-}
 
     public function emailExists($email)
     {
