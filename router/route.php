@@ -19,10 +19,11 @@ require_once "controllers/Admin/AdminFeedbackController.php";
 require_once "controllers/GiftCardController.php";
 require_once "controllers/LocationsController.php";
 require_once "controllers/JoinTheTeamController.php";
+require_once "controllers/CheckoutController.php"; // Add this line
 require_once __DIR__ . '/../controllers/Admin/Users/UserController.php';
 require_once './controllers/Admin/Products/ProductController.php';
 require_once "./controllers/Admin/DashboardController.php";
-require_once "./controllers/Admin/AdminReceiptController.php"; // Fixed path
+require_once "./controllers/Admin/AdminReceiptController.php";
 
 use YourNamespace\Router;
 use YourNamespace\Controllers\WelcomeController;
@@ -40,10 +41,11 @@ use YourNamespace\Controllers\Admin\AdminFeedbackController;
 use YourNamespace\Controllers\GiftCardController;
 use YourNamespace\Controllers\LocationsController;
 use YourNamespace\Controllers\JoinTheTeamController;
+use YourNamespace\Controllers\CheckoutController; // Add this line
 use YourNamespace\Controllers\Admin\Users\UserController;
 use YourNamespace\Controllers\Admin\Products\ProductController;
 use YourNamespace\Controllers\Admin\DashboardController;
-use YourNamespace\Controllers\Admin\AdminReceiptController; // Fixed namespace
+use YourNamespace\Controllers\Admin\AdminReceiptController;
 
 
 $route = new Router();
@@ -90,9 +92,10 @@ $route->get("/order/details/{id}", [OrdersController::class, 'details']);
 $route->post("/order/add-to-cart", [OrdersController::class, 'addToCart']);
 $route->get("/cart", [OrdersController::class, 'cart']);
 
-// New checkout and payment routes
-$route->get("/checkout", [OrdersController::class, 'checkout']);
-$route->post("/process-payment", [OrdersController::class, 'processPayment']);
+// Checkout routes - Update these to use the new CheckoutController
+$route->get("/checkout", [CheckoutController::class, 'index']);
+$route->post("/process-payment", [CheckoutController::class, 'processPayment']);
+$route->get("/checkout/success", [CheckoutController::class, 'success']);
 
 // New payment routes
 $route->get("/payment", [PaymentController::class, 'index']);
@@ -115,7 +118,7 @@ $route->get("/admin/receipts", [AdminReceiptController::class, 'index']);
 $route->get("/admin/receipts/download/{id}", [AdminReceiptController::class, 'download']);
 $route->get("/admin/receipts/delete/{id}", [AdminReceiptController::class, 'delete']);
 $route->post("/admin/receipts/delete/{id}", [AdminReceiptController::class, 'delete']);
-$route->get("/admin/receipts/export-csv", [AdminReceiptController::class, 'exportCSV']); // New route for CSV export
+$route->get("/admin/receipts/export-csv", [AdminReceiptController::class, 'exportCSV']);
 
 // Booking routes
 $route->get("/booking", [BookingController::class, 'index']);
@@ -150,17 +153,12 @@ $route->post("/admin/products/update/{id}", [ProductController::class, 'update']
 $route->post("/admin/products/delete/{id}", [ProductController::class, 'destroy']);
 
 // Admin User Management
-
-
-// Fix the user routes to match your controller's expectations
 $route->get("/admin/users", [UserController::class, 'index']);
 $route->get("/admin/users/create", [UserController::class, 'create']);
 $route->post("/admin/users/store", [UserController::class, 'store']);
 $route->get("/admin/users/edit/{id}", [UserController::class, 'edit']);
 $route->post("/admin/users/update/{id}", [UserController::class, 'update']);
-$route->post("/admin/users/delete", [UserController::class, 'destroy']);// Changed from 'delete' to 'destroy' to match your controller
-
-
+$route->post("/admin/users/delete", [UserController::class, 'destroy']);
 
 // Admin Feedback Management
 $route->get("/admin/feedback", [FeedbackController::class, 'index']);
