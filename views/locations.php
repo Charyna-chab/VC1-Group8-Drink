@@ -222,16 +222,6 @@
     </div>
 </section>
 
-<section class="location-cta">
-    <div class="container">
-        <div class="cta-content">
-            <h2>Can't Find a Location Near You?</h2>
-            <p>We're expanding! Let us know where you'd like to see a XING FU CHA store next.</p>
-            <button id="suggestLocationBtn" class="cta-button">Suggest a Location</button>
-        </div>
-    </div>
-</section>
-
 <div id="suggestLocationModal" class="modal">
     <div class="modal-content">
         <span class="close-modal">&times;</span>
