@@ -37,7 +37,7 @@
                       <span>$<?php echo number_format($subtotal, 2); ?></span>
                   </div>
                   <div class="total-row">
-                      <span>Tax (8%):</span>
+                      <span>Delivery (8%):</span>
                       <span>$<?php echo number_format($tax, 2); ?></span>
                   </div>
                   <div class="total-row grand-total">
