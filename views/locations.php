@@ -142,9 +142,7 @@
                                     <a href="https://maps.google.com/?q=<?php echo urlencode($location['address']); ?>" class="btn-directions" target="_blank">
                                         <i class="fas fa-directions"></i> Directions
                                     </a>
-                                    <a href="/locations/details/<?php echo $location['id']; ?>" class="btn-view-details">
-                                        <i class="fas fa-info-circle"></i> Details
-                                    </a>
+
                                     <a href="/order?location=<?php echo $location['id']; ?>" class="btn-order-online">
                                         <i class="fas fa-shopping-cart"></i> Order
                                     </a>
