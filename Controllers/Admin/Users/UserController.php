@@ -16,6 +16,24 @@ class UserController extends BaseController
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
         }
+        
+        // Check if user is logged in and is an admin
+        if (!isset($_SESSION['user_id']) || !isset($_SESSION['user']['role']) || $_SESSION['user']['role'] !== 'admin') {
+            // Clear any existing session data
+            $_SESSION = array();
+            
+            // Destroy the session cookie
+            if (isset($_COOKIE[session_name()])) {
+                setcookie(session_name(), '', time() - 3600, '/');
+            }
+            
+            // Destroy the session
+            session_destroy();
+            
+            // Redirect to admin login
+            $this->redirect('/admin-login');
+            exit();
+        }
 
         $this->model = new UserModel(); // Use the namespaced UserModel
     }
@@ -93,10 +111,11 @@ class UserController extends BaseController
             }
         }
     }
+    
     function edit($id)
     {
         $user = $this->model->getUser($id);
-        $this->views('user/edit.php', ['user' => $user]);
+        $this->views('user/edit', ['user' => $user]);
     }
 
     function update($id)
@@ -117,15 +136,15 @@ class UserController extends BaseController
     }
 
     function destroy()
-{
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'])) {
-        $id = $_POST['user_id'];
-        if ($this->model->deleteUser($id)) {
-            $_SESSION['success'] = 'User deleted successfully';
-        } else {
-            $_SESSION['error'] = 'Failed to delete user';
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'])) {
+            $id = $_POST['user_id'];
+            if ($this->model->deleteUser($id)) {
+                $_SESSION['success'] = 'User deleted successfully';
+            } else {
+                $_SESSION['error'] = 'Failed to delete user';
+            }
         }
+        $this->redirect('/admin/users');
     }
-    $this->redirect('/admin/users');
-}
 }

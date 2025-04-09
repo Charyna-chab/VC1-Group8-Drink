@@ -1,83 +1,82 @@
+<link rel="stylesheet" href="/assets/css/sidebar.css">
+<style>
+    body {
+        padding-top: 0;
+        overflow-x: hidden;
+    }
 
+    #wrapper {
+        display: flex;
+        width: 100%;
+        align-items: stretch;
+    }
 
-    <style>
-        body {
-            padding-top: 0;
-            overflow-x: hidden;
-        }
+    .main-content {
+        width: 100%;
+        padding: 20px;
+        margin-left: 250px;
+        /* Adjust this to match your sidebar width */
+        transition: all 0.3s;
+    }
 
-        #wrapper {
-            display: flex;
-            width: 100%;
-            align-items: stretch;
-        }
+    .card {
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
 
+    .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #fff;
+        border-bottom: 1px solid #e3e6f0;
+        padding: 1.25rem 1.5rem;
+    }
+
+    .search-container {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .search-input {
+        width: 300px;
+    }
+
+    .user-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .badge-admin {
+        background-color: #4e73df;
+        color: white;
+    }
+
+    .badge-user {
+        background-color: #1cc88a;
+        color: white;
+    }
+
+    @media (max-width: 768px) {
         .main-content {
-            width: 100%;
-            padding: 20px;
-            margin-left: 250px;
-            /* Adjust this to match your sidebar width */
-            transition: all 0.3s;
-        }
-
-        .card {
-            border: none;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #fff;
-            border-bottom: 1px solid #e3e6f0;
-            padding: 1.25rem 1.5rem;
+            margin-left: 0;
         }
 
         .search-container {
-            display: flex;
-            align-items: center;
-            gap: 15px;
+            flex-direction: column;
+            align-items: flex-start;
+            width: 100%;
         }
 
         .search-input {
-            width: 300px;
+            width: 100%;
         }
-
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .badge-admin {
-            background-color: #4e73df;
-            color: white;
-        }
-
-        .badge-user {
-            background-color: #1cc88a;
-            color: white;
-        }
-
-        @media (max-width: 768px) {
-            .main-content {
-                margin-left: 0;
-            }
-
-            .search-container {
-                flex-direction: column;
-                align-items: flex-start;
-                width: 100%;
-            }
-
-            .search-input {
-                width: 100%;
-            }
-        }
-    </style>
+    }
+</style>
 
 <?php require './views/admin/Partials/header.php' ?>
 
@@ -148,7 +147,7 @@
                                                             <?php endif; ?>
                                                         </div>
                                                     </td>
-                                                    <td><?php echo htmlspecialchars($user['name']); ?></td>
+                                                    <td class="user-name"><?php echo htmlspecialchars($user['name']); ?></td>
                                                     <td><?php echo htmlspecialchars($user['email']); ?></td>
                                                     <td><?php echo htmlspecialchars($user['phone'] ?? 'N/A'); ?></td>
                                                     <td>
@@ -207,21 +206,36 @@
             });
 
             $('#searchInput').keyup(function(e) {
-                if (e.keyCode === 13) {
-                    filterTable();
-                }
+                filterTable();
             });
 
             function filterTable() {
-                const value = $('#searchInput').val().toLowerCase();
-                $('#userTable tbody tr').filter(function() {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                const searchTerm = $('#searchInput').val().toLowerCase().trim();
+                
+                if (searchTerm === '') {
+                    // Show all rows if search is empty
+                    $('#userTable tbody tr').show();
+                    return;
+                }
+                
+                $('#userTable tbody tr').each(function() {
+                    const $row = $(this);
+                    const userName = $row.find('.user-name').text().toLowerCase();
+                    
+                    // Check if the name contains the search term
+                    if (userName.includes(searchTerm)) {
+                        $row.show();
+                        
+                        // If the name matches exactly, move it to the top
+                        if (userName === searchTerm) {
+                            $row.prependTo($('#userTable tbody'));
+                        }
+                    } else {
+                        $row.hide();
+                    }
                 });
             }
         });
     </script>
-
-
 </body>
-
 </html>
