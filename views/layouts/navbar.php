@@ -351,7 +351,11 @@
                 </svg>
                 <span class="notification-badge">3</span>
             </div>
-            <img src="https://via.placeholder.com/150" alt="Profile" class="profile-btn" id="profileBtn">
+            <?php
+            // Get user avatar from session or use default
+            $userAvatar = isset($_SESSION['user']['avatar']) ? $_SESSION['user']['avatar'] : '/assets/image/placeholder.svg?height=40&width=40';
+            ?>
+            <img src="<?php echo htmlspecialchars($userAvatar); ?>" alt="Profile" class="profile-btn" id="profileBtn">
         </div>
 
         <!-- Notification Modal -->
@@ -404,7 +408,11 @@
             <div class="profile-card">
                 <!-- Profile picture with camera icon for changing the image -->
                 <div class="profile-pic-container">
-                    <img src="<?php echo isset($_SESSION['user']['avatar']) ? $_SESSION['user']['avatar'] : 'https://via.placeholder.com/150'; ?>" class="profile-pic" id="profilePic">
+                    <?php
+                    // Get user avatar from session or use default
+                    $userAvatar = isset($_SESSION['user']['avatar']) ? $_SESSION['user']['avatar'] : '/assets/image/placeholder.svg?height=120&width=120';
+                    ?>
+                    <img src="<?php echo htmlspecialchars($userAvatar); ?>" class="profile-pic" id="profilePic">
                     <label for="profileImageInput" class="camera-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                             <path d="M15 12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h1.172a3 3 0 0 0 2.12-.879l.83-.828A1 1 0 0 1 6.827 3h2.344a1 1 0 0 1 .707.293l.828.828A3 3 0 0 0 12.828 5H14a1 1 0 0 1 1 1v6zM2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4H2z"/>
@@ -414,8 +422,8 @@
                     <input type="file" id="profileImageInput" accept="image/*" style="display: none;" onchange="updateProfileImage(event)">
                 </div>
 
-                <h3 class="profile-name" id="profileName"><?php echo isset($_SESSION['user']['name']) ? htmlspecialchars($_SESSION['user']['name']) : ''; ?></h3>
-                <p class="profile-email" id="profileEmail"><?php echo isset($_SESSION['user']['email']) ? htmlspecialchars($_SESSION['user']['email']) : ''; ?></p>
+                <h3 class="profile-name" id="profileName"><?php echo isset($_SESSION['user']['name']) ? htmlspecialchars($_SESSION['user']['name']) : 'Guest'; ?></h3>
+                <p class="profile-email" id="profileEmail"><?php echo isset($_SESSION['user']['email']) ? htmlspecialchars($_SESSION['user']['email']) : 'guest@example.com'; ?></p>
 
                 <div class="profile-stats">
                     <div class="stat-item">
@@ -432,7 +440,7 @@
                     </div>
                 </div>
 
-                <!-- Action buttons: Cancel and Upgrade -->
+                <!-- Action buttons: Cancel and Save -->
                 <div class="profile-actions">
                     <button class="cancel-btn" onclick="cancelProfileChanges()">Cancel</button>
                     <button class="upgrade-btn" onclick="saveProfileChanges()" id="saveBtn" style="display: none;">Save Changes</button>
@@ -448,6 +456,7 @@
         const notificationModal = document.getElementById('notificationModal');
         const notificationIcon = document.querySelector('.notification-icon');
         let originalProfileImage = ''; // To store the original image URL for canceling
+        let newImageFile = null; // To store the new image file for uploading
 
         // Show profile modal
         function showProfile() {
@@ -459,25 +468,24 @@
                 const userData = {
                     name: '<?php echo isset($_SESSION['user']['name']) ? addslashes($_SESSION['user']['name']) : "Guest"; ?>',
                     email: '<?php echo isset($_SESSION['user']['email']) ? addslashes($_SESSION['user']['email']) : "guest@example.com"; ?>',
-                    avatar: '<?php echo isset($_SESSION['user']['avatar']) ? $_SESSION['user']['avatar'] : "https://via.placeholder.com/150"; ?>'
+                    avatar: '<?php echo isset($_SESSION['user']['avatar']) ? addslashes($_SESSION['user']['avatar']) : "/assets/image/placeholder.svg?height=120&width=120"; ?>'
                 };
 
                 document.getElementById('profileName').textContent = userData.name;
                 document.getElementById('profileEmail').textContent = userData.email;
                 document.getElementById('profilePic').src = userData.avatar;
-                profileBtn.src = userData.avatar; // Update sidebar profile image
                 originalProfileImage = userData.avatar; // Store the original image
             } else {
                 // Default values for non-logged-in users
                 document.getElementById('profileName').textContent = 'Guest';
                 document.getElementById('profileEmail').textContent = 'guest@example.com';
-                document.getElementById('profilePic').src = 'https://via.placeholder.com/150';
-                profileBtn.src = 'https://via.placeholder.com/150'; // Update sidebar profile image
-                originalProfileImage = 'https://via.placeholder.com/150'; // Store the default image
+                document.getElementById('profilePic').src = '/assets/image/placeholder.svg?height=120&width=120';
+                originalProfileImage = '/assets/image/placeholder.svg?height=120&width=120'; // Store the default image
             }
 
             // Reset the save button visibility
             document.getElementById('saveBtn').style.display = 'none';
+            newImageFile = null; // Reset the new image file
 
             // Close notification modal if open
             notificationModal.style.display = 'none';
@@ -488,10 +496,11 @@
         function updateProfileImage(event) {
             const file = event.target.files[0];
             if (file) {
+                newImageFile = file; // Store the file for later upload
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     const profilePic = document.getElementById('profilePic');
-                    profilePic.src = e.target.result; // Update the profile image
+                    profilePic.src = e.target.result; // Update the profile image preview
                     document.getElementById('saveBtn').style.display = 'block'; // Show the Save button
                 };
                 reader.readAsDataURL(file);
@@ -503,34 +512,28 @@
             // Reset the image to the original
             document.getElementById('profilePic').src = originalProfileImage;
             document.getElementById('saveBtn').style.display = 'none'; // Hide the Save button
+            newImageFile = null; // Reset the new image file
             profileModal.style.display = 'none'; // Close the modal
         }
 
         // Handle the save action
         function saveProfileChanges() {
-            // Get the new image source
-            const newImageSrc = document.getElementById('profilePic').src;
-            
-            // Update the sidebar profile image immediately
-            profileBtn.src = newImageSrc;
-            
-            // Here you would typically save the new image to the server
-            // For this example, we'll simulate a successful save
-            originalProfileImage = newImageSrc; // Update the original image to the new one
-            
-            // Show success message
-            alert('Profile picture updated successfully!');
-            
-            // Reset the modal state
-            document.getElementById('saveBtn').style.display = 'none'; // Hide the Save button
-            profileModal.style.display = 'none'; // Close the modal
-            
-            // In a real application, you would send the image to the server here
-            // Example using fetch:
-            /*
+            if (!newImageFile) {
+                alert('No changes to save.');
+                return;
+            }
+
+            // Create FormData object to send the file
             const formData = new FormData();
-            formData.append('profileImage', document.getElementById('profileImageInput').files[0]);
+            formData.append('profile_image', newImageFile);
             
+            // Show loading state
+            const saveBtn = document.getElementById('saveBtn');
+            const originalText = saveBtn.textContent;
+            saveBtn.textContent = 'Saving...';
+            saveBtn.disabled = true;
+            
+            // Send the image to the server
             fetch('/update-profile-image', {
                 method: 'POST',
                 body: formData
@@ -538,11 +541,19 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    originalProfileImage = data.newImageUrl;
-                    profileBtn.src = data.newImageUrl;
+                    // Update the profile images in the UI
+                    const newImageUrl = data.image_url;
+                    document.getElementById('profilePic').src = newImageUrl;
+                    profileBtn.src = newImageUrl;
+                    originalProfileImage = newImageUrl;
+                    
+                    // Show success message
                     alert('Profile picture updated successfully!');
+                    
+                    // Reset the modal state
                     document.getElementById('saveBtn').style.display = 'none';
                     profileModal.style.display = 'none';
+                    newImageFile = null;
                 } else {
                     alert('Error updating profile picture: ' + data.message);
                 }
@@ -550,8 +561,12 @@
             .catch(error => {
                 console.error('Error:', error);
                 alert('An error occurred while updating your profile picture');
+            })
+            .finally(() => {
+                // Reset button state
+                saveBtn.textContent = originalText;
+                saveBtn.disabled = false;
             });
-            */
         }
 
         // Toggle notification modal

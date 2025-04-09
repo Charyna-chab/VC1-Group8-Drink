@@ -24,6 +24,7 @@ require_once __DIR__ . '/../controllers/Admin/Users/UserController.php';
 require_once './controllers/Admin/Products/ProductController.php';
 require_once "./controllers/Admin/DashboardController.php";
 require_once "./controllers/Admin/AdminReceiptController.php";
+require_once "controllers/ProfileController.php"; // Add this line for ProfileController
 
 use YourNamespace\Router;
 use YourNamespace\Controllers\WelcomeController;
@@ -46,6 +47,7 @@ use YourNamespace\Controllers\Admin\Users\UserController;
 use YourNamespace\Controllers\Admin\Products\ProductController;
 use YourNamespace\Controllers\Admin\DashboardController;
 use YourNamespace\Controllers\Admin\AdminReceiptController;
+use YourNamespace\Controllers\ProfileController; // Add this line
 
 
 $route = new Router();
@@ -66,8 +68,9 @@ $route->post("/admin-verification", [AuthController::class, 'adminVerification']
 $route->get("/register", [AuthController::class, 'register']);
 $route->post("/register", [AuthController::class, 'register']);
 $route->get("/register-success", [AuthController::class, 'registerSuccess']);
-$route->get("/forgot-password", [AuthController::class, 'forgotPassword']);
-$route->post("/forgot-password", [AuthController::class, 'forgotPassword']);
+
+// Profile image update route - FIXED: using $route instead of $router
+$route->post("/update-profile-image", [ProfileController::class, 'updateProfileImage']);
 
 // Profile update routes
 $route->post("/update-profile", [AuthController::class, 'updateProfile']);
