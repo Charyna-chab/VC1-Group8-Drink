@@ -25,6 +25,7 @@ require_once __DIR__ . '/../controllers/Admin/Users/UserController.php';
 require_once './controllers/Admin/Products/ProductController.php';
 require_once "./controllers/Admin/DashboardController.php";
 require_once "./controllers/Admin/AdminReceiptController.php"; // Fixed path
+require_once __DIR__ . '/../controllers/Admin/OrderListController.php'; // Fixed path for OrderListController
 
 use YourNamespace\Router;
 use YourNamespace\Controllers\WelcomeController;
@@ -46,6 +47,7 @@ use YourNamespace\Controllers\Admin\Users\UserController;
 use YourNamespace\Controllers\Admin\Products\ProductController;
 use YourNamespace\Controllers\Admin\DashboardController;
 use YourNamespace\Controllers\Admin\AdminReceiptController; // Fixed namespace
+use YourNamespace\Controllers\Admin\OrderListController; // Ensure namespace matches the actual class definition
 
 
 $route = new Router();
@@ -170,5 +172,14 @@ $route->post("/admin/feedback/store", [FeedbackController::class, 'store']);
 $route->get("/admin/feedback/edit/{id}", [FeedbackController::class, 'edit']);
 $route->post("/admin/feedback/update/{id}", [FeedbackController::class, 'update']);
 $route->post("/admin/feedback/delete/{id}", [FeedbackController::class, 'delete']);
+
+// Admin Order List
+$route->get("/admin/orders", [OrderListController::class, 'index']);
+$route->get("/admin/orders/details/{id}", [OrderListController::class, 'details']);
+$route->post("/admin/orders/update-status/{id}", [OrderListController::class, 'updateStatus']);
+$route->post("/admin/orders/delete/{id}", [OrderListController::class, 'delete']);
+$route->get("/admin/orders/export-csv", [OrderListController::class, 'exportCSV']); // New route for CSV export
+
+
 
 $route->route();

@@ -9,7 +9,7 @@ require_once __DIR__ . '/../../layouts/admin_sidebar.php';
         <div class="order-details-header">
             <h2>Order Details</h2>
             <div class="header-actions">
-                <a href="/admin/order-list" class="btn-back">
+                <a href="/admin/orders" class="btn-back">
                     <i class="fas fa-arrow-left"></i> Back to List
                 </a>
                 <a href="/admin/order/edit/<?= $order['order_id']; ?>" class="btn-edit">
