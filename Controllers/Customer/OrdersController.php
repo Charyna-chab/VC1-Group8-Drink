@@ -7,10 +7,12 @@ use YourNamespace\BaseController;
 class OrdersController extends BaseController
 {
     private $productModel;
+    private $toppingModel;
     public function __construct()
     {
         // Initialize the product model if needed
         $this->productModel = new \YourNamespace\Models\ProductModel();
+        $this->toppingModel = new \YourNamespace\Models\ToppingModel();
     }
     public function index()
     {
@@ -28,48 +30,13 @@ class OrdersController extends BaseController
         }, $this->productModel->getProducts());
 
 
-        $toppings =  [
-            [
-                'id' => 1,
-                'name' => 'Boba Pearls',
-                'price' => 0.75
-            ],
-            [
-                'id' => 2,
-                'name' => 'Grass Jelly',
-                'price' => 0.75
-            ],
-            [
-                'id' => 3,
-                'name' => 'Pudding',
-                'price' => 0.75
-            ],
-            [
-                'id' => 4,
-                'name' => 'Aloe Vera',
-                'price' => 0.75
-            ],
-            [
-                'id' => 5,
-                'name' => 'Cheese Foam',
-                'price' => 1.00
-            ],
-            [
-                'id' => 6,
-                'name' => 'Fresh Fruit',
-                'price' => 1.00
-            ],
-            [
-                'id' => 7,
-                'name' => 'Red Bean',
-                'price' => 0.75
-            ],
-            [
-                'id' => 8,
-                'name' => 'Coconut Jelly',
-                'price' => 0.75
-            ]
-        ];
+        $toppings =  array_map(function ($i) {
+            return [
+                'id' => $i['topping_id'],
+                'name' => $i['topping_name'],
+                'price' => $i['price']
+            ];
+        }, $this->productModel->getToppings());
 
         // Get user favorites if logged in
         $favorites = [];

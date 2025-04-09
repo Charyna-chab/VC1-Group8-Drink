@@ -41,7 +41,7 @@ class ToppingModel
         return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
 
-    public function updateProduct($id, $data)
+    public function updateTopping($id, $data)
     {
         $sql = "UPDATE toppings SET 
                     topping_name = :topping_name,
