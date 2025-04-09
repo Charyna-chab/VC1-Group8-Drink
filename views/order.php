@@ -1,4 +1,89 @@
-<!-- filepath: c:\Users\Bopha.Khat\Desktop\VC1-Group8-Drink\views\order.php -->
+<?php require_once __DIR__ . '/layouts/header.php'; ?>
+<?php require_once __DIR__ . '/layouts/navbar.php'; ?>
+<?php require_once __DIR__ . '/layouts/sidebar.php'; ?>
+
+<section class="content">
+    <!-- Discount Banner -->
+    <div class="discount-banner">
+        <div class="banner-content">
+            <h2>Get Discount Voucher Up To 20%</h2>
+            <p>Use code: <strong>BOBA20</strong> at checkout</p>
+            <button class="btn-primary">Get Voucher</button>
+        </div>
+        <img src="/assets/image/logo/logo.png" alt="Discount 20-50%">
+    </div>
+
+    <!-- Menu Categories -->
+    <div class="menu-categories">
+        <button class="category-btn active" data-category="all">All Drinks</button>
+        <button class="category-btn" data-category="milk-tea">Milk Tea</button>
+        <button class="category-btn" data-category="fruit-tea">Fruit Tea</button>
+        <button class="category-btn" data-category="smoothie">Smoothies</button>
+        <button class="category-btn" data-category="coffee">Coffee</button>
+        <button class="category-btn" data-category="snacks">Snacks</button>
+    </div>
+
+    <!-- Order Container -->
+    <div class="order-container">
+        <div class="product-filters">
+            <div class="search-filter">
+                <input type="text" id="productSearch" placeholder="Search drinks...">
+                <i class="fas fa-search"></i>   
+            </div>
+        </div>
+        <h3>Order Drinks & Snacks</h3>
+        <div class="products-grid">
+            <?php foreach ($products as $product): ?>
+            <div class="product-card" data-category="<?php echo $product['category']; ?>">
+                <div class="product-image">
+                    <img src="<?php echo $product['image']; ?>" alt="<?php echo $product['name']; ?>">
+
+                </div>
+                <div class="product-info">
+                    <h3><?php echo $product['name']; ?></h3>
+                    <p class="product-desc"><?php echo $product['description']; ?></p>
+                    <div class="product-price">$<?php echo number_format($product['price'], 2); ?></div>
+                </div>
+                <div class="product-actions">
+                    <button class="order-btn" data-product-id="<?php echo $product['id']; ?>">Order Now</button>
+                </div>
+            </div>
+            <?php endforeach; ?>
+            
+            <div id="no-product-message">No products found matching your criteria.</div>
+        </div>
+    </div>
+</section>
+
+<!-- Add this right before the Order Panel div -->
+<!-- Product Detail Modal -->
+<div id="productDetailModal" class="product-detail-modal">
+    <div class="product-detail-content">
+        <button class="close-btn">&times;</button>
+        <div class="product-detail-image">
+            <img id="detailProductImage" src="/placeholder.svg" alt="Product Image">
+        </div>
+        <div class="product-detail-info">
+            <h3 id="detailProductName">Product Name</h3>
+            <p id="detailProductDescription" class="product-detail-desc">Product description goes here.</p>
+            <div class="product-detail-price">$<span id="detailProductPrice">0.00</span></div>
+            <div class="product-detail-category">
+                <span>Category: </span>
+                <span id="detailProductCategory">Category</span>
+            </div>
+            <div class="product-detail-actions">
+                <button id="customizeOrderBtn" class="btn-primary">
+                    <i class="fas fa-mug-hot"></i> Customize Order
+                </button>
+                <button id="addToFavoritesBtn" class="btn-outline">
+                    <i class="far fa-heart"></i> Add to Favorites
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Order Panel -->
 <div id="orderPanel" class="order-panel">
     <div class="order-panel-content">
         <button class="close-btn">&times;</button>
@@ -7,16 +92,6 @@
             <img id="productImage" src="/placeholder.svg" alt="Product Image">
             <h4 id="productName">Product Name</h4>
             <p id="productPrice">$0.00</p>
-        </div>
-        
-        <!-- Customer Details Form -->
-        <div class="customer-details">
-            <h4>Customer Details</h4>
-            <label for="customerPhone">Phone Number:</label>
-            <input type="text" id="customerPhone" placeholder="Enter your phone number" required>
-            
-            <label for="customerId">Customer ID:</label>
-            <input type="text" id="customerId" placeholder="Enter your customer ID" required>
         </div>
         
         <!-- Quantity Control -->
@@ -94,3 +169,64 @@
         </button>
     </div>
 </div>
+
+<!-- Cart Panel -->
+<div id="cartPanel" class="cart-panel">
+    <div class="cart-panel-content">
+        <button class="close-btn">&times;</button>
+        <h3>Your Cart</h3>
+        <div id="cartItems" class="cart-items">
+            <!-- Cart items will be dynamically added here -->
+        </div>
+        <div class="cart-summary">
+            <div class="summary-item">
+                <span>Subtotal:</span>
+                <span id="cartSubtotal">$0.00</span>
+            </div>
+            <div class="summary-item">
+                <span>Tax (8%):</span>
+                <span id="cartTax">$0.00</span>
+            </div>
+            <div class="summary-item total">
+                <span>Total:</span>
+                <span id="cartTotal">$0.00</span>
+            </div>
+        </div>
+        <div class="cart-actions">
+            <button id="clearCartBtn" class="btn-outline">
+                <i class="fas fa-trash"></i> Clear Cart
+            </button>
+            <a href="/checkout" id="checkoutBtn" class="btn-primary">
+                <i class="fas fa-check"></i> Checkout
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Notification Panel -->
+<div id="notificationPanel" class="notification-panel">
+    <div class="notification-header">
+        <h3>Notifications</h3>
+        <button class="close-btn">&times;</button>
+    </div>
+    <div id="notificationList" class="notification-list">
+        <!-- Notifications will be dynamically added here -->
+        <div class="empty-notification">
+            <i class="fas fa-bell-slash"></i>
+            <p>No notifications yet</p>
+        </div>
+    </div>
+</div>
+
+<!-- Overlay -->
+<div id="overlay"></div>
+
+<!-- Include CSS files -->
+<link rel="stylesheet" href="/assets/css/order-panel.css">
+<link rel="stylesheet" href="/assets/css/cart.css">
+<link rel="stylesheet" href="/assets/css/notification.css">
+
+<!-- Include JavaScript files -->
+<script src="/assets/js/cart.js"></script>
+<script src="/assets/js/order.js"></script>
+<script src="/assets/js/notification.js"></script>
