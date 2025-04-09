@@ -51,7 +51,7 @@ use YourNamespace\Controllers\Admin\Products\ProductController;
 use YourNamespace\Controllers\Admin\DashboardController;
 use YourNamespace\Controllers\Admin\AdminReceiptController; // Fixed namespace
 use YourNamespace\Controllers\Admin\OrderListController; // Ensure namespace matches the actual class definition
-use YourNamespace\Controllers\Admin\AdminReceiptController;
+
 
 
 $route = new Router();
