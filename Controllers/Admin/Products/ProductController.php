@@ -30,6 +30,7 @@ class ProductController extends BaseController
     public function create()
     {
         $this->views('products/product-create');
+        
     }
 
     public function store()
@@ -124,15 +125,31 @@ class ProductController extends BaseController
             $_SESSION['error'] = "Failed to update product.";
         }
 
-        return $this->redirect("/admin/products/edit/");
+        return $this->redirect('/product');
     }
 
-    return $this->redirect('/product');
+    
 }
 
 
 
     function delete($id)
+    {
+        if (!is_numeric($id)) {
+            $_SESSION['error'] = 'Invalid product ID!';
+            return $this->redirect('/product');
+        }
+
+        if ($this->model->deleteProduct($id)) {
+            $_SESSION['success'] = 'Product deleted successfully!';
+        } else {
+            $_SESSION['error'] = 'Failed to delete product!';
+        }
+
+        $this->redirect('/product');
+    }
+
+    public function destroy($id)
     {
         if (!is_numeric($id)) {
             $_SESSION['error'] = 'Invalid product ID!';
