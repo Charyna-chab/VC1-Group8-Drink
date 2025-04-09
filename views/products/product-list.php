@@ -12,7 +12,7 @@
     <link href="/assets/css/sb-admin-2.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/style.css">
     <link rel="stylesheet" href="/assets/css/sidebar.css">
-    
+
     <style>
         body {
             background-color: #f8f9fc;
@@ -51,101 +51,119 @@
         .dropdown-toggle::after {
             display: none;
         }
-/* Search Container Styles - Bigger and Right-Aligned */
-.search-container {
-    position: relative;
-    width: 100%;
-    max-width: 350px; /* Increased from 400px */
-    margin-left: auto; /* This pushes it to the right */
-    margin-right: 0;   /* Removes right margin */
-}
 
-.search-container .input-group {
-    display: flex;
-    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1); /* Stronger shadow */
-    border-radius: 30px; /* More rounded */
-    overflow: hidden;
-    transition: all 0.3s ease;
-    height: 40px; /* Fixed height for bigger size */
-}
+        /* Search Container Styles - Bigger and Right-Aligned */
+        .search-container {
+            position: relative;
+            width: 100%;
+            max-width: 350px;
+            /* Increased from 400px */
+            margin-left: auto;
+            /* This pushes it to the right */
+            margin-right: 0;
+            /* Removes right margin */
+        }
 
-.search-container .input-group:hover {
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); /* Stronger hover shadow */
-}
+        .search-container .input-group {
+            display: flex;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            /* Stronger shadow */
+            border-radius: 30px;
+            /* More rounded */
+            overflow: hidden;
+            transition: all 0.3s ease;
+            height: 40px;
+            /* Fixed height for bigger size */
+        }
 
-/* Search Input Styles - Bigger */
-.search-container #searchInput {
-    flex: 1;
-    border: none;
-    padding: 12px 25px; /* Increased padding */
-    font-size: 16px; /* Larger font */
-    background-color: #f8f9fc;
-    color: #333;
-    outline: none;
-    height: 100%; /* Takes full height of container */
-}
+        .search-container .input-group:hover {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            /* Stronger hover shadow */
+        }
 
-.search-container #searchInput::placeholder {
-    color: #9a9a9a;
-    font-weight: 300;
-    font-size: 15px; /* Larger placeholder */
-}
+        /* Search Input Styles - Bigger */
+        .search-container #searchInput {
+            flex: 1;
+            border: none;
+            padding: 12px 25px;
+            /* Increased padding */
+            font-size: 16px;
+            /* Larger font */
+            background-color: #f8f9fc;
+            color: #333;
+            outline: none;
+            height: 100%;
+            /* Takes full height of container */
+        }
 
-.search-container #searchInput:focus {
-    background-color: #fff;
-    box-shadow: inset 0 0 0 2px #4e73df; /* Thicker focus border */
-}
+        .search-container #searchInput::placeholder {
+            color: #9a9a9a;
+            font-weight: 300;
+            font-size: 15px;
+            /* Larger placeholder */
+        }
 
-/* Search Button Styles - Bigger */
-.search-container #searchButton {
-    border: none;
-    background-color: #4e73df;
-    color: white;
-    padding: 0 25px; /* Wider button */
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 60px; /* Minimum button width */
-}
+        .search-container #searchInput:focus {
+            background-color: #fff;
+            box-shadow: inset 0 0 0 2px #4e73df;
+            /* Thicker focus border */
+        }
 
-.search-container #searchButton:hover {
-    background-color: #2e59d9;
-}
+        /* Search Button Styles - Bigger */
+        .search-container #searchButton {
+            border: none;
+            background-color: #4e73df;
+            color: white;
+            padding: 0 25px;
+            /* Wider button */
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 60px;
+            /* Minimum button width */
+        }
 
-.search-container #searchButton i {
-    font-size: 20px; /* Larger icon */
-}
+        .search-container #searchButton:hover {
+            background-color: #2e59d9;
+        }
 
-/* Responsive Adjustments */
-@media (max-width: 768px) {
-    .search-container {
-        max-width: 100%;
-    }
-    
-    .search-container #searchInput {
-        padding: 10px 20px;
-        font-size: 15px;
-    }
-    
-    .search-container #searchButton {
-        padding: 0 20px;
-        min-width: 50px;
-    }
-    
-    .search-container #searchButton i {
-        font-size: 18px;
-    }
-}
+        .search-container #searchButton i {
+            font-size: 20px;
+            /* Larger icon */
+        }
 
-/* Highlight for search results */
-.highlight-match {
-    background-color: #fffde7;
-    font-weight: bold;
-    padding: 3px 5px; /* Slightly bigger highlight */
-    border-radius: 4px;
-}
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .search-container {
+                max-width: 100%;
+            }
+
+            .search-container #searchInput {
+                padding: 10px 20px;
+                font-size: 15px;
+            }
+
+            .search-container #searchButton {
+                padding: 0 20px;
+                min-width: 50px;
+            }
+
+            .search-container #searchButton i {
+                font-size: 18px;
+            }
+        }
+
+        /* Highlight for search results */
+        .highlight-match {
+            background-color: #fffde7;
+            font-weight: bold;
+            padding: 3px 5px;
+            /* Slightly bigger highlight */
+            border-radius: 4px;
+        }
+
         @media (max-width: 768px) {
             #sidebar {
                 margin-left: -250px;
@@ -186,7 +204,7 @@
                             <div id="searchResults" class="text-muted small"></div>
                             <div class="search-container">
                                 <div class="input-group">
-                                    <input type="text" class="form-control form-control-sm" placeholder="Search products..." 
+                                    <input type="text" class="form-control form-control-sm" placeholder="Search products..."
                                         id="searchInput" autocomplete="off">
                                     <button class="btn btn-primary btn-sm" type="button" id="searchButton">
                                         <i class="fas fa-search"></i>
@@ -305,100 +323,100 @@
                 const searchTerm = $('#searchInput').val().toLowerCase().trim();
                 const $rows = $('tbody tr');
                 let matchCount = 0;
-                
+
                 // Remove previous highlights
                 $('.product-name, .product-detail').each(function() {
                     const originalText = $(this).text();
                     $(this).text(originalText);
                     $(this).removeClass('highlight-match');
                 });
-                
+
                 if (searchTerm === '') {
                     // Show all rows if search is empty
                     $rows.show();
                     $('#searchResults').text('');
                     return;
                 }
-                
+
                 // Hide all rows first
                 $rows.hide();
-                
+
                 // Filter and show matching rows
                 $rows.each(function() {
                     const $row = $(this);
                     const productName = $row.find('.product-name').text().toLowerCase();
                     const productDetail = $row.find('.product-detail').text().toLowerCase();
                     const category = $row.data('category').toLowerCase();
-                    
-                    if (productName.includes(searchTerm) || 
-                        productDetail.includes(searchTerm) || 
+
+                    if (productName.includes(searchTerm) ||
+                        productDetail.includes(searchTerm) ||
                         category.includes(searchTerm)) {
-                        
+
                         $row.show();
                         matchCount++;
-                        
+
                         // Highlight matching text in product name
                         if (productName.includes(searchTerm)) {
                             highlightText($row.find('.product-name'), searchTerm);
                         }
-                        
+
                         // Highlight matching text in product detail
                         if (productDetail.includes(searchTerm)) {
                             highlightText($row.find('.product-detail'), searchTerm);
                         }
                     }
                 });
-                
+
                 // Update search results count
-                $('#searchResults').text(matchCount > 0 ? 
-                    `Found ${matchCount} matching product${matchCount !== 1 ? 's' : ''}` : 
+                $('#searchResults').text(matchCount > 0 ?
+                    `Found ${matchCount} matching product${matchCount !== 1 ? 's' : ''}` :
                     'No products found');
-                
+
                 // Sort matching rows to show exact matches first
                 sortSearchResults(searchTerm);
             }
-            
+
             function highlightText($element, searchTerm) {
                 const text = $element.text();
                 const lowerText = text.toLowerCase();
                 const index = lowerText.indexOf(searchTerm.toLowerCase());
-                
+
                 if (index >= 0) {
                     const prefix = text.substring(0, index);
                     const match = text.substring(index, index + searchTerm.length);
                     const suffix = text.substring(index + searchTerm.length);
-                    
+
                     $element.html(prefix + '<span class="highlight-match">' + match + '</span>' + suffix);
                 }
             }
-            
+
             function sortSearchResults(searchTerm) {
                 const $tbody = $('tbody');
                 const $visibleRows = $('tbody tr:visible');
-                
+
                 // Sort rows: exact matches first, then partial matches
                 const sortedRows = $visibleRows.get().sort(function(a, b) {
                     const aName = $(a).data('name').toLowerCase();
                     const bName = $(b).data('name').toLowerCase();
-                    
+
                     // If one is an exact match and the other isn't
                     const aExact = aName === searchTerm;
                     const bExact = bName === searchTerm;
-                    
+
                     if (aExact && !bExact) return -1;
                     if (!aExact && bExact) return 1;
-                    
+
                     // If one starts with the search term and the other doesn't
                     const aStarts = aName.startsWith(searchTerm);
                     const bStarts = bName.startsWith(searchTerm);
-                    
+
                     if (aStarts && !bStarts) return -1;
                     if (!aStarts && bStarts) return 1;
-                    
+
                     // Otherwise sort alphabetically
                     return aName.localeCompare(bName);
                 });
-                
+
                 // Re-append sorted rows
                 $.each(sortedRows, function(index, row) {
                     $tbody.append(row);
@@ -407,4 +425,5 @@
         });
     </script>
 </body>
+
 </html>
