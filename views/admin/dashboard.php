@@ -174,8 +174,8 @@ $product_count = $_SESSION['product_count'] ?? 0;
                     labels: ["Total Price Product", "Total Product", "Pending Requests"],
                     datasets: [{
                         data: [totalPrice, totalProducts, pendingRequests],
-                        backgroundColor: ['#1FCAF5', '#1cc88a', '#f6c23e'],
-                        hoverBackgroundColor: ['#0FC9F8', '#17a673', '#f4b619'],
+                        backgroundColor: ['#1cc88a', '#1FCAF5', '#f6c23e'],
+                        hoverBackgroundColor: ['#1cc88a', '#1FCAF5', '#f4b619'],
                         hoverBorderColor: "rgba(234, 236, 244, 1)",
                     }],
                 },
