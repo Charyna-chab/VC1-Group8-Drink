@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>XING FU CHA</title>
     <style>
-
-
         /* Header actions */
         .header-actions {
             display: flex;
@@ -72,7 +71,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0, 0, 0, 0.5);
             z-index: 1000;
             justify-content: center;
             align-items: center;
@@ -84,13 +83,20 @@
             padding: 30px;
             border-radius: 15px;
             text-align: center;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
             animation: fadeIn 0.3s ease;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .profile-pic {
@@ -163,7 +169,7 @@
             right: 20px;
             background-color: white;
             border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
             width: 350px;
             max-height: 400px;
             overflow-y: auto;
@@ -172,8 +178,15 @@
         }
 
         @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .notification-header {
@@ -255,6 +268,7 @@
         }
     </style>
 </head>
+
 <body>
     <header>
         <a href="/welcome">
@@ -271,7 +285,7 @@
         <div class="header-actions">
             <div class="notification-icon" onclick="toggleNotificationModal()">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+                    <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z" />
                 </svg>
                 <span class="notification-badge">3</span>
             </div>
@@ -288,7 +302,7 @@
                 <div class="notification-item unread">
                     <div class="notification-icon-container">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" />
                         </svg>
                     </div>
                     <div class="notification-text">
@@ -300,7 +314,7 @@
                 <div class="notification-item unread">
                     <div class="notification-icon-container">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                            <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+                            <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z" />
                         </svg>
                     </div>
                     <div class="notification-text">
@@ -312,7 +326,7 @@
                 <div class="notification-item">
                     <div class="notification-icon-container">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" />
                         </svg>
                     </div>
                     <div class="notification-text">
@@ -326,10 +340,10 @@
         <!-- Profile Modal -->
         <div class="profile-modal" id="profileModal">
             <div class="profile-card">
-                <img src="https://via.placeholder.com/150" class="profile-pic" id="profilePic">
-                <h3 class="profile-name" id="profileName">John Doe</h3>
-                <p class="profile-email" id="profileEmail">john.doe@example.com</p>
-                
+                <img src="<?php echo isset($_SESSION['user']['avatar']) ? $_SESSION['user']['avatar'] : 'https://via.placeholder.com/150'; ?>" class="profile-pic" id="profilePic">
+                <h3 class="profile-name" id="profileName"><?php echo isset($_SESSION['user']['name']) ? htmlspecialchars($_SESSION['user']['name']) : ''; ?></h3>
+                <p class="profile-email" id="profileEmail"><?php echo isset($_SESSION['user']['email']) ? htmlspecialchars($_SESSION['user']['email']) : ''; ?></p>
+
                 <div class="profile-stats">
                     <div class="stat-item">
                         <div class="stat-value">15</div>
@@ -344,7 +358,7 @@
                         <div class="stat-label">Member</div>
                     </div>
                 </div>
-                
+
                 <button class="close-btn" onclick="hideProfile()">Close</button>
             </div>
         </div>
@@ -356,24 +370,41 @@
         const profileModal = document.getElementById('profileModal');
         const notificationModal = document.getElementById('notificationModal');
         const notificationIcon = document.querySelector('.notification-icon');
-        
+
+        // Show profile modal
         // Show profile modal
         function showProfile() {
-            // You would fetch real user data here
-            document.getElementById('profileName').textContent = 'John Doe';
-            document.getElementById('profileEmail').textContent = 'john.doe@example.com';
-            document.getElementById('profilePic').src = 'https://via.placeholder.com/150';
-            
+            // Check if user is logged in (you might need to adjust this based on your actual session structure)
+            const isLoggedIn = <?php echo isset($_SESSION['user_id']) ? 'true' : 'false'; ?>;
+
+            if (isLoggedIn) {
+                // Use PHP to output the user data directly in JavaScript
+                const userData = {
+                    name: '<?php echo isset($_SESSION['user']['name']) ? addslashes($_SESSION['user']['name']) : "Guest"; ?>',
+                    email: '<?php echo isset($_SESSION['user']['email']) ? addslashes($_SESSION['user']['email']) : "guest@example.com"; ?>',
+                    avatar: '<?php echo isset($_SESSION['user']['avatar']) ? $_SESSION['user']['avatar'] : "https://via.placeholder.com/150"; ?>'
+                };
+
+                document.getElementById('profileName').textContent = userData.name;
+                document.getElementById('profileEmail').textContent = userData.email;
+                document.getElementById('profilePic').src = userData.avatar;
+            } else {
+                // Default values for non-logged-in users
+                document.getElementById('profileName').textContent = '';
+                document.getElementById('profileEmail').textContent = '';
+                document.getElementById('profilePic').src = 'https://via.placeholder.com/150';
+            }
+
             // Close notification modal if open
             notificationModal.style.display = 'none';
             profileModal.style.display = 'flex';
         }
-        
+
         // Hide profile modal
         function hideProfile() {
             profileModal.style.display = 'none';
         }
-        
+
         // Toggle notification modal
         function toggleNotificationModal() {
             if (notificationModal.style.display === 'block') {
@@ -384,31 +415,31 @@
                 notificationModal.style.display = 'block';
             }
         }
-        
+
         // Mark all notifications as read
         function markAllAsRead() {
             const unreadItems = document.querySelectorAll('.notification-item.unread');
             const badge = document.querySelector('.notification-badge');
-            
+
             unreadItems.forEach(item => {
                 item.classList.remove('unread');
                 const dot = item.querySelector('.notification-dot');
                 if (dot) dot.remove();
             });
-            
+
             badge.textContent = '0';
         }
-        
+
         // Event listeners
         profileBtn.addEventListener('click', showProfile);
-        
+
         // Close when clicking outside
         window.addEventListener('click', function(e) {
             // Close profile modal
             if (e.target === profileModal) {
                 hideProfile();
             }
-            
+
             // Close notification modal
             if (e.target !== notificationIcon && !notificationIcon.contains(e.target) &&
                 e.target !== notificationModal && !notificationModal.contains(e.target)) {
@@ -417,4 +448,5 @@
         });
     </script>
 </body>
+
 </html>

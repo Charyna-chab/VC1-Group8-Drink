@@ -15,7 +15,7 @@
 
         <!-- Empty State (initially hidden if there are favorites) -->
         <div class="favorites-empty" style="<?php echo !empty($favorites) ? 'display: none;' : ''; ?>">
-            <img src="/assets/image/empty-favorites.svg" alt="No Favorites">
+           
             <h3>No Favorites Yet</h3>
             <p>You haven't added any favorites yet. Browse our menu and add items to your favorites!</p>
             <a href="/order" class="favorites-browse-btn">Browse Menu</a>
