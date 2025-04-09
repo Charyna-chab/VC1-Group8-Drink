@@ -390,8 +390,8 @@
                 document.getElementById('profilePic').src = userData.avatar;
             } else {
                 // Default values for non-logged-in users
-                document.getElementById('profileName').textContent = '';
-                document.getElementById('profileEmail').textContent = '';
+                document.getElementById('profileName').textContent = 'Guest';
+                document.getElementById('profileEmail').textContent = 'guest@example.com';
                 document.getElementById('profilePic').src = 'https://via.placeholder.com/150';
             }
 
