@@ -1,393 +1,627 @@
-// checkout.js - Handles checkout functionality
 document.addEventListener("DOMContentLoaded", () => {
     // DOM Elements
-    const paymentOptions = document.querySelectorAll(".payment-option")
-    const paymentRadios = document.querySelectorAll('input[name="payment_method"]')
-    const completePaymentBtn = document.getElementById("complete-payment")
-    const paymentSuccessModal = document.getElementById("paymentSuccessModal")
-    const overlay = document.getElementById("overlay")
-
-    // Get cart items from localStorage
-    const cartItems = JSON.parse(localStorage.getItem("cart")) || []
-
-    // Calculate totals
-    const subtotal = cartItems.reduce((total, item) => total + item.totalPrice, 0)
-    const tax = subtotal * 0.08 // 8% tax
-    const total = subtotal + tax
-
-    // Initialize payment options
-    paymentRadios.forEach((radio) => {
-        radio.addEventListener("change", function() {
-            // Hide all payment option content
-            document.querySelectorAll(".payment-option-content").forEach((content) => {
-                content.style.display = "none"
-            })
-
-            // Show selected payment option content
-            const selectedOption = document.querySelector(`.payment-option[data-payment="${this.value}"]`)
-            if (selectedOption) {
-                const content = selectedOption.querySelector(".payment-option-content")
-                if (content) {
-                    content.style.display = "block"
-                }
-            }
-
-            // Enable the complete payment button
-            if (completePaymentBtn) {
-                completePaymentBtn.disabled = false
-            }
-        })
-    })
-
-    // Set default payment method if none selected
-    if (paymentRadios.length > 0 && !document.querySelector('input[name="payment_method"]:checked')) {
-        paymentRadios[0].checked = true
-        paymentRadios[0].dispatchEvent(new Event("change"))
-    }
-
+    const steps = document.querySelectorAll(".step");
+    const stepContents = document.querySelectorAll(".checkout-step-content");
+    const stepConnectors = document.querySelectorAll(".step-connector");
+    
+    const continueToPaymentBtn = document.getElementById("continue-to-payment");
+    const backToDetailsBtn = document.getElementById("back-to-details");
+    
+    const paymentMethods = document.querySelectorAll(".payment-method");
+    const paymentRadios = document.querySelectorAll('input[name="payment_method"]');
+    
+    const verifyAbaPaymentBtn = document.getElementById("verify-aba-payment");
+    const verifyAcledaPaymentBtn = document.getElementById("verify-acleda-payment");
+    const processCardPaymentBtn = document.getElementById("process-card-payment");
+    const confirmCashPaymentBtn = document.getElementById("confirm-cash-payment");
+    
+    const loadingModal = document.getElementById("loadingModal");
+    const overlay = document.getElementById("overlay");
+    
+    // Form elements
+    const firstNameInput = document.getElementById("first_name");
+    const lastNameInput = document.getElementById("last_name");
+    const emailInput = document.getElementById("email");
+    const phoneInput = document.getElementById("phone");
+    const addressInput = document.getElementById("address");
+    const notesInput = document.getElementById("notes");
+    
+    // Hidden form elements
+    const hiddenFirstName = document.getElementById("hidden_first_name");
+    const hiddenLastName = document.getElementById("hidden_last_name");
+    const hiddenEmail = document.getElementById("hidden_email");
+    const hiddenPhone = document.getElementById("hidden_phone");
+    const hiddenAddress = document.getElementById("hidden_address");
+    const hiddenNotes = document.getElementById("hidden_notes");
+    const hiddenTransactionId = document.getElementById("hidden_transaction_id");
+    
     // Card form elements
-    const cardNumber = document.getElementById("card_number")
-    const expiryDate = document.getElementById("expiry_date")
-    const cvv = document.getElementById("cvv")
-    const cardName = document.getElementById("card_name")
-
-    // Format card number with spaces
-    if (cardNumber) {
-        cardNumber.addEventListener("input", function(e) {
-            const value = this.value.replace(/\s+/g, "").replace(/[^0-9]/gi, "")
-            let formattedValue = ""
-
-            for (let i = 0; i < value.length; i++) {
-                if (i > 0 && i % 4 === 0) {
-                    formattedValue += " "
+    const cardNumber = document.getElementById("card_number");
+    const expiryDate = document.getElementById("expiry_date");
+    const cvv = document.getElementById("cvv");
+    const cardName = document.getElementById("card_name");
+    
+    // Get cart items from localStorage
+    const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+    
+    // Calculate totals
+    const subtotal = cartItems.reduce((total, item) => total + item.totalPrice, 0);
+    const tax = subtotal * 0.08; // 8% tax
+    const total = subtotal + tax;
+    
+    // Initialize checkout
+    initCheckout();
+    
+    function initCheckout() {
+        // Load cart items
+        loadCartItems();
+        
+        // Update totals
+        updateTotals();
+        
+        // Set up event listeners
+        setupEventListeners();
+        
+        // Pre-fill user data if available
+        prefillUserData();
+    }
+    
+    function loadCartItems() {
+        const orderItemsContainer = document.getElementById("checkout-order-items");
+        
+        if (!orderItemsContainer) return;
+        
+        if (cartItems.length === 0) {
+            orderItemsContainer.innerHTML = `
+                <div class="empty-cart-message">
+                    <p>Your cart is empty. Please add some items before checkout.</p>
+                    <a href="/order" class="btn-primary">Go to Menu</a>
+                </div>
+            `;
+            
+            // Disable continue button
+            if (continueToPaymentBtn) {
+                continueToPaymentBtn.disabled = true;
+            }
+            
+            return;
+        }
+        
+        // Clear loading spinner
+        orderItemsContainer.innerHTML = "";
+        
+        // Add cart items
+        cartItems.forEach(item => {
+            const orderItemElement = document.createElement("div");
+            orderItemElement.className = "order-item";
+            
+            // Format toppings
+            let toppingsText = "None";
+            if (item.toppings && item.toppings.length > 0) {
+                toppingsText = item.toppings.map(t => t.name).join(", ");
+            }
+            
+            orderItemElement.innerHTML = `
+                <div class="item-image">
+                    <img src="${item.image}" alt="${item.name}">
+                </div>
+                <div class="item-details">
+                    <h4>${item.name}</h4>
+                    <p>Size: ${item.size.name} | Sugar: ${item.sugar.name} | Ice: ${item.ice.name}</p>
+                    <p>Toppings: ${toppingsText}</p>
+                    <div class="item-quantity-price">
+                        <span>Qty: ${item.quantity}</span>
+                        <span>$${item.totalPrice.toFixed(2)}</span>
+                    </div>
+                </div>
+            `;
+            
+            orderItemsContainer.appendChild(orderItemElement);
+        });
+    }
+    
+    function updateTotals() {
+        // Update subtotal, tax, and total
+        const subtotalElement = document.getElementById("checkout-subtotal");
+        const taxElement = document.getElementById("checkout-tax");
+        const totalElement = document.getElementById("checkout-total");
+        
+        if (subtotalElement) subtotalElement.textContent = "$" + subtotal.toFixed(2);
+        if (taxElement) taxElement.textContent = "$" + tax.toFixed(2);
+        if (totalElement) totalElement.textContent = "$" + total.toFixed(2);
+        
+        // Update payment method amounts
+        const abaAmountElement = document.getElementById("aba-amount");
+        const acledaAmountElement = document.getElementById("acleda-amount");
+        const cashAmountElement = document.getElementById("cash-amount");
+        
+        if (abaAmountElement) abaAmountElement.textContent = "$" + total.toFixed(2);
+        if (acledaAmountElement) acledaAmountElement.textContent = "$" + total.toFixed(2);
+        if (cashAmountElement) cashAmountElement.textContent = "$" + total.toFixed(2);
+    }
+    
+    function setupEventListeners() {
+        // Continue to payment button
+        if (continueToPaymentBtn) {
+            continueToPaymentBtn.addEventListener("click", () => {
+                if (validateUserForm()) {
+                    // Transfer form data to hidden fields
+                    transferFormData();
+                    goToStep(2);
                 }
-                formattedValue += value[i]
-            }
-
-            this.value = formattedValue
-        })
-    }
-
-    // Format expiry date (MM/YY)
-    if (expiryDate) {
-        expiryDate.addEventListener("input", function(e) {
-            const value = this.value.replace(/\D/g, "")
-
-            if (value.length > 2) {
-                this.value = value.substring(0, 2) + "/" + value.substring(2, 4)
-            } else {
-                this.value = value
-            }
-        })
-    }
-
-    // Only allow numbers in CVV
-    if (cvv) {
-        cvv.addEventListener("input", function(e) {
-            this.value = this.value.replace(/\D/g, "")
-        })
-    }
-
-    // Verify QR payment button
-    const verifyQrPaymentBtn = document.getElementById("verify-qr-payment")
-    if (verifyQrPaymentBtn) {
-        verifyQrPaymentBtn.addEventListener("click", () => {
-            // In a real app, this would verify the payment with the server
-            // For demo, we'll just simulate a successful payment
-            processPayment("qr")
-        })
-    }
-
-    // Complete payment button
-    if (completePaymentBtn) {
-        completePaymentBtn.addEventListener("click", () => {
-            const selectedPaymentMethod = document.querySelector('input[name="payment_method"]:checked')
-
-            if (!selectedPaymentMethod) {
-                showToast("Error", "Please select a payment method", "error")
-                return
-            }
-
-            const paymentMethod = selectedPaymentMethod.value
-
-            // Validate payment details based on method
-            if (paymentMethod === "card") {
-                if (!validateCardPayment()) {
-                    return
+            });
+        }
+        
+        // Back to details button
+        if (backToDetailsBtn) {
+            backToDetailsBtn.addEventListener("click", () => {
+                goToStep(1);
+            });
+        }
+        
+        // Payment method selection
+        paymentRadios.forEach(radio => {
+            radio.addEventListener("change", function() {
+                // Deactivate all payment methods
+                paymentMethods.forEach(method => {
+                    method.classList.remove("active");
+                });
+                
+                // Activate selected payment method
+                const selectedMethod = this.closest(".payment-method");
+                if (selectedMethod) {
+                    selectedMethod.classList.add("active");
                 }
-            }
-
-            // Disable the button to prevent multiple clicks
-            completePaymentBtn.disabled = true
-            completePaymentBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...'
-
-            // Process the payment
-            processPayment(paymentMethod)
-        })
+            });
+        });
+        
+        // Format card number with spaces
+        if (cardNumber) {
+            cardNumber.addEventListener("input", function(e) {
+                const value = this.value.replace(/\s+/g, "").replace(/[^0-9]/gi, "");
+                let formattedValue = "";
+                
+                for (let i = 0; i < value.length; i++) {
+                    if (i > 0 && i % 4 === 0) {
+                        formattedValue += " ";
+                    }
+                    formattedValue += value[i];
+                }
+                
+                this.value = formattedValue;
+            });
+        }
+        
+        // Format expiry date (MM/YY)
+        if (expiryDate) {
+            expiryDate.addEventListener("input", function(e) {
+                const value = this.value.replace(/\D/g, "");
+                
+                if (value.length > 2) {
+                    this.value = value.substring(0, 2) + "/" + value.substring(2, 4);
+                } else {
+                    this.value = value;
+                }
+            });
+        }
+        
+        // Only allow numbers in CVV
+        if (cvv) {
+            cvv.addEventListener("input", function(e) {
+                this.value = this.value.replace(/\D/g, "");
+            });
+        }
+        
+        // Payment verification buttons
+        if (verifyAbaPaymentBtn) {
+            verifyAbaPaymentBtn.addEventListener("click", () => {
+                const transactionId = document.getElementById("aba_transaction_id").value;
+                if (transactionId.trim() === "") {
+                    showToast("Error", "Please enter your ABA transaction ID", "error");
+                    return;
+                }
+                
+                // Set transaction ID in hidden field
+                hiddenTransactionId.value = transactionId;
+                
+                // Process payment
+                processPayment("aba");
+            });
+        }
+        
+        if (verifyAcledaPaymentBtn) {
+            verifyAcledaPaymentBtn.addEventListener("click", () => {
+                const transactionId = document.getElementById("acleda_transaction_id").value;
+                if (transactionId.trim() === "") {
+                    showToast("Error", "Please enter your ACLEDA transaction ID", "error");
+                    return;
+                }
+                
+                // Set transaction ID in hidden field
+                hiddenTransactionId.value = transactionId;
+                
+                // Process payment
+                processPayment("acleda");
+            });
+        }
+        
+        if (processCardPaymentBtn) {
+            processCardPaymentBtn.addEventListener("click", () => {
+                if (validateCardPayment()) {
+                    // Set transaction ID in hidden field (card number last 4 digits)
+                    const last4 = cardNumber.value.replace(/\s+/g, "").slice(-4);
+                    hiddenTransactionId.value = "CARD-" + last4;
+                    
+                    // Process payment
+                    processPayment("card");
+                }
+            });
+        }
+        
+        if (confirmCashPaymentBtn) {
+            confirmCashPaymentBtn.addEventListener("click", () => {
+                // Process payment
+                processPayment("cash");
+            });
+        }
     }
-
-    // Validate card payment details
+    
+    function transferFormData() {
+        // Transfer form data to hidden fields
+        if (hiddenFirstName) hiddenFirstName.value = firstNameInput.value;
+        if (hiddenLastName) hiddenLastName.value = lastNameInput.value;
+        if (hiddenEmail) hiddenEmail.value = emailInput.value;
+        if (hiddenPhone) hiddenPhone.value = phoneInput.value;
+        if (hiddenAddress) hiddenAddress.value = addressInput.value;
+        if (hiddenNotes) hiddenNotes.value = notesInput ? notesInput.value : '';
+    }
+    
+    function prefillUserData() {
+        // Check if user data is available in localStorage
+        const userData = JSON.parse(localStorage.getItem("userData") || "null");
+        
+        if (userData) {
+            if (firstNameInput && userData.firstName) {
+                firstNameInput.value = userData.firstName;
+            }
+            
+            if (lastNameInput && userData.lastName) {
+                lastNameInput.value = userData.lastName;
+            }
+            
+            if (emailInput && userData.email) {
+                emailInput.value = userData.email;
+            }
+            
+            if (phoneInput && userData.phone) {
+                phoneInput.value = userData.phone;
+            }
+            
+            if (addressInput && userData.address) {
+                addressInput.value = userData.address;
+            }
+        }
+    }
+    
+    function validateUserForm() {
+        // Check if form fields are filled
+        if (!firstNameInput.value.trim()) {
+            showToast("Error", "Please enter your first name", "error");
+            firstNameInput.focus();
+            return false;
+        }
+        
+        if (!lastNameInput.value.trim()) {
+            showToast("Error", "Please enter your last name", "error");
+            lastNameInput.focus();
+            return false;
+        }
+        
+        if (!emailInput.value.trim()) {
+            showToast("Error", "Please enter your email address", "error");
+            emailInput.focus();
+            return false;
+        }
+        
+        // Validate email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(emailInput.value.trim())) {
+            showToast("Error", "Please enter a valid email address", "error");
+            emailInput.focus();
+            return false;
+        }
+        
+        if (!phoneInput.value.trim()) {
+            showToast("Error", "Please enter your phone number", "error");
+            phoneInput.focus();
+            return false;
+        }
+        
+        if (!addressInput.value.trim()) {
+            showToast("Error", "Please enter your delivery address", "error");
+            addressInput.focus();
+            return false;
+        }
+        
+        // Save user data to localStorage for future use
+        const userData = {
+            firstName: firstNameInput.value.trim(),
+            lastName: lastNameInput.value.trim(),
+            email: emailInput.value.trim(),
+            phone: phoneInput.value.trim(),
+            address: addressInput.value.trim()
+        };
+        
+        localStorage.setItem("userData", JSON.stringify(userData));
+        
+        return true;
+    }
+    
     function validateCardPayment() {
-        if (!cardNumber || !expiryDate || !cvv || !cardName) {
-            showToast("Error", "Card form elements not found", "error")
-            return false
+        if (!cardNumber || !cardNumber.value.trim()) {
+            showToast("Error", "Please enter your card number", "error");
+            cardNumber.focus();
+            return false;
         }
-
-        if (cardNumber.value.replace(/\s/g, "").length < 16) {
-            showToast("Error", "Please enter a valid card number", "error")
-            cardNumber.focus()
-            return false
+        
+        // Validate card number (simple check for length)
+        const cardNumberValue = cardNumber.value.replace(/\s+/g, "");
+        if (cardNumberValue.length < 13 || cardNumberValue.length > 19) {
+            showToast("Error", "Please enter a valid card number", "error");
+            cardNumber.focus();
+            return false;
         }
-
-        if (expiryDate.value.length < 5) {
-            showToast("Error", "Please enter a valid expiry date (MM/YY)", "error")
-            expiryDate.focus()
-            return false
+        
+        if (!expiryDate || !expiryDate.value.trim()) {
+            showToast("Error", "Please enter your card expiry date", "error");
+            expiryDate.focus();
+            return false;
         }
-
-        if (cvv.value.length < 3) {
-            showToast("Error", "Please enter a valid CVV", "error")
-            cvv.focus()
-            return false
+        
+        // Validate expiry date format (MM/YY)
+        const expiryRegex = /^(0[1-9]|1[0-2])\/([0-9]{2})$/;
+        if (!expiryRegex.test(expiryDate.value.trim())) {
+            showToast("Error", "Please enter a valid expiry date (MM/YY)", "error");
+            expiryDate.focus();
+            return false;
         }
-
-        if (cardName.value.trim() === "") {
-            showToast("Error", "Please enter the name on card", "error")
-            cardName.focus()
-            return false
+        
+        if (!cvv || !cvv.value.trim()) {
+            showToast("Error", "Please enter your CVV", "error");
+            cvv.focus();
+            return false;
         }
-
-        return true
+        
+        // Validate CVV (3-4 digits)
+        if (cvv.value.length < 3 || cvv.value.length > 4) {
+            showToast("Error", "Please enter a valid CVV", "error");
+            cvv.focus();
+            return false;
+        }
+        
+        if (!cardName || !cardName.value.trim()) {
+            showToast("Error", "Please enter the name on card", "error");
+            cardName.focus();
+            return false;
+        }
+        
+        return true;
     }
-
-    // Process payment based on method
-    function processPayment(method) {
-        // Generate a unique order ID
-        const orderId = "ORD" + Date.now().toString().slice(-6)
-
-        // In a real app, this would make an API call to process the payment
-        // For demo, we'll just simulate a payment processing delay
+    
+    function goToStep(stepNumber) {
+        // Update step indicators
+        steps.forEach((step, index) => {
+            if (index + 1 < stepNumber) {
+                step.classList.add("completed");
+                step.classList.remove("active");
+            } else if (index + 1 === stepNumber) {
+                step.classList.add("active");
+                step.classList.remove("completed");
+            } else {
+                step.classList.remove("active", "completed");
+            }
+        });
+        
+        // Update step connectors
+        stepConnectors.forEach((connector, index) => {
+            if (index + 2 <= stepNumber) {
+                connector.classList.add("active");
+            } else {
+                connector.classList.remove("active");
+            }
+        });
+        
+        // Show the correct step content
+        stepContents.forEach((content, index) => {
+            if (index + 1 === stepNumber) {
+                content.classList.add("active");
+            } else {
+                content.classList.remove("active");
+            }
+        });
+        
+        // Scroll to top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    
+    function processPayment(paymentMethod) {
+        // Show loading modal
+        if (loadingModal) loadingModal.style.display = "flex";
+        if (overlay) overlay.style.display = "block";
+        
+        // Create booking from cart
+        const booking = createBookingFromCart(paymentMethod);
+        
+        // Simulate payment processing
         setTimeout(() => {
-                // Create a booking from the order
-                createBookingFromOrder(orderId, method)
-
-                // Set success message based on payment method
-                let successMessage = ""
-                switch (method) {
-                    case "card":
-                        successMessage = "Your card payment has been processed successfully."
-                        break
-                    case "qr":
-                        successMessage = "Your QR code payment has been verified successfully."
-                        break
-                    case "cash":
-                        successMessage = "Your cash on delivery order has been confirmed."
-                        break
-                    default:
-                        successMessage = "Your payment has been processed successfully."
-                }
-
-                // Update payment success modal
-                const paymentSuccessMessage = document.getElementById("payment-success-message")
-                if (paymentSuccessMessage) {
-                    paymentSuccessMessage.textContent = successMessage
-                }
-
-                // Update order number in success modal
-                const orderNumberElement = document.getElementById("order-number")
-                if (orderNumberElement) {
-                    orderNumberElement.textContent = "#" + orderId
-                }
-
-                // Show success modal
-                showPaymentSuccessModal()
-
-                // Reset button state
-                completePaymentBtn.disabled = false
-                completePaymentBtn.innerHTML = '<i class="fas fa-lock"></i> Complete Payment'
-
-                // Clear cart
-                localStorage.setItem("cart", JSON.stringify([]))
-
-                // Set flag for booking page to know we just checked out
-                sessionStorage.setItem("justCheckedOut", "true")
-
-                // Redirect to booking page after 3 seconds
-                setTimeout(() => {
-                    window.location.href = "/booking"
-                }, 3000)
-            }, 2000) // 2 second delay to simulate payment processing
+            // Hide loading modal
+            if (loadingModal) loadingModal.style.display = "none";
+            if (overlay) overlay.style.display = "none";
+            
+            // Update confirmation page
+            updateConfirmationPage(booking);
+            
+            // Go to confirmation step
+            goToStep(3);
+            
+            // Clear cart
+            localStorage.setItem("cart", JSON.stringify([]));
+            
+            // Update notification badge
+            updateNotificationBadge();
+        }, 2000);
     }
-
-    // Create booking from order
-    function createBookingFromOrder(orderId, paymentMethod) {
-        // Get existing bookings
-        const bookings = JSON.parse(localStorage.getItem("bookings")) || []
-
-        // Create new booking
+    
+    function createBookingFromCart(paymentMethod) {
+        // Calculate totals
+        const subtotal = cartItems.reduce((total, item) => total + item.totalPrice, 0);
+        const tax = subtotal * 0.08; // 8% tax
+        const total = subtotal + tax;
+        
+        // Generate a unique order ID
+        const orderId = 'ORD' + Date.now().toString().slice(-6);
+        
+        // Create booking
         const booking = {
             id: orderId,
-            order_number: orderId,
             date: new Date().toISOString(),
-            time: new Date().toLocaleTimeString(),
             items: cartItems,
-            subtotal: subtotal,
-            tax: tax,
-            total: total,
-            status: paymentMethod === "cash" ? "processing" : "completed",
-            paymentStatus: paymentMethod === "cash" ? "pending" : "completed",
-            paymentMethod: paymentMethod,
-            delivery_address: "123 Main St, Apt 4B, New York, NY 10001", // In a real app, get from form
-            contact: "+1 (555) 123-4567", // In a real app, get from form
-        }
-
-        // Add to bookings
-        bookings.unshift(booking)
-
+            subtotal,
+            tax,
+            total,
+            status: 'completed',
+            payment_status: 'completed',
+            payment_method: paymentMethod,
+            customer: {
+                first_name: firstNameInput.value,
+                last_name: lastNameInput.value,
+                email: emailInput.value,
+                phone: phoneInput.value,
+                address: addressInput.value,
+                notes: notesInput ? notesInput.value : ''
+            }
+        };
+        
+        // Get existing bookings
+        const bookings = JSON.parse(localStorage.getItem("bookings")) || [];
+        
+        // Add new booking
+        bookings.unshift(booking);
+        
         // Save to localStorage
-        localStorage.setItem("bookings", JSON.stringify(bookings))
+        localStorage.setItem("bookings", JSON.stringify(bookings));
+        
+        return booking;
     }
-
-    // Show payment success modal
-    function showPaymentSuccessModal() {
-        if (paymentSuccessModal) {
-            paymentSuccessModal.classList.add("active")
+    
+    function updateConfirmationPage(booking) {
+        // Update order details
+        const orderNumberElement = document.getElementById("confirmation-order-number");
+        const orderDateElement = document.getElementById("confirmation-order-date");
+        const orderTotalElement = document.getElementById("confirmation-order-total");
+        const paymentMethodElement = document.getElementById("confirmation-payment-method");
+        const emailElement = document.getElementById("confirmation-email");
+        const viewReceiptBtn = document.getElementById("view-receipt-btn");
+        
+        if (orderNumberElement) orderNumberElement.textContent = "#" + booking.id;
+        
+        if (orderDateElement) {
+            const date = new Date(booking.date);
+            orderDateElement.textContent = date.toLocaleDateString() + " " + date.toLocaleTimeString();
         }
-
-        if (overlay) {
-            overlay.style.display = "block"
+        
+        if (orderTotalElement) orderTotalElement.textContent = "$" + booking.total.toFixed(2);
+        
+        if (paymentMethodElement) {
+            let methodText = "Unknown";
+            switch (booking.payment_method) {
+                case "card":
+                    methodText = "Credit/Debit Card";
+                    break;
+                case "aba":
+                    methodText = "ABA Pay";
+                    break;
+                case "acleda":
+                    methodText = "ACLEDA Pay";
+                    break;
+                case "cash":
+                    methodText = "Cash on Delivery";
+                    break;
+            }
+            paymentMethodElement.textContent = methodText;
+        }
+        
+        if (emailElement) emailElement.textContent = booking.customer.email;
+        
+        if (viewReceiptBtn) viewReceiptBtn.href = "/receipt?order_id=" + booking.id;
+    }
+    
+    function updateNotificationBadge() {
+        // Get bookings count
+        const bookings = JSON.parse(localStorage.getItem("bookings")) || [];
+        const count = bookings.length;
+        
+        // Update badge
+        const badge = document.querySelector(".notification-badge");
+        if (badge) {
+            badge.textContent = count;
+            badge.style.display = count > 0 ? "flex" : "none";
         }
     }
-
-    // Show toast notification
+    
     function showToast(title, message, type = "info") {
         // Create toast container if it doesn't exist
-        let toastContainer = document.querySelector(".toast-container")
+        let toastContainer = document.querySelector(".toast-container");
         if (!toastContainer) {
-            toastContainer = document.createElement("div")
-            toastContainer.className = "toast-container"
-            document.body.appendChild(toastContainer)
+            toastContainer = document.createElement("div");
+            toastContainer.className = "toast-container";
+            document.body.appendChild(toastContainer);
         }
-
-        const toast = document.createElement("div")
-        toast.className = "toast"
-
-        let icon = "info-circle"
+        
+        const toast = document.createElement("div");
+        toast.className = "toast";
+        
+        let icon = "info-circle";
         if (type === "success") {
-            icon = "check-circle"
-            toast.classList.add("success")
+            icon = "check-circle";
+            toast.classList.add("success");
         } else if (type === "error") {
-            icon = "exclamation-circle"
-            toast.classList.add("error")
+            icon = "exclamation-circle";
+            toast.classList.add("error");
+        } else if (type === "warning") {
+            icon = "exclamation-triangle";
+            toast.classList.add("warning");
         }
-
+        
         toast.innerHTML = `
-              <div class="toast-icon">
-                  <i class="fas fa-${icon}"></i>
-              </div>
-              <div class="toast-content">
-                  <h4>${title}</h4>
-                  <p>${message}</p>
-              </div>
-              <button class="toast-close">&times;</button>
-          `
-
+            <div class="toast-icon">
+                <i class="fas fa-${icon}"></i>
+            </div>
+            <div class="toast-content">
+                <h4>${title}</h4>
+                <p>${message}</p>
+            </div>
+            <button class="toast-close">&times;</button>
+        `;
+        
         // Add to container
-        toastContainer.appendChild(toast)
-
+        toastContainer.appendChild(toast);
+        
         // Add close button functionality
-        const closeButton = toast.querySelector(".toast-close")
+        const closeButton = toast.querySelector(".toast-close");
         closeButton.addEventListener("click", () => {
-            toast.classList.add("toast-hide")
+            toast.classList.add("toast-hide");
             setTimeout(() => {
-                toast.remove()
-            }, 300)
-        })
-
+                toast.remove();
+            }, 300);
+        });
+        
         // Auto remove after 5 seconds
         setTimeout(() => {
-            toast.classList.add("toast-hide")
+            toast.classList.add("toast-hide");
             setTimeout(() => {
-                toast.remove()
-            }, 300)
-        }, 5000)
+                toast.remove();
+            }, 300);
+        }, 5000);
     }
-
-    // Add CSS for toast notifications
-    const style = document.createElement("style")
-    style.textContent = `
-          .toast-container {
-              position: fixed;
-              top: 20px;
-              right: 20px;
-              z-index: 9999;
-              display: flex;
-              flex-direction: column;
-              gap: 10px;
-          }
-          
-          .toast {
-              display: flex;
-              align-items: flex-start;
-              background-color: white;
-              border-radius: 8px;
-              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-              padding: 12px;
-              min-width: 300px;
-              max-width: 400px;
-              animation: slideIn 0.3s ease;
-              transition: opacity 0.3s ease, transform 0.3s ease;
-          }
-          
-          .toast.toast-hide {
-              opacity: 0;
-              transform: translateX(20px);
-          }
-          
-          .toast.success .toast-icon {
-              color: #4caf50;
-          }
-          
-          .toast.error .toast-icon {
-              color: #f44336;
-          }
-          
-          .toast-icon {
-              font-size: 24px;
-              margin-right: 12px;
-              color: #2196f3;
-          }
-          
-          .toast-content {
-              flex: 1;
-          }
-          
-          .toast-content h4 {
-              margin: 0 0 5px;
-              font-size: 16px;
-              font-weight: 600;
-          }
-          
-          .toast-content p {
-              margin: 0;
-              font-size: 14px;
-              color: #666;
-          }
-          
-          .toast-close {
-              background: none;
-              border: none;
-              font-size: 18px;
-              color: #999;
-              cursor: pointer;
-              padding: 0;
-              margin-left: 8px;
-          }
-          
-          @keyframes slideIn {
-              from { transform: translateX(100%); opacity: 0; }
-              to { transform: translateX(0); opacity: 1; }
-          }
-      `
-    document.head.appendChild(style)
-})
+});

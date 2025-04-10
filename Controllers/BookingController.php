@@ -6,8 +6,10 @@ use YourNamespace\BaseController;
 
 class BookingController extends BaseController {
     public function index() {
-        // Get cart items from localStorage via JavaScript
-        // This will be populated in the view
+        // Start session if not already started
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
         
         // In a real application, you would fetch bookings from the database
         // For now, we'll create sample data
@@ -58,17 +60,18 @@ class BookingController extends BaseController {
             ]
         ];
         
-        // Get cart count for notification badge
-        $cartCount = 0; // This will be updated via JavaScript
-        
         $this->views('booking', [
             'title' => 'My Bookings',
-            'bookings' => $bookings,
-            'cartCount' => $cartCount
+            'bookings' => $bookings
         ]);
     }
     
     public function details($id) {
+        // Start session if not already started
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+        
         // In a real application, you would fetch the booking from the database
         // For now, we'll create sample data
         $bookings = [
@@ -140,6 +143,11 @@ class BookingController extends BaseController {
     
     // Add a new method to create a booking from cart
     public function createBooking() {
+        // Start session if not already started
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+        
         // Check if request is POST
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             http_response_code(405); // Method Not Allowed
@@ -182,7 +190,12 @@ class BookingController extends BaseController {
         ];
         
         // In a real application, you would save the booking to the database
-        // For now, we'll just return success
+        // For now, we'll store it in the session
+        if (!isset($_SESSION['bookings'])) {
+            $_SESSION['bookings'] = [];
+        }
+        
+        $_SESSION['bookings'][$orderId] = $booking;
         
         echo json_encode([
             'success' => true,
@@ -191,5 +204,30 @@ class BookingController extends BaseController {
         ]);
         exit;
     }
+    
+    // Add a method to complete a booking
+    public function completeBooking($id) {
+        // Start session if not already started
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+        
+        // Check if booking exists
+        if (!isset($_SESSION['bookings']) || !isset($_SESSION['bookings'][$id])) {
+            http_response_code(404); // Not Found
+            echo json_encode(['success' => false, 'message' => 'Booking not found']);
+            exit;
+        }
+        
+        // Update booking status
+        $_SESSION['bookings'][$id]['status'] = 'completed';
+        $_SESSION['bookings'][$id]['payment_status'] = 'completed';
+        
+        echo json_encode([
+            'success' => true,
+            'message' => 'Booking completed successfully',
+            'booking' => $_SESSION['bookings'][$id]
+        ]);
+        exit;
+    }
 }
-
