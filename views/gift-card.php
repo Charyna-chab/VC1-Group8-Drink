@@ -164,9 +164,7 @@
                     <h3>How do I redeem a gift card?</h3>
                     <i class="fas fa-chevron-down"></i>
                 </div>
-                <div class="faq-answer">
-                    <p>You can redeem your gift card at any XING FU CHA location by presenting the physical card or digital code at checkout. The amount will be deducted from your total purchase.</p>
-                </div>
+
             </div>
             
             <div class="faq-item">
@@ -174,9 +172,7 @@
                     <h3>Can I check my gift card balance?</h3>
                     <i class="fas fa-chevron-down"></i>
                 </div>
-                <div class="faq-answer">
-                    <p>Yes, you can check your gift card balance at any XING FU CHA location or online by entering your gift card number and PIN.</p>
-                </div>
+
             </div>
             
             <div class="faq-item">
@@ -184,9 +180,7 @@
                     <h3>Can I reload my gift card?</h3>
                     <i class="fas fa-chevron-down"></i>
                 </div>
-                <div class="faq-answer">
-                    <p>Yes, you can reload your gift card at any XING FU CHA location or online through our website.</p>
-                </div>
+
             </div>
             
             <div class="faq-item">
@@ -194,9 +188,7 @@
                     <h3>What if my gift card is lost or stolen?</h3>
                     <i class="fas fa-chevron-down"></i>
                 </div>
-                <div class="faq-answer">
-                    <p>If your gift card is registered, we can help you recover the balance. Please contact our customer service team with your gift card details.</p>
-                </div>
+
             </div>
             
             <div class="faq-item">
@@ -204,9 +196,7 @@
                     <h3>Can I use my gift card for online orders?</h3>
                     <i class="fas fa-chevron-down"></i>
                 </div>
-                <div class="faq-answer">
-                    <p>Yes, you can use your gift card for online orders by entering the gift card number and PIN during checkout.</p>
-                </div>
+
             </div>
         </div>
     </div>
