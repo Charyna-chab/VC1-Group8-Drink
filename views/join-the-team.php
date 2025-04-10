@@ -1,5 +1,7 @@
 <?php require_once __DIR__ . '/layouts/header.php'; ?>
 <?php require_once __DIR__ . '/layouts/navbar.php'; ?>
+<?php require_once __DIR__ . '/layouts/sidebar.php'; ?>
+
 <div class="section-praents-join-team">
 <section class="team-intro">
     <div class="container">
@@ -10,14 +12,14 @@
                 <p>Whether you're a bubble tea enthusiast, a customer service pro, or someone looking to start a rewarding career in the food and beverage industry, we'd love to hear from you!</p>
                 <a href="#open-positions" class="view-positions-btn">View Open Positions</a>
             </div>
-            <div class="intro-video">
+            <!-- <div class="intro-video">
                 <div class="video-container">
                     <img src="/assets/image/team/team-video-thumbnail.jpg" alt="Team Video Thumbnail">
                     <div class="play-button">
                         <i class="fas fa-play"></i>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 </section>
