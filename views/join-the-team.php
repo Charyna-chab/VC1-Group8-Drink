@@ -307,7 +307,7 @@
                     <i class="fas fa-chevron-down"></i>
                 </div>
                 <div class="faq-answer">
-                    <p>We believe in promoting from within and offer clear career paths for our team members. Many of our managers started as baristas or kitchen staff. We provide training and mentorship to help you grow in your role and take on new responsibilities.</p>
+                    <p>We believe in the promoting from within and offer clear career paths for our team members. Many of our managers started as baristas or kitchen staff. We provide training and mentorship to help you grow in your role and take on new responsibilities.</p>
                 </div>
             </div>
             
