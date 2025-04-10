@@ -25,6 +25,14 @@ if (isset($_SESSION['user_id'])) {
 </head>
 <body>
   <div class="main-container">
+    <!-- Login Button at Top Right -->
+    <div class="login-redirect-container">
+  <a href="/login" class="login-redirect-button">
+    <i class="fas fa-sign-in-alt"></i> Login
+  </a>
+</div>
+
+    
     <!-- Main Content -->
     <div class="auth-container register-container">
       <!-- Form Container -->
@@ -113,13 +121,39 @@ if (isset($_SESSION['user_id'])) {
             </button>
           </div>
         </form>
-
-        <div class="auth-footer">
-          <p>Already have an account? <a href="/login">Login</a></p>
-        </div>
       </div>
     </div>
   </div>
+
+  <style>
+.login-redirect-container {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+.login-redirect-button {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #ff0000;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: 500;
+  transition: background-color 0.3s;
+  gap: 8px;
+}
+
+.login-redirect-button:hover {
+  background-color: #cc0000;
+}
+
+
+.login-redirect-button i {
+  font-size: 14px;
+}
+  </style>
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
