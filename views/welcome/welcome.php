@@ -315,6 +315,16 @@ nav ul li a:hover {
     opacity: 0.5;
     /* Slightly transparent */
 }
+.content-welcome{
+    position: relative;
+    bottom: 100px;
+}
+.hero-section{
+    position: relative;
+    bottom: 100px;
+}
+
+    
 
 .btn-primary {
     background-color: #ff5e62;
@@ -359,11 +369,13 @@ nav ul li a:hover {
 }
 
 .header-banner img {
-    width: 200%;
+    width: 800px;
     /* Make the image bigger */
     max-width: 500px;
     display: block;
     margin: auto;
+    position: relative;
+    left:100px;
     border-radius: 20px;
     transition: transform 0.3s ease-in-out, filter 0.3s ease-in-out;
 }
@@ -510,7 +522,8 @@ nav ul li a:hover {
 .product-card {
     background: white;
     border-radius: 16px;
-    overflow: hidden;
+    
+    
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
     transition: transform 0.3s ease-in-out;
     width: 30%;
@@ -531,8 +544,8 @@ nav ul li a:hover {
     width: 140px;
     /* Fixed size for centering */
     margin: 0 auto;
-    /* Centering */
-    overflow: hidden;
+    
+    
     border-radius: 12px;
 }
 
@@ -587,8 +600,7 @@ nav ul li a:hover {
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    
     max-width: 90%;
 }
 
@@ -665,7 +677,7 @@ nav ul li a:hover {
     max-height: 90vh;
     background: white;
     border-radius: 16px;
-    overflow: hidden;
+   
     display: flex;
     flex-direction: column;
     transform: translateY(20px);
@@ -705,7 +717,7 @@ nav ul li a:hover {
 
 .modal-body {
     padding: 25px;
-    overflow-y: auto;
+
 }
 
 .product-details {
@@ -1568,7 +1580,7 @@ p {
     padding: 120px 20px;
     margin-bottom: 60px;
     position: relative;
-    overflow: hidden;
+    
 }
 
 .hero::before {
@@ -1633,7 +1645,7 @@ p {
     background-color: white;
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
-    overflow: hidden;
+
     transition: var(--transition);
 }
 
@@ -1644,7 +1656,7 @@ p {
 
 .card-image {
     position: relative;
-    overflow: hidden;
+   
 }
 
 .card-image img {
@@ -1783,7 +1795,7 @@ p {
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 1000;
-    overflow-y: auto;
+
     padding: 50px 0;
     animation: fadeIn 0.3s ease;
 }
@@ -1827,7 +1839,7 @@ p {
     display: flex;
     border-bottom: 1px solid var(--border-color);
     margin-bottom: var(--spacing-lg);
-    overflow-x: auto;
+   
     scrollbar-width: none;
     /* Firefox */
 }
@@ -1879,7 +1891,8 @@ p {
     margin-bottom: var(--spacing-md);
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
-    overflow: hidden;
+    
+    
 }
 
 .faq-question {
@@ -1914,7 +1927,8 @@ p {
 .faq-answer {
     padding: 0;
     max-height: 0;
-    overflow: hidden;
+   
+    
     transition: max-height 0.3s ease, padding 0.3s ease;
 }
 
@@ -2432,7 +2446,8 @@ p {
     }
     .tabs-header {
         flex-wrap: nowrap;
-        overflow-x: auto;
+      
+        
     }
     .tab-btn {
         padding: 10px 15px;
@@ -2492,7 +2507,7 @@ p {
 .gift-card-item {
     background-color: white;
     border-radius: var(--border-radius);
-    overflow: hidden;
+   
     box-shadow: var(--shadow);
     transition: var(--transition);
     display: flex;
@@ -2507,7 +2522,8 @@ p {
 
 .gift-card-image {
     position: relative;
-    overflow: hidden;
+
+    
 }
 
 .gift-card-image img {
@@ -2750,7 +2766,8 @@ p {
 
 .gift-card-image {
     border-radius: var(--border-radius);
-    overflow: hidden;
+
+    
     box-shadow: var(--shadow);
 }
 
@@ -2769,7 +2786,8 @@ p {
     width: 80px;
     height: 80px;
     border-radius: 5px;
-    overflow: hidden;
+
+    
     cursor: pointer;
     opacity: 0.7;
     transition: var(--transition);
@@ -2899,7 +2917,8 @@ p {
     align-items: center;
     border: 1px solid var(--border-color);
     border-radius: 5px;
-    overflow: hidden;
+    
+    
 }
 
 .quantity-btn {
@@ -3074,7 +3093,8 @@ p {
     height: 8px;
     background-color: #e9ecef;
     border-radius: 4px;
-    overflow: hidden;
+   
+    
 }
 
 .progress {
@@ -3112,7 +3132,7 @@ p {
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    overflow: hidden;
+    
 }
 
 .reviewer-avatar img {
@@ -3166,7 +3186,7 @@ p {
 .related-cards-slider {
     display: flex;
     gap: 20px;
-    overflow-x: auto;
+  
     padding: 10px 0 20px;
     scrollbar-width: thin;
 }
@@ -3193,7 +3213,8 @@ p {
     min-width: 200px;
     background-color: white;
     border-radius: var(--border-radius);
-    overflow: hidden;
+    
+    
     box-shadow: var(--shadow);
     transition: var(--transition);
     text-align: center;
@@ -3422,7 +3443,8 @@ p {
     width: 100%;
     height: 100%;
     border-radius: var(--border-radius);
-    overflow: hidden;
+    
+    
     box-shadow: var(--shadow);
 }
 
@@ -3460,7 +3482,8 @@ p {
 .location-card {
     background-color: white;
     border-radius: var(--border-radius);
-    overflow: hidden;
+
+    
     box-shadow: var(--shadow);
     transition: var(--transition);
     display: flex;
@@ -3634,7 +3657,8 @@ p {
 .featured-slider {
     display: flex;
     gap: 20px;
-    overflow-x: auto;
+   
+    
     padding: 10px 0 20px;
     scrollbar-width: thin;
 }
@@ -3642,7 +3666,8 @@ p {
 .featured-location {
     min-width: 300px;
     border-radius: var(--border-radius);
-    overflow: hidden;
+   
+    
     box-shadow: var(--shadow);
     transition: var(--transition);
 }
@@ -3946,7 +3971,8 @@ p {
 #locationMap {
     flex-grow: 1;
     border-radius: var(--border-radius);
-    overflow: hidden;
+    
+    
     box-shadow: var(--shadow);
     min-height: 300px;
 }
@@ -3982,7 +4008,7 @@ p {
 
 .menu-categories {
     display: flex;
-    overflow-x: auto;
+    
     gap: 10px;
     margin-bottom: 25px;
     padding-bottom: 10px;
@@ -4047,7 +4073,8 @@ p {
 .menu-item {
     background-color: white;
     border-radius: var(--border-radius);
-    overflow: hidden;
+    
+    
     box-shadow: var(--shadow);
     transition: var(--transition);
 }
@@ -4135,7 +4162,8 @@ p {
 .gallery-item {
     position: relative;
     border-radius: var(--border-radius);
-    overflow: hidden;
+   
+    
     box-shadow: var(--shadow);
     cursor: pointer;
 }
@@ -4287,7 +4315,8 @@ p {
 .nearby-locations-slider {
     display: flex;
     gap: 20px;
-    overflow-x: auto;
+    
+    
     padding: 10px 0 20px;
     scrollbar-width: thin;
 }
@@ -4296,7 +4325,8 @@ p {
     min-width: 300px;
     background-color: white;
     border-radius: var(--border-radius);
-    overflow: hidden;
+
+    
     box-shadow: var(--shadow);
     transition: var(--transition);
 }
@@ -4509,7 +4539,8 @@ p {
 .video-container {
     position: relative;
     border-radius: var(--border-radius);
-    overflow: hidden;
+    
+    
     box-shadow: var(--shadow);
     cursor: pointer;
 }
@@ -4612,7 +4643,8 @@ p {
 
 .values-image {
     border-radius: var(--border-radius);
-    overflow: hidden;
+   
+    
     box-shadow: var(--shadow);
 }
 
@@ -4699,7 +4731,8 @@ p {
 .position-card {
     background-color: white;
     border-radius: var(--border-radius);
-    overflow: hidden;
+
+    
     box-shadow: var(--shadow);
     transition: var(--transition);
     display: flex;
@@ -4949,7 +4982,8 @@ p {
     width: 120px;
     height: 120px;
     border-radius: 50%;
-    overflow: hidden;
+
+    
     flex-shrink: 0;
 }
 
@@ -5030,7 +5064,8 @@ p {
     background-color: white;
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
-    overflow: hidden;
+    
+    
 }
 
 .error-message {
@@ -5191,7 +5226,7 @@ p {
 .availability-grid {
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
-    overflow: hidden;
+    
 }
 
 .availability-header {
@@ -5367,7 +5402,8 @@ p {
     box-shadow: var(--shadow);
     transition: var(--transition);
     position: relative;
-    overflow: hidden;
+   
+    
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -5678,7 +5714,7 @@ p {
     margin: 0 auto;
     background-color: white;
     border-radius: var(--border-radius);
-    overflow: hidden;
+    
     box-shadow: var(--shadow);
     display: flex;
 }
@@ -5762,7 +5798,8 @@ p {
 
 .intro-image {
     border-radius: var(--border-radius);
-    overflow: hidden;
+    
+    
     box-shadow: var(--shadow);
 }
 
@@ -5994,7 +6031,8 @@ p {
 .team-member {
     background-color: white;
     border-radius: var(--border-radius);
-    overflow: hidden;
+   
+    
     box-shadow: var(--shadow);
     transition: var(--transition);
 }
@@ -6006,7 +6044,8 @@ p {
 
 .member-image {
     height: 250px;
-    overflow: hidden;
+    
+    
 }
 
 .member-image img {
@@ -6078,7 +6117,8 @@ p {
 
 .quality-image {
     border-radius: var(--border-radius);
-    overflow: hidden;
+    
+    
     box-shadow: var(--shadow);
 }
 

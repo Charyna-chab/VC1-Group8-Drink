@@ -192,7 +192,6 @@ document.addEventListener("DOMContentLoaded", () => {
               width: 90%;
               max-width: 500px;
               box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-              overflow: hidden;
               transform: scale(0.9);
               transition: transform 0.3s ease;
           }

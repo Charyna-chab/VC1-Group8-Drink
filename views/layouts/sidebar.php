@@ -12,6 +12,8 @@
             <li style="margin-bottom: 16px;"><a href="/booking"><i class="fas fa-calendar-check" style="color: #ff5e62;"></i> Booking</a></li>
             <li style="margin-bottom: 16px;"><a href="/favorites"><i class="fas fa-heart" style="color: #ff5e62;"></i> Favorite</a></li>
             <li style="margin-bottom: 16px;"><a href="/feedback"><i class="fas fa-comment-alt" style="color: #ff5e62;"></i> Feedback</a></li>
+            <li style="margin-bottom: 16px;"><a href="/checkout"><i class="fas fa-shopping-cart" style="color: #ff5e62;"></i> Checkout</a></li>
+
             
             <!-- Settings Item with Role Info -->
             <li class="settings-item" style="margin-bottom: 16px;">
