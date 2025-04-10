@@ -191,101 +191,42 @@
 
         <div class="container-fluid">
             <div class="order-list-container">
-
-                <!-- Header + Search -->
                 <div class="order-list-header">
-                    <h2>Order List</h2>
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <div id="searchResults" class="text-muted small"></div>
-                        <div class="search-container">
-                            <div class="input-group">
-                                <input type="text" class="form-control form-control-sm" placeholder="Search products..."
-                                    id="searchInput" autocomplete="off">
-                                <button class="btn btn-primary btn-sm" type="button" id="searchButton">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                    <h2>User Order List</h2>
                 </div>
 
-                <!-- Success/Error Messages -->
-                <?php if (isset($_SESSION['success'])): ?>
-                    <div class="alert alert-success"><?= htmlspecialchars($_SESSION['success']) ?></div>
-                    <?php unset($_SESSION['success']); ?>
-                <?php endif; ?>
-
-                <?php if (isset($_SESSION['error'])): ?>
-                    <div class="alert alert-danger"><?= htmlspecialchars($_SESSION['error']) ?></div>
-                    <?php unset($_SESSION['error']); ?>
-                <?php endif; ?>
-
-                <!-- Filter Form -->
-                <div class="order-list-filters">
-                    <form method="GET" class="filter-form">
-                        <div class="form-group">
-                            <label for="date_from">From:</label>
-                            <input type="date" name="date_from" id="date_from" value="<?= htmlspecialchars($dateFrom) ?>">
-                        </div>
-                        <div class="form-group">
-                            <label for="date_to">To:</label>
-                            <input type="date" name="date_to" id="date_to" value="<?= htmlspecialchars($dateTo) ?>">
-                        </div>
-                        <button type="submit" class="btn-filter">Filter</button>
-                        <a href="/admin/orders" class="btn-reset">Reset</a>
-                    </form>
-                </div>
-
-                <!-- Orders Table -->
-                <?php if (!empty($orders)): ?>
-                    <table class="order-list-table">
-                        <thead>
-                            <tr>
-                                <th>Order ID</th>
-                                <th>Customer</th>
-                                <th>Product</th>
-                                <th>Size</th>
-                                <th>Date</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                <table class="order-list-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer Name</th>
+                            <th>Customer Email</th>
+                            <th>Product Name</th>
+                            <th>Drink Size</th>
+                            <th>Price</th>
+                            <th>Order Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (!empty($orders)): ?>
                             <?php foreach ($orders as $order): ?>
                                 <tr>
-                                    <td><?= htmlspecialchars($order['order_id']) ?></td>
-                                    <td><?= htmlspecialchars($order['user_id']) ?></td>
-                                    <td><?= htmlspecialchars($products[$order['product_id']]['product_name'] ?? 'Unknown') ?></td>
-                                    <td><?= htmlspecialchars($order['drink_size']) ?></td>
-                                    <td><?= htmlspecialchars($order['order_date']) ?></td>
-                                    <td class="actions">
-                                        <a href="/admin/order/details/<?= $order['order_id'] ?>" class="btn-view" title="View">
-                                            <i class="fas fa-eye"></i>
-                                        </a>
-                                        <a href="/admin/order/edit/<?= $order['order_id'] ?>" class="btn-edit" title="Edit">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                        <form method="POST" action="/admin/order/delete/<?= $order['order_id'] ?>" class="delete-form" onsubmit="return confirm('Delete this order?');">
-                                            <button type="submit" class="btn-delete" title="Delete">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </button>
-                                        </form>
-                                    </td>
+                                    <td><?= htmlspecialchars($order['order_id']); ?></td>
+                                    <td><?= htmlspecialchars($order['customer_name']); ?></td>
+                                    <td><?= htmlspecialchars($order['customer_email']); ?></td>
+                                    <td><?= htmlspecialchars($order['product_name']); ?></td>
+                                    <td><?= htmlspecialchars($order['drink_size']); ?></td>
+                                    <td>$<?= number_format($order['product_price'], 2); ?></td>
+                                    <td><?= htmlspecialchars($order['order_date']); ?></td>
                                 </tr>
                             <?php endforeach; ?>
-                        </tbody>
-                    </table>
-
-                    <!-- Pagination -->
-                    <?php if ($totalPages > 1): ?>
-                        <div class="pagination">
-                            <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                                <a href="?page=<?= $i ?>" class="page-link <?= $i == $currentPage ? 'active' : '' ?>"><?= $i ?></a>
-                            <?php endfor; ?>
-                        </div>
-                    <?php endif; ?>
-                <?php else: ?>
-                    <p class="no-data">No orders found.</p>
-                <?php endif; ?>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan="7" class="no-data">No orders found.</td>
+                            </tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
