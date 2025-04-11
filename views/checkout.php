@@ -37,7 +37,7 @@
                       <span>$<?php echo number_format($subtotal, 2); ?></span>
                   </div>
                   <div class="total-row">
-                      <span>Tax (8%):</span>
+                      <span>Delivery (8%):</span>
                       <span>$<?php echo number_format($tax, 2); ?></span>
                   </div>
                   <div class="total-row grand-total">
@@ -62,12 +62,12 @@
                           <div class="card-payment-form">
                               <div class="form-group">
                                   <label for="card_number">Card Number</label>
-                                  <input type="text" id="card_number" placeholder="1234 5678 9012 3456" maxlength="19">
+                                  <input type="text" id="card_number" placeholder="Your number card" maxlength="19">
                               </div>
                               <div class="form-row">
                                   <div class="form-group">
                                       <label for="expiry_date">Expiry Date</label>
-                                      <input type="text" id="expiry_date" placeholder="MM/YY" maxlength="5">
+                                      <input type="text" id="expiry_date" placeholder="date" maxlength="5">
                                   </div>
                                   <div class="form-group">
                                       <label for="cvv">CVV</label>
@@ -76,7 +76,7 @@
                               </div>
                               <div class="form-group">
                                   <label for="card_name">Name on Card</label>
-                                  <input type="text" id="card_name" placeholder="John Doe">
+                                  <input type="text" id="card_name" placeholder="Your name cards">
                               </div>
                           </div>
                       </div>
