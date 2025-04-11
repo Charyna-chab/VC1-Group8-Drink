@@ -37,6 +37,7 @@
     </div>
 </section>
 
+
 <!-- Add custom CSS for improved styling -->
 <style>
     .banner {
@@ -208,6 +209,6 @@
         }
     }
 </style>
-
+<link rel="stylesheet" href="/assets/css/booking.css">
 <script src="/assets/js/booking.js"></script>
 <?php require_once __DIR__ . '/layouts/footer.php'; ?>
