@@ -19,8 +19,74 @@ if (session_status() == PHP_SESSION_NONE) {
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
+  <style>
+    /* NEW IMPROVED STYLES FOR TOP BUTTONS */
+    .auth-top-buttons {
+      position: fixed; /* Changed from absolute to fixed */
+      top: 20px;
+      right: 20px;
+      display: flex;
+      gap: 15px;
+      z-index: 1000;
+    }
+    .auth-top-button {
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 15px;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .register-button {
+      background-color: #ffffff;
+      color:rgb(255, 0, 72) ;
+      border: 2px solid #e0e0e0;
+    }
+    .fa-user-plus {
+      background-color: #ffffff;
+      color:rgb(255, 0, 72) ;
+      
+    }
+    .register-button:hover {
+      background-color:rgb(245, 245, 245);
+      transform: translateY(-2px);
+    }
+    .admin-button {
+      background-color:rgb(255, 79, 79);
+      color: white;
+      border: 2px solidrgb(255, 0, 0);
+    }
+    .fa-user-lock {
+      background-color:rgb(255, 79, 79);
+      color: white;
+      
+    }
+
+    .admin-button:hover {
+      background-color:hsl(0, 100.00%, 50.00%);
+      transform: translateY(-2px);
+    }
+    .auth-top-button i {
+      margin-right: 8px;
+    }
+  </style>
 </head>
 <body>
+  <!-- IMPROVED BUTTONS - NOW VISIBLE IN TOP RIGHT -->
+  <div class="auth-top-buttons">
+    <a href="/register" class="auth-top-button register-button">
+      <i class="fas fa-user-plus"></i> Register
+    </a>
+
+    <a href="/admin-login" class="auth-top-button admin-button">
+  <i class="fas fa-user-lock"></i> Admin Login
+</a>
+
+
+  </div>
+
   <!-- MAIN CONTENT -->
   <div class="main-container">
     <div class="auth-container">
@@ -89,11 +155,6 @@ if (session_status() == PHP_SESSION_NONE) {
             </button>
           </div>
         </form>
-
-        <div class="auth-footer">
-          <p>Don't have an account? <a href="/register">Register</a></p>
-          <p>Are you an admin? <a href="/admin-login">Admin Login</a></p>
-        </div>
       </div>
       
       <!-- Right side - Image -->

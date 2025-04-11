@@ -40,7 +40,7 @@ body {
 
 .content {
     flex: 1;
-    margin-left: 250px;
+    margin-left: 200px;
     /* Same as sidebar width */
     padding: 20px;
     padding-top: 90px;
@@ -712,7 +712,6 @@ nav ul li a:hover {
     color: #666;
     margin-bottom: 10px;
     display: -webkit-box;
-   
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
