@@ -105,8 +105,8 @@
                                         <i class="fas fa-search"></i>
                                     </button>
                                 </div>
-                                <a href="/admin/users/create" class="btn btn-success">
-                                    <i class="fas fa-plus"></i> Add User
+                                <a href="/admin/users/create" class="btn btn-success" style="width: 150px">
+                                    <i class="fas fa-plus text-white"></i> Add User
                                 </a>
                             </div>
                         </div>
