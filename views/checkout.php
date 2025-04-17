@@ -61,7 +61,6 @@
                     <div class="checkout-order-summary">
                         <h3>Order Summary</h3>
                         <div id="checkout-order-items" class="checkout-order-items">
-                            <!-- Cart items will be loaded here via JavaScript -->
                             <div class="loading-spinner">
                                 <i class="fas fa-spinner fa-spin"></i>
                                 <p>Loading your order...</p>
@@ -102,13 +101,13 @@
                 <!-- ABA Pay -->
                 <div class="payment-method">
                     <div class="payment-method-header">
-                        <input type="radio" name="payment_method" id="aba_payment" value="aba">
+                        <input type="radio" name="payment_method" id="aba_payment" value="aba" required>
                         <label for="aba_payment">
-                            <img src="/assets/images/aba-pay-logo.png" alt="ABA Pay">
+                            <img src="/assets/images/aba-pay-logo.png" alt="ABA Pay" class="payment-logo">
                             <span>ABA Pay</span>
                         </label>
                     </div>
-                    <div class="payment-method-content">
+                    <div class="payment-method-content" id="aba_payment_content" style="display: none;">
                         <div class="payment-qr-container">
                             <img src="/assets/images/aba-qr-code.png" alt="ABA QR Code" class="payment-qr">
                             <p>Scan this QR code with your ABA mobile app to complete the payment</p>
@@ -142,13 +141,13 @@
                 <!-- ACLEDA Pay -->
                 <div class="payment-method">
                     <div class="payment-method-header">
-                        <input type="radio" name="payment_method" id="acleda_payment" value="acleda">
+                        <input type="radio" name="payment_method" id="acleda_payment" value="acleda" required>
                         <label for="acleda_payment">
-                            <img src="/assets/images/acleda-pay-logo.png" alt="ACLEDA Pay">
+                            <img src="/assets/images/acleda-pay-logo.png" alt="ACLEDA Pay" class="payment-logo">
                             <span>ACLEDA Pay</span>
                         </label>
                     </div>
-                    <div class="payment-method-content">
+                    <div class="payment-method-content" id="acleda_payment_content" style="display: none;">
                         <div class="payment-qr-container">
                             <img src="/assets/images/acleda-qr-code.png" alt="ACLEDA QR Code" class="payment-qr">
                             <p>Scan this QR code with your ACLEDA mobile app to complete the payment</p>
@@ -182,69 +181,54 @@
                 <!-- Credit/Debit Card -->
                 <div class="payment-method">
                     <div class="payment-method-header">
-                        <input type="radio" name="payment_method" id="card_payment" value="card">
+                        <input type="radio" name="payment_method" id="card_payment" value="card" required>
                         <label for="card_payment">
                             <i class="fas fa-credit-card"></i>
                             <span>Credit/Debit Card</span>
                         </label>
                     </div>
-                    <div class="payment-method-content">
-                        <div class="card-payment-form">
-                            <div class="card-input-container">
-                                <div class="card-front">
-                                    <div class="form-group">
-                                        <label for="card_number">Card Number</label>
-                                        <div class="card-number-input">
-                                            <input type="text" id="card_number" placeholder="1234 5678 9012 3456" maxlength="19" required>
-                                            <div class="card-icons">
-                                                <i class="fab fa-cc-visa"></i>
-                                                <i class="fab fa-cc-mastercard"></i>
-                                                <i class="fab fa-cc-amex"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="form-group">
-                                            <label for="expiry_date">Expiry Date</label>
-                                            <input type="text" id="expiry_date" placeholder="MM/YY" maxlength="5" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="cvv">CVV</label>
-                                            <input type="text" id="cvv" placeholder="123" maxlength="4" required>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="card_name">Name on Card</label>
-                                        <input type="text" id="card_name" placeholder="John Doe" required>
-                                    </div>
-                                </div>
+                    <div class="payment-method-content" id="card_payment_content" style="display: none```php
                             </div>
-                            <button id="process-card-payment" class="btn-primary">
-                                <i class="fas fa-lock"></i> Process Payment
-                            </button>
                         </div>
+                    </div>
+                    <div class="card-payment-form">
+                        <div class="form-group">
+                            <label for="card_number">Card Number</label>
+                            <input type="text" id="card_number" name="card_number" placeholder="1234 5678 9012 3456" maxlength="19" required>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="expiry_date">Expiry Date</label>
+                                <input type="text" id="expiry_date" name="expiry_date" placeholder="MM/YY" maxlength="5" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="cvv">CVV</label>
+                                <input type="text" id="cvv" name="cvv" placeholder="123" maxlength="4" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="card_holder">Card Holder Name</label>
+                            <input type="text" id="card_holder" name="card_holder" placeholder="John Doe" required>
+                        </div>
+                        <button type="button" id="process-card-payment" class="btn-primary">
+                            <i class="fas fa-lock"></i> Process Payment
+                        </button>
                     </div>
                 </div>
                 
                 <!-- Cash on Delivery -->
                 <div class="payment-method">
                     <div class="payment-method-header">
-                        <input type="radio" name="payment_method" id="cash_payment" value="cash">
-                        <label for="cash_payment">
+                        <input type="radio" name="payment_method" id="cod_payment" value="cod" required>
+                        <label for="cod_payment">
                             <i class="fas fa-money-bill-wave"></i>
                             <span>Cash on Delivery</span>
                         </label>
                     </div>
-                    <div class="payment-method-content">
-                        <div class="cash-payment-info">
-                            <p>You will pay when your order is delivered or when you pick it up at our store.</p>
-                            <p>Please prepare the exact amount: <strong id="cash-amount">$0.00</strong></p>
-                            <div class="cash-payment-note">
-                                <i class="fas fa-info-circle"></i>
-                                <p>Note: Our delivery person will contact you before arrival.</p>
-                            </div>
-                        </div>
-                        <button id="confirm-cash-payment" class="btn-primary">
+                    <div class="payment-method-content" id="cod_payment_content" style="display: none;">
+                        <p>Pay cash upon delivery or pickup.</p>
+                        <p>Total Amount: <strong id="cod-amount">$0.00</strong></p>
+                        <button type="button" id="confirm-cod-payment" class="btn-primary">
                             <i class="fas fa-check"></i> Confirm Order
                         </button>
                     </div>
@@ -252,76 +236,81 @@
             </div>
             
             <div class="payment-actions">
-                <button id="back-to-details" class="btn-secondary">
-                    <i class="fas fa-arrow-left"></i> Back to Details
+                <button type="button" id="back-to-customer" class="btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Customer Details
                 </button>
             </div>
         </div>
 
-        <!-- Step 3: Confirmation -->
+        <!-- Step 3: Order Confirmation -->
         <div class="checkout-step-content" id="step-3">
             <div class="order-confirmation">
-                <div class="confirmation-icon">
-                    <i class="fas fa-check-circle"></i>
-                </div>
-                <h2>Thank You for Your Order!</h2>
-                <p>Your order has been placed successfully.</p>
+                <i class="fas fa-check-circle"></i>
+                <h2>Order Confirmed!</h2>
+                <p>Your order has been successfully placed.</p>
                 
                 <div class="order-details">
-                    <div class="order-number">
+                    <div class="order-detail-row">
                         <span>Order Number:</span>
-                        <span id="confirmation-order-number">#<?php echo uniqid(); ?></span>
+                        <span id="order-number"></span>
                     </div>
-                    <div class="order-date">
+                    <div class="order-detail-row">
                         <span>Order Date:</span>
-                        <span id="confirmation-order-date"><?php echo date('F j, Y h:i A'); ?></span>
+                        <span id="order-date"><?php echo date('F j, Y H:i'); ?></span>
                     </div>
-                    <div class="order-total">
-                        <span>Total Amount:</span>
-                        <span id="confirmation-order-total">$0.00</span>
+                    <div class="order-detail-row">
+                        <span>Customer Name:</span>
+                        <span id="order-customer"></span>
                     </div>
-                    <div class="payment-method-used">
+                    <div class="order-detail-row">
+                        <span>Email:</span>
+                        <span id="order-email"></span>
+                    </div>
+                    <div class="order-detail-row">
+                        <span>Delivery Address:</span>
+                        <span id="order-address"></span>
+                    </div>
+                    <div class="order-detail-row">
                         <span>Payment Method:</span>
-                        <span id="confirmation-payment-method">Credit Card</span>
+                        <span id="order-payment-method"></span>
                     </div>
                 </div>
                 
-                <div class="confirmation-message">
-                    <p>We've sent a confirmation email to <span id="confirmation-email">your@email.com</span></p>
-                    <p>You can view your order details and track your delivery status in the "My Orders" section.</p>
+                <div class="order-items">
+                    <h3>Order Items</h3>
+                    <div id="order-items-list"></div>
+                    <div class="order-totals">
+                        <div class="order-total-row">
+                            <span>Subtotal:</span>
+                            <span id="order-subtotal">$0.00</span>
+                        </div>
+                        <div class="order-total-row">
+                            <span>Tax (8%):</span>
+                            <span id="order-tax">$0.00</span>
+                        </div>
+                        <div class="order-total-row grand-total">
+                            <span>Total:</span>
+                            <span id="order-total">$0.00</span>
+                        </div>
+                    </div>
                 </div>
                 
                 <div class="confirmation-actions">
-                    <a href="/booking" class="btn-secondary">
-                        <i class="fas fa-list"></i> View My Orders
-                    </a>
-                    <button id="print-receipt" class="btn-primary">
-                        <i class="fas fa-receipt"></i> Print Receipt
+                    <a href="/orders" class="btn-primary">View Orders</a>
+                    <a href="/menu" class="btn-secondary">Continue Shopping</a>
+                    <button type="button" id="print-receipt" class="btn-outline">
+                        <i class="fas fa-print"></i> Print Receipt
                     </button>
-                    <a href="/menu" class="btn-outline">
-                        <i class="fas fa-mug-hot"></i> Order More Drinks
-                    </a>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- Loading Modal -->
-    <div id="loadingModal" class="loading-modal">
-        <div class="loading-spinner">
-            <i class="fas fa-spinner fa-spin"></i>
-            <p>Processing your payment...</p>
-        </div>
-    </div>
-
-    <!-- Overlay -->
-    <div id="overlay"></div>
 </section>
 
-<!-- Include CSS files -->
+<!-- Include CSS -->
 <link rel="stylesheet" href="/assets/css/checkout.css">
 
-<!-- Include JavaScript files -->
+<!-- Include JavaScript -->
 <script src="/assets/js/checkout.js"></script>
 
 <?php require_once __DIR__ . '/layouts/footer.php'; ?>

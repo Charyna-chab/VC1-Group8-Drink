@@ -1,207 +1,209 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', () => {
     // DOM Elements
     const customerForm = document.getElementById('customer-details-form');
-    const continueToPaymentBtn = document.getElementById('continue-to-payment');
-    const backToDetailsBtn = document.getElementById('back-to-details');
+    const paymentMethods = document.querySelectorAll('input[name="payment_method"]');
     const steps = document.querySelectorAll('.step');
     const stepContents = document.querySelectorAll('.checkout-step-content');
-    const loadingModal = document.getElementById('loadingModal');
-    const overlay = document.getElementById('overlay');
 
-    // Payment method elements
-    const paymentMethods = document.querySelectorAll('input[name="payment_method"]');
-    const verifyAbaBtn = document.getElementById('verify-aba-payment');
-    const verifyAcledaBtn = document.getElementById('verify-acleda-payment');
-    const processCardBtn = document.getElementById('process-card-payment');
-    const confirmCashBtn = document.getElementById('confirm-cash-payment');
+    // Buttons
+    const continueToPaymentBtn = document.getElementById('continue-to-payment');
+    const backToCustomerBtn = document.getElementById('back-to-customer');
+    const verifyAbaPaymentBtn = document.getElementById('verify-aba-payment');
+    const verifyAcledaPaymentBtn = document.getElementById('verify-acleda-payment');
+    const processCardPaymentBtn = document.getElementById('process-card-payment');
+    const confirmCodPaymentBtn = document.getElementById('confirm-cod-payment');
+    const printReceiptBtn = document.getElementById('print-receipt');
 
-    // Order summary elements
+    // Order summary
     const orderItemsContainer = document.getElementById('checkout-order-items');
-    const subtotalElement = document.getElementById('checkout-subtotal');
-    const taxElement = document.getElementById('checkout-tax');
-    const totalElement = document.getElementById('checkout-total');
+    const checkoutSubtotal = document.getElementById('checkout-subtotal');
+    const checkoutTax = document.getElementById('checkout-tax');
+    const checkoutTotal = document.getElementById('checkout-total');
 
-    // Confirmation elements
-    const confirmationOrderNumber = document.getElementById('confirmation-order-number');
-    const confirmationOrderDate = document.getElementById('confirmation-order-date');
-    const confirmationOrderTotal = document.getElementById('confirmation-order-total');
-    const confirmationPaymentMethod = document.getElementById('confirmation-payment-method');
-    const confirmationEmail = document.getElementById('confirmation-email');
+    // Confirmation
+    const orderNumber = document.getElementById('order-number');
+    const orderCustomer = document.getElementById('order-customer');
+    const orderEmail = document.getElementById('order-email');
+    const orderAddress = document.getElementById('order-address');
+    const orderPaymentMethod = document.getElementById('order-payment-method');
+    const orderItemsList = document.getElementById('order-items-list');
+    const orderSubtotal = document.getElementById('order-subtotal');
+    const orderTax = document.getElementById('order-tax');
+    const orderTotal = document.getElementById('order-total');
 
-    // Load cart items from localStorage or API
+    // Load order summary
     function loadOrderSummary() {
-        // In a real app, you would fetch this from your backend or cart system
-        const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
-
-        if (cartItems.length === 0) {
-            orderItemsContainer.innerHTML = '<p>Your cart is empty</p>';
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        if (!cart.length) {
+            orderItemsContainer.innerHTML = '<p>Your cart is empty.</p>';
             return;
         }
 
-        let itemsHTML = '';
         let subtotal = 0;
+        const itemsHTML = cart.map(item => {
+            const itemTotal = item.price * item.quantity;
+            subtotal += itemTotal;
+            return `
+                <div class="order-item">
+                    <img src="${item.image}" alt="${item.name}">
+                    <div class="order-item-details">
+                        <h4>${item.name}</h4>
+                        <p>Quantity: ${item.quantity}</p>
+                        <p>Price: $$  {item.price.toFixed(2)}</p>
+                        <p>Total:   $${itemTotal.toFixed(2)}</p>
+                    </div>
+                </div>
+            `;
+        }).join('');
 
-        cartItems.forEach(item => {
-            subtotal += item.price * item.quantity;
-            itemsHTML += `
-              <div class="checkout-order-item">
-                  <div class="checkout-item-image">
-                      <img src="${item.image}" alt="${item.name}">
-                  </div>
-                  <div class="checkout-item-details">
-                      <h4>${item.name}</h4>
-                      <p>Size: ${item.size} | Sugar: ${item.sugar} | Ice: ${item.ice}</p>
-                      <p>Toppings: ${item.toppings ? item.toppings.join(', ') : 'None'}</p>
-                      <div class="checkout-item-price-quantity">
-                          <span>$${item.price.toFixed(2)} × ${item.quantity}</span>
-                          <span>$${(item.price * item.quantity).toFixed(2)}</span>
-                      </div>
-                  </div>
-              </div>
-          `;
-        });
-
-        const tax = subtotal * 0.08; // 8% tax
+        const tax = subtotal * 0.08;
         const total = subtotal + tax;
 
         orderItemsContainer.innerHTML = itemsHTML;
-        subtotalElement.textContent = `$${subtotal.toFixed(2)}`;
-        taxElement.textContent = `$${tax.toFixed(2)}`;
-        totalElement.textContent = `$${total.toFixed(2)}`;
+        checkoutSubtotal.textContent = `$${subtotal.toFixed(2)}`;
+        checkoutTax.textContent = `$${tax.toFixed(2)}`;
+        checkoutTotal.textContent = `$${total.toFixed(2)}`;
 
-        // Update amounts in payment methods
+        // Update payment method amounts
         document.getElementById('aba-amount').textContent = `$${total.toFixed(2)}`;
         document.getElementById('acleda-amount').textContent = `$${total.toFixed(2)}`;
-        document.getElementById('cash-amount').textContent = `$${total.toFixed(2)}`;
+        document.getElementById('cod-amount').textContent = `$${total.toFixed(2)}`;
     }
 
-    // Handle step navigation
-    function goToStep(stepNumber) {
-        // Update step indicators
-        steps.forEach(step => {
-            if (parseInt(step.dataset.step) <= stepNumber) {
-                step.classList.add('active');
-            } else {
-                step.classList.remove('active');
-            }
-        });
-
-        // Show the correct content
-        stepContents.forEach(content => {
-            if (content.id === `step-${stepNumber}`) {
-                content.classList.add('active');
-            } else {
-                content.classList.remove('active');
-            }
-        });
-
-        // Scroll to top of step
-        window.scrollTo(0, 0);
+    // Navigate to a specific step
+    function goToStep(step) {
+        steps.forEach(s => s.classList.toggle('active', s.dataset.step <= step));
+        stepContents.forEach(c => c.classList.toggle('active', c.id === `step-${step}`));
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // Save customer details to hidden fields when proceeding to payment
-    customerForm.addEventListener('submit', function(e) {
+    // Handle customer form submission
+    customerForm.addEventListener('submit', e => {
         e.preventDefault();
-
-        // Save data to hidden fields
-        document.getElementById('hidden_first_name').value = document.getElementById('first_name').value;
-        document.getElementById('hidden_last_name').value = document.getElementById('last_name').value;
-        document.getElementById('hidden_email').value = document.getElementById('email').value;
-        document.getElementById('hidden_phone').value = document.getElementById('phone').value;
-        document.getElementById('hidden_address').value = document.getElementById('address').value;
-        document.getElementById('hidden_notes').value = document.getElementById('notes').value;
-
-        // Also set confirmation email
-        confirmationEmail.textContent = document.getElementById('email').value;
-
-        goToStep(2);
-    });
-
-    // Back to details button
-    backToDetailsBtn.addEventListener('click', function() {
-        goToStep(1);
-    });
-
-    // Payment method selection
-    paymentMethods.forEach(method => {
-        method.addEventListener('change', function() {
-            const contentId = `${this.id}_content`;
-            document.querySelectorAll('.payment-method-content').forEach(content => {
-                content.style.display = 'none';
+        if (customerForm.checkValidity()) {
+            // Store customer details
+            ['first_name', 'last_name', 'email', 'phone', 'address', 'notes'].forEach(field => {
+                document.getElementById(`hidden_${field}`).value = document.getElementById(field).value;
             });
+            goToStep(2);
+        } else {
+            customerForm.reportValidity();
+        }
+    });
 
-            if (this.checked) {
-                document.getElementById(contentId).style.display = 'block';
-            }
+    // Handle payment method selection
+    paymentMethods.forEach(method => {
+        method.addEventListener('change', () => {
+            document.querySelectorAll('.payment-method-content').forEach(content => {
+                content.style.display = content.id === `${method.id}_content` ? 'block' : 'none';
+            });
         });
     });
 
-    // Payment verification handlers
-    verifyAbaBtn.addEventListener('click', processPayment);
-    verifyAcledaBtn.addEventListener('click', processPayment);
-    processCardBtn.addEventListener('click', processPayment);
-    confirmCashBtn.addEventListener('click', processPayment);
+    // Process payment
+    function processPayment(method) {
+        // Simulate payment processing
+        return new Promise(resolve => {
+            setTimeout(() => {
+                const orderId = `XF${Math.floor(100000 + Math.random() * 900000)}`;
+                resolve({ success: true, orderId });
+            }, 1500);
+        });
+    }
 
-    function processPayment(e) {
-        e.preventDefault();
-        showLoading();
+    // Payment button handlers
+    verifyAbaPaymentBtn.addEventListener('click', async() => {
+        const transactionId = document.getElementById('aba_transaction_id').value;
+        if (!transactionId) {
+            alert('Please enter a transaction ID.');
+            return;
+        }
+        const result = await processPayment('aba');
+        if (result.success) {
+            finalizeOrder('ABA Pay', result.orderId);
+        }
+    });
 
-        // In a real app, you would send this to your backend
-        setTimeout(() => {
-            hideLoading();
+    verifyAcledaPaymentBtn.addEventListener('click', async() => {
+        const transactionId = document.getElementById('acleda_transaction_id').value;
+        if (!transactionId) {
+            alert('Please enter a transaction ID.');
+            return;
+        }
+        const result = await processPayment('acleda');
+        if (result.success) {
+            finalizeOrder('ACLEDA Pay', result.orderId);
+        }
+    });
 
-            // Generate a random order number if not already set
-            if (!confirmationOrderNumber.textContent.startsWith('#')) {
-                confirmationOrderNumber.textContent = `#${Math.floor(100000 + Math.random() * 900000)}`;
-            }
+    processCardPaymentBtn.addEventListener('click', async() => {
+        const cardNumber = document.getElementById('card_number').value.replace(/\s/g, '');
+        const expiryDate = document.getElementById('expiry_date').value;
+        const cvv = document.getElementById('cvv').value;
+        const cardHolder = document.getElementById('card_holder').value;
 
-            // Set payment method in confirmation
-            const selectedMethod = document.querySelector('input[name="payment_method"]:checked');
-            if (selectedMethod) {
-                let methodName = '';
-                switch (selectedMethod.value) {
-                    case 'aba':
-                        methodName = 'ABA Pay';
-                        break;
-                    case 'acleda':
-                        methodName = 'ACLEDA Pay';
-                        break;
-                    case 'card':
-                        methodName = 'Credit/Debit Card';
-                        break;
-                    case 'cash':
-                        methodName = 'Cash on Delivery';
-                        break;
-                }
-                confirmationPaymentMethod.textContent = methodName;
-            }
+        if (!/^\d{16}$/.test(cardNumber) || !/^\d{3,4}$/.test(cvv) || !/^\d{2}\/\d{2}$/.test(expiryDate) || !cardHolder) {
+            alert('Please enter valid card details.');
+            return;
+        }
 
-            // Set order total in confirmation
-            confirmationOrderTotal.textContent = totalElement.textContent;
+        const result = await processPayment('card');
+        if (result.success) {
+            finalizeOrder('Credit/Debit Card', result.orderId);
+        }
+    });
 
-            // Go to confirmation step
-            goToStep(3);
+    confirmCodPaymentBtn.addEventListener('click', async() => {
+        const result = await processPayment('cod');
+        if (result.success) {
+            finalizeOrder('Cash on Delivery', result.orderId);
+        }
+    });
 
-            // Clear cart
-            localStorage.removeItem('cart');
-        }, 2000);
+    // Finalize order and show confirmation
+    function finalizeOrder(paymentMethod, orderId) {
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let subtotal = 0;
+        const itemsHTML = cart.map(item => {
+            const itemTotal = item.price * item.quantity;
+            subtotal += itemTotal;
+            return `
+                <div class="order-item">
+                    <img src="${item.image}" alt="${item.name}">
+                    <div class="order-item-details">
+                        <h4>${item.name}</h4>
+                        <p>Quantity: ${item.quantity}</p>
+                        <p>Price: $$  {item.price.toFixed(2)}</p>
+                        <p>Total:   $${itemTotal.toFixed(2)}</p>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        const tax = subtotal * 0.08;
+        const total = subtotal + tax;
+
+        orderNumber.textContent = orderId;
+        orderCustomer.textContent = `${document.getElementById('hidden_first_name').value} ${document.getElementById('hidden_last_name').value}`;
+        orderEmail.textContent = document.getElementById('hidden_email').value;
+        orderAddress.textContent = document.getElementById('hidden_address').value;
+        orderPaymentMethod.textContent = paymentMethod;
+        orderItemsList.innerHTML = itemsHTML;
+        orderSubtotal.textContent = `$${subtotal.toFixed(2)}`;
+        orderTax.textContent = `$${tax.toFixed(2)}`;
+        orderTotal.textContent = `$${total.toFixed(2)}`;
+
+        localStorage.removeItem('cart');
+        goToStep(3);
     }
 
     // Print receipt
-    document.getElementById('print-receipt').addEventListener('click', function() {
+    printReceiptBtn.addEventListener('click', () => {
         window.print();
     });
 
-    // Loading functions
-    function showLoading() {
-        loadingModal.style.display = 'flex';
-        overlay.style.display = 'block';
-    }
-
-    function hideLoading() {
-        loadingModal.style.display = 'none';
-        overlay.style.display = 'none';
-    }
+    // Back to customer details
+    backToCustomerBtn.addEventListener('click', () => goToStep(1));
 
     // Initialize
     loadOrderSummary();
