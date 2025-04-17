@@ -1,133 +1,133 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // DOM Elements
-  const bookingsList = document.querySelector(".bookings-list")
-  const filterTabs = document.querySelectorAll(".filter-tab")
-  const searchInput = document.getElementById("bookingSearch")
-  const ctaButton = document.querySelector(".cta-button")
-  const mainContent = document.querySelector(".main-content")
-  const contentArea = document.querySelector(".content-area") || mainContent
+            // DOM Elements
+            const bookingsList = document.querySelector(".bookings-list")
+            const filterTabs = document.querySelectorAll(".filter-tab")
+            const searchInput = document.getElementById("bookingSearch")
+            const ctaButton = document.querySelector(".cta-button")
+            const mainContent = document.querySelector(".main-content")
+            const contentArea = document.querySelector(".content-area") || mainContent
 
-  // Get cart items from localStorage
-  const cartItems = JSON.parse(localStorage.getItem("cart")) || []
+            // Get cart items from localStorage
+            const cartItems = JSON.parse(localStorage.getItem("cart")) || []
 
-  // Create bookings from cart items
-  const bookings = JSON.parse(localStorage.getItem("bookings")) || []
+            // Create bookings from cart items
+            const bookings = JSON.parse(localStorage.getItem("bookings")) || []
 
-  // Check if we just came from checkout
-  const justCheckedOut = sessionStorage.getItem("justCheckedOut")
-  if (justCheckedOut) {
-    // Clear the flag
-    sessionStorage.removeItem("justCheckedOut")
+            // Check if we just came from checkout
+            const justCheckedOut = sessionStorage.getItem("justCheckedOut")
+            if (justCheckedOut) {
+                // Clear the flag
+                sessionStorage.removeItem("justCheckedOut")
 
-    // Create a new booking from cart items if there are any
-    if (cartItems.length > 0) {
-      createBookingFromCart()
-    }
-  }
+                // Create a new booking from cart items if there are any
+                if (cartItems.length > 0) {
+                    createBookingFromCart()
+                }
+            }
 
-  // Initialize bookings
-  renderBookings()
+            // Initialize bookings
+            renderBookings()
 
-  // Filter bookings by status
-  filterTabs.forEach((tab) => {
-    tab.addEventListener("click", function () {
-      // Remove active class from all tabs
-      filterTabs.forEach((t) => t.classList.remove("active"))
+            // Filter bookings by status
+            filterTabs.forEach((tab) => {
+                tab.addEventListener("click", function() {
+                    // Remove active class from all tabs
+                    filterTabs.forEach((t) => t.classList.remove("active"))
 
-      // Add active class to clicked tab
-      this.classList.add("active")
+                    // Add active class to clicked tab
+                    this.classList.add("active")
 
-      // Filter bookings
-      const status = this.getAttribute("data-status")
-      renderBookings(status)
-    })
-  })
+                    // Filter bookings
+                    const status = this.getAttribute("data-status")
+                    renderBookings(status)
+                })
+            })
 
-  // Search bookings
-  if (searchInput) {
-    searchInput.addEventListener("input", function () {
-      const searchTerm = this.value.toLowerCase().trim()
-      const activeStatus = document.querySelector(".filter-tab.active").getAttribute("data-status")
+            // Search bookings
+            if (searchInput) {
+                searchInput.addEventListener("input", function() {
+                    const searchTerm = this.value.toLowerCase().trim()
+                    const activeStatus = document.querySelector(".filter-tab.active").getAttribute("data-status")
 
-      renderBookings(activeStatus, searchTerm)
-    })
-  }
+                    renderBookings(activeStatus, searchTerm)
+                })
+            }
 
-  // CTA button click
-  if (ctaButton) {
-    ctaButton.addEventListener("click", () => {
-      window.location.href = "/order"
-    })
-  }
+            // CTA button click
+            if (ctaButton) {
+                ctaButton.addEventListener("click", () => {
+                    window.location.href = "/order"
+                })
+            }
 
-  // Create booking from cart
-  function createBookingFromCart() {
-    if (cartItems.length === 0) return
+            // Create booking from cart
+            function createBookingFromCart() {
+                if (cartItems.length === 0) return
 
-    // Calculate total
-    const subtotal = cartItems.reduce((total, item) => total + item.totalPrice, 0)
-    const tax = subtotal * 0.08
-    const total = subtotal + tax
+                // Calculate total
+                const subtotal = cartItems.reduce((total, item) => total + item.totalPrice, 0)
+                const tax = subtotal * 0.08
+                const total = subtotal + tax
 
-    // Create booking
-    const booking = {
-      id: "ORD" + Date.now().toString().slice(-6),
-      date: new Date().toISOString(),
-      items: cartItems,
-      subtotal,
-      tax,
-      total,
-      status: "processing",
-      paymentStatus: "pending", // Add payment status
-      paymentMethod: null, // Will be set when payment is made
-    }
+                // Create booking
+                const booking = {
+                    id: "ORD" + Date.now().toString().slice(-6),
+                    date: new Date().toISOString(),
+                    items: cartItems,
+                    subtotal,
+                    tax,
+                    total,
+                    status: "processing",
+                    paymentStatus: "pending", // Add payment status
+                    paymentMethod: null, // Will be set when payment is made
+                }
 
-    // Add to bookings
-    bookings.unshift(booking)
+                // Add to bookings
+                bookings.unshift(booking)
 
-    // Save to localStorage
-    localStorage.setItem("bookings", JSON.stringify(bookings))
+                // Save to localStorage
+                localStorage.setItem("bookings", JSON.stringify(bookings))
 
-    // Clear cart
-    localStorage.setItem("cart", JSON.stringify([]))
+                // Clear cart
+                localStorage.setItem("cart", JSON.stringify([]))
 
-    // Add notification
-    if (window.addNotification) {
-      window.addNotification(
-        "Order Placed Successfully",
-        `Your order #${booking.id} has been placed and is being processed.`,
-        "order",
-      )
-    }
-  }
+                // Add notification
+                if (window.addNotification) {
+                    window.addNotification(
+                        "Order Placed Successfully",
+                        `Your order #${booking.id} has been placed and is being processed.`,
+                        "order",
+                    )
+                }
+            }
 
-  // Render bookings
-  function renderBookings(status = "all", searchTerm = "") {
-    if (!bookingsList) return
+            // Render bookings
+            function renderBookings(status = "all", searchTerm = "") {
+                if (!bookingsList) return
 
-    // Filter bookings by status
-    let filteredBookings = bookings
-    if (status !== "all") {
-      filteredBookings = bookings.filter((booking) => booking.status === status)
-    }
-    // Fix: When in "all" tab, don't show cancelled orders
-    else {
-      filteredBookings = bookings.filter((booking) => booking.status !== "cancelled")
-    }
+                // Filter bookings by status
+                let filteredBookings = bookings
+                if (status !== "all") {
+                    filteredBookings = bookings.filter((booking) => booking.status === status)
+                }
+                // Fix: When in "all" tab, don't show cancelled orders
+                else {
+                    filteredBookings = bookings.filter((booking) => booking.status !== "cancelled")
+                }
 
-    // Filter by search term
-    if (searchTerm) {
-      filteredBookings = filteredBookings.filter((booking) => booking.id.toLowerCase().includes(searchTerm))
-    }
+                // Filter by search term
+                if (searchTerm) {
+                    filteredBookings = filteredBookings.filter((booking) => booking.id.toLowerCase().includes(searchTerm))
+                }
 
-    // Clear bookings list
-    bookingsList.innerHTML = ""
+                // Clear bookings list
+                bookingsList.innerHTML = ""
 
-    // Show empty state if no bookings
-    if (filteredBookings.length === 0) {
-      bookingsList.innerHTML = `
+                // Show empty state if no bookings
+                if (filteredBookings.length === 0) {
+                    bookingsList.innerHTML = `
                 <div class="empty-state">
-                    <img src="/assets/image/empty-orders.svg" alt="No Orders">
+
                     <h3>No Orders Found</h3>
                     <p>${status === "all" ? "You haven't placed any orders yet." : `You don't have any ${status} orders.`}</p>
                     <a href="/order" class="btn-primary">Order Now</a>
