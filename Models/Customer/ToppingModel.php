@@ -3,7 +3,6 @@ namespace YourNamespace\Models;
 
 require_once './Database/database.php';
 
-require_once __DIR__ . '/../Database/database.php';
 use YourNamespace\Database\Database;
 use PDOException;
 class ToppingModel
@@ -35,11 +34,11 @@ class ToppingModel
     }
 
     public function getTopping($id)
-    {
-        $stmt = $this->pdo->prepare("SELECT * FROM toppings WHERE topping_id = :topping_id");
-        $stmt->execute(['product_id' => $id]);
-        return $stmt->fetch(\PDO::FETCH_ASSOC);
-    }
+{
+    $stmt = $this->pdo->prepare("SELECT * FROM toppings WHERE topping_id = :topping_id");
+    $stmt->execute(['topping_id' => $id]); // Changed 'product_id' to 'topping_id'
+    return $stmt->fetch(\PDO::FETCH_ASSOC);
+}
 
     public function updateTopping($id, $data)
     {

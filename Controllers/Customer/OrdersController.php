@@ -1,6 +1,7 @@
 <?php
 
 namespace YourNamespace\Controllers;
+// namespace YourNamespace\Models;
 
 use YourNamespace\BaseController;
 
@@ -12,7 +13,7 @@ class OrdersController extends BaseController
     {
         // Initialize the product model if needed
         $this->productModel = new \YourNamespace\Models\ProductModel();
-        $this->toppingModel = new \YourNamespace\Models\ToppingModel();
+        // $this->toppingModel = new \YourNamespace\Models\ToppingModel();
     }
     public function index()
     {
@@ -30,13 +31,13 @@ class OrdersController extends BaseController
         }, $this->productModel->getProducts());
 
 
-        $toppings =  array_map(function ($i) {
-            return [
-                'id' => $i['topping_id'],
-                'name' => $i['topping_name'],
-                'price' => $i['price']
-            ];
-        }, $this->productModel->getToppings());
+        // $toppings =  array_map(function ($i) {
+        //     return [
+        //         'id' => $i['topping_id'],
+        //         'name' => $i['topping_name'],
+        //         'price' => $i['price']
+        //     ];
+        // }, $this->toppingModel->getToppings());
 
         // Get user favorites if logged in
         $favorites = [];
@@ -52,7 +53,7 @@ class OrdersController extends BaseController
         $this->views('order', [
             'title' => 'Order Drinks',
             'products' => $products,
-            'toppings' => $toppings,
+            // 'toppings' => $toppings,
             'favorites' => $favorites,
             'cartCount' => $cartCount
         ]);
@@ -62,84 +63,24 @@ class OrdersController extends BaseController
     {
         // In a real application, you would fetch the product from the database
         // For now, we'll create a lookup array with all products
-        $products = [
-            1 => [
-                'id' => 1,
-                'name' => 'Classic Milk Tea',
-                'description' => 'Our signature milk tea with premium black tea and creamy milk.',
-                'price' => 4.50,
-                'image' => '/assets/images/products/classic-milk-tea.jpg',
+        $products = array_map(function ($i) {
+            return [
+                'id' => $i['product_id'],	
+                'name' => $i['product_name'],
+                'description' => $i['product_detail'],
+                'price' => $i['price'],
+                'image' => $i['image'],
                 'category' => 'milk-tea'
-            ],
-            2 => [
-                'id' => 2,
-                'name' => 'Taro Milk Tea',
-                'description' => 'Creamy taro flavor blended with our premium milk tea.',
-                'price' => 5.00,
-                'image' => '/assets/images/products/taro-milk-tea.jpg',
-                'category' => 'milk-tea'
-            ],
-            3 => [
-                'id' => 3,
-                'name' => 'Matcha Latte',
-                'description' => 'Premium Japanese matcha powder with fresh milk.',
-                'price' => 5.50,
-                'image' => '/assets/images/products/matcha-latte.jpg',
-                'category' => 'milk-tea'
-            ],
-            4 => [
-                'id' => 4,
-                'name' => 'Brown Sugar Boba Milk',
-                'description' => 'Fresh milk with brown sugar syrup and chewy boba pearls.',
-                'price' => 5.75,
-                'image' => '/assets/images/products/brown-sugar-boba.jpg',
-                'category' => 'milk-tea'
-            ],
-            // Add more products as needed
-        ];
+            ];
+        }, $this->productModel->getProducts());
 
-        $toppings = [
-            [
-                'id' => 1,
-                'name' => 'Boba Pearls',
-                'price' => 0.75
-            ],
-            [
-                'id' => 2,
-                'name' => 'Grass Jelly',
-                'price' => 0.75
-            ],
-            [
-                'id' => 3,
-                'name' => 'Pudding',
-                'price' => 0.75
-            ],
-            [
-                'id' => 4,
-                'name' => 'Aloe Vera',
-                'price' => 0.75
-            ],
-            [
-                'id' => 5,
-                'name' => 'Cheese Foam',
-                'price' => 1.00
-            ],
-            [
-                'id' => 6,
-                'name' => 'Fresh Fruit',
-                'price' => 1.00
-            ],
-            [
-                'id' => 7,
-                'name' => 'Red Bean',
-                'price' => 0.75
-            ],
-            [
-                'id' => 8,
-                'name' => 'Coconut Jelly',
-                'price' => 0.75
-            ]
-        ];
+        $toppings =  array_map(function ($i) {
+            return [
+                'id' => $i['topping_id'],
+                'name' => $i['topping_name'],
+                'price' => $i['price']
+            ];
+        }, $this->toppingModel->getToppings());
 
         $product = isset($products[$id]) ? $products[$id] : null;
 
@@ -190,7 +131,6 @@ class OrdersController extends BaseController
         // 1. Validate the product exists
         // 2. Calculate the correct price
         // 3. Add the item to the user's cart in the database
-
         // For now, we'll just store in session
         if (!isset($_SESSION['cart'])) {
             $_SESSION['cart'] = [];

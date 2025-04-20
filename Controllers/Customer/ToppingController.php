@@ -1,14 +1,15 @@
 <?php
 
-namespace YourNamespace\Controllers\Admin\Products;
+namespace YourNamespace;
 
-require_once './Models/ToppingModel.php';
-require_once './controllers/BaseController.php';
+require_once './Models/Customer/ToppingModel.php';
+require_once './Controllers/BaseController.php';
 
-use YourNamespace\Models\ToppingModel; // Keep this
-use YourNamespace\BaseController; // Keep this
 
-class ProductController extends BaseController
+use YourNamespace\Models\ToppingModel;
+// use YourNamespace\Controllers\BaseController;
+
+class ToppingController extends BaseController
 {
     private $model;
 
@@ -18,24 +19,24 @@ class ProductController extends BaseController
             session_start();
         }
 
-        $this->model = new ToppingModel(); // Use the namespaced ProductModel
+        $this->model = new ToppingModel();
     }
 
     public function index()
     {
-        $products = $this->model->getToppings(); // Fetch products from the database
-        $this->views('products/product-list', ['products' => $products]); // Pass products to the view
+        $toppings = $this->model->getToppings();
+        $this->views('admin/toppings/topping', ['toppings' => $toppings]); // Ensure this view exists
     }
 
     public function create()
     {
-        $this->views('products/product-create');
+        $this->views('admin/toppings/create'); // Ensure this view exists
     }
 
     public function store()
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $uploadDir = 'uploads/product/';
+            $uploadDir = 'uploads/toppings/'; // Changed to toppings directory
             if (!is_dir($uploadDir)) {
                 mkdir($uploadDir, 0777, true);
             }
@@ -45,14 +46,13 @@ class ProductController extends BaseController
 
             if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadFile)) {
                 $data = [
-                    'product_name' => $_POST['product_name'],
-                    'product_detail' => $_POST['product_detail'],
+                    'name' => $_POST['name'], // Adjust fields to match your ToppingModel
                     'price' => $_POST['price'],
                     'image' => $uploadFile,
                 ];
 
                 $this->model->createTopping($data);
-                $this->redirect('/product');
+                $this->redirect('/admin/toppings'); // Redirect to toppings list
             } else {
                 die("Failed to upload the image.");
             }
@@ -61,90 +61,65 @@ class ProductController extends BaseController
 
     public function edit($id)
     {
-        $product = $this->model->getTopping($id);
-        if (!$product) {
-            $_SESSION['error'] = "Product not found!";
-            return $this->redirect('/product');
+        $topping = $this->model->getTopping($id);
+        if (!$topping) {
+            $_SESSION['error'] = "Topping not found!";
+            return $this->redirect('/admin/toppings');
         }
-        $this->views('products/product-edit', ['product' => $product]);
+        $this->views('admin/toppings/edit', ['topping' => $topping]); // Ensure this view exists
     }
-
 
     public function update($id)
-{
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $product = $this->model->getTopping($id);
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $topping = $this->model->getTopping($id);
 
-        if (!$product) {
-            $_SESSION['error'] = "Product not found!";
-            return $this->redirect('/product');
-        }
-
-        $product_name = $_POST['product_name'];
-        $product_detail = $_POST['product_detail'];
-        $price = $_POST['price'];
-        $category = $_POST['category'];
-        $existing_image = $_POST['existing_image'];
-
-        // Handle file upload
-        $image = $existing_image;
-        if (!empty($_FILES['image']['name'])) {
-            $upload_dir = __DIR__ . '/../public/uploads/';
-            if (!is_dir($upload_dir)) {
-                mkdir($upload_dir, 0755, true);
+            if (!$topping) {
+                $_SESSION['error'] = "Topping not found!";
+                return $this->redirect('/admin/toppings');
             }
 
-            $filename = time() . '_' . basename($_FILES['image']['name']);
-            $target_file = $upload_dir . $filename;
+            $data = [
+                'name' => $_POST['name'],
+                'price' => $_POST['price'],
+            ];
 
-            if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
-                $image = $filename;
+            // Handle image update (optional)
+            if (!empty($_FILES['image']['name'])) {
+                $uploadDir = 'uploads/toppings/';
+                $imageName = basename($_FILES['image']['name']);
+                $uploadFile = $uploadDir . $imageName;
 
-                // Optionally delete the old image
-                $old_image_path = $upload_dir . $existing_image;
-                if (file_exists($old_image_path) && $existing_image !== '') {
-                    unlink($old_image_path);
+                if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadFile)) {
+                    $data['image'] = $uploadFile;
                 }
             }
+
+            $updated = $this->model->updateTopping($id, $data);
+
+            if ($updated) {
+                $_SESSION['success'] = "Topping updated successfully!";
+            } else {
+                $_SESSION['error'] = "Failed to update topping.";
+            }
+
+            $this->redirect('/admin/toppings');
         }
-
-        $data = [
-            'product_name' => $product_name,
-            'product_detail' => $product_detail,
-            'price' => $price,
-            'category' => $category,
-            'image' => $image,
-        ];
-
-        $updated = $this->model->updateTopping($id, $data);
-
-        if ($updated) {
-            $_SESSION['success'] = "Product updated successfully!";
-        } else {
-            $_SESSION['error'] = "Failed to update product.";
-        }
-
-        return $this->redirect("/admin/products/edit/");
     }
 
-    return $this->redirect('/product');
-}
-
-
-
-    function delete($id)
+    public function destroy($id)
     {
         if (!is_numeric($id)) {
-            $_SESSION['error'] = 'Invalid product ID!';
-            return $this->redirect('/product');
+            $_SESSION['error'] = 'Invalid topping ID!';
+            return $this->redirect('/admin/toppings');
         }
 
         if ($this->model->deleteTopping($id)) {
-            $_SESSION['success'] = 'Product deleted successfully!';
+            $_SESSION['success'] = 'Topping deleted successfully!';
         } else {
-            $_SESSION['error'] = 'Failed to delete product!';
+            $_SESSION['error'] = 'Failed to delete topping!';
         }
 
-        $this->redirect('/product');
+        $this->redirect('/admin/toppings');
     }
 }

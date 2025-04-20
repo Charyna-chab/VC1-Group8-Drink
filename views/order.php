@@ -137,8 +137,8 @@
                 <div id="toppings" class="toppings-grid">
                     <?php foreach ($toppings as $topping): ?>
                     <label class="topping-item">
-                        <input type="checkbox" name="topping" value="<?php echo $topping['name']; ?>" data-price="<?php echo $topping['price']; ?>">
-                        <span><?php echo $topping['name']; ?></span>
+                        <input type="checkbox" name="topping" value="<?php echo $topping['topping_name']; ?>" data-price="<?php echo $topping['price']; ?>">
+                        <span><?php echo $topping['topping_name']; ?></span>
                         <span class="topping-price">$<?php echo number_format($topping['price'], 2); ?></span>
                     </label>
                     <?php endforeach; ?>
