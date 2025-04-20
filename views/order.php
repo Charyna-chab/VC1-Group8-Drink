@@ -1,6 +1,10 @@
-<?php require_once __DIR__ . '/layouts/header.php'; ?>
-<?php require_once __DIR__ . '/layouts/navbar.php'; ?>
-<?php require_once __DIR__ . '/layouts/sidebar.php'; ?>
+<?php
+require_once __DIR__ . '/layouts/header.php';
+require_once __DIR__ . '/layouts/navbar.php';
+require_once __DIR__ . '/layouts/sidebar.php';
+
+
+?>
 
 <section class="content">
     <!-- Discount Banner -->
@@ -37,7 +41,6 @@
             <div class="product-card" data-category="<?php echo $product['category']; ?>">
                 <div class="product-image">
                     <img src="<?php echo $product['image']; ?>" alt="<?php echo $product['name']; ?>">
-
                 </div>
                 <div class="product-info">
                     <h3><?php echo $product['name']; ?></h3>
@@ -49,17 +52,15 @@
                 </div>
             </div>
             <?php endforeach; ?>
-            
             <div id="no-product-message">No products found matching your criteria.</div>
         </div>
     </div>
 </section>
 
-<!-- Add this right before the Order Panel div -->
 <!-- Product Detail Modal -->
 <div id="productDetailModal" class="product-detail-modal">
     <div class="product-detail-content">
-        <button class="close-btn">&times;</button>
+        <button class="close-btn">×</button>
         <div class="product-detail-image">
             <img id="detailProductImage" src="/placeholder.svg" alt="Product Image">
         </div>
@@ -86,7 +87,7 @@
 <!-- Order Panel -->
 <div id="orderPanel" class="order-panel">
     <div class="order-panel-content">
-        <button class="close-btn">&times;</button>
+        <button class="close-btn">×</button>
         <h3>Customize Your Order</h3>
         <div class="product-info">
             <img id="productImage" src="/placeholder.svg" alt="Product Image">
@@ -173,7 +174,7 @@
 <!-- Cart Panel -->
 <div id="cartPanel" class="cart-panel">
     <div class="cart-panel-content">
-        <button class="close-btn">&times;</button>
+        <button class="close-btn">×</button>
         <h3>Your Cart</h3>
         <div id="cartItems" class="cart-items">
             <!-- Cart items will be dynamically added here -->
@@ -196,10 +197,12 @@
             <button id="clearCartBtn" class="btn-outline">
                 <i class="fas fa-trash"></i> Clear Cart
             </button>
-            <a href="/checkout" id="checkoutBtn" class="btn-primary">
+            <button id="checkoutBtn" class="btn-primary">
                 <i class="fas fa-check"></i> Checkout
-            </a>
+            </button>
         </div>
+        <!-- Hidden input for user_id -->
+        <input type="hidden" id="userId" value="<?php echo isset($_SESSION['user_id']) ? $_SESSION['user_id'] : ''; ?>">
     </div>
 </div>
 
@@ -207,10 +210,9 @@
 <div id="notificationPanel" class="notification-panel">
     <div class="notification-header">
         <h3>Notifications</h3>
-        <button class="close-btn">&times;</button>
+        <button class="close-btn">×</button>
     </div>
     <div id="notificationList" class="notification-list">
-        <!-- Notifications will be dynamically added here -->
         <div class="empty-notification">
             <i class="fas fa-bell-slash"></i>
             <p>No notifications yet</p>
@@ -231,4 +233,4 @@
 <script src="/assets/js/order.js"></script>
 <script src="/assets/js/notification.js"></script>
 
-
+<?php require_once __DIR__ . '/layouts/footer.php'; ?>

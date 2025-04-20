@@ -3,8 +3,18 @@ require_once __DIR__ . '/layouts/header.php';
 require_once __DIR__ . '/layouts/navbar.php';
 require_once __DIR__ . '/layouts/sidebar.php';
 
+// Start session
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
 // Check for booking_id in URL
 $booking_id = isset($_GET['booking_id']) ? htmlspecialchars($_GET['booking_id']) : null;
+
+// Sync localStorage cart with session
+if (!isset($_SESSION['cart']) && isset($_POST['cart'])) {
+    $_SESSION['cart'] = json_decode($_POST['cart'], true);
+}
 ?>
 
 <section class="content">
@@ -182,64 +192,75 @@ $booking_id = isset($_GET['booking_id']) ? htmlspecialchars($_GET['booking_id'])
         <!-- Step 3: Receipt -->
         <div class="checkout-step-content" id="step-3">
             <div class="order-confirmation">
-                <i class="fas fa-check-circle confirmation-icon"></i>
-                <h2>Order Receipt</h2>
-                <p>Your order has been successfully processed. Thank you for your purchase!</p>
-                <div class="order-details">
-                    <div class="order-detail-row">
-                        <span>Order Number:</span>
-                        <span id="order-number"></span>
-                    </div>
-                    <div class="order-detail-row">
-                        <span>Order Date:</span>
-                        <span id="order-date"><?php echo date('F j, Y H:i'); ?></span>
-                    </div>
-                    <div class="order-detail-row">
-                        <span>Customer Name:</span>
-                        <span id="order-customer"></span>
-                    </div>
-                    <div class="order-detail-row">
-                        <span>Email:</span>
-                        <span id="order-email"></span>
-                    </div>
-                    <div class="order-detail-row">
-                        <span>Delivery Address:</span>
-                        <span id="order-address"></span>
-                    </div>
-                    <div class="order-detail-row">
-                        <span>Payment Method:</span>
-                        <span id="order-payment-method"></span>
-                    </div>
-                    <div class="order-detail-row">
-                        <span>Transaction ID:</span>
-                        <span id="order-transaction-id"></span>
-                    </div>
+                <div class="receipt-header">
+                    <img src="/assets/images/logo.png" alt="Xing Fu Cha Logo" class="receipt-logo">
+                    <h2>Order Receipt</h2>
+                    <p>Thank you for your purchase at Xing Fu Cha!</p>
                 </div>
-                <div class="order-items">
-                    <h3>Order Items</h3>
-                    <div id="order-items-list"></div>
-                    <div class="order-totals">
-                        <div class="order-total-row">
-                            <span>Subtotal:</span>
-                            <span id="order-subtotal">$0.00</span>
+                <div class="receipt-content">
+                    <div class="receipt-section receipt-details">
+                        <h3>Order Details</h3>
+                        <div class="receipt-row">
+                            <span>Order Number:</span>
+                            <span id="order-number"></span>
                         </div>
-                        <div class="order-total-row">
-                            <span>Tax (8%):</span>
-                            <span id="order-tax">$0.00</span>
+                        <div class="receipt-row">
+                            <span>Order Date:</span>
+                            <span id="order-date"><?php echo date('F j, Y H:i'); ?></span>
                         </div>
-                        <div class="order-total-row grand-total">
-                            <span>Total:</span>
-                            <span id="order-total">$0.00</span>
+                        <div class="receipt-row">
+                            <span>Customer Name:</span>
+                            <span id="order-customer"></span>
+                        </div>
+                        <div class="receipt-row">
+                            <span>Email:</span>
+                            <span id="order-email"></span>
+                        </div>
+                        <div class="receipt-row">
+                            <span>Delivery Address:</span>
+                            <span id="order-address"></span>
+                        </div>
+                        <div class="receipt-row">
+                            <span>Payment Method:</span>
+                            <span id="order-payment-method"></span>
+                        </div>
+                        <div class="receipt-row">
+                            <span>Transaction ID:</span>
+                            <span id="order-transaction-id"></span>
+                        </div>
+                    </div>
+                    <div class="receipt-section receipt-items">
+                        <h3>Order Items</h3>
+                        <div id="order-items-list"></div>
+                        <div class="receipt-totals">
+                            <div class="receipt-total-row">
+                                <span>Subtotal:</span>
+                                <span id="order-subtotal">$0.00</span>
+                            </div>
+                            <div class="receipt-total-row">
+                                <span>Tax (8%):</span>
+                                <span id="order-tax">$0.00</span>
+                            </div>
+                            <div class="receipt-total-row grand-total">
+                                <span>Total:</span>
+                                <span id="order-total">$0.00</span>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="confirmation-actions">
-                    <a href="/menu" class="btn-primary">Continue Shopping</a>
+                    <a href="views/order.php" class="btn-primary">Continue Shopping</a>
                     <button type="button" id="print-receipt" class="btn-outline">
                         <i class="fas fa-print"></i> Print Receipt
                     </button>
                     <button type="button" id="download-receipt" class="btn-outline">
                         <i class="fas fa-download"></i> Download PDF
+                    </button>
+                    <button type="button" id="email-receipt" class="btn-outline">
+                        <i class="fas fa-envelope"></i> Email Receipt
+                    </button>
+                    <button type="button" id="share-receipt" class="btn-outline">
+                        <i class="fas fa-share-alt"></i> Share Receipt
                     </button>
                 </div>
             </div>
@@ -250,5 +271,3 @@ $booking_id = isset($_GET['booking_id']) ? htmlspecialchars($_GET['booking_id'])
 <link rel="stylesheet" href="/assets/css/checkout.css">
 <script src="/assets/js/checkout.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
-<?php require_once __DIR__ . '/layouts/footer.php'; ?>
