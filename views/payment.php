@@ -92,21 +92,71 @@
                         </div>
                     </div>
                     
-                    <!-- QR Code Payment Option -->
-                    <div class="payment-method-card" data-payment="qr">
+                    <!-- ABA QR Code Payment Option -->
+                    <div class="payment-method-card" data-payment="aba">
                         <div class="payment-method-header">
-                            <input type="radio" name="payment_method" id="qr_payment" value="qr">
-                            <label for="qr_payment">
-                                <i class="fas fa-qrcode"></i>
-                                <span>QR Code Payment</span>
+                            <input type="radio" name="payment_method" id="aba_payment" value="aba">
+                            <label for="aba_payment">
+                                <img src="/assets/images/aba-pay-logo.png" alt="ABA Pay" style="height: 24px;">
+                                <span>ABA Pay</span>
                             </label>
                         </div>
-                        <div class="payment-method-content" id="qr_payment_content">
+                        <div class="payment-method-content" id="aba_payment_content">
                             <div class="qr-code-container">
-                                <img src="/assets/images/qr-code-payment.png" alt="QR Code Payment">
-                                <p>Scan this QR code with your mobile payment app to complete the payment</p>
+                                <img src="/assets/images/aba-qr-code.png" alt="ABA QR Code Payment">
+                                <p>Scan this QR code with your ABA mobile app to complete the payment</p>
+                                <div class="payment-details">
+                                    <div class="payment-detail-row">
+                                        <span>Account Name:</span>
+                                        <span>Xing Fu Cha</span>
+                                    </div>
+                                    <div class="payment-detail-row">
+                                        <span>Account Number:</span>
+                                        <span>000 123 456</span>
+                                    </div>
+                                </div>
                                 <div class="qr-verification">
-                                    <button id="verify-qr-payment" class="btn-primary">
+                                    <div class="form-group">
+                                        <label for="aba_transaction_id">Enter Transaction ID</label>
+                                        <input type="text" id="aba_transaction_id" placeholder="e.g. ABA123456789">
+                                    </div>
+                                    <button id="verify-aba-payment" class="btn-primary">
+                                        <i class="fas fa-check-circle"></i> Verify Payment
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- ACLEDA QR Code Payment Option -->
+                    <div class="payment-method-card" data-payment="acleda">
+                        <div class="payment-method-header">
+                            <input type="radio" name="payment_method" id="acleda_payment" value="acleda">
+                            <label for="acleda_payment">
+                                <img src="/assets/images/acleda-pay-logo.png" alt="ACLEDA Pay" style="height: 24px;">
+                                <span>ACLEDA Pay</span>
+                            </label>
+                        </div>
+                        <div class="payment-method-content" id="acleda_payment_content">
+                            <div class="qr-code-container">
+                                <img src="/assets/images/acleda-qr-code.png" alt="ACLEDA QR Code Payment">
+                                <p>Scan this QR code with your ACLEDA mobile app to complete the payment</p>
+                                <div class="payment-details">
+                                    <div class="payment-detail-row">
+                                        <span>Account Name:</span>
+                                        <span>Xing Fu Cha</span>
+                                    </div>
+                                    <div class="payment-detail-row">
+                                        <span>Account Number:</span>
+                                        <span>000 987 654</span>
+                                    </div>
+                                </div>
+                                <div class="qr-verification">
+                                    <div class="form-group">
+                                        <label for="acleda_transaction_id">Enter Transaction ID</label>
+                                        <input type="text" id="acleda_transaction_id" placeholder="e.g. ACLEDA123456789">
+                                    </div>
+                                    <button id="verify-acleda-payment" class="btn-primary">
                                         <i class="fas fa-check-circle"></i> Verify Payment
                                     </button>
                                 </div>
@@ -127,6 +177,10 @@
                             <div class="cash-payment-info">
                                 <p>You will pay when your order is delivered or when you pick it up at our store.</p>
                                 <p>Please prepare the exact amount: <strong>$<?php echo isset($total) ? number_format($total, 2) : '0.00'; ?></strong></p>
+                                <div class="cash-payment-note">
+                                    <i class="fas fa-info-circle"></i>
+                                    <p>Note: Our delivery person will contact you before arrival.</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -163,23 +217,15 @@
                 </div>
             </div>
             <div class="success-actions">
-                <a href="/booking" class="btn-primary">View My Orders</a>
+                <a href="/receipt?order_id=<?php echo isset($_GET['order_id']) ? htmlspecialchars($_GET['order_id']) : ''; ?>" class="btn-primary">View Receipt</a>
+                <a href="/booking" class="btn-secondary">View My Orders</a>
             </div>
         </div>
     </div>
-</section>
-<!-- Update the button in the payment actions section -->
-<div class="payment-actions">
-    <a href="/booking" class="btn-outline">
-        <i class="fas fa-arrow-left"></i> Back to Orders
-    </a>
-    <button id="complete-payment" class="btn-primary" disabled>
-        <i class="fas fa-check-circle"></i> Completed
-    </button>
-</div>
 
-<!-- Overlay -->
-<div id="overlay"></div>
+    <!-- Overlay -->
+    <div id="overlay"></div>
+</section>
 
 <!-- Include CSS files -->
 <link rel="stylesheet" href="/assets/css/payment.css">

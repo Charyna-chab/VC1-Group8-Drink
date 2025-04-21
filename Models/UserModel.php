@@ -94,6 +94,20 @@ class UserModel
         }
     }
 
+    public function updateProfileImage($userId, $imagePath)
+    {
+        try {
+            $stmt = $this->pdo->prepare("UPDATE users SET image = :image WHERE user_id = :user_id");
+            return $stmt->execute([
+                'image' => $imagePath,
+                'user_id' => $userId
+            ]);
+        } catch (PDOException $e) {
+            error_log("Error updating profile image: " . $e->getMessage());
+            return false;
+        }
+    }
+
     public function deleteUser($id)
     {
         try {

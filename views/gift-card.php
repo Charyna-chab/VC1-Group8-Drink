@@ -9,7 +9,7 @@
             <p>Perfect for birthdays, holidays, or just to say thank you</p>
         </div>
         
-        <div class="gift-card-grid">
+        <div class="gift-card-container">
             <?php
             $giftCards = [
                 [
@@ -47,32 +47,57 @@
                 ]
             ];
             
-            foreach ($giftCards as $card): ?>
-                <div class="gift-card-item" data-id="<?php echo $card['id']; ?>">
-                    <div class="gift-card-image">
-                        <img src="<?php echo $card['image']; ?>" alt="<?php echo $card['name']; ?>">
-                        <div class="card-overlay">
-                            <a href="/gift-card/details/<?php echo $card['id']; ?>" class="view-details-btn">View Details</a>
+            foreach ($giftCards as $index => $card): 
+                // Force the second card (index 1) to be image-right
+                $layoutClass = ($index == 1) ? 'image-right' : (($index % 2 == 0) ? 'image-left' : 'image-right');
+            ?>
+                <div class="gift-card-item <?php echo $layoutClass; ?>" data-id="<?php echo $card['id']; ?>">
+                    <?php if($layoutClass == ''): ?>
+                        <div class="gift-card-content">
+                            <h3><?php echo $card['name']; ?></h3>
+                            <p class="card-description"><?php echo $card['description']; ?></p>
+                            <div class="price-options">
+                                <?php foreach ($card['options'] as $optIndex => $option): ?>
+                                    <button class="price-option <?php echo $optIndex === 0 ? 'active' : ''; ?>" data-value="<?php echo $option['value']; ?>"><?php echo $option['label']; ?></button>
+                                <?php endforeach; ?>
+                            </div>
+                            <button class="add-to-cart-btn" data-id="<?php echo $card['id']; ?>">
+                                <i class="fas fa-shopping-cart"></i> Add to Cart
+                            </button>
                         </div>
-                    </div>
-                    <div class="gift-card-content">
-                        <h3><?php echo $card['name']; ?></h3>
-                        <p class="card-description"><?php echo $card['description']; ?></p>
-                        <div class="price-options">
-                            <?php foreach ($card['options'] as $index => $option): ?>
-                                <button class="price-option <?php echo $index === 0 ? 'active' : ''; ?>" data-value="<?php echo $option['value']; ?>"><?php echo $option['label']; ?></button>
-                            <?php endforeach; ?>
+                        <div class="gift-card-image">
+                            <img src="<?php echo $card['image']; ?>" alt="<?php echo $card['name']; ?>">
+                            <div class="card-overlay">
+                                <a href="/gift-card/details/<?php echo $card['id']; ?>" class="view-details-btn">View Details</a>
+                            </div>
                         </div>
-                        <button class="add-to-cart-btn" data-id="<?php echo $card['id']; ?>">
-                            <i class="fas fa-shopping-cart"></i> Add to Cart
-                        </button>
-                    </div>
+                    <?php else: ?>
+                        <div class="gift-card-image">
+                            <img src="<?php echo $card['image']; ?>" alt="<?php echo $card['name']; ?>">
+                            <div class="card-overlay">
+                                <a href="/gift-card/details/<?php echo $card['id']; ?>" class="view-details-btn">View Details</a>
+                            </div>
+                        </div>
+                        <div class="gift-card-content">
+                            <h3><?php echo $card['name']; ?></h3>
+                            <p class="card-description"><?php echo $card['description']; ?></p>
+                            <div class="price-options">
+                                <?php foreach ($card['options'] as $optIndex => $option): ?>
+                                    <button class="price-option <?php echo $optIndex === 0 ? 'active' : ''; ?>" data-value="<?php echo $option['value']; ?>"><?php echo $option['label']; ?></button>
+                                <?php endforeach; ?>
+                            </div>
+                            <button class="add-to-cart-btn" data-id="<?php echo $card['id']; ?>">
+                                <i class="fas fa-shopping-cart"></i> Add to Cart
+                            </button>
+                        </div>
+                    <?php endif; ?>
                 </div>
             <?php endforeach; ?>
         </div>
     </div>
 </section>
 
+<!-- Rest of your sections remain the same -->
 <section class="how-it-works">
     <div class="container">
         <div class="section-header">
@@ -164,9 +189,7 @@
                     <h3>How do I redeem a gift card?</h3>
                     <i class="fas fa-chevron-down"></i>
                 </div>
-                <div class="faq-answer">
-                    <p>You can redeem your gift card at any XING FU CHA location by presenting the physical card or digital code at checkout. The amount will be deducted from your total purchase.</p>
-                </div>
+
             </div>
             
             <div class="faq-item">
@@ -174,9 +197,7 @@
                     <h3>Can I check my gift card balance?</h3>
                     <i class="fas fa-chevron-down"></i>
                 </div>
-                <div class="faq-answer">
-                    <p>Yes, you can check your gift card balance at any XING FU CHA location or online by entering your gift card number and PIN.</p>
-                </div>
+
             </div>
             
             <div class="faq-item">
@@ -184,9 +205,7 @@
                     <h3>Can I reload my gift card?</h3>
                     <i class="fas fa-chevron-down"></i>
                 </div>
-                <div class="faq-answer">
-                    <p>Yes, you can reload your gift card at any XING FU CHA location or online through our website.</p>
-                </div>
+
             </div>
             
             <div class="faq-item">
@@ -194,9 +213,7 @@
                     <h3>What if my gift card is lost or stolen?</h3>
                     <i class="fas fa-chevron-down"></i>
                 </div>
-                <div class="faq-answer">
-                    <p>If your gift card is registered, we can help you recover the balance. Please contact our customer service team with your gift card details.</p>
-                </div>
+
             </div>
             
             <div class="faq-item">
@@ -204,18 +221,181 @@
                     <h3>Can I use my gift card for online orders?</h3>
                     <i class="fas fa-chevron-down"></i>
                 </div>
-                <div class="faq-answer">
-                    <p>Yes, you can use your gift card for online orders by entering the gift card number and PIN during checkout.</p>
-                </div>
+
             </div>
         </div>
     </div>
 </section>
 
-
 </div>
 
+<style>
+.gift-card-container {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    margin-top: 140px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 20px;
+}
+
+.gift-card-item {
+    display: flex;
+    align-items: stretch; /* Changed from center to stretch for equal height */
+    background: #fff;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+    width: 100%; /* Ensure full width of container */
+    height: 350px; /* Fixed height for all cards */
+}
+
+.gift-card-item:hover {
+    transform: translateY(-5px);
+}
+
+.gift-card-item.image-right {
+    flex-direction: row;
+}
+
+.gift-card-item.image-left {
+    flex-direction: row-reverse;
+}
+
+.gift-card-image {
+    flex: 1;
+    position: relative;
+    min-height: 100%; /* Changed from fixed px to percentage */
+    width: 50%; /* Fixed width for image section */
+}
+
+.gift-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.card-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.gift-card-image:hover .card-overlay {
+    opacity: 1;
+}
+
+.view-details-btn {
+    padding: 10px 20px;
+    background: #fff;
+    color: #333;
+    text-decoration: none;
+    border-radius: 30px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.view-details-btn:hover {
+    background: #333;
+    color: #fff;
+}
+
+.gift-card-content {
+    flex: 1;
+    padding: 30px;
+    width: 50%; /* Fixed width for content section */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.gift-card-content h3 {
+    font-size: 24px;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.card-description {
+    color: #666;
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+
+.price-options {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+.price-option {
+    padding: 8px 15px;
+    border: 1px solid #ddd;
+    background: #f9f9f9;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.price-option.active, .price-option:hover {
+    background: #333;
+    color: #fff;
+    border-color: #333;
+}
+
+.add-to-cart-btn {
+    padding: 12px 25px;
+    background: #ff6b6b;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: fit-content;
+}
+
+.add-to-cart-btn:hover {
+    background: #ff5252;
+    transform: translateY(-2px);
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .gift-card-item, 
+    .gift-card-item.image-right, 
+    .gift-card-item.image-left {
+        flex-direction: column;
+        height: auto; /* Allow height to adjust on mobile */
+    }
+    
+    .gift-card-image,
+    .gift-card-content {
+        width: 100%; /* Full width on mobile */
+    }
+    
+    .gift-card-image {
+        min-height: 200px;
+    }
+    
+    .gift-card-content {
+        padding: 20px;
+    }
+}
+</style>
 
 <?php $pageScript = '/assets/js/gift-card.js'; ?>
 <?php require_once __DIR__ . '/layouts/footer.php'; ?>
-

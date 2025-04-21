@@ -2,6 +2,7 @@
 <?php require_once __DIR__ . '/layouts/navbar.php'; ?>
 
 
+
 <div class="section-praents-location">
 <section class="location-finder">
     <div class="container">
@@ -142,9 +143,7 @@
                                     <a href="https://maps.google.com/?q=<?php echo urlencode($location['address']); ?>" class="btn-directions" target="_blank">
                                         <i class="fas fa-directions"></i> Directions
                                     </a>
-                                    <a href="/locations/details/<?php echo $location['id']; ?>" class="btn-view-details">
-                                        <i class="fas fa-info-circle"></i> Details
-                                    </a>
+
                                     <a href="/order?location=<?php echo $location['id']; ?>" class="btn-order-online">
                                         <i class="fas fa-shopping-cart"></i> Order
                                     </a>
@@ -220,16 +219,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</section>
-
-<section class="location-cta">
-    <div class="container">
-        <div class="cta-content">
-            <h2>Can't Find a Location Near You?</h2>
-            <p>We're expanding! Let us know where you'd like to see a XING FU CHA store next.</p>
-            <button id="suggestLocationBtn" class="cta-button">Suggest a Location</button>
         </div>
     </div>
 </section>

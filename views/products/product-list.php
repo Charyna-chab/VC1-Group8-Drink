@@ -178,7 +178,7 @@
                     <div class="card-header py-3 d-flex justify-content-between align-items-center">
                         <h6 class="m-0 font-weight-bold text-primary">Product List</h6>
                         <a href="/admin/products/create" class="btn btn-primary btn-sm rounded-pill px-3">
-                            <i class="fas fa-plus me-1"></i> Add New
+                            <i class="fas fa-plus me-1 text-white"></i> Add New
                         </a>
                     </div>
                     <div class="card-body">
@@ -189,7 +189,7 @@
                                     <input type="text" class="form-control form-control-sm" placeholder="Search products..." 
                                         id="searchInput" autocomplete="off">
                                     <button class="btn btn-primary btn-sm" type="button" id="searchButton">
-                                        <i class="fas fa-search"></i>
+                                        <i class="fas fa-search text-white"></i>
                                     </button>
                                 </div>
                             </div>

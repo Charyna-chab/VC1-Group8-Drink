@@ -1,3 +1,10 @@
+<?php
+
+
+// Get cart item count from session
+$cart_count = isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0;
+?>
+
 <div class="section-sidebar">
 <aside class="sidebar">
     <div class="children-sidebar">
@@ -12,7 +19,16 @@
             <li style="margin-bottom: 16px;"><a href="/booking"><i class="fas fa-calendar-check" style="color: #ff5e62;"></i> Booking</a></li>
             <li style="margin-bottom: 16px;"><a href="/favorites"><i class="fas fa-heart" style="color: #ff5e62;"></i> Favorite</a></li>
             <li style="margin-bottom: 16px;"><a href="/feedback"><i class="fas fa-comment-alt" style="color: #ff5e62;"></i> Feedback</a></li>
-            
+            <li style="margin-bottom: 16px;">
+                <a href="/checkout">
+                    <i class="fas fa-shopping-cart" style="color: #ff5e62;"></i> 
+                    Checkout
+                    <span class="cart-count-badge" style="<?php echo $cart_count > 0 ? 'display: inline-flex;' : 'display: none;'; ?>">
+                        <?php echo $cart_count; ?>
+                    </span>
+                </a>
+            </li>
+
             <!-- Settings Item with Role Info -->
             <li class="settings-item" style="margin-bottom: 16px;">
                 <a href="#" class="settings-trigger">
@@ -38,14 +54,14 @@
         <!-- User Greeting Section -->
         <?php if (isset($username)) : ?>
             <div class="user-section">
-            <hr>
-            <div class="user-container">
-                <p class="user-greeting">Hello, <?php echo $username; ?></p>
-                <a href="/logout" class="logout-btn">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </a>
+                <hr>
+                <div class="user-container">
+                    <p class="user-greeting">Hello, <?php echo htmlspecialchars($username); ?></p>
+                    <a href="/logout" class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </div>
             </div>
-        </div>
         <?php endif; ?>
     </div>
 </aside>
@@ -79,21 +95,20 @@
         text-align: center;
         margin-bottom: 55px;
     }
+
     .sidebar .nav-list a {
-        margin-bottom:20px;
+        margin-bottom: 20px;
         position: relative;
         bottom: 40px;
-        
     }
+
     .branch-logo {
         width: 100px;
         height: auto;
         border-radius: 8px;
         transition: transform 0.3s ease;
         position: relative;
-        left:30px;
-        
-  
+        left: 30px;
     }
 
     .branch-logo:hover {
@@ -106,11 +121,10 @@
         padding: 0;
         margin: 0;
         flex-grow: 1;
-        
     }
 
     .nav-list li {
-        margin-bottom: 16px; /* Changed from 8px to 16px */
+        margin-bottom: 16px;
     }
 
     .nav-list a {
@@ -121,12 +135,19 @@
         text-decoration: none;
         border-radius: 6px;
         transition: all 0.3s ease;
+        position: relative;
     }
 
     .nav-list a:hover {
         background-color: rgba(255, 94, 98, 0.1);
         color: #ff5e62;
         transform: translateX(5px);
+    }
+
+    .nav-list a.active {
+        background-color: rgba(255, 94, 98, 0.2);
+        color: #ff5e62;
+        font-weight: 600;
     }
 
     .nav-list i {
@@ -136,10 +157,26 @@
         text-align: center;
     }
 
+    /* Cart Count Badge */
+    .cart-count-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 20px;
+        height: 20px;
+        background-color: #ff5e62;
+        color: white;
+        border-radius: 10px;
+        font-size: 12px;
+        font-weight: bold;
+        position: absolute;
+        right: 15px;
+        padding: 0 6px;
+    }
+
     /* Settings Item Styles */
     .settings-item {
         position: relative;
-      
     }
 
     .settings-trigger {
@@ -163,7 +200,7 @@
         border-top: none;
         animation: fadeIn 0.3s ease;
         position: relative;
-          bottom:40px;
+        bottom: 40px;
     }
 
     .settings-item.active .settings-dropdown {
@@ -354,5 +391,43 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+    // Set active class based on current URL
+    const currentUrl = window.location.pathname.toLowerCase();
+    const sidebarLinks = document.querySelectorAll('.sidebar .nav-list a');
+
+    sidebarLinks.forEach(link => {
+        const href = link.getAttribute('href').toLowerCase();
+        if (currentUrl === href || currentUrl.startsWith(href + '/')) {
+            link.classList.add('active');
+            link.closest('li').classList.add('active');
+        }
+    });
+
+    // Ensure checkout is highlighted during checkout
+    if (currentUrl.includes('/checkout')) {
+        const checkoutLink = document.querySelector('.sidebar .nav-list a[href="/checkout"]');
+        if (checkoutLink) {
+            checkoutLink.classList.add('active');
+            checkoutLink.closest('li').classList.add('active');
+        }
+    }
+
+    // Initialize cart badge from localStorage
+    function updateCartBadge() {
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const count = cart.length;
+        const badge = document.querySelector('.cart-count-badge');
+        if (badge) {
+            badge.textContent = count;
+            badge.style.display = count > 0 ? 'inline-flex' : 'none';
+        }
+    }
+
+    // Update badge on cart changes
+    document.addEventListener('cartUpdated', updateCartBadge);
+
+    // Initial badge update
+    updateCartBadge();
 });
-</script> 
+</script>
