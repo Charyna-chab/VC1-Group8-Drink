@@ -1,168 +1,169 @@
 document.addEventListener("DOMContentLoaded", () => {
             // DOM Elements
-            const bookingsList = document.querySelector(".bookings-list")
-            const filterTabs = document.querySelectorAll(".filter-tab")
-            const searchInput = document.getElementById("bookingSearch")
-            const ctaButton = document.querySelector(".cta-button")
-            const mainContent = document.querySelector(".main-content")
-            const contentArea = document.querySelector(".content-area") || mainContent
+            const bookingsList = document.querySelector(".bookings-list");
+            const filterTabs = document.querySelectorAll(".filter-tab");
+            const searchInput = document.getElementById("bookingSearch");
+            const ctaButton = document.querySelector(".cta-button");
+            const mainContent = document.querySelector(".main-content");
+            const contentArea = document.querySelector(".content-area") || mainContent;
+            const orderCount = document.createElement("div"); // Order count display
+            orderCount.className = "order-count";
 
             // Get cart items from localStorage
-            const cartItems = JSON.parse(localStorage.getItem("cart")) || []
+            const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
 
             // Create bookings from cart items
-            const bookings = JSON.parse(localStorage.getItem("bookings")) || []
+            const bookings = JSON.parse(localStorage.getItem("bookings")) || [];
 
             // Check if we just came from checkout
-            const justCheckedOut = sessionStorage.getItem("justCheckedOut")
+            const justCheckedOut = sessionStorage.getItem("justCheckedOut");
             if (justCheckedOut) {
-                // Clear the flag
-                sessionStorage.removeItem("justCheckedOut")
-
-                // Create a new booking from cart items if there are any
+                sessionStorage.removeItem("justCheckedOut");
                 if (cartItems.length > 0) {
-                    createBookingFromCart()
+                    createBookingFromCart();
+                }
+            }
+
+            // Display order count
+            function updateOrderCount() {
+                const count = bookings.filter(b => b.status !== "cancelled").length;
+                orderCount.textContent = count > 0 ? count : "0";
+                if (!document.querySelector(".order-count") && mainContent) {
+                    orderCount.style.position = "absolute";
+                    orderCount.style.top = "10px";
+                    orderCount.style.right = "10px";
+                    orderCount.style.background = "#ff5e62";
+                    orderCount.style.color = "white";
+                    orderCount.style.borderRadius = "50%";
+                    orderCount.style.width = "24px";
+                    orderCount.style.height = "24px";
+                    orderCount.style.display = "flex";
+                    orderCount.style.alignItems = "center";
+                    orderCount.style.justifyContent = "center";
+                    orderCount.style.fontSize = "14px";
+                    mainContent.appendChild(orderCount);
                 }
             }
 
             // Initialize bookings
-            renderBookings()
+            renderBookings();
+            updateOrderCount();
 
             // Filter bookings by status
             filterTabs.forEach((tab) => {
                 tab.addEventListener("click", function() {
-                    // Remove active class from all tabs
-                    filterTabs.forEach((t) => t.classList.remove("active"))
-
-                    // Add active class to clicked tab
-                    this.classList.add("active")
-
-                    // Filter bookings
-                    const status = this.getAttribute("data-status")
-                    renderBookings(status)
-                })
-            })
+                    filterTabs.forEach((t) => t.classList.remove("active"));
+                    this.classList.add("active");
+                    const status = this.getAttribute("data-status");
+                    renderBookings(status);
+                });
+            });
 
             // Search bookings
             if (searchInput) {
                 searchInput.addEventListener("input", function() {
-                    const searchTerm = this.value.toLowerCase().trim()
-                    const activeStatus = document.querySelector(".filter-tab.active").getAttribute("data-status")
-
-                    renderBookings(activeStatus, searchTerm)
-                })
+                    const searchTerm = this.value.toLowerCase().trim();
+                    const activeStatus = document.querySelector(".filter-tab.active").getAttribute("data-status");
+                    renderBookings(activeStatus, searchTerm);
+                });
             }
 
             // CTA button click
             if (ctaButton) {
                 ctaButton.addEventListener("click", () => {
-                    window.location.href = "/order"
-                })
+                    window.location.href = "/order";
+                });
             }
 
             // Create booking from cart
             function createBookingFromCart() {
-                if (cartItems.length === 0) return
+                if (cartItems.length === 0) return;
 
-                // Calculate total
-                const subtotal = cartItems.reduce((total, item) => total + item.totalPrice, 0)
-                const tax = subtotal * 0.08
-                const total = subtotal + tax
+                const subtotal = cartItems.reduce((total, item) => total + item.totalPrice, 0);
+                const tax = subtotal * 0.08;
+                const total = subtotal + tax;
 
-                // Create booking
                 const booking = {
-                    id: "ORD" + Date.now().toString().slice(-6),
-                    date: new Date().toISOString(),
-                    items: cartItems,
+                    id: generateId("ORD"),
+                    bookingTimestamp: new Date().toISOString(),
+                    items: cartItems.map(item => ({...item, basePrice: item.totalPrice / item.quantity })),
                     subtotal,
                     tax,
                     total,
                     status: "processing",
-                    paymentStatus: "pending", // Add payment status
-                    paymentMethod: null, // Will be set when payment is made
-                }
+                    paymentStatus: "pending",
+                    paymentMethod: null
+                };
 
-                // Add to bookings
-                bookings.unshift(booking)
+                bookings.unshift(booking);
+                localStorage.setItem("bookings", JSON.stringify(bookings));
+                localStorage.setItem("cart", JSON.stringify([]));
+                updateOrderCount();
 
-                // Save to localStorage
-                localStorage.setItem("bookings", JSON.stringify(bookings))
-
-                // Clear cart
-                localStorage.setItem("cart", JSON.stringify([]))
-
-                // Add notification
                 if (window.addNotification) {
                     window.addNotification(
                         "Order Placed Successfully",
                         `Your order #${booking.id} has been placed and is being processed.`,
-                        "order",
-                    )
+                        "order"
+                    );
+                } else {
+                    showToast("Order Placed", `Your order #${booking.id} has been placed.`, "success");
                 }
+
+                renderBookings();
             }
 
             // Render bookings
             function renderBookings(status = "all", searchTerm = "") {
-                if (!bookingsList) return
+                if (!bookingsList) return;
 
-                // Filter bookings by status
-                let filteredBookings = bookings
+                let filteredBookings = bookings;
                 if (status !== "all") {
-                    filteredBookings = bookings.filter((booking) => booking.status === status)
-                }
-                // Fix: When in "all" tab, don't show cancelled orders
-                else {
-                    filteredBookings = bookings.filter((booking) => booking.status !== "cancelled")
+                    filteredBookings = bookings.filter((booking) => booking.status === status);
+                } else {
+                    filteredBookings = bookings.filter((booking) => booking.status !== "cancelled");
                 }
 
-                // Filter by search term
                 if (searchTerm) {
-                    filteredBookings = filteredBookings.filter((booking) => booking.id.toLowerCase().includes(searchTerm))
+                    filteredBookings = filteredBookings.filter((booking) => booking.id.toLowerCase().includes(searchTerm));
                 }
 
-                // Clear bookings list
-                bookingsList.innerHTML = ""
+                bookingsList.innerHTML = "";
 
-                // Show empty state if no bookings
                 if (filteredBookings.length === 0) {
                     bookingsList.innerHTML = `
                 <div class="empty-state">
-
                     <h3>No Orders Found</h3>
                     <p>${status === "all" ? "You haven't placed any orders yet." : `You don't have any ${status} orders.`}</p>
                     <a href="/order" class="btn-primary">Order Now</a>
                 </div>
-            `
-      return
-    }
+            `;
+            return;
+        }
 
-    // Render each booking
-    filteredBookings.forEach((booking) => {
-      const bookingCard = document.createElement("div")
-      bookingCard.className = "booking-card"
-      bookingCard.setAttribute("data-id", booking.id)
-      bookingCard.setAttribute("data-status", booking.status)
+        filteredBookings.forEach((booking) => {
+            const bookingCard = document.createElement("div");
+            bookingCard.className = "booking-card";
+            bookingCard.setAttribute("data-id", booking.id);
+            bookingCard.setAttribute("data-status", booking.status);
 
-      // Format date
-      const date = new Date(booking.date)
-      const formattedDate = date.toLocaleDateString() + " " + date.toLocaleTimeString()
+            const date = new Date(booking.bookingTimestamp);
+            const formattedDate = date.toLocaleDateString() + " " + date.toLocaleTimeString();
 
-      // Get status class
-      let statusClass = ""
-      switch (booking.status) {
-        case "processing":
-          statusClass = "processing"
-          break
-        case "completed":
-          statusClass = "completed"
-          break
-        case "cancelled":
-          statusClass = "cancelled"
-          break
-      }
+            let statusClass = "";
+            switch (booking.status) {
+                case "processing":
+                    statusClass = "processing";
+                    break;
+                case "completed":
+                    statusClass = "completed";
+                    break;
+                case "cancelled":
+                    statusClass = "cancelled";
+                    break;
+            }
 
-      // Create booking card HTML
-      bookingCard.innerHTML = `
+            bookingCard.innerHTML = `
                 <div class="booking-header">
                     <div class="booking-info">
                         <h3>Order #${booking.id}</h3>
@@ -177,19 +178,19 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
                 <div class="booking-items">
                     ${booking.items
-                      .map(
-                        (item) => `
-                            <div class="booking-item">
-                                <div class="item-details">
-                                    <h4>${item.name}</h4>
-                                    <p>Size: ${item.size.name} | Sugar: ${item.sugar.name} | Ice: ${item.ice.name}</p>
-                                    <p>Quantity: ${item.quantity}</p>
+                        .map(
+                            (item) => `
+                                <div class="booking-item">
+                                    <div class="item-details">
+                                        <h4>${item.name}</h4>
+                                        <p>Size: ${item.size.name} | Sugar: ${item.sugar.name} | Ice: ${item.ice.name}</p>
+                                        <p>Quantity: ${item.quantity}</p>
+                                    </div>
+                                    <div class="item-price">$${item.totalPrice.toFixed(2)}</div>
                                 </div>
-                                <div class="item-price">$${item.totalPrice.toFixed(2)}</div>
-                            </div>
-                        `,
-                      )
-                      .join("")}
+                            `
+                        )
+                        .join("")}
                 </div>
                 <div class="booking-footer">
                     <div class="booking-total">
@@ -200,158 +201,131 @@ document.addEventListener("DOMContentLoaded", () => {
                             <i class="fas fa-eye"></i> View Details
                         </a>
                         ${
-                          booking.status === "processing"
-                            ? `
-                                <button class="btn-outline-danger cancel-booking" data-id="${booking.id}">
-                                    <i class="fas fa-times"></i> Cancel
-                                </button>
-                                <button class="btn-primary complete-booking" data-id="${booking.id}">
-                                    <i class="fas fa-check"></i> Complete
-                                </button>
-                            `
-                            : ""
+                            booking.status === "processing"
+                                ? `
+                                    <button class="btn-outline-danger cancel-booking" data-id="${booking.id}">
+                                        <i class="fas fa-times"></i> Cancel
+                                    </button>
+                                    <button class="btn-primary complete-booking" data-id="${booking.id}">
+                                        <i class="fas fa-check"></i> Complete
+                                    </button>
+                                `
+                                : ""
                         }
                         ${
-                          booking.status === "completed"
-                            ? `
-                                <a href="/receipt?order_id=${booking.id}" class="btn-primary">
-                                    <i class="fas fa-receipt"></i> View Receipt
-                                </a>
-                            `
-                            : ""
+                            booking.status === "completed"
+                                ? `
+                                    <a href="/receipt?order_id=${booking.id}" class="btn-primary">
+                                        <i class="fas fa-receipt"></i> View Receipt
+                                    </a>
+                                `
+                                : ""
                         }
                         ${
-                          booking.status === "completed" || booking.status === "cancelled"
-                            ? `
-                                <button class="btn-outline-danger delete-booking" data-id="${booking.id}">
-                                    <i class="fas fa-trash"></i> Delete
-                                </button>
-                            `
-                            : ""
+                            booking.status === "completed" || booking.status === "cancelled"
+                                ? `
+                                    <button class="btn-outline-danger delete-booking" data-id="${booking.id}">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                `
+                                : ""
                         }
                     </div>
                 </div>
-            `
+            `;
 
-      bookingsList.appendChild(bookingCard)
-    })
+            bookingsList.appendChild(bookingCard);
 
-    // Add event listeners to buttons
-    const viewDetailsButtons = document.querySelectorAll(".view-details")
-    const cancelButtons = document.querySelectorAll(".cancel-booking")
-    const completeButtons = document.querySelectorAll(".complete-booking")
-    const deleteButtons = document.querySelectorAll(".delete-booking")
+            // Attach event listeners to buttons within this booking card
+            const cancelButton = bookingCard.querySelector(".cancel-booking");
+            const completeButton = bookingCard.querySelector(".complete-booking");
+            const deleteButton = bookingCard.querySelector(".delete-booking");
+            const viewDetailsButton = bookingCard.querySelector(".view-details");
 
-    viewDetailsButtons.forEach((button) => {
-      button.addEventListener("click", function (e) {
-        e.preventDefault()
-        const id = this.getAttribute("data-id")
-        showBookingDetails(id)
-      })
-    })
+            if (viewDetailsButton) {
+                viewDetailsButton.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    const id = viewDetailsButton.getAttribute("data-id");
+                    showBookingDetails(id);
+                });
+            }
 
-    cancelButtons.forEach((button) => {
-      button.addEventListener("click", function () {
-        const id = this.getAttribute("data-id")
-        cancelBooking(id)
-      })
-    })
+            if (cancelButton) {
+                cancelButton.addEventListener("click", () => {
+                    const id = cancelButton.getAttribute("data-id");
+                    cancelBooking(id);
+                });
+            }
 
-    completeButtons.forEach((button) => {
-      button.addEventListener("click", function () {
-        const id = this.getAttribute("data-id")
-        // Complete the booking directly instead of showing payment interface
-        completeBooking(id)
-      })
-    })
+            if (completeButton) {
+                completeButton.addEventListener("click", () => {
+                    const id = completeButton.getAttribute("data-id");
+                    completeBooking(id);
+                });
+            }
 
-    deleteButtons.forEach((button) => {
-      button.addEventListener("click", function () {
-        const id = this.getAttribute("data-id")
-        deleteBooking(id)
-      })
-    })
-  }
-
-  // Delete booking
-  function deleteBooking(id) {
-    const bookingIndex = bookings.findIndex((b) => b.id === id)
-    if (bookingIndex === -1) return
-
-    // Remove booking from array
-    bookings.splice(bookingIndex, 1)
-
-    // Save to localStorage
-    localStorage.setItem("bookings", JSON.stringify(bookings))
-
-    // Add notification
-    if (window.addNotification) {
-      window.addNotification("Order Deleted", `Order #${id} has been permanently deleted.`, "order")
+            if (deleteButton) {
+                deleteButton.addEventListener("click", () => {
+                    const id = deleteButton.getAttribute("data-id");
+                    deleteBooking(id);
+                });
+            }
+        });
     }
 
-    // Find and remove the booking card from the DOM
-    const bookingCard = document.querySelector(`.booking-card[data-id="${id}"]`)
-    if (bookingCard) {
-      // Add fade-out animation
-      bookingCard.style.transition = "opacity 0.3s ease, transform 0.3s ease"
-      bookingCard.style.opacity = "0"
-      bookingCard.style.transform = "translateX(20px)"
+    // Delete booking
+    function deleteBooking(id) {
+        const bookingIndex = bookings.findIndex((b) => b.id === id);
+        if (bookingIndex === -1) return;
 
-      // Remove after animation completes
-      setTimeout(() => {
-        bookingCard.remove()
+        bookings.splice(bookingIndex, 1);
+        localStorage.setItem("bookings", JSON.stringify(bookings));
+        updateOrderCount();
 
-        // Check if there are no more bookings and show empty state if needed
-        if (bookingsList.children.length === 0) {
-          bookingsList.innerHTML = `
-                        <div class="empty-state">
-                            <img src="/assets/image/empty-orders.svg" alt="No Orders">
-                            <h3>No Orders Found</h3>
-                            <p>You haven't placed any orders yet.</p>
-                            <a href="/order" class="btn-primary">Order Now</a>
-                        </div>
-                    `
+        showToast("Order Deleted", `Order #${id} has been permanently deleted.`, "success");
+
+        // Re-render bookings based on current filter and search
+        const activeTab = document.querySelector(".filter-tab.active");
+        const status = activeTab ? activeTab.getAttribute("data-status") : "all";
+        const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : "";
+        renderBookings(status, searchTerm);
+    }
+
+    // Show booking details
+    function showBookingDetails(id) {
+        const existingModal = document.querySelector(".booking-details-modal");
+        if (existingModal) existingModal.remove();
+
+        const booking = bookings.find((b) => b.id === id);
+        if (!booking) return;
+
+        const modal = document.createElement("div");
+        modal.className = "booking-details-modal";
+
+        const date = new Date(booking.bookingTimestamp);
+        const formattedDate = date.toLocaleDateString() + " " + date.toLocaleTimeString();
+
+        let statusClass = "";
+        switch (booking.status) {
+            case "processing":
+                statusClass = "processing";
+                break;
+            case "completed":
+                statusClass = "completed";
+                break;
+            case "cancelled":
+                statusClass = "cancelled";
+                break;
         }
-      }, 300)
-    }
-  }
 
-  // Show booking details
-  function showBookingDetails(id) {
-    const booking = bookings.find((b) => b.id === id)
-    if (!booking) return
+        const paymentStatus = booking.paymentStatus || "pending";
+        const paymentStatusClass = paymentStatus === "completed" ? "completed" : "processing";
 
-    // Create modal
-    const modal = document.createElement("div")
-    modal.className = "booking-details-modal"
-
-    // Format date
-    const date = new Date(booking.date)
-    const formattedDate = date.toLocaleDateString() + " " + date.toLocaleTimeString()
-
-    // Get status class
-    let statusClass = ""
-    switch (booking.status) {
-      case "processing":
-        statusClass = "processing"
-        break
-      case "completed":
-        statusClass = "completed"
-        break
-      case "cancelled":
-        statusClass = "cancelled"
-        break
-    }
-
-    // Get payment status
-    const paymentStatus = booking.paymentStatus || "pending"
-    const paymentStatusClass = paymentStatus === "completed" ? "completed" : "processing"
-
-    modal.innerHTML = `
+        modal.innerHTML = `
             <div class="modal-content">
                 <div class="modal-header">
                     <h3>Order Details</h3>
-                    <button class="close-modal">&times;</button>
+                    <button class="close-modal">×</button>
                 </div>
                 <div class="modal-body">
                     <div class="order-info">
@@ -369,31 +343,29 @@ document.addEventListener("DOMContentLoaded", () => {
                                 </div>
                             </div>
                         </div>
-                        
                         <div class="order-items">
                             <h4>Items</h4>
                             ${booking.items
-                              .map(
-                                (item) => `
-                                    <div class="order-item">
-                                        <div class="item-image">
-                                            <img src="${item.image}" alt="${item.name}">
-                                        </div>
-                                        <div class="item-details">
-                                            <h5>${item.name}</h5>
-                                            <p>Size: ${item.size.name} | Sugar: ${item.sugar.name} | Ice: ${item.ice.name}</p>
-                                            <p>Toppings: ${item.toppings && item.toppings.length > 0 ? item.toppings.map((t) => t.name).join(", ") : "None"}</p>
-                                            <div class="item-quantity-price">
-                                                <span>Qty: ${item.quantity}</span>
-                                                <span>$${item.totalPrice.toFixed(2)}</span>
+                                .map(
+                                    (item) => `
+                                        <div class="order-item">
+                                            <div class="item-image">
+                                                <img src="${item.image}" alt="${item.name}">
+                                            </div>
+                                            <div class="item-details">
+                                                <h5>${item.name}</h5>
+                                                <p>Size: ${item.size.name} | Sugar: ${item.sugar.name} | Ice: ${item.ice.name}</p>
+                                                <p>Toppings: ${item.toppings && item.toppings.length > 0 ? item.toppings.map((t) => t.name).join(", ") : "None"}</p>
+                                                <div class="item-quantity-price">
+                                                    <span>Qty: ${item.quantity}</span>
+                                                    <span>$${item.totalPrice.toFixed(2)}</span>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                `,
-                              )
-                              .join("")}
+                                    `
+                                )
+                                .join("")}
                         </div>
-                        
                         <div class="order-summary">
                             <h4>Order Summary</h4>
                             <div class="summary-row">
@@ -415,206 +387,249 @@ document.addEventListener("DOMContentLoaded", () => {
                     <button class="btn-secondary close-details">Close</button>
                 </div>
             </div>
-        `
+        `;
 
-    document.body.appendChild(modal)
+        document.body.appendChild(modal);
 
-    // Add event listeners
-    const closeButtons = modal.querySelectorAll(".close-modal, .close-details")
-    closeButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        modal.remove()
-      })
-    })
+        const closeButtons = modal.querySelectorAll(".close-modal, .close-details");
+        closeButtons.forEach((button) => {
+            button.addEventListener("click", () => {
+                modal.remove();
+            });
+        });
 
-    // Close when clicking outside
-    modal.addEventListener("click", (e) => {
-      if (e.target === modal) {
-        modal.remove()
-      }
-    })
-  }
-
-  // Cancel booking
-  function cancelBooking(id) {
-    const bookingIndex = bookings.findIndex((b) => b.id === id)
-    if (bookingIndex === -1) return
-
-    // Update booking status
-    bookings[bookingIndex].status = "cancelled"
-
-    // Save to localStorage
-    localStorage.setItem("bookings", JSON.stringify(bookings))
-
-    // Add notification
-    if (window.addNotification) {
-      window.addNotification("Order Cancelled", `Your order #${bookings[bookingIndex].id} has been cancelled.`, "order")
+        modal.addEventListener("click", (e) => {
+            if (e.target === modal) {
+                modal.remove();
+            }
+        });
     }
 
-    // Find and remove the booking card from the DOM if in "all" tab
-    const activeTab = document.querySelector(".filter-tab.active")
-    if (activeTab && activeTab.getAttribute("data-status") === "all") {
-      const bookingCard = document.querySelector(`.booking-card[data-id="${id}"]`)
-      if (bookingCard) {
-        // Add fade-out animation
-        bookingCard.style.transition = "opacity 0.3s ease, transform 0.3s ease"
-        bookingCard.style.opacity = "0"
-        bookingCard.style.transform = "translateX(20px)"
+    // Cancel booking
+    function cancelBooking(id) {
+        const bookingIndex = bookings.findIndex((b) => b.id === id);
+        if (bookingIndex === -1) return;
 
-        // Remove after animation completes
+        bookings[bookingIndex].status = "cancelled";
+        localStorage.setItem("bookings", JSON.stringify(bookings));
+        updateOrderCount();
+
+        showToast("Order Cancelled", `Your order #${bookings[bookingIndex].id} has been cancelled.`, "success");
+
+        // Re-render bookings based on current filter and search
+        const activeTab = document.querySelector(".filter-tab.active");
+        const status = activeTab ? activeTab.getAttribute("data-status") : "all";
+        const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : "";
+        renderBookings(status, searchTerm);
+    }
+
+    // Complete booking
+    function completeBooking(id) {
+        const bookingIndex = bookings.findIndex((b) => b.id === id);
+        if (bookingIndex === -1) return;
+
+        showRedirectNotification(
+            "Proceeding to Payment",
+            `Order #${bookings[bookingIndex].id} is ready for payment. Redirecting to checkout...`,
+            `/checkout?booking_id=${id}`
+        );
+
+        bookings[bookingIndex].status = "processing";
+        bookings[bookingIndex].paymentStatus = "pending";
+        localStorage.setItem("bookings", JSON.stringify(bookings));
+        updateOrderCount();
+
+        renderBookings();
+    }
+
+    // Show toast notification
+    function showToast(title, message, type = "info") {
+        let toastContainer = document.querySelector(".toast-container");
+        if (!toastContainer) {
+            toastContainer = document.createElement("div");
+            toastContainer.className = "toast-container";
+            document.body.appendChild(toastContainer);
+        }
+
+        const toast = document.createElement("div");
+        toast.className = `toast ${type}`;
+        toast.innerHTML = `
+            <div class="toast-icon">
+                <i class="fas fa-${type === "success" ? "check-circle" : type === "error" ? "exclamation-circle" : "info-circle"}"></i>
+            </div>
+            <div class="toast-content">
+                <h4>${title}</h4>
+                <p>${message}</p>
+            </div>
+            <button class="toast-close">×</button>
+        `;
+        toastContainer.appendChild(toast);
+
         setTimeout(() => {
-          bookingCard.remove()
+            toast.classList.add("toast-hide");
+            setTimeout(() => toast.remove(), 300);
+        }, 5000);
 
-          // Check if there are no more bookings and show empty state if needed
-          if (bookingsList.children.length === 0) {
-            bookingsList.innerHTML = `
-                            <div class="empty-state">
-                                <img src="/assets/image/empty-orders.svg" alt="No Orders">
-                                <h3>No Orders Found</h3>
-                                <p>You haven't placed any orders yet.</p>
-                                <a href="/order" class="btn-primary">Order Now</a>
-                            </div>
-                        `
-          }
-        }, 300)
-      }
-    } else {
-      // Re-render bookings for other tabs
-      const status = activeTab ? activeTab.getAttribute("data-status") : "all"
-      const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : ""
-      renderBookings(status, searchTerm)
-    }
-  }
-
-  // Complete booking
-  function completeBooking(id) {
-    const bookingIndex = bookings.findIndex((b) => b.id === id)
-    if (bookingIndex === -1) return
-
-    // Update booking status
-    bookings[bookingIndex].status = "completed"
-
-    // Also update payment status
-    bookings[bookingIndex].paymentStatus = "completed"
-
-    // Save to localStorage
-    localStorage.setItem("bookings", JSON.stringify(bookings))
-
-    // Add notification
-    if (window.addNotification) {
-      window.addNotification(
-        "Order Completed",
-        `Your order #${bookings[bookingIndex].id} has been marked as completed.`,
-        "order",
-      )
+        toast.querySelector(".toast-close").addEventListener("click", () => {
+            toast.classList.add("toast-hide");
+            setTimeout(() => toast.remove(), 300);
+        });
     }
 
-    // Show success notification on the left side
-    showOrderSuccessNotification(bookings[bookingIndex])
+    // Show redirect notification
+    function showRedirectNotification(title, message, url) {
+        showToast(title, message, "info");
+        setTimeout(() => {
+            window.location.href = url;
+        }, 2000);
+    }
 
     // Show celebration animation
-    showCelebrationAnimation()
+    function showCelebrationAnimation() {
+        const celebrationContainer = document.createElement("div");
+        celebrationContainer.className = "celebration-animation";
+        document.body.appendChild(celebrationContainer);
 
-    // Re-render bookings
-    const activeTab = document.querySelector(".filter-tab.active")
-    const status = activeTab ? activeTab.getAttribute("data-status") : "all"
-    const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : ""
-    renderBookings(status, searchTerm)
-  }
+        const colors = ["#ff5e62", "#4caf50", "#2196F3", "#ff9800", "#9C27B0"];
+        for (let i = 0; i < 100; i++) {
+            const confetti = document.createElement("div");
+            confetti.className = "confetti";
+            confetti.style.left = Math.random() * 100 + "vw";
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.width = Math.random() * 10 + 5 + "px";
+            confetti.style.height = Math.random() * 10 + 10 + "px";
+            confetti.style.animationDuration = Math.random() * 3 + 2 + "s";
+            celebrationContainer.appendChild(confetti);
+        }
 
-  // Show celebration animation
-  function showCelebrationAnimation() {
-    // Create celebration container
-    const celebrationContainer = document.createElement("div")
-    celebrationContainer.className = "celebration-animation"
-    document.body.appendChild(celebrationContainer)
-
-    // Create confetti pieces
-    const colors = ["#ff5e62", "#4caf50", "#2196F3", "#ff9800", "#9C27B0"]
-    for (let i = 0; i < 100; i++) {
-      const confetti = document.createElement("div")
-      confetti.className = "confetti"
-      confetti.style.left = Math.random() * 100 + "vw"
-      confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)]
-      confetti.style.width = Math.random() * 10 + 5 + "px"
-      confetti.style.height = Math.random() * 10 + 10 + "px"
-      confetti.style.animationDuration = Math.random() * 3 + 2 + "s"
-      celebrationContainer.appendChild(confetti)
+        setTimeout(() => {
+            celebrationContainer.classList.add("fade-out");
+            setTimeout(() => {
+                celebrationContainer.remove();
+            }, 1000);
+        }, 3000);
     }
 
-    // Remove celebration after animation completes
-    setTimeout(() => {
-      celebrationContainer.classList.add("fade-out")
-      setTimeout(() => {
-        celebrationContainer.remove()
-      }, 1000)
-    }, 3000)
-  }
-
-  // Show order success notification on the left side
-  function showOrderSuccessNotification(booking) {
-    const notification = document.createElement("div")
-    notification.className = "order-success-notification left-notification"
-
-    notification.innerHTML = `
-            <div class="notification-content">
-                <div class="success-icon">
-                    <i class="fas fa-check-circle"></i>
-                </div>
-                <div class="notification-text">
-                    <h4>Your order drink success!</h4>
-                    <p>Order #${booking.id} has been successfully completed.</p>
-                </div>
-                <button class="close-notification">&times;</button>
-            </div>
-        `
-
-    document.body.appendChild(notification)
-
-    // Auto remove after 5 seconds
-    setTimeout(() => {
-      notification.classList.add("fade-out")
-      setTimeout(() => {
-        notification.remove()
-      }, 500)
-    }, 5000)
-
-    // Close button
-    notification.querySelector(".close-notification").addEventListener("click", () => {
-      notification.remove()
-    })
-  }
-
-  // Initialize event listeners after DOM changes
-  function initializeEventListeners() {
-    // Re-attach event listeners to filter tabs
-    const filterTabs = document.querySelectorAll(".filter-tab")
-    filterTabs.forEach((tab) => {
-      tab.addEventListener("click", function () {
-        filterTabs.forEach((t) => t.classList.remove("active"))
-        this.classList.add("active")
-        const status = this.getAttribute("data-status")
-        renderBookings(status)
-      })
-    })
-
-    // Re-attach search functionality
-    const searchInput = document.getElementById("bookingSearch")
-    if (searchInput) {
-      searchInput.addEventListener("input", function () {
-        const searchTerm = this.value.toLowerCase().trim()
-        const activeStatus = document.querySelector(".filter-tab.active").getAttribute("data-status")
-        renderBookings(activeStatus, searchTerm)
-      })
+    // Generate unique ID
+    function generateId(prefix) {
+        return `${prefix}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     }
 
-    // Re-render bookings
-    renderBookings()
-  }
+    // Initialize event listeners after DOM changes
+    function initializeEventListeners() {
+        const filterTabs = document.querySelectorAll(".filter-tab");
+        filterTabs.forEach((tab) => {
+            tab.addEventListener("click", function () {
+                filterTabs.forEach((t) => t.classList.remove("active"));
+                this.classList.add("active");
+                const status = this.getAttribute("data-status");
+                renderBookings(status);
+            });
+        });
 
-  // Add CSS for booking
-  const style = document.createElement("style")
-  style.textContent = `
+        const searchInput = document.getElementById("bookingSearch");
+        if (searchInput) {
+            searchInput.addEventListener("input", function () {
+                const searchTerm = this.value.toLowerCase().trim();
+                const activeStatus = document.querySelector(".filter-tab.active").getAttribute("data-status");
+                renderBookings(activeStatus, searchTerm);
+            });
+        }
+
+        renderBookings();
+        updateOrderCount();
+    }
+
+    // Add CSS for booking
+    const style = document.createElement("style");
+    style.textContent = `
+        /* Toast Notification */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1500;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 300px;
+            max-width: 400px;
+            opacity: 0;
+            animation: slide-in-right 0.3s ease forwards;
+        }
+
+        .toast.success {
+            border-left: 4px solid #4caf50;
+        }
+
+        .toast.error {
+            border-left: 4px solid #f44336;
+        }
+
+        .toast.info {
+            border-left: 4px solid #2196f3;
+        }
+
+        .toast-icon {
+            font-size: 24px;
+        }
+
+        .toast-content h4 {
+            margin: 0 0 5px;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .toast-content p {
+            margin: 0;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: #999;
+            cursor: pointer;
+        }
+
+        .toast-hide {
+            animation: slide-out-right 0.3s ease forwards;
+        }
+
+        @keyframes slide-in-right {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slide-out-right {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+        }
+
         /* Booking Card Styles */
         .booking-card {
             background-color: white;
@@ -816,25 +831,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         .btn-primary:hover {
             background-color: #ff4146;
-        }
-
-        .btn-success {
-            padding: 8px 15px;
-            background-color: #4caf50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .btn-success:hover {
-            background-color: #43a047;
         }
 
         /* Empty State */
@@ -1045,73 +1041,6 @@ document.addEventListener("DOMContentLoaded", () => {
             border-top: 1px solid #eee;
         }
 
-        /* Order Success Notification */
-        .order-success-notification,
-        .thank-you-notification {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
-            width: 300px;
-            z-index: 1300;
-            overflow: hidden;
-            animation: slide-in-left 0.3s ease;
-        }
-
-        /* Left notification for order completed */
-        .order-success-notification.left-notification,
-        .thank-you-notification.left-notification {
-            left: 20px;
-            right: auto;
-        }
-
-        .notification-content {
-            display: flex;
-            padding: 15px;
-            align-items: center;
-            position: relative;
-        }
-
-        .success-icon {
-            font-size: 24px;
-            color: #4caf50;
-            margin-right: 15px;
-        }
-
-        .notification-text {
-            flex: 1;
-        }
-
-        .notification-text h4 {
-            margin: 0 0 5px;
-            font-size: 16px;
-            color: #333;
-        }
-
-        .notification-text p {
-            margin: 0;
-            font-size: 14px;
-            color: #666;
-        }
-
-        .close-notification {
-            background: none;
-            border: none;
-            font-size: 20px;
-            color: #999;
-            cursor: pointer;
-            position: absolute;
-            top: 5px;
-            right: 5px;
-        }
-
-        .order-success-notification.fade-out,
-        .thank-you-notification.fade-out {
-            animation: fade-out-left 0.5s ease forwards;
-        }
-
         /* Celebration Animation */
         .celebration-animation {
             position: fixed;
@@ -1155,70 +1084,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 opacity: 0;
             }
         }
+    `;
+    document.head.appendChild(style);
 
-        @keyframes slide-in-left {
-            from {
-                transform: translateX(-100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
+    // Check if we need to create a booking from cart
+    if (window.location.pathname === "/booking" && cartItems.length > 0) {
+        sessionStorage.setItem("justCheckedOut", "true");
+        if (!justCheckedOut) {
+            createBookingFromCart();
         }
-
-        @keyframes fade-out-left {
-            from {
-                transform: translateX(0);
-                opacity: 1;
-            }
-            to {
-                transform: translateX(-100%);
-                opacity: 0;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .form-row {
-                flex-direction: column;
-                gap: 15px;
-            }
-
-            .receipt-info {
-                flex-direction: column;
-                gap: 15px;
-            }
-
-            .receipt-actions {
-                flex-direction: column;
-                width: 100%;
-            }
-
-            .receipt-actions button {
-                width: 100%;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .receipt-paper {
-                padding: 20px 15px;
-            }
-
-            .item-details {
-                font-size: 11px;
-            }
-        }
-    `
-  document.head.appendChild(style)
-
-  // Check if we need to create a booking from cart
-  if (window.location.pathname === "/booking" && cartItems.length > 0) {
-    // Set flag to create booking on page load
-    sessionStorage.setItem("justCheckedOut", "true")
-
-    // Reload page to trigger booking creation
-    if (!justCheckedOut) {
-      window.location.reload()
     }
-  }
-})
+});
