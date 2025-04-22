@@ -126,13 +126,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Show empty state if no bookings
                 if (filteredBookings.length === 0) {
                     bookingsList.innerHTML = `
-        <div class="empty-state">
+<div class="empty-state">
 
-            <h3>No Orders Found</h3>
-            <p>${status === "all" ? "You haven't placed any orders yet." : `You don't have any ${status} orders.`}</p>
-            <a href="/order" class="btn-primary">Order Now</a>
-        </div>
-    `
+    <h3>No Orders Found</h3>
+    <p>${status === "all" ? "You haven't placed any orders yet." : `You don't have any ${status} orders.`}</p>
+    <a href="/order" class="btn-primary">Order Now</a>
+</div>
+`
 return
 }
 
@@ -151,87 +151,87 @@ const formattedDate = date.toLocaleDateString() + " " + date.toLocaleTimeString(
 let statusClass = ""
 switch (booking.status) {
 case "processing":
-  statusClass = "processing"
-  break
+statusClass = "processing"
+break
 case "completed":
-  statusClass = "completed"
-  break
+statusClass = "completed"
+break
 case "cancelled":
-  statusClass = "cancelled"
-  break
+statusClass = "cancelled"
+break
 }
 
 // Create booking card HTML
 bookingCard.innerHTML = `
-        <div class="booking-header">
-            <div class="booking-info">
-                <h3>Order #${booking.id}</h3>
-                <div class="booking-date">
-                    <i class="fas fa-calendar-alt"></i>
-                    <span>${formattedDate}</span>
+<div class="booking-header">
+    <div class="booking-info">
+        <h3>Order #${booking.id}</h3>
+        <div class="booking-date">
+            <i class="fas fa-calendar-alt"></i>
+            <span>${formattedDate}</span>
+        </div>
+    </div>
+    <div class="booking-status ${statusClass}">
+        ${booking.status}
+    </div>
+</div>
+<div class="booking-items">
+    ${booking.items
+      .map(
+        (item) => `
+            <div class="booking-item">
+                <div class="item-details">
+                    <h4>${item.name}</h4>
+                    <p>Size: ${item.size.name} | Sugar: ${item.sugar.name} | Ice: ${item.ice.name}</p>
+                    <p>Quantity: ${item.quantity}</p>
                 </div>
+                <div class="item-price">$${item.totalPrice.toFixed(2)}</div>
             </div>
-            <div class="booking-status ${statusClass}">
-                ${booking.status}
-            </div>
-        </div>
-        <div class="booking-items">
-            ${booking.items
-              .map(
-                (item) => `
-                    <div class="booking-item">
-                        <div class="item-details">
-                            <h4>${item.name}</h4>
-                            <p>Size: ${item.size.name} | Sugar: ${item.sugar.name} | Ice: ${item.ice.name}</p>
-                            <p>Quantity: ${item.quantity}</p>
-                        </div>
-                        <div class="item-price">$${item.totalPrice.toFixed(2)}</div>
-                    </div>
-                `,
-              )
-              .join("")}
-        </div>
-        <div class="booking-footer">
-            <div class="booking-total">
-                Total: <span class="total-price">$${booking.total.toFixed(2)}</span>
-            </div>
-            <div class="booking-actions">
-                <a href="#" class="btn-secondary view-details" data-id="${booking.id}">
-                    <i class="fas fa-eye"></i> View Details
+        `,
+      )
+      .join("")}
+</div>
+<div class="booking-footer">
+    <div class="booking-total">
+        Total: <span class="total-price">$${booking.total.toFixed(2)}</span>
+    </div>
+    <div class="booking-actions">
+        <a href="#" class="btn-secondary view-details" data-id="${booking.id}">
+            <i class="fas fa-eye"></i> View Details
+        </a>
+        ${
+          booking.status === "processing"
+            ? `
+                <button class="btn-outline-danger cancel-booking" data-id="${booking.id}">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+                <button class="btn-primary complete-booking" data-id="${booking.id}">
+                    <i class="fas fa-check"></i> Complete
+                </button>
+            `
+            : ""
+        }
+        ${
+          booking.status === "completed"
+            ? `
+                <a href="/receipt?order_id=${booking.id}" class="btn-primary">
+                    <i class="fas fa-receipt"></i> View Receipt
                 </a>
-                ${
-                  booking.status === "processing"
-                    ? `
-                        <button class="btn-outline-danger cancel-booking" data-id="${booking.id}">
-                            <i class="fas fa-times"></i> Cancel
-                        </button>
-                        <button class="btn-primary complete-booking" data-id="${booking.id}">
-                            <i class="fas fa-check"></i> Complete
-                        </button>
-                    `
-                    : ""
-                }
-                ${
-                  booking.status === "completed"
-                    ? `
-                        <a href="/receipt?order_id=${booking.id}" class="btn-primary">
-                            <i class="fas fa-receipt"></i> View Receipt
-                        </a>
-                    `
-                    : ""
-                }
-                ${
-                  booking.status === "completed" || booking.status === "cancelled"
-                    ? `
-                        <button class="btn-outline-danger delete-booking" data-id="${booking.id}">
-                            <i class="fas fa-trash"></i> Delete
-                        </button>
-                    `
-                    : ""
-                }
-            </div>
-        </div>
-    `
+            `
+            : ""
+        }
+        ${
+          booking.status === "completed" || booking.status === "cancelled"
+            ? `
+                <button class="btn-outline-danger delete-booking" data-id="${booking.id}">
+                    <i class="fas fa-trash"></i> Delete
+                </button>
+            `
+            : ""
+        }
+    </div>
+</div>
+`
 
 bookingsList.appendChild(bookingCard)
 })
@@ -260,8 +260,8 @@ cancelBooking(id)
 completeButtons.forEach((button) => {
 button.addEventListener("click", function () {
 const id = this.getAttribute("data-id")
-// Complete the booking directly instead of showing payment interface
-completeBooking(id)
+// Redirect to checkout page with booking_id
+window.location.href = `/checkout?booking_id=${id}`
 })
 })
 
@@ -303,14 +303,14 @@ bookingCard.remove()
 
 // Check if there are no more bookings and show empty state if needed
 if (bookingsList.children.length === 0) {
-  bookingsList.innerHTML = `
-                <div class="empty-state">
-                    <img src="/assets/image/empty-orders.svg" alt="No Orders">
-                    <h3>No Orders Found</h3>
-                    <p>You haven't placed any orders yet.</p>
-                    <a href="/order" class="btn-primary">Order Now</a>
-                </div>
-            `
+bookingsList.innerHTML = `
+        <div class="empty-state">
+            <img src="/assets/image/empty-orders.svg" alt="No Orders">
+            <h3>No Orders Found</h3>
+            <p>You haven't placed any orders yet.</p>
+            <a href="/order" class="btn-primary">Order Now</a>
+        </div>
+    `
 }
 }, 300)
 }
@@ -348,73 +348,73 @@ const paymentStatus = booking.paymentStatus || "pending"
 const paymentStatusClass = paymentStatus === "completed" ? "completed" : "processing"
 
 modal.innerHTML = `
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3>Order Details</h3>
-            <button class="close-modal">&times;</button>
-        </div>
-        <div class="modal-body">
-            <div class="order-info">
-                <div class="order-header">
-                    <div>
-                        <h4>Order #${booking.id}</h4>
-                        <p><i class="fas fa-calendar-alt"></i> ${formattedDate}</p>
-                    </div>
-                    <div class="order-status-container">
-                        <div class="order-status ${statusClass}">
-                            ${booking.status}
-                        </div>
-                        <div class="payment-status ${paymentStatusClass}">
-                            Payment: ${paymentStatus}
-                        </div>
-                    </div>
+<div class="modal-content">
+<div class="modal-header">
+    <h3>Order Details</h3>
+    <button class="close-modal">×</button>
+</div>
+<div class="modal-body">
+    <div class="order-info">
+        <div class="order-header">
+            <div>
+                <h4>Order #${booking.id}</h4>
+                <p><i class="fas fa-calendar-alt"></i> ${formattedDate}</p>
+            </div>
+            <div class="order-status-container">
+                <div class="order-status ${statusClass}">
+                    ${booking.status}
                 </div>
-                
-                <div class="order-items">
-                    <h4>Items</h4>
-                    ${booking.items
-                      .map(
-                        (item) => `
-                            <div class="order-item">
-                                <div class="item-image">
-                                    <img src="${item.image}" alt="${item.name}">
-                                </div>
-                                <div class="item-details">
-                                    <h5>${item.name}</h5>
-                                    <p>Size: ${item.size.name} | Sugar: ${item.sugar.name} | Ice: ${item.ice.name}</p>
-                                    <p>Toppings: ${item.toppings && item.toppings.length > 0 ? item.toppings.map((t) => t.name).join(", ") : "None"}</p>
-                                    <div class="item-quantity-price">
-                                        <span>Qty: ${item.quantity}</span>
-                                        <span>$${item.totalPrice.toFixed(2)}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        `,
-                      )
-                      .join("")}
-                </div>
-                
-                <div class="order-summary">
-                    <h4>Order Summary</h4>
-                    <div class="summary-row">
-                        <span>Subtotal:</span>
-                        <span>$${booking.subtotal.toFixed(2)}</span>
-                    </div>
-                    <div class="summary-row">
-                        <span>Tax (8%):</span>
-                        <span>$${booking.tax.toFixed(2)}</span>
-                    </div>
-                    <div class="summary-row total">
-                        <span>Total:</span>
-                        <span>$${booking.total.toFixed(2)}</span>
-                    </div>
+                <div class="payment-status ${paymentStatusClass}">
+                    Payment: ${paymentStatus}
                 </div>
             </div>
         </div>
-        <div class="modal-footer">
-            <button class="btn-secondary close-details">Close</button>
+        
+        <div class="order-items">
+            <h4>Items</h4>
+            ${booking.items
+              .map(
+                (item) => `
+                    <div class="order-item">
+                        <div class="item-image">
+                            <img src="${item.image}" alt="${item.name}">
+                        </div>
+                        <div class="item-details">
+                            <h5>${item.name}</h5>
+                            <p>Size: ${item.size.name} | Sugar: ${item.sugar.name} | Ice: ${item.ice.name}</p>
+                            <p>Toppings: ${item.toppings && item.toppings.length > 0 ? item.toppings.map((t) => t.name).join(", ") : "None"}</p>
+                            <div class="item-quantity-price">
+                                <span>Qty: ${item.quantity}</span>
+                                <span>$${item.totalPrice.toFixed(2)}</span>
+                            </div>
+                        </div>
+                    </div>
+                `,
+              )
+              .join("")}
+        </div>
+        
+        <div class="order-summary">
+            <h4>Order Summary</h4>
+            <div class="summary-row">
+                <span>Subtotal:</span>
+                <span>$${booking.subtotal.toFixed(2)}</span>
+            </div>
+            <div class="summary-row">
+                <span>Tax (8%):</span>
+                <span>$${booking.tax.toFixed(2)}</span>
+            </div>
+            <div class="summary-row total">
+                <span>Total:</span>
+                <span>$${booking.total.toFixed(2)}</span>
+            </div>
         </div>
     </div>
+</div>
+<div class="modal-footer">
+    <button class="btn-secondary close-details">Close</button>
+</div>
+</div>
 `
 
 document.body.appendChild(modal)
@@ -463,19 +463,19 @@ bookingCard.style.transform = "translateX(20px)"
 
 // Remove after animation completes
 setTimeout(() => {
-  bookingCard.remove()
+bookingCard.remove()
 
-  // Check if there are no more bookings and show empty state if needed
-  if (bookingsList.children.length === 0) {
-    bookingsList.innerHTML = `
-                    <div class="empty-state">
-                        <img src="/assets/image/empty-orders.svg" alt="No Orders">
-                        <h3>No Orders Found</h3>
-                        <p>You haven't placed any orders yet.</p>
-                        <a href="/order" class="btn-primary">Order Now</a>
-                    </div>
-                `
-  }
+// Check if there are no more bookings and show empty state if needed
+if (bookingsList.children.length === 0) {
+bookingsList.innerHTML = `
+            <div class="empty-state">
+                <img src="/assets/image/empty-orders.svg" alt="No Orders">
+                <h3>No Orders Found</h3>
+                <p>You haven't placed any orders yet.</p>
+                <a href="/order" class="btn-primary">Order Now</a>
+            </div>
+        `
+}
 }, 300)
 }
 } else {
@@ -557,16 +557,16 @@ const notification = document.createElement("div")
 notification.className = "order-success-notification left-notification"
 
 notification.innerHTML = `
-    <div class="notification-content">
-        <div class="success-icon">
-            <i class="fas fa-check-circle"></i>
-        </div>
-        <div class="notification-text">
-            <h4>Your order drink success!</h4>
-            <p>Order #${booking.id} has been successfully completed.</p>
-        </div>
-        <button class="close-notification">&times;</button>
-    </div>
+<div class="notification-content">
+<div class="success-icon">
+    <i class="fas fa-check-circle"></i>
+</div>
+<div class="notification-text">
+    <h4>Your order drink success!</h4>
+    <p>Order #${booking.id} has been successfully completed.</p>
+</div>
+<button class="close-notification">×</button>
+</div>
 `
 
 document.body.appendChild(notification)
@@ -617,596 +617,596 @@ const style = document.createElement("style")
 style.textContent = `
 /* Booking Card Styles */
 .booking-card {
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-    margin-bottom: 20px;
-    overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+background-color: white;
+border-radius: 10px;
+box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+margin-bottom: 20px;
+overflow: hidden;
+transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .booking-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+transform: translateY(-3px);
+box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
 }
 
 .booking-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 20px;
-    border-bottom: 1px solid #eee;
-    background-color: #f9f9f9;
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 15px 20px;
+border-bottom: 1px solid #eee;
+background-color: #f9f9f9;
 }
 
 .booking-info h3 {
-    margin: 0 0 5px;
-    font-size: 18px;
-    color: #333;
+margin: 0 0 5px;
+font-size: 18px;
+color: #333;
 }
 
 .booking-date {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 14px;
-    color: #666;
+display: flex;
+align-items: center;
+gap: 5px;
+font-size: 14px;
+color: #666;
 }
 
 .booking-status {
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
+padding: 6px 12px;
+border-radius: 20px;
+font-size: 12px;
+font-weight: 600;
+text-transform: uppercase;
 }
 
 .booking-status.processing {
-    background-color: #fff8e1;
-    color: #ff9800;
+background-color: #fff8e1;
+color: #ff9800;
 }
 
 .booking-status.completed {
-    background-color: #e8f5e9;
-    color: #4caf50;
+background-color: #e8f5e9;
+color: #4caf50;
 }
 
 .booking-status.cancelled {
-    background-color: #ffebee;
-    color: #f44336;
+background-color: #ffebee;
+color: #f44336;
 }
 
 .payment-status {
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-    margin-top: 5px;
+padding: 6px 12px;
+border-radius: 20px;
+font-size: 12px;
+font-weight: 600;
+text-transform: uppercase;
+margin-top: 5px;
 }
 
 .payment-status.processing {
-    background-color: #e3f2fd;
-    color: #2196f3;
+background-color: #e3f2fd;
+color: #2196f3;
 }
 
 .payment-status.completed {
-    background-color: #e8f5e9;
-    color: #4caf50;
+background-color: #e8f5e9;
+color: #4caf50;
 }
 
 .order-status-container {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
+display: flex;
+flex-direction: column;
+align-items: flex-end;
 }
 
 .booking-items {
-    padding: 15px 20px;
+padding: 15px 20px;
 }
 
 .booking-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 0;
-    border-bottom: 1px dashed #eee;
+display: flex;
+justify-content: space-between;
+padding: 10px 0;
+border-bottom: 1px dashed #eee;
 }
 
 .booking-item:last-child {
-    border-bottom: none;
+border-bottom: none;
 }
 
 .item-details h4 {
-    margin: 0 0 5px;
-    font-size: 16px;
-    color: #333;
+margin: 0 0 5px;
+font-size: 16px;
+color: #333;
 }
 
 .item-details p {
-    margin: 0;
-    font-size: 14px;
-    color: #666;
+margin: 0;
+font-size: 14px;
+color: #666;
 }
 
 .item-price {
-    font-size: 16px;
-    font-weight: 600;
-    color: #ff5e62;
-    align-self: center;
+font-size: 16px;
+font-weight: 600;
+color: #ff5e62;
+align-self: center;
 }
 
 .booking-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 20px;
-    border-top: 1px solid #eee;
-    background-color: #f9f9f9;
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 15px 20px;
+border-top: 1px solid #eee;
+background-color: #f9f9f9;
 }
 
 .booking-total {
-    font-size: 16px;
-    font-weight: 600;
-    color: #333;
+font-size: 16px;
+font-weight: 600;
+color: #333;
 }
 
 .total-price {
-    color: #ff5e62;
+color: #ff5e62;
 }
 
 .booking-actions {
-    display: flex;
-    gap: 10px;
+display: flex;
+gap: 10px;
 }
 
 .btn-secondary {
-    padding: 8px 15px;
-    background-color: #f5f5f5;
-    color: #333;
-    border: none;
-    border-radius: 5px;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    text-decoration: none;
+padding: 8px 15px;
+background-color: #f5f5f5;
+color: #333;
+border: none;
+border-radius: 5px;
+font-size: 14px;
+font-weight: 500;
+cursor: pointer;
+transition: all 0.3s ease;
+display: flex;
+align-items: center;
+gap: 5px;
+text-decoration: none;
 }
 
 .btn-secondary:hover {
-    background-color: #e5e5e5;
+background-color: #e5e5e5;
 }
 
 .btn-outline-danger {
-    padding: 8px 15px;
-    background-color: transparent;
-    color: #f44336;
-    border: 1px solid #f44336;
-    border-radius: 5px;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 5px;
+padding: 8px 15px;
+background-color: transparent;
+color: #f44336;
+border: 1px solid #f44336;
+border-radius: 5px;
+font-size: 14px;
+font-weight: 500;
+cursor: pointer;
+transition: all 0.3s ease;
+display: flex;
+align-items: center;
+gap: 5px;
 }
 
 .btn-outline-danger:hover {
-    background-color: #f44336;
-    color: white;
+background-color: #f44336;
+color: white;
 }
 
 .btn-primary {
-    padding: 8px 15px;
-    background-color: #ff5e62;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 5px;
+padding: 8px 15px;
+background-color: #ff5e62;
+color: white;
+border: none;
+border-radius: 5px;
+font-size: 14px;
+font-weight: 500;
+cursor: pointer;
+transition: all 0.3s ease;
+display: flex;
+align-items: center;
+gap: 5px;
 }
 
 .btn-primary:hover {
-    background-color: #ff4146;
+background-color: #ff4146;
 }
 
 .btn-success {
-    padding: 8px 15px;
-    background-color: #4caf50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 5px;
+padding: 8px 15px;
+background-color: #4caf50;
+color: white;
+border: none;
+border-radius: 5px;
+font-size: 14px;
+font-weight: 500;
+cursor: pointer;
+transition: all 0.3s ease;
+display: flex;
+align-items: center;
+gap: 5px;
 }
 
 .btn-success:hover {
-    background-color: #43a047;
+background-color: #43a047;
 }
 
 /* Empty State */
 .empty-state {
-    text-align: center;
-    padding: 40px 20px;
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+text-align: center;
+padding: 40px 20px;
+background-color: white;
+border-radius: 10px;
+box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
 }
 
 .empty-state img {
-    width: 120px;
-    height: auto;
-    margin-bottom: 20px;
-    opacity: 0.7;
+width: 120px;
+height: auto;
+margin-bottom: 20px;
+opacity: 0.7;
 }
 
 .empty-state h3 {
-    margin: 0 0 10px;
-    font-size: 20px;
-    color: #333;
+margin: 0 0 10px;
+font-size: 20px;
+color: #333;
 }
 
 .empty-state p {
-    margin: 0 0 20px;
-    font-size: 16px;
-    color: #666;
+margin: 0 0 20px;
+font-size: 16px;
+color: #666;
 }
 
 /* Booking Details Modal */
 .booking-details-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background-color: rgba(0, 0, 0, 0.5);
+display: flex;
+align-items: center;
+justify-content: center;
+z-index: 1000;
 }
 
 .modal-content {
-    width: 90%;
-    max-width: 600px;
-    max-height: 90vh;
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
+width: 90%;
+max-width: 600px;
+max-height: 90vh;
+background-color: white;
+border-radius: 10px;
+box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+overflow: hidden;
+display: flex;
+flex-direction: column;
 }
 
 .modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 20px;
-    border-bottom: 1px solid #eee;
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 15px 20px;
+border-bottom: 1px solid #eee;
 }
 
 .modal-header h3 {
-    margin: 0;
-    font-size: 20px;
-    color: #333;
+margin: 0;
+font-size: 20px;
+color: #333;
 }
 
 .close-modal {
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-    color: #999;
+background: none;
+border: none;
+font-size: 24px;
+cursor: pointer;
+color: #999;
 }
 
 .modal-body {
-    flex: 1;
-    padding: 20px;
-    overflow-y: auto;
+flex: 1;
+padding: 20px;
+overflow-y: auto;
 }
 
 .order-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 20px;
+display: flex;
+justify-content: space-between;
+align-items: flex-start;
+margin-bottom: 20px;
 }
 
 .order-header h4 {
-    margin: 0 0 5px;
-    font-size: 18px;
-    color: #333;
+margin: 0 0 5px;
+font-size: 18px;
+color: #333;
 }
 
 .order-header p {
-    margin: 0;
-    font-size: 14px;
-    color: #666;
-    display: flex;
-    align-items: center;
-    gap: 5px;
+margin: 0;
+font-size: 14px;
+color: #666;
+display: flex;
+align-items: center;
+gap: 5px;
 }
 
 .order-items {
-    margin-bottom: 20px;
+margin-bottom: 20px;
 }
 
 .order-items h4 {
-    margin: 0 0 15px;
-    font-size: 18px;
-    color: #333;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 10px;
+margin: 0 0 15px;
+font-size: 18px;
+color: #333;
+border-bottom: 1px solid #eee;
+padding-bottom: 10px;
 }
 
 .order-item {
-    display: flex;
-    margin-bottom: 15px;
-    padding-bottom: 15px;
-    border-bottom: 1px dashed #eee;
+display: flex;
+margin-bottom: 15px;
+padding-bottom: 15px;
+border-bottom: 1px dashed #eee;
 }
 
 .order-item:last-child {
-    margin-bottom: 0;
-    padding-bottom: 0;
-    border-bottom: none;
+margin-bottom: 0;
+padding-bottom: 0;
+border-bottom: none;
 }
 
 .item-image {
-    width: 60px;
-    height: 60px;
-    border-radius: 8px;
-    overflow: hidden;
-    margin-right: 15px;
+width: 60px;
+height: 60px;
+border-radius: 8px;
+overflow: hidden;
+margin-right: 15px;
 }
 
 .item-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+width: 100%;
+height: 100%;
+object-fit: cover;
 }
 
 .item-details {
-    flex: 1;
+flex: 1;
 }
 
 .item-details h5 {
-    margin: 0 0 5px;
-    font-size: 16px;
-    color: #333;
+margin: 0 0 5px;
+font-size: 16px;
+color: #333;
 }
 
 .item-details p {
-    margin: 0 0 5px;
-    font-size: 14px;
-    color: #666;
+margin: 0 0 5px;
+font-size: 14px;
+color: #666;
 }
 
 .item-quantity-price {
-    display: flex;
-    justify-content: space-between;
-    font-size: 14px;
-    color: #333;
-    margin-top: 5px;
+display: flex;
+justify-content: space-between;
+font-size: 14px;
+color: #333;
+margin-top: 5px;
 }
 
 .order-summary {
-    background-color: #f9f9f9;
-    padding: 15px;
-    border-radius: 8px;
+background-color: #f9f9f9;
+padding: 15px;
+border-radius: 8px;
 }
 
 .order-summary h4 {
-    margin: 0 0 15px;
-    font-size: 18px;
-    color: #333;
+margin: 0 0 15px;
+font-size: 18px;
+color: #333;
 }
 
 .summary-row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-    font-size: 14px;
-    color: #666;
+display: flex;
+justify-content: space-between;
+margin-bottom: 10px;
+font-size: 14px;
+color: #666;
 }
 
 .summary-row.total {
-    font-size: 18px;
-    font-weight: 600;
-    color: #333;
-    border-top: 1px dashed #ddd;
-    padding-top: 10px;
-    margin-top: 10px;
+font-size: 18px;
+font-weight: 600;
+color: #333;
+border-top: 1px dashed #ddd;
+padding-top: 10px;
+margin-top: 10px;
 }
 
 .summary-row.total span:last-child {
-    color: #ff5e62;
+color: #ff5e62;
 }
 
 .modal-footer {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    padding: 15px 20px;
-    border-top: 1px solid #eee;
+display: flex;
+justify-content: flex-end;
+gap: 10px;
+padding: 15px 20px;
+border-top: 1px solid #eee;
 }
 
 /* Order Success Notification */
 .order-success-notification,
 .thank-you-notification {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
-    width: 300px;
-    z-index: 1300;
-    overflow: hidden;
-    animation: slide-in-left 0.3s ease;
+position: fixed;
+top: 20px;
+left: 20px;
+background-color: white;
+border-radius: 10px;
+box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+width: 300px;
+z-index: 1300;
+overflow: hidden;
+animation: slide-in-left 0.3s ease;
 }
 
 /* Left notification for order completed */
 .order-success-notification.left-notification,
 .thank-you-notification.left-notification {
-    left: 20px;
-    right: auto;
+left: 20px;
+right: auto;
 }
 
 .notification-content {
-    display: flex;
-    padding: 15px;
-    align-items: center;
-    position: relative;
+display: flex;
+padding: 15px;
+align-items: center;
+position: relative;
 }
 
 .success-icon {
-    font-size: 24px;
-    color: #4caf50;
-    margin-right: 15px;
+font-size: 24px;
+color: #4caf50;
+margin-right: 15px;
 }
 
 .notification-text {
-    flex: 1;
+flex: 1;
 }
 
 .notification-text h4 {
-    margin: 0 0 5px;
-    font-size: 16px;
-    color: #333;
+margin: 0 0 5px;
+font-size: 16px;
+color: #333;
 }
 
 .notification-text p {
-    margin: 0;
-    font-size: 14px;
-    color: #666;
+margin: 0;
+font-size: 14px;
+color: #666;
 }
 
 .close-notification {
-    background: none;
-    border: none;
-    font-size: 20px;
-    color: #999;
-    cursor: pointer;
-    position: absolute;
-    top: 5px;
-    right: 5px;
+background: none;
+border: none;
+font-size: 20px;
+color: #999;
+cursor: pointer;
+position: absolute;
+top: 5px;
+right: 5px;
 }
 
 .order-success-notification.fade-out,
 .thank-you-notification.fade-out {
-    animation: fade-out-left 0.5s ease forwards;
+animation: fade-out-left 0.5s ease forwards;
 }
 
 /* Celebration Animation */
 .celebration-animation {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 2000;
-    overflow: hidden;
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+pointer-events: none;
+z-index: 2000;
+overflow: hidden;
 }
 
 .confetti {
-    position: absolute;
-    top: -10px;
-    width: 10px;
-    height: 20px;
-    animation: fall 3s linear forwards;
+position: absolute;
+top: -10px;
+width: 10px;
+height: 20px;
+animation: fall 3s linear forwards;
 }
 
 @keyframes fall {
-    0% {
-        transform: translateY(0) rotate(0deg);
-        opacity: 1;
-    }
-    100% {
-        transform: translateY(100vh) rotate(720deg);
-        opacity: 0;
-    }
+0% {
+transform: translateY(0) rotate(0deg);
+opacity: 1;
+}
+100% {
+transform: translateY(100vh) rotate(720deg);
+opacity: 0;
+}
 }
 
 .celebration-animation.fade-out {
-    animation: fade-out 1s forwards;
+animation: fade-out 1s forwards;
 }
 
 @keyframes fade-out {
-    from {
-        opacity: 1;
-    }
-    to {
-        opacity: 0;
-    }
+from {
+opacity: 1;
+}
+to {
+opacity: 0;
+}
 }
 
 @keyframes slide-in-left {
-    from {
-        transform: translateX(-100%);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
+from {
+transform: translateX(-100%);
+opacity: 0;
+}
+to {
+transform: translateX(0);
+opacity: 1;
+}
 }
 
 @keyframes fade-out-left {
-    from {
-        transform: translateX(0);
-        opacity: 1;
-    }
-    to {
-        transform: translateX(-100%);
-        opacity: 0;
-    }
+from {
+transform: translateX(0);
+opacity: 1;
+}
+to {
+transform: translateX(-100%);
+opacity: 0;
+}
 }
 
 @media (max-width: 768px) {
-    .form-row {
-        flex-direction: column;
-        gap: 15px;
-    }
+.form-row {
+flex-direction: column;
+gap: 15px;
+}
 
-    .receipt-info {
-        flex-direction: column;
-        gap: 15px;
-    }
+.receipt-info {
+flex-direction: column;
+gap: 15px;
+}
 
-    .receipt-actions {
-        flex-direction: column;
-        width: 100%;
-    }
+.receipt-actions {
+flex-direction: column;
+width: 100%;
+}
 
-    .receipt-actions button {
-        width: 100%;
-    }
+.receipt-actions button {
+width: 100%;
+}
 }
 
 @media (max-width: 480px) {
-    .receipt-paper {
-        padding: 20px 15px;
-    }
+.receipt-paper {
+padding: 20px 15px;
+}
 
-    .item-details {
-        font-size: 11px;
-    }
+.item-details {
+font-size: 11px;
+}
 }
 `
 document.head.appendChild(style)
