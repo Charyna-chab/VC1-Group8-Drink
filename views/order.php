@@ -3,7 +3,30 @@ require_once __DIR__ . '/layouts/header.php';
 require_once __DIR__ . '/layouts/navbar.php';
 require_once __DIR__ . '/layouts/sidebar.php';
 
+// Redirect to login if user is not authenticated
+if (!isset($_SESSION['user_id'])) {
+    $_SESSION['error'] = 'Please log in to place an order';
+    header('Location: /login');
+    exit;
+}
 
+// Fetch toppings (replace this with your actual database query or logic)
+$toppings = []; // Default to empty array to prevent undefined variable error
+// Example: Assuming you have a database connection and a toppings table
+// $db = new PDO("mysql:host=localhost;dbname=your_database", "username", "password");
+// $stmt = $db->query("SELECT name, price FROM toppings");
+// $toppings = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// For now, using a placeholder array for demonstration
+$toppings = [
+    ['name' => 'Boba Pearls', 'price' => 0.50],
+    ['name' => 'Pudding', 'price' => 0.75],
+    ['name' => 'Lychee Jelly', 'price' => 0.60]
+];
+
+// Ensure $products is defined (assuming it's fetched elsewhere; if not, you may need to add similar logic)
+if (!isset($products)) {
+    $products = []; // Prevent undefined variable error for products
+}
 ?>
 
 <section class="content">
@@ -24,7 +47,7 @@ require_once __DIR__ . '/layouts/sidebar.php';
         <button class="category-btn" data-category="fruit-tea">Fruit Tea</button>
         <button class="category-btn" data-category="smoothie">Smoothies</button>
         <button class="category-btn" data-category="coffee">Coffee</button>
-        <button class="category-btn" data-category="snacks">Snacks</button>
+        <button class="category-btn" data-category="snack">Snacks</button>
     </div>
 
     <!-- Order Container -->
@@ -37,22 +60,26 @@ require_once __DIR__ . '/layouts/sidebar.php';
         </div>
         <h3>Order Drinks & Snacks</h3>
         <div class="products-grid">
-            <?php foreach ($products as $product): ?>
-            <div class="product-card" data-category="<?php echo $product['category']; ?>">
-                <div class="product-image">
-                    <img src="<?php echo $product['image']; ?>" alt="<?php echo $product['name']; ?>">
+            <?php if (empty($products)): ?>
+                <div id="no-product-message">No products available at the moment.</div>
+            <?php else: ?>
+                <?php foreach ($products as $product): ?>
+                <div class="product-card" data-category="<?php echo htmlspecialchars($product['category']); ?>">
+                    <div class="product-image">
+                        <img src="<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>">
+                    </div>
+                    <div class="product-info">
+                        <h3><?php echo htmlspecialchars($product['name']); ?></h3>
+                        <p class="product-desc"><?php echo htmlspecialchars($product['description']); ?></p>
+                        <div class="product-price">$<?php echo number_format($product['price'], 2); ?></div>
+                    </div>
+                    <div class="product-actions">
+                        <button class="order-btn" data-product-id="order.php?product_id=<?php echo $product['id']; ?>">Order Now</button>
+                    </div>
                 </div>
-                <div class="product-info">
-                    <h3><?php echo $product['name']; ?></h3>
-                    <p class="product-desc"><?php echo $product['description']; ?></p>
-                    <div class="product-price">$<?php echo number_format($product['price'], 2); ?></div>
-                </div>
-                <div class="product-actions">
-                    <button class="order-btn" data-product-id="order.php?product_id=<?php echo $product['id']; ?>">Order Now</button>
-                </div>
-            </div>
-            <?php endforeach; ?>
-            <div id="no-product-message">No products found matching your criteria.</div>
+                <?php endforeach; ?>
+            <?php endif; ?>
+            <div id="no-product-message" style="display: none;">No products found matching your criteria.</div>
         </div>
     </div>
 </section>
@@ -105,8 +132,8 @@ require_once __DIR__ . '/layouts/sidebar.php';
             </div>
         </div>
         
-        <div class="customize-options">
-            <div class="option-group">
+        <div class="customize-options" id="customizeOptions">
+            <div class="option-group" id="sizeGroup">
                 <label>Size:</label>
                 <select id="drinkSize">
                     <option value="small" data-price="0">Small-Size</option>
@@ -114,7 +141,7 @@ require_once __DIR__ . '/layouts/sidebar.php';
                     <option value="large" data-price="1.00">Large-Size (+$1.00)</option>
                 </select>
             </div>
-            <div class="option-group">
+            <div class="option-group" id="sugarGroup">
                 <label>Sugar Level:</label>
                 <select id="sugarLevel">
                     <option value="no">No Sugar</option>
@@ -124,7 +151,7 @@ require_once __DIR__ . '/layouts/sidebar.php';
                     <option value="100">100% Sugar</option>
                 </select>
             </div>
-            <div class="option-group">
+            <div class="option-group" id="iceGroup">
                 <label>Ice Level:</label>
                 <select id="iceLevel">
                     <option value="no">No Ice</option>
@@ -133,16 +160,20 @@ require_once __DIR__ . '/layouts/sidebar.php';
                     <option value="extra">Extra Ice</option>
                 </select>
             </div>
-            <div class="option-group">
+            <div class="option-group" id="toppingsGroup">
                 <label>Toppings:</label>
                 <div id="toppings" class="toppings-grid">
-                    <?php foreach ($toppings as $topping): ?>
-                    <label class="topping-item">
-                        <input type="checkbox" name="topping" value="<?php echo $topping['topping_name']; ?>" data-price="<?php echo $topping['price']; ?>">
-                        <span><?php echo $topping['topping_name']; ?></span>
-                        <span class="topping-price">$<?php echo number_format($topping['price'], 2); ?></span>
-                    </label>
-                    <?php endforeach; ?>
+                    <?php if (empty($toppings)): ?>
+                        <p>No toppings available.</p>
+                    <?php else: ?>
+                        <?php foreach ($toppings as $topping): ?>
+                        <label class="topping-item">
+                            <input type="checkbox" name="topping" value="<?php echo htmlspecialchars($topping['name']); ?>" data-price="<?php echo $topping['price']; ?>">
+                            <span><?php echo htmlspecialchars($topping['name']); ?></span>
+                            <span class="topping-price">$<?php echo number_format($topping['price'], 2); ?></span>
+                        </label>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>

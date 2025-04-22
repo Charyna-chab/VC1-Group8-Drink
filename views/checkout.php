@@ -15,6 +15,9 @@ $booking_id = isset($_GET['booking_id']) ? htmlspecialchars($_GET['booking_id'])
 if (!isset($_SESSION['cart']) && isset($_POST['cart'])) {
     $_SESSION['cart'] = json_decode($_POST['cart'], true);
 }
+
+// Google Maps API Key
+$google_maps_api_key = "YOUR_GOOGLE_MAPS_API_KEY"; // Replace with your actual API key
 ?>
 
 <section class="content">
@@ -71,11 +74,37 @@ if (!isset($_SESSION['cart']) && isset($_POST['cart'])) {
                             <input type="tel" id="phone" name="phone" placeholder="+123 456 7890" required>
                             <span class="error-message" id="phone_error"></span>
                         </div>
+                        
+                        <!-- Google Maps Integration -->
                         <div class="form-group">
-                            <label for="address">Delivery Address *</label>
-                            <textarea id="address" name="address" rows="3" placeholder="Enter your delivery address" required></textarea>
+                            <label for="address_search">Find Your Delivery Location *</label>
+                            <div class="address-search-container">
+                                <input type="text" id="address_search" placeholder="Search for your address" class="address-search-input">
+                                <button type="button" id="use-my-location" class="btn-outline-small">
+                                    <i class="fas fa-location-arrow"></i> Use My Location
+                                </button>
+                            </div>
+                            <span class="error-message" id="address_search_error"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div id="map"></div>
+                            <div class="map-instructions">
+                                <p><i class="fas fa-info-circle"></i> Drag the marker to adjust your exact location.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="address">Delivery Address Details *</label>
+                            <textarea id="address" name="address" rows="3" placeholder="Apartment/Unit #, Building, Floor, Additional directions" required></textarea>
                             <span class="error-message" id="address_error"></span>
                         </div>
+                        
+                        <!-- Hidden inputs for coordinates -->
+                        <input type="hidden" id="lat" name="lat">
+                        <input type="hidden" id="lng" name="lng">
+                        <input type="hidden" id="formatted_address" name="formatted_address">
+                        
                         <div class="form-group">
                             <label for="notes">Order Notes (Optional)</label>
                             <textarea id="notes" name="notes" rows="2" placeholder="Any special instructions?"></textarea>
@@ -122,6 +151,9 @@ if (!isset($_SESSION['cart']) && isset($_POST['cart'])) {
             <input type="hidden" id="hidden_address" name="hidden_address">
             <input type="hidden" id="hidden_notes" name="hidden_notes">
             <input type="hidden" id="hidden_booking_id" name="hidden_booking_id" value="<?php echo $booking_id; ?>">
+            <input type="hidden" id="hidden_lat" name="hidden_lat">
+            <input type="hidden" id="hidden_lng" name="hidden_lng">
+            <input type="hidden" id="hidden_formatted_address" name="hidden_formatted_address">
             <input type="hidden" id="selected_payment_method" name="selected_payment_method">
 
             <!-- Payment Cards -->
@@ -269,5 +301,53 @@ if (!isset($_SESSION['cart']) && isset($_POST['cart'])) {
 </section>
 
 <link rel="stylesheet" href="/assets/css/checkout.css">
+<script src="https://maps.googleapis.com/maps/api/js?key=<?php echo $google_maps_api_key; ?>&libraries=places&callback=initMap" async defer></script>
 <script src="/assets/js/checkout.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<style>
+    #map {
+        height: 300px;
+        width: 100%;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+    }
+    
+    .address-search-container {
+        display: flex;
+        gap: 10px;
+    }
+    
+    .address-search-input {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+    }
+    
+    .btn-outline-small {
+        padding: 8px 12px;
+        background: none;
+        border: 1px solid #ff6769;
+        color: #ff6769;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 13px;
+        transition: all 0.3s;
+        white-space: nowrap;
+    }
+    
+    .btn-outline-small:hover {
+        background: #ff6769;
+        color: white;
+    }
+    
+    .map-instructions {
+        margin-top: -10px;
+        margin-bottom: 15px;
+        font-size: 13px;
+        color: #666;
+    }
+</style>
