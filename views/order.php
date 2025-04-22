@@ -3,7 +3,12 @@ require_once __DIR__ . '/layouts/header.php';
 require_once __DIR__ . '/layouts/navbar.php';
 require_once __DIR__ . '/layouts/sidebar.php';
 
-
+// Redirect to login if user is not authenticated
+if (!isset($_SESSION['user_id'])) {
+    $_SESSION['error'] = 'Please log in to place an order';
+    header('Location: /login');
+    exit;
+}
 ?>
 
 <section class="content">
@@ -24,7 +29,7 @@ require_once __DIR__ . '/layouts/sidebar.php';
         <button class="category-btn" data-category="fruit-tea">Fruit Tea</button>
         <button class="category-btn" data-category="smoothie">Smoothies</button>
         <button class="category-btn" data-category="coffee">Coffee</button>
-        <button class="category-btn" data-category="snacks">Snacks</button>
+        <button class="category-btn" data-category="snack">Snacks</button>
     </div>
 
     <!-- Order Container -->
@@ -38,13 +43,13 @@ require_once __DIR__ . '/layouts/sidebar.php';
         <h3>Order Drinks & Snacks</h3>
         <div class="products-grid">
             <?php foreach ($products as $product): ?>
-            <div class="product-card" data-category="<?php echo $product['category']; ?>">
+            <div class="product-card" data-category="<?php echo htmlspecialchars($product['category']); ?>">
                 <div class="product-image">
-                    <img src="<?php echo $product['image']; ?>" alt="<?php echo $product['name']; ?>">
+                    <img src="<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>">
                 </div>
                 <div class="product-info">
-                    <h3><?php echo $product['name']; ?></h3>
-                    <p class="product-desc"><?php echo $product['description']; ?></p>
+                    <h3><?php echo htmlspecialchars($product['name']); ?></h3>
+                    <p class="product-desc"><?php echo htmlspecialchars($product['description']); ?></p>
                     <div class="product-price">$<?php echo number_format($product['price'], 2); ?></div>
                 </div>
                 <div class="product-actions">
@@ -105,8 +110,8 @@ require_once __DIR__ . '/layouts/sidebar.php';
             </div>
         </div>
         
-        <div class="customize-options">
-            <div class="option-group">
+        <div class="customize-options" id="customizeOptions">
+            <div class="option-group" id="sizeGroup">
                 <label>Size:</label>
                 <select id="drinkSize">
                     <option value="small" data-price="0">Small-Size</option>
@@ -114,7 +119,7 @@ require_once __DIR__ . '/layouts/sidebar.php';
                     <option value="large" data-price="1.00">Large-Size (+$1.00)</option>
                 </select>
             </div>
-            <div class="option-group">
+            <div class="option-group" id="sugarGroup">
                 <label>Sugar Level:</label>
                 <select id="sugarLevel">
                     <option value="no">No Sugar</option>
@@ -124,7 +129,7 @@ require_once __DIR__ . '/layouts/sidebar.php';
                     <option value="100">100% Sugar</option>
                 </select>
             </div>
-            <div class="option-group">
+            <div class="option-group" id="iceGroup">
                 <label>Ice Level:</label>
                 <select id="iceLevel">
                     <option value="no">No Ice</option>
@@ -133,13 +138,13 @@ require_once __DIR__ . '/layouts/sidebar.php';
                     <option value="extra">Extra Ice</option>
                 </select>
             </div>
-            <div class="option-group">
+            <div class="option-group" id="toppingsGroup">
                 <label>Toppings:</label>
                 <div id="toppings" class="toppings-grid">
                     <?php foreach ($toppings as $topping): ?>
                     <label class="topping-item">
-                        <input type="checkbox" name="topping" value="<?php echo $topping['name']; ?>" data-price="<?php echo $topping['price']; ?>">
-                        <span><?php echo $topping['name']; ?></span>
+                        <input type="checkbox" name="topping" value="<?php echo htmlspecialchars($topping['name']); ?>" data-price="<?php echo $topping['price']; ?>">
+                        <span><?php echo htmlspecialchars($topping['name']); ?></span>
                         <span class="topping-price">$<?php echo number_format($topping['price'], 2); ?></span>
                     </label>
                     <?php endforeach; ?>
