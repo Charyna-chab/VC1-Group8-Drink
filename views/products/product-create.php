@@ -60,4 +60,4 @@
     </div>
 </div>
 
-<?php require_once __DIR__ . '/../admin/Partials/footer.php'; ?>
+<?php require_once __DIR__ . '/../layouts/footer.php'; ?>

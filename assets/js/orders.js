@@ -39,6 +39,8 @@ document.addEventListener("DOMContentLoaded", () => {
         sugarLevelSelect: document.getElementById("sugarLevel"),
         iceLevelSelect: document.getElementById("iceLevel"),
         toppingCheckboxes: document.querySelectorAll('#toppings input[type="checkbox"]'),
+        customerPhoneInput: document.getElementById("customerPhone"), // Added
+        customerIdInput: document.getElementById("customerId"),       // Added
 
         // Order customization display elements
         productImage: document.getElementById("productImage"),
@@ -594,6 +596,8 @@ document.addEventListener("DOMContentLoaded", () => {
             toppings: selectedToppings,
             quantity: quantity,
             totalPrice: totalPrice,
+            customerPhone: customerPhone, // Added customer phone
+            customerId: customerId,       // Added customer ID
             orderDate: new Date().toISOString(),
             status: "processing"
         };

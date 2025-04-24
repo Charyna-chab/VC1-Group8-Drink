@@ -79,7 +79,7 @@ $currentPage = basename($_SERVER['REQUEST_URI']);
 
     <!-- Nav Item - Order List -->
     <li class="nav-item <?= $currentPage == 'order-list' ? 'active-page' : '' ?>">
-        <a class="nav-link" href="/admin/order-list">
+        <a class="nav-link" href="/admin/orders">
             <i class="fas fa-list order-list-icon" style="color: black !important;"></i>
             <span>Order List</span>
         </a>
