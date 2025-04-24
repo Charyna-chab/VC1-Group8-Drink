@@ -26,8 +26,8 @@ require_once __DIR__ . '/../controllers/Admin/Users/UserController.php';
 require_once './controllers/Admin/Products/ProductController.php';
 require_once "./controllers/Admin/DashboardController.php";
 require_once "./controllers/Admin/AdminReceiptController.php"; // Fixed path
-require_once __DIR__ . '/../controllers/Admin/OrderListController.php'; // Fixed path for OrderListController
-require_once "./controllers/Admin/AdminReceiptController.php";
+require_once __DIR__ . '/../controllers/Customer/ToppingController.php';
+require_once "controllers/ProfileController.php"; // Add this line for ProfileController
 
 use YourNamespace\Router;
 use YourNamespace\Controllers\WelcomeController;
@@ -49,10 +49,10 @@ use YourNamespace\Controllers\CheckoutController; // Add this line
 use YourNamespace\Controllers\Admin\Users\UserController;
 use YourNamespace\Controllers\Admin\Products\ProductController;
 use YourNamespace\Controllers\Admin\DashboardController;
-use YourNamespace\Controllers\Admin\AdminReceiptController; // Fixed namespace
-use YourNamespace\Controllers\Admin\OrderListController; // Ensure namespace matches the actual class definition
+use YourNamespace\Controllers\Admin\AdminReceiptController;
+use YourNamespace\Controllers\ProfileController; // Add this line
 
-
+use YourNamespace\Controllers\Admin\Products\ToppingController; // Fixed namespace
 
 $route = new Router();
 
@@ -72,8 +72,9 @@ $route->post("/admin-verification", [AuthController::class, 'adminVerification']
 $route->get("/register", [AuthController::class, 'register']);
 $route->post("/register", [AuthController::class, 'register']);
 $route->get("/register-success", [AuthController::class, 'registerSuccess']);
-$route->get("/forgot-password", [AuthController::class, 'forgotPassword']);
-$route->post("/forgot-password", [AuthController::class, 'forgotPassword']);
+
+// Profile image update route - FIXED: using $route instead of $router
+$route->post("/update-profile-image", [ProfileController::class, 'updateProfileImage']);
 
 // Profile update routes
 $route->post("/update-profile", [AuthController::class, 'updateProfile']);
@@ -155,9 +156,18 @@ $route->get("/admin/products/create", [ProductController::class, 'create']);
 $route->post("/admin/products/store", [ProductController::class, 'store']);
 $route->get("/admin/products/edit/{id}", [ProductController::class, 'edit']);
 $route->post("/admin/products/update/{id}", [ProductController::class, 'update']);
-$route->post("/admin/products/delete/{id}", [ProductController::class, 'destroy']);
+$route->post("/admin/products/delete/{id}", [ProductController::class, 'delete']);
+
+// Admin Topping Management Routes
+$route->get("/admin/toppings", [ToppingController::class, 'index']);
+$route->get("/admin/toppings/create", [ToppingController::class, 'create']);
+$route->post("/admin/toppings/store", [ToppingController::class, 'store']);
+$route->get("/admin/toppings/edit/{id}", [ToppingController::class, 'edit']);
+$route->post("/admin/toppings/update/{id}", [ToppingController::class, 'update']);
+$route->post("/admin/toppings/delete/{id}", [ToppingController::class, 'destroy']);
 
 // Admin User Management
+// Fix the user routes to match your controller's expectations
 $route->get("/admin/users", [UserController::class, 'index']);
 $route->get("/admin/users/create", [UserController::class, 'create']);
 $route->post("/admin/users/store", [UserController::class, 'store']);

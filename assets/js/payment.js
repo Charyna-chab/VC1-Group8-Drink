@@ -9,478 +9,508 @@ document.addEventListener("DOMContentLoaded", () => {
     const orderNumberElement = document.getElementById("order-number")
     const overlay = document.getElementById("overlay")
     const verifyQrPaymentBtn = document.getElementById("verify-qr-payment")
-
+    const verifyAbaPaymentBtn = document.getElementById("verify-aba-payment")
+    const verifyAcledaPaymentBtn = document.getElementById("verify-acleda-payment")
+  
     // Card form elements
     const cardNumber = document.getElementById("card_number")
     const expiryDate = document.getElementById("expiry_date")
     const cvv = document.getElementById("cvv")
     const cardName = document.getElementById("card_name")
-
+  
     // Get order ID from URL or session storage
     const urlParams = new URLSearchParams(window.location.search)
     const orderId = urlParams.get("order_id") || sessionStorage.getItem("paymentOrderId")
-
+  
     // Clear session storage order ID
     if (sessionStorage.getItem("paymentOrderId")) {
-        sessionStorage.removeItem("paymentOrderId")
+      sessionStorage.removeItem("paymentOrderId")
     }
-
+  
     // Get booking details if order ID is provided
     let currentBooking = null
     if (orderId) {
-        const bookings = JSON.parse(localStorage.getItem("bookings")) || []
-        currentBooking = bookings.find((booking) => booking.id === orderId)
-
-        // Update order details in the UI
-        if (currentBooking) {
-            updateOrderDetails(currentBooking)
-        }
+      const bookings = JSON.parse(localStorage.getItem("bookings")) || []
+      currentBooking = bookings.find((booking) => booking.id === orderId)
+  
+      // Update order details in the UI
+      if (currentBooking) {
+        updateOrderDetails(currentBooking)
+      }
     }
-
+  
     // Initialize payment options
     paymentRadios.forEach((radio) => {
-        radio.addEventListener("change", function() {
-            // Remove active class from all payment options
-            paymentOptions.forEach((option) => {
-                option.classList.remove("active")
-            })
-
-            // Add active class to selected payment option
-            const selectedOption = document.querySelector(`.payment-method-card[data-payment="${this.value}"]`)
-            if (selectedOption) {
-                selectedOption.classList.add("active")
-            }
-
-            // Show selected payment content
-            const paymentContents = document.querySelectorAll(".payment-method-content")
-            paymentContents.forEach((content) => {
-                content.style.display = "none"
-            })
-
-            const selectedContent = document.getElementById(`${this.value}_payment_content`)
-            if (selectedContent) {
-                selectedContent.style.display = "block"
-            }
-
-            // Enable the complete payment button
-            if (completePaymentBtn) {
-                completePaymentBtn.disabled = false
-            }
+      radio.addEventListener("change", function () {
+        // Remove active class from all payment options
+        paymentOptions.forEach((option) => {
+          option.classList.remove("active")
         })
+  
+        // Add active class to selected payment option
+        const selectedOption = document.querySelector(`.payment-method-card[data-payment="${this.value}"]`)
+        if (selectedOption) {
+          selectedOption.classList.add("active")
+        }
+  
+        // Show selected payment content
+        const paymentContents = document.querySelectorAll(".payment-method-content")
+        paymentContents.forEach((content) => {
+          content.style.display = "none"
+        })
+  
+        const selectedContent = document.getElementById(`${this.value}_payment_content`)
+        if (selectedContent) {
+          selectedContent.style.display = "block"
+        }
+  
+        // Enable the complete payment button
+        if (completePaymentBtn) {
+          completePaymentBtn.disabled = false
+        }
+      })
     })
-
+  
     // Set default payment method if none selected
     if (paymentRadios.length > 0 && !document.querySelector('input[name="payment_method"]:checked')) {
-        paymentRadios[0].checked = true
-        paymentRadios[0].dispatchEvent(new Event("change"))
+      paymentRadios[0].checked = true
+      paymentRadios[0].dispatchEvent(new Event("change"))
     }
-
+  
     // Format card number with spaces
     if (cardNumber) {
-        cardNumber.addEventListener("input", function(e) {
-            const value = this.value.replace(/\s+/g, "").replace(/[^0-9]/gi, "")
-            let formattedValue = ""
-
-            for (let i = 0; i < value.length; i++) {
-                if (i > 0 && i % 4 === 0) {
-                    formattedValue += " "
-                }
-                formattedValue += value[i]
-            }
-
-            this.value = formattedValue
-        })
+      cardNumber.addEventListener("input", function (e) {
+        const value = this.value.replace(/\s+/g, "").replace(/[^0-9]/gi, "")
+        let formattedValue = ""
+  
+        for (let i = 0; i < value.length; i++) {
+          if (i > 0 && i % 4 === 0) {
+            formattedValue += " "
+          }
+          formattedValue += value[i]
+        }
+  
+        this.value = formattedValue
+      })
     }
-
+  
     // Format expiry date (MM/YY)
     if (expiryDate) {
-        expiryDate.addEventListener("input", function(e) {
-            const value = this.value.replace(/\D/g, "")
-
-            if (value.length > 2) {
-                this.value = value.substring(0, 2) + "/" + value.substring(2, 4)
-            } else {
-                this.value = value
-            }
-        })
+      expiryDate.addEventListener("input", function (e) {
+        const value = this.value.replace(/\D/g, "")
+  
+        if (value.length > 2) {
+          this.value = value.substring(0, 2) + "/" + value.substring(2, 4)
+        } else {
+          this.value = value
+        }
+      })
     }
-
+  
     // Only allow numbers in CVV
     if (cvv) {
-        cvv.addEventListener("input", function(e) {
-            this.value = this.value.replace(/\D/g, "")
-        })
+      cvv.addEventListener("input", function (e) {
+        this.value = this.value.replace(/\D/g, "")
+      })
     }
-
-    // Verify QR payment button
+  
+    // Verify QR payment buttons
     if (verifyQrPaymentBtn) {
-        verifyQrPaymentBtn.addEventListener("click", () => {
-            // In a real app, this would verify the payment with the server
-            // For demo, we'll just simulate a successful payment
-            processPayment("qr")
-        })
+      verifyQrPaymentBtn.addEventListener("click", () => {
+        // In a real app, this would verify the payment with the server
+        // For demo, we'll just simulate a successful payment
+        processPayment("qr")
+      })
     }
-
+  
+    if (verifyAbaPaymentBtn) {
+      verifyAbaPaymentBtn.addEventListener("click", () => {
+        const transactionId = document.getElementById("aba_transaction_id").value
+        if (!transactionId || transactionId.trim() === "") {
+          showToast("Error", "Please enter your ABA transaction ID", "error")
+          return
+        }
+        processPayment("aba")
+      })
+    }
+  
+    if (verifyAcledaPaymentBtn) {
+      verifyAcledaPaymentBtn.addEventListener("click", () => {
+        const transactionId = document.getElementById("acleda_transaction_id").value
+        if (!transactionId || transactionId.trim() === "") {
+          showToast("Error", "Please enter your ACLEDA transaction ID", "error")
+          return
+        }
+        processPayment("acleda")
+      })
+    }
+  
     // Complete payment button
     if (completePaymentBtn) {
-        completePaymentBtn.addEventListener("click", () => {
-            const selectedPaymentMethod = document.querySelector('input[name="payment_method"]:checked')
-
-            if (!selectedPaymentMethod) {
-                showToast("Error", "Please select a payment method", "error")
-                return
-            }
-
-            const paymentMethod = selectedPaymentMethod.value
-
-            // Validate payment details based on method
-            if (paymentMethod === "card") {
-                if (!validateCardPayment()) {
-                    return
-                }
-            }
-
-            // Disable the button to prevent multiple clicks
-            completePaymentBtn.disabled = true
-            completePaymentBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...'
-
-            // Process the payment
-            processPayment(paymentMethod)
-        })
+      completePaymentBtn.addEventListener("click", () => {
+        const selectedPaymentMethod = document.querySelector('input[name="payment_method"]:checked')
+  
+        if (!selectedPaymentMethod) {
+          showToast("Error", "Please select a payment method", "error")
+          return
+        }
+  
+        const paymentMethod = selectedPaymentMethod.value
+  
+        // Validate payment details based on method
+        if (paymentMethod === "card") {
+          if (!validateCardPayment()) {
+            return
+          }
+        }
+  
+        // Disable the button to prevent multiple clicks
+        completePaymentBtn.disabled = true
+        completePaymentBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...'
+  
+        // Process the payment
+        processPayment(paymentMethod)
+      })
     }
-
+  
     // Update order details in the UI
     function updateOrderDetails(booking) {
-        // Update order number
-        const orderNumberElements = document.querySelectorAll(".order-number span:last-child")
-        orderNumberElements.forEach((el) => {
-            if (el) el.textContent = "#" + booking.id
-        })
-
-        // Update total amount
-        const totalAmountElements = document.querySelectorAll(".order-total span:last-child")
-        orderNumberElements.forEach((el) => {
-            if (el) el.textContent = "#" + booking.id
-        })
-
-        // Update total amount
-        const totalAmountElements2 = document.querySelectorAll(".order-total span:last-child")
-        totalAmountElements2.forEach((el) => {
-            if (el) el.textContent = "$" + booking.total.toFixed(2)
-        })
-
-        // Update order items if there's a container for them
-        const orderItemsContainer = document.querySelector(".order-items")
-        if (orderItemsContainer && booking.items) {
-            orderItemsContainer.innerHTML = booking.items
-                .map(
-                    (item) => `
-                  <div class="order-item">
-                      <div class="item-image">
-                          <img src="${item.image}" alt="${item.name}">
-                      </div>
-                      <div class="item-details">
-                          <h4>${item.name}</h4>
-                          <p>Size: ${item.size.name} | Sugar: ${item.sugar.name} | Ice: ${item.ice.name}</p>
-                          <p>Toppings: ${item.toppings && item.toppings.length > 0 ? item.toppings.map((t) => t.name).join(", ") : "None"}</p>
-                          <div class="item-quantity-price">
-                              <span>Qty: ${item.quantity}</span>
-                              <span>$${item.totalPrice.toFixed(2)}</span>
-                          </div>
-                      </div>
-                  </div>
-              `,
-                )
-                .join("")
-        }
-
-        // Update subtotal, tax, and total in order summary
-        const subtotalElement = document.querySelector(".total-row:nth-child(1) span:last-child")
-        if (subtotalElement) subtotalElement.textContent = "$" + booking.subtotal.toFixed(2)
-
-        const taxElement = document.querySelector(".total-row:nth-child(2) span:last-child")
-        if (taxElement) taxElement.textContent = "$" + booking.tax.toFixed(2)
-
-        const totalElement = document.querySelector(".total-row.grand-total span:last-child")
-        if (totalElement) totalElement.textContent = "$" + booking.total.toFixed(2)
+      // Update order number
+      const orderNumberElements = document.querySelectorAll(".order-number span:last-child")
+      orderNumberElements.forEach((el) => {
+        if (el) el.textContent = "#" + booking.id
+      })
+  
+      // Update total amount
+      const totalAmountElements = document.querySelectorAll(".order-total span:last-child")
+      totalAmountElements.forEach((el) => {
+        if (el) el.textContent = "$" + booking.total.toFixed(2)
+      })
+  
+      // Update order items if there's a container for them
+      const orderItemsContainer = document.querySelector(".order-items")
+      if (orderItemsContainer && booking.items) {
+        orderItemsContainer.innerHTML = booking.items
+          .map(
+            (item) => `
+                    <div class="order-item">
+                        <div class="item-image">
+                            <img src="${item.image}" alt="${item.name}">
+                        </div>
+                        <div class="item-details">
+                            <h4>${item.name}</h4>
+                            <p>Size: ${item.size.name} | Sugar: ${item.sugar.name} | Ice: ${item.ice.name}</p>
+                            <p>Toppings: ${item.toppings && item.toppings.length > 0 ? item.toppings.map((t) => t.name).join(", ") : "None"}</p>
+                            <div class="item-quantity-price">
+                                <span>Qty: ${item.quantity}</span>
+                                <span>$${item.totalPrice.toFixed(2)}</span>
+                            </div>
+                        </div>
+                    </div>
+                `,
+          )
+          .join("")
+      }
+  
+      // Update subtotal, tax, and total in order summary
+      const subtotalElement = document.querySelector(".total-row:nth-child(1) span:last-child")
+      if (subtotalElement) subtotalElement.textContent = "$" + booking.subtotal.toFixed(2)
+  
+      const taxElement = document.querySelector(".total-row:nth-child(2) span:last-child")
+      if (taxElement) taxElement.textContent = "$" + booking.tax.toFixed(2)
+  
+      const totalElement = document.querySelector(".total-row.grand-total span:last-child")
+      if (totalElement) totalElement.textContent = "$" + booking.total.toFixed(2)
     }
-
+  
     // Validate card payment details
     function validateCardPayment() {
-        if (!cardNumber || !expiryDate || !cvv || !cardName) {
-            showToast("Error", "Card form elements not found", "error")
-            return false
-        }
-
-        if (cardNumber.value.replace(/\s/g, "").length < 16) {
-            showToast("Error", "Please enter a valid card number", "error")
-            cardNumber.focus()
-            return false
-        }
-
-        if (expiryDate.value.length < 5) {
-            showToast("Error", "Please enter a valid expiry date (MM/YY)", "error")
-            expiryDate.focus()
-            return false
-        }
-
-        if (cvv.value.length < 3) {
-            showToast("Error", "Please enter a valid CVV", "error")
-            cvv.focus()
-            return false
-        }
-
-        if (cardName.value.trim() === "") {
-            showToast("Error", "Please enter the name on card", "error")
-            cardName.focus()
-            return false
-        }
-
-        return true
+      if (!cardNumber || !expiryDate || !cvv || !cardName) {
+        showToast("Error", "Card form elements not found", "error")
+        return false
+      }
+  
+      if (cardNumber.value.replace(/\s/g, "").length < 16) {
+        showToast("Error", "Please enter a valid card number", "error")
+        cardNumber.focus()
+        return false
+      }
+  
+      if (expiryDate.value.length < 5) {
+        showToast("Error", "Please enter a valid expiry date (MM/YY)", "error")
+        expiryDate.focus()
+        return false
+      }
+  
+      if (cvv.value.length < 3) {
+        showToast("Error", "Please enter a valid CVV", "error")
+        cvv.focus()
+        return false
+      }
+  
+      if (cardName.value.trim() === "") {
+        showToast("Error", "Please enter the name on card", "error")
+        cardName.focus()
+        return false
+      }
+  
+      return true
     }
-
+  
     // Process payment based on method
     function processPayment(method) {
-        // If we have a current booking, update it
-        if (currentBooking) {
-            processExistingBookingPayment(currentBooking.id, method)
-            return
-        }
-
-        // Get cart items from localStorage
-        const cartItems = JSON.parse(localStorage.getItem("cart")) || []
-
-        // Calculate totals
-        const subtotal = cartItems.reduce((total, item) => total + item.totalPrice, 0)
-        const tax = subtotal * 0.08 // 8% tax
-        const total = subtotal + tax
-
-        // Generate a unique order ID if we don't have one
-        const orderId = "ORD" + Date.now().toString().slice(-6)
-
-        // In a real app, this would make an API call to process the payment
-        // For demo, we'll just simulate a payment processing delay
-        setTimeout(() => {
-                // Create a booking from the order
-                createBookingFromOrder(orderId, method, cartItems, subtotal, tax, total)
-
-                // Set success message based on payment method
-                let successMessage = ""
-                switch (method) {
-                    case "card":
-                        successMessage = "Your card payment has been processed successfully."
-                        break
-                    case "qr":
-                        successMessage = "Your QR code payment has been verified successfully."
-                        break
-                    case "cash":
-                        successMessage = "Your cash on delivery order has been confirmed."
-                        break
-                    default:
-                        successMessage = "Your payment has been processed successfully."
-                }
-
-                if (paymentSuccessMessage) {
-                    paymentSuccessMessage.textContent = successMessage
-                }
-
-                // Update order number in success modal
-                if (orderNumberElement) {
-                    orderNumberElement.textContent = "#" + orderId
-                }
-
-                // Show success modal
-                showPaymentSuccessModal()
-
-                // Reset button state
-                completePaymentBtn.disabled = false
-                completePaymentBtn.innerHTML = '<i class="fas fa-lock"></i> Complete Payment'
-
-                // Clear cart
-                localStorage.setItem("cart", JSON.stringify([]))
-
-                // Add notification
-                if (window.addNotification) {
-                    window.addNotification(
-                        "Payment Successful",
-                        `Your payment for order #${orderId} has been processed successfully.`,
-                        "success",
-                    )
-                }
-
-                // Set flag for booking page to know we just checked out
-                sessionStorage.setItem("justCheckedOut", "true")
-
-                // Redirect to booking page after 3 seconds
-                setTimeout(() => {
-                    window.location.href = "/booking"
-                }, 3000)
-            }, 2000) // 2 second delay to simulate payment processing
-    }
-
-    // Process payment for an existing booking
-    function processExistingBookingPayment(bookingId, method) {
-        // Get bookings from localStorage
-        const bookings = JSON.parse(localStorage.getItem("bookings")) || []
-
-        // Find the booking
-        const bookingIndex = bookings.findIndex((b) => b.id === bookingId)
-
-        if (bookingIndex === -1) {
-            showToast("Error", "Booking not found", "error")
-            return
-        }
-
-        // Update booking payment status and method
-        bookings[bookingIndex].paymentStatus = "completed"
-        bookings[bookingIndex].paymentMethod = method
-
-        // Save to localStorage
-        localStorage.setItem("bookings", JSON.stringify(bookings))
-
+      // If we have a current booking, update it
+      if (currentBooking) {
+        processExistingBookingPayment(currentBooking.id, method)
+        return
+      }
+  
+      // Get cart items from localStorage
+      const cartItems = JSON.parse(localStorage.getItem("cart")) || []
+  
+      // Calculate totals
+      const subtotal = cartItems.reduce((total, item) => total + item.totalPrice, 0)
+      const tax = subtotal * 0.08 // 8% tax
+      const total = subtotal + tax
+  
+      // Generate a unique order ID if we don't have one
+      const orderId = "ORD" + Date.now().toString().slice(-6)
+  
+      // In a real app, this would make an API call to process the payment
+      // For demo, we'll just simulate a payment processing delay
+      setTimeout(() => {
+        // Create a booking from the order
+        createBookingFromOrder(orderId, method, cartItems, subtotal, tax, total)
+  
         // Set success message based on payment method
         let successMessage = ""
         switch (method) {
-            case "card":
-                successMessage = "Your card payment has been processed successfully."
-                break
-            case "qr":
-                successMessage = "Your QR code payment has been verified successfully."
-                break
-            case "cash":
-                successMessage = "Your cash on delivery order has been confirmed."
-                break
-            default:
-                successMessage = "Your payment has been processed successfully."
+          case "card":
+            successMessage = "Your card payment has been processed successfully."
+            break
+          case "aba":
+            successMessage = "Your ABA Pay payment has been verified successfully."
+            break
+          case "acleda":
+            successMessage = "Your ACLEDA Pay payment has been verified successfully."
+            break
+          case "qr":
+            successMessage = "Your QR code payment has been verified successfully."
+            break
+          case "cash":
+            successMessage = "Your cash on delivery order has been confirmed."
+            break
+          default:
+            successMessage = "Your payment has been processed successfully."
         }
-
-        // Update payment success modal
+  
         if (paymentSuccessMessage) {
-            paymentSuccessMessage.textContent = successMessage
+          paymentSuccessMessage.textContent = successMessage
         }
-
+  
         // Update order number in success modal
         if (orderNumberElement) {
-            orderNumberElement.textContent = "#" + bookingId
+          orderNumberElement.textContent = "#" + orderId
         }
-
-        // Show success modal after a delay to simulate processing
+  
+        // Show success modal
+        showPaymentSuccessModal()
+  
+        // Reset button state
+        completePaymentBtn.disabled = false
+        completePaymentBtn.innerHTML = '<i class="fas fa-lock"></i> Complete Payment'
+  
+        // Clear cart
+        localStorage.setItem("cart", JSON.stringify([]))
+  
+        // Add notification
+        if (window.addNotification) {
+          window.addNotification(
+            "Payment Successful",
+            `Your payment for order #${orderId} has been processed successfully.`,
+            "success",
+          )
+        }
+  
+        // Set flag for booking page to know we just checked out
+        sessionStorage.setItem("justCheckedOut", "true")
+  
+        // Redirect to booking page after 3 seconds
         setTimeout(() => {
-            // Show success modal
-            showPaymentSuccessModal()
-
-            // Reset button state
-            completePaymentBtn.disabled = false
-            completePaymentBtn.innerHTML = '<i class="fas fa-lock"></i> Complete Payment'
-
-            // Add notification
-            if (window.addNotification) {
-                window.addNotification(
-                    "Payment Successful",
-                    `Your payment for order #${bookingId} has been processed successfully.`,
-                    "success",
-                )
-            }
-
-            // Redirect to receipt page after 3 seconds
-            setTimeout(() => {
-                window.location.href = `/receipt?order_id=${bookingId}`
-            }, 3000)
-        }, 2000)
+          window.location.href = "/booking"
+        }, 3000)
+      }, 2000) // 2 second delay to simulate payment processing
     }
-
+  
+    // Process payment for an existing booking
+    function processExistingBookingPayment(bookingId, method) {
+      // Get bookings from localStorage
+      const bookings = JSON.parse(localStorage.getItem("bookings")) || []
+  
+      // Find the booking
+      const bookingIndex = bookings.findIndex((b) => b.id === bookingId)
+  
+      if (bookingIndex === -1) {
+        showToast("Error", "Booking not found", "error")
+        return
+      }
+  
+      // Update booking payment status and method
+      bookings[bookingIndex].paymentStatus = "completed"
+      bookings[bookingIndex].paymentMethod = method
+  
+      // Save to localStorage
+      localStorage.setItem("bookings", JSON.stringify(bookings))
+  
+      // Set success message based on payment method
+      let successMessage = ""
+      switch (method) {
+        case "card":
+          successMessage = "Your card payment has been processed successfully."
+          break
+        case "aba":
+          successMessage = "Your ABA Pay payment has been verified successfully."
+          break
+        case "acleda":
+          successMessage = "Your ACLEDA Pay payment has been verified successfully."
+          break
+        case "qr":
+          successMessage = "Your QR code payment has been verified successfully."
+          break
+        case "cash":
+          successMessage = "Your cash on delivery order has been confirmed."
+          break
+        default:
+          successMessage = "Your payment has been processed successfully."
+      }
+  
+      // Update payment success modal
+      if (paymentSuccessMessage) {
+        paymentSuccessMessage.textContent = successMessage
+      }
+  
+      // Update order number in success modal
+      if (orderNumberElement) {
+        orderNumberElement.textContent = "#" + bookingId
+      }
+  
+      // Show success modal after a delay to simulate processing
+      setTimeout(() => {
+        // Show success modal
+        showPaymentSuccessModal()
+  
+        // Reset button state
+        completePaymentBtn.disabled = false
+        completePaymentBtn.innerHTML = '<i class="fas fa-lock"></i> Complete Payment'
+  
+        // Add notification
+        if (window.addNotification) {
+          window.addNotification(
+            "Payment Successful",
+            `Your payment for order #${bookingId} has been processed successfully.`,
+            "success",
+          )
+        }
+  
+        // Redirect to receipt page after 3 seconds
+        setTimeout(() => {
+          window.location.href = `/receipt?order_id=${bookingId}`
+        }, 3000)
+      }, 2000)
+    }
+  
     // Create booking from order
     function createBookingFromOrder(orderId, paymentMethod, items, subtotal, tax, total) {
-        // Get existing bookings
-        const bookings = JSON.parse(localStorage.getItem("bookings")) || []
-
-        // Create new booking
-        const booking = {
-            id: orderId,
-            order_number: orderId,
-            date: new Date().toISOString(),
-            time: new Date().toLocaleTimeString(),
-            items: items,
-            subtotal: subtotal,
-            tax: tax,
-            total: total,
-            status: paymentMethod === "cash" ? "processing" : "completed",
-            paymentStatus: paymentMethod === "cash" ? "pending" : "completed",
-            paymentMethod: paymentMethod,
-            delivery_address: "123 Main St, Apt 4B, New York, NY 10001", // In a real app, get from form
-            contact: "+1 (555) 123-4567", // In a real app, get from form
-        }
-
-        // Add to bookings
-        bookings.unshift(booking)
-
-        // Save to localStorage
-        localStorage.setItem("bookings", JSON.stringify(bookings))
+      // Get existing bookings
+      const bookings = JSON.parse(localStorage.getItem("bookings")) || []
+  
+      // Create new booking
+      const booking = {
+        id: orderId,
+        order_number: orderId,
+        date: new Date().toISOString(),
+        time: new Date().toLocaleTimeString(),
+        items: items,
+        subtotal: subtotal,
+        tax: tax,
+        total: total,
+        status: paymentMethod === "cash" ? "processing" : "completed",
+        paymentStatus: paymentMethod === "cash" ? "pending" : "completed",
+        paymentMethod: paymentMethod,
+        delivery_address: "123 Main St, Apt 4B, New York, NY 10001", // In a real app, get from form
+        contact: "+1 (555) 123-4567", // In a real app, get from form
+      }
+  
+      // Add to bookings
+      bookings.unshift(booking)
+  
+      // Save to localStorage
+      localStorage.setItem("bookings", JSON.stringify(bookings))
     }
-
+  
     // Show payment success modal
     function showPaymentSuccessModal() {
-        if (paymentSuccessModal) {
-            paymentSuccessModal.classList.add("active")
-        }
-
-        if (overlay) {
-            overlay.style.display = "block"
-        }
+      if (paymentSuccessModal) {
+        paymentSuccessModal.classList.add("active")
+      }
+  
+      if (overlay) {
+        overlay.style.display = "block"
+      }
     }
-
+  
     // Show toast notification
     function showToast(title, message, type = "info") {
-        // Create toast container if it doesn't exist
-        let toastContainer = document.querySelector(".toast-container")
-        if (!toastContainer) {
-            toastContainer = document.createElement("div")
-            toastContainer.className = "toast-container"
-            document.body.appendChild(toastContainer)
-        }
-
-        const toast = document.createElement("div")
-        toast.className = "toast"
-
-        let icon = "info-circle"
-        if (type === "success") {
-            icon = "check-circle"
-            toast.classList.add("success")
-        } else if (type === "error") {
-            icon = "exclamation-circle"
-            toast.classList.add("error")
-        }
-
-        toast.innerHTML = `
-                <div class="toast-icon">
-                    <i class="fas fa-${icon}"></i>
-                </div>
-                <div class="toast-content">
-                    <h4>${title}</h4>
-                    <p>${message}</p>
-                </div>
-                <button class="toast-close">&times;</button>
-            `
-
-        // Add to container
-        toastContainer.appendChild(toast)
-
-        // Add close button functionality
-        const closeButton = toast.querySelector(".toast-close")
-        closeButton.addEventListener("click", () => {
-            toast.classList.add("toast-hide")
-            setTimeout(() => {
-                toast.remove()
-            }, 300)
-        })
-
-        // Auto remove after 5 seconds
+      // Create toast container if it doesn't exist
+      let toastContainer = document.querySelector(".toast-container")
+      if (!toastContainer) {
+        toastContainer = document.createElement("div")
+        toastContainer.className = "toast-container"
+        document.body.appendChild(toastContainer)
+      }
+  
+      const toast = document.createElement("div")
+      toast.className = "toast"
+  
+      let icon = "info-circle"
+      if (type === "success") {
+        icon = "check-circle"
+        toast.classList.add("success")
+      } else if (type === "error") {
+        icon = "exclamation-circle"
+        toast.classList.add("error")
+      }
+  
+      toast.innerHTML = `
+                  <div class="toast-icon">
+                      <i class="fas fa-${icon}"></i>
+                  </div>
+                  <div class="toast-content">
+                      <h4>${title}</h4>
+                      <p>${message}</p>
+                  </div>
+                  <button class="toast-close">&times;</button>
+              `
+  
+      // Add to container
+      toastContainer.appendChild(toast)
+  
+      // Add close button functionality
+      const closeButton = toast.querySelector(".toast-close")
+      closeButton.addEventListener("click", () => {
+        toast.classList.add("toast-hide")
         setTimeout(() => {
-            toast.classList.add("toast-hide")
-            setTimeout(() => {
-                toast.remove()
-            }, 300)
-        }, 5000)
+          toast.remove()
+        }, 300)
+      })
+  
+      // Auto remove after 5 seconds
+      setTimeout(() => {
+        toast.classList.add("toast-hide")
+        setTimeout(() => {
+          toast.remove()
+        }, 300)
+      }, 5000)
     }
 
     // Add CSS for toast notifications and payment UI

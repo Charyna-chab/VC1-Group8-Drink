@@ -45,10 +45,11 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user']['role']) && $_SESSION
       overflow: hidden;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
       height: 600px;
+      position: relative;
     }
     
     .form-side {
-      width: 40%; /* Reduced from 50% */
+      width: 40%;
       padding: 40px;
       display: flex;
       flex-direction: column;
@@ -56,7 +57,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user']['role']) && $_SESSION
     }
     
     .image-side {
-      width: 60%; /* Increased from 50% */
+      width: 60%;
       position: relative;
     }
     
@@ -139,36 +140,58 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user']['role']) && $_SESSION
     }
     
     .login-header h2 {
-      font-size: 22px; /* Slightly smaller */
+      font-size: 22px;
       margin-bottom: 10px;
     }
     
     .login-header p {
-      font-size: 15px; /* Slightly smaller */
+      font-size: 15px;
     }
     
     .form-control {
-      font-size: 15px; /* Slightly smaller */
-      padding: 10px 15px 10px 40px; /* Adjusted padding */
+      font-size: 15px;
+      padding: 10px 15px 10px 40px;
       height: auto;
       width: 100%;
-      margin-bottom: 15px; /* Reduced spacing */
+      margin-bottom: 15px;
     }
     
     .form-label {
-      font-size: 15px; /* Slightly smaller */
+      font-size: 15px;
       margin-bottom: 8px;
       font-weight: 500;
     }
     
     .form-group {
       width: 100%;
-      margin-bottom: 20px; /* Reduced spacing */
+      margin-bottom: 20px;
     }
     
-    .footer-links {
-      margin-top: 25px; /* Reduced spacing */
-      font-size: 14px; /* Slightly smaller */
+    /* NEW STYLES FOR USER LOGIN BUTTON */
+    .user-login-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background-color: #dc3545;
+      color: white;
+      padding: 8px 15px;
+      border-radius: 5px;
+      font-weight: 500;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s ease;
+      z-index: 10;
+      border: none;
+    }
+    
+    .user-login-btn:hover {
+      background-color: #bb2d3b;
+      color: white;
+      transform: translateY(-2px);
+    }
+    
+    .user-login-btn i {
+      margin-right: 5px;
     }
     
     @media (max-width: 992px) {
@@ -188,12 +211,26 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user']['role']) && $_SESSION
       .image-side {
         height: 400px;
       }
+      
+      .user-login-btn {
+        position: relative;
+        top: auto;
+        right: auto;
+        display: block;
+        margin: 0 auto 20px;
+        width: fit-content;
+      }
     }
   </style>
 </head>
 <body>
+  <!-- NEW USER LOGIN BUTTON ADDED HERE -->
+  <a href="/login" class="user-login-btn">
+    <i class="fas fa-sign-in-alt"></i> User Login
+  </a>
+
   <div class="login-card">
-    <!-- Left side - More compact form -->
+    <!-- Left side - Form -->
     <div class="form-side">
       <div class="login-header">
         <img src="/assets/image/logo/logo.png" alt="XING FU CHA Logo">
@@ -202,7 +239,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user']['role']) && $_SESSION
       </div>
 
       <?php if(isset($error)): ?>
-        <div class="alert alert-danger d-flex align-items-center mb-3 py-2"> <!-- Smaller alert -->
+        <div class="alert alert-danger d-flex align-items-center mb-3 py-2">
           <i class="fas fa-exclamation-circle me-2"></i>
           <span><?php echo htmlspecialchars($error); ?></span>
         </div>
@@ -232,12 +269,11 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user']['role']) && $_SESSION
       </form>
 
       <div class="text-center footer-links">
-        <p class="text-muted mb-2">Not an admin? <a href="/login" class="text-danger text-decoration-none">User Login</a></p>
         <p class="text-muted">Forgot Password? <a href="/forgot-password" class="text-danger text-decoration-none">Reset Password</a></p>
       </div>
     </div>
     
-    <!-- Right side - Larger image area -->
+    <!-- Right side - Image area -->
     <div class="image-side">
       <div class="image-overlay"></div>
       <div class="image-content">
@@ -245,7 +281,6 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user']['role']) && $_SESSION
       </div>
     </div>
   </div>
-  
 
   <!-- Bootstrap JS Bundle with Popper -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

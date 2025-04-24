@@ -1,21 +1,23 @@
 <?php
 
 namespace YourNamespace\Controllers;
+// namespace YourNamespace\Models;
 
 use YourNamespace\BaseController;
 
 class OrdersController extends BaseController
 {
     private $productModel;
+    private $toppingModel;
     public function __construct()
     {
         // Initialize the product model if needed
         $this->productModel = new \YourNamespace\Models\ProductModel();
+        // $this->toppingModel = new \YourNamespace\Models\ToppingModel();
     }
     public function index()
     {
-        // In a real application, you would fetch products from the database
-        // For now, we'll create sample data
+        // Fetch products from the database and map them with categories
         $products = array_map(function ($i) {
             return [
                 'id' => $i['product_id'],	
@@ -23,10 +25,9 @@ class OrdersController extends BaseController
                 'description' => $i['product_detail'],
                 'price' => $i['price'],
                 'image' => $i['image'],
-                'category' => 'milk-tea'
+                'category' => $i['category'] // Use category from database
             ];
         }, $this->productModel->getProducts());
-
 
         $toppings =  [
             [
@@ -85,7 +86,7 @@ class OrdersController extends BaseController
         $this->views('order', [
             'title' => 'Order Drinks',
             'products' => $products,
-            'toppings' => $toppings,
+            // 'toppings' => $toppings,
             'favorites' => $favorites,
             'cartCount' => $cartCount
         ]);
@@ -93,8 +94,7 @@ class OrdersController extends BaseController
 
     public function details($id)
     {
-        // In a real application, you would fetch the product from the database
-        // For now, we'll create a lookup array with all products
+        // Sample product data with multiple categories including snack
         $products = [
             1 => [
                 'id' => 1,
@@ -128,7 +128,54 @@ class OrdersController extends BaseController
                 'image' => '/assets/images/products/brown-sugar-boba.jpg',
                 'category' => 'milk-tea'
             ],
-            // Add more products as needed
+            5 => [
+                'id' => 5,
+                'name' => 'Strawberry Smoothie',
+                'description' => 'Refreshing strawberry smoothie blended with real fruit.',
+                'price' => 6.00,
+                'image' => '/assets/images/products/strawberry-smoothie.jpg',
+                'category' => 'smoothie'
+            ],
+            6 => [
+                'id' => 6,
+                'name' => 'Mango Fruit Tea',
+                'description' => 'Sweet mango-flavored tea with fresh fruit chunks.',
+                'price' => 4.75,
+                'image' => '/assets/images/products/mango-fruit-tea.jpg',
+                'category' => 'fruit-tea'
+            ],
+            7 => [
+                'id' => 7,
+                'name' => 'Iced Americano',
+                'description' => 'Bold espresso with cold water over ice.',
+                'price' => 3.50,
+                'image' => '/assets/images/products/iced-americano.jpg',
+                'category' => 'coffee'
+            ],
+            8 => [
+                'id' => 8,
+                'name' => 'Passion Fruit Tea',
+                'description' => 'Tangy passion fruit tea with a refreshing zing.',
+                'price' => 4.50,
+                'image' => '/assets/images/products/passion-fruit-tea.jpg',
+                'category' => 'fruit-tea'
+            ],
+            9 => [
+                'id' => 9,
+                'name' => 'Crispy Snack Mix',
+                'description' => 'A savory mix of crunchy snacks.',
+                'price' => 3.50,
+                'image' => '/assets/images/products/snack-mix.jpg',
+                'category' => 'snack'
+            ],
+            10 => [
+                'id' => 10,
+                'name' => 'Spicy Chips',
+                'description' => 'Crispy chips with a spicy kick.',
+                'price' => 2.75,
+                'image' => '/assets/images/products/spicy-chips.jpg',
+                'category' => 'snack'
+            ]
         ];
 
         $toppings = [
@@ -184,9 +231,9 @@ class OrdersController extends BaseController
         }
 
         $this->views('order_details', [
-            'title' => 'Customize Your Drink',
+            'title' => 'Customize Your ' . ($product['category'] === 'snack' ? 'Snack' : 'Drink'),
             'product' => $product,
-            'toppings' => $toppings
+            'toppings' => $product['category'] === 'snack' ? [] : $toppings // No toppings for snacks
         ]);
     }
 
@@ -210,7 +257,7 @@ class OrdersController extends BaseController
         }
 
         // Validate required fields
-        $requiredFields = ['product_id', 'size', 'sugar', 'ice', 'quantity'];
+        $requiredFields = ['product_id', 'quantity'];
         foreach ($requiredFields as $field) {
             if (!isset($data[$field])) {
                 http_response_code(400); // Bad Request
@@ -219,12 +266,27 @@ class OrdersController extends BaseController
             }
         }
 
-        // In a real application, you would:
-        // 1. Validate the product exists
-        // 2. Calculate the correct price
-        // 3. Add the item to the user's cart in the database
+        // Fetch product from database to validate and get category
+        $product = $this->productModel->find($data['product_id']);
+        if (!$product) {
+            http_response_code(404);
+            echo json_encode(['success' => false, 'message' => 'Product not found']);
+            exit;
+        }
 
-        // For now, we'll just store in session
+        // For drinks, validate additional fields
+        if ($product['category'] !== 'snack') {
+            $drinkFields = ['size', 'sugar', 'ice'];
+            foreach ($drinkFields as $field) {
+                if (!isset($data[$field])) {
+                    http_response_code(400);
+                    echo json_encode(['success' => false, 'message' => "Missing required field for drink: $field"]);
+                    exit;
+                }
+            }
+        }
+
+        // Initialize cart if not set
         if (!isset($_SESSION['cart'])) {
             $_SESSION['cart'] = [];
         }
@@ -232,19 +294,29 @@ class OrdersController extends BaseController
         // Generate a unique ID for the cart item
         $cartItemId = uniqid();
 
-        // Add to cart
-        $_SESSION['cart'][] = [
+        // Prepare cart item
+        $cartItem = [
             'id' => $cartItemId,
             'product_id' => $data['product_id'],
-            'size' => $data['size'],
-            'sugar' => $data['sugar'],
-            'ice' => $data['ice'],
-            'toppings' => isset($data['toppings']) ? $data['toppings'] : [],
+            'product_name' => $product['product_name'],
+            'category' => $product['category'],
             'quantity' => $data['quantity'],
             'price' => $data['price'],
             'total_price' => $data['price'] * $data['quantity'],
+            'image' => $product['image'],
             'added_at' => date('Y-m-d H:i:s')
         ];
+
+        // Add drink-specific fields if not a snack
+        if ($product['category'] !== 'snack') {
+            $cartItem['size'] = $data['size'];
+            $cartItem['sugar'] = $data['sugar'];
+            $cartItem['ice'] = $data['ice'];
+            $cartItem['toppings'] = isset($data['toppings']) ? $data['toppings'] : [];
+        }
+
+        // Add to cart
+        $_SESSION['cart'][] = $cartItem;
 
         echo json_encode([
             'success' => true,
@@ -257,7 +329,7 @@ class OrdersController extends BaseController
     public function cart()
     {
         // In a real application, you would fetch the cart items from the database
-        // For now, we'll create sample data
+        // For now, we'll create sample data with multiple categories including snack
         $cartItems = [
             [
                 'id' => 1,
@@ -269,11 +341,12 @@ class OrdersController extends BaseController
                 'toppings' => ['Boba Pearls', 'Pudding'],
                 'quantity' => 1,
                 'price' => 6.00,
-                'image' => '/assets/images/products/classic-milk-tea.jpg'
+                'image' => '/assets/images/products/classic-milk-tea.jpg',
+                'category' => 'milk-tea'
             ],
             [
                 'id' => 2,
-                'product_id' => 9,
+                'product_id' => 5,
                 'product_name' => 'Strawberry Smoothie',
                 'size' => 'large',
                 'sugar' => '70%',
@@ -281,16 +354,39 @@ class OrdersController extends BaseController
                 'toppings' => ['Fresh Fruit'],
                 'quantity' => 2,
                 'price' => 13.00,
-                'image' => '/assets/images/products/strawberry-smoothie.jpg'
+                'image' => '/assets/images/products/strawberry-smoothie.jpg',
+                'category' => 'smoothie'
+            ],
+            [
+                'id' => 3,
+                'product_id' => 6,
+                'product_name' => 'Mango Fruit Tea',
+                'size' => 'medium',
+                'sugar' => '30%',
+                'ice' => '50%',
+                'toppings' => ['Aloe Vera'],
+                'quantity' => 1,
+                'price' => 5.50,
+                'image' => '/assets/images/products/mango-fruit-tea.jpg',
+                'category' => 'fruit-tea'
+            ],
+            [
+                'id' => 4,
+                'product_id' => 9,
+                'product_name' => 'Crispy Snack Mix',
+                'quantity' => 1,
+                'price' => 3.50,
+                'image' => '/assets/images/products/snack-mix.jpg',
+                'category' => 'snack'
             ]
         ];
 
         $this->views('cart', [
             'title' => 'Your Cart',
             'cartItems' => $cartItems,
-            'subtotal' => 19.00,
-            'tax' => 1.52,
-            'total' => 20.52
+            'subtotal' => 28.00,
+            'tax' => 2.24,
+            'total' => 30.24
         ]);
     }
 }

@@ -29,8 +29,8 @@
     border-radius: var(--favorites-radius);
     transition: var(--favorites-transition);
     position: relative;
-    bottom: 306px;
-    right: 10px;
+    bottom: 336px;
+    right: 100px;
 }
 
 .favorites-header h2 {
@@ -191,7 +191,8 @@
     max-width: 600px;
     margin: 2rem auto;
     position: relative;
-    bottom: 280px;
+    bottom: 330px;
+    right: 70px;
 }
 
 .favorites-empty img {

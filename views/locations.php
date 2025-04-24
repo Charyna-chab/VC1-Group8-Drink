@@ -2,6 +2,7 @@
 <?php require_once __DIR__ . '/layouts/navbar.php'; ?>
 
 
+
 <div class="section-praents-location">
 <section class="location-finder">
     <div class="container">

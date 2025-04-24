@@ -1,4 +1,3 @@
-// booking.js - Modified version with payment and receipt functions removed
 document.addEventListener("DOMContentLoaded", () => {
             // DOM Elements
             const bookingsList = document.querySelector(".bookings-list")
@@ -128,10 +127,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (filteredBookings.length === 0) {
                     bookingsList.innerHTML = `
 <div class="empty-state">
-<img src="/assets/image/empty-orders.svg" alt="No Orders">
-<h3>No Orders Found</h3>
-<p>${status === "all" ? "You haven't placed any orders yet." : `You don't have any ${status} orders.`}</p>
-<a href="/order" class="btn-primary">Order Now</a>
+
+    <h3>No Orders Found</h3>
+    <p>${status === "all" ? "You haven't placed any orders yet." : `You don't have any ${status} orders.`}</p>
+    <a href="/order" class="btn-primary">Order Now</a>
 </div>
 `
 return
@@ -165,63 +164,72 @@ break
 // Create booking card HTML
 bookingCard.innerHTML = `
 <div class="booking-header">
-<div class="booking-info">
-  <h3>Order #${booking.id}</h3>
-  <div class="booking-date">
-    <i class="fas fa-calendar-alt"></i>
-    <span>${formattedDate}</span>
-  </div>
-</div>
-<div class="booking-status ${statusClass}">
-  ${booking.status}
-</div>
+    <div class="booking-info">
+        <h3>Order #${booking.id}</h3>
+        <div class="booking-date">
+            <i class="fas fa-calendar-alt"></i>
+            <span>${formattedDate}</span>
+        </div>
+    </div>
+    <div class="booking-status ${statusClass}">
+        ${booking.status}
+    </div>
 </div>
 <div class="booking-items">
-${booking.items
-  .map(
-    (item) => `
-    <div class="booking-item">
-      <div class="item-details">
-        <h4>${item.name}</h4>
-        <p>Size: ${item.size.name} | Sugar: ${item.sugar.name} | Ice: ${item.ice.name}</p>
-        <p>Quantity: ${item.quantity}</p>
-      </div>
-      <div class="item-price">$${item.totalPrice.toFixed(2)}</div>
-    </div>
-  `,
-  )
-  .join("")}
+    ${booking.items
+      .map(
+        (item) => `
+            <div class="booking-item">
+                <div class="item-details">
+                    <h4>${item.name}</h4>
+                    <p>Size: ${item.size.name} | Sugar: ${item.sugar.name} | Ice: ${item.ice.name}</p>
+                    <p>Quantity: ${item.quantity}</p>
+                </div>
+                <div class="item-price">$${item.totalPrice.toFixed(2)}</div>
+            </div>
+        `,
+      )
+      .join("")}
 </div>
 <div class="booking-footer">
-<div class="booking-total">
-  Total: <span class="total-price">$${booking.total.toFixed(2)}</span>
-</div>
-<div class="booking-actions">
-  <a href="#" class="btn-secondary view-details" data-id="${booking.id}">
-    <i class="fas fa-eye"></i> View Details
-  </a>
-  ${
-    booking.status === "processing"
-      ? `
-      <button class="btn-outline-danger cancel-booking" data-id="${booking.id}">
-        <i class="fas fa-times"></i> Cancel
-      </button>
-      <button class="btn-primary complete-booking" data-id="${booking.id}">
-        <i class="fas fa-check"></i> Complete
-      </button>
-    `
-      : ""
-  }
-  ${
-    booking.status === "completed" || booking.status === "cancelled"
-      ? `
-      <button class="btn-outline-danger delete-booking" data-id="${booking.id}">
-        <i class="fas fa-trash"></i> Delete
-      </button>
-    `
-      : ""
-  }
-</div>
+    <div class="booking-total">
+        Total: <span class="total-price">$${booking.total.toFixed(2)}</span>
+    </div>
+    <div class="booking-actions">
+        <a href="#" class="btn-secondary view-details" data-id="${booking.id}">
+            <i class="fas fa-eye"></i> View Details
+        </a>
+        ${
+          booking.status === "processing"
+            ? `
+                <button class="btn-outline-danger cancel-booking" data-id="${booking.id}">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+                <button class="btn-primary complete-booking" data-id="${booking.id}">
+                    <i class="fas fa-check"></i> Complete
+                </button>
+            `
+            : ""
+        }
+        ${
+          booking.status === "completed"
+            ? `
+                <a href="/receipt?order_id=${booking.id}" class="btn-primary">
+                    <i class="fas fa-receipt"></i> View Receipt
+                </a>
+            `
+            : ""
+        }
+        ${
+          booking.status === "completed" || booking.status === "cancelled"
+            ? `
+                <button class="btn-outline-danger delete-booking" data-id="${booking.id}">
+                    <i class="fas fa-trash"></i> Delete
+                </button>
+            `
+            : ""
+        }
+    </div>
 </div>
 `
 
@@ -252,8 +260,8 @@ cancelBooking(id)
 completeButtons.forEach((button) => {
 button.addEventListener("click", function () {
 const id = this.getAttribute("data-id")
-// Complete the booking directly instead of showing payment interface
-completeBooking(id)
+// Redirect to checkout page with booking_id
+window.location.href = `/checkout?booking_id=${id}`
 })
 })
 
@@ -296,13 +304,13 @@ bookingCard.remove()
 // Check if there are no more bookings and show empty state if needed
 if (bookingsList.children.length === 0) {
 bookingsList.innerHTML = `
-  <div class="empty-state">
-    <img src="/assets/image/empty-orders.svg" alt="No Orders">
-    <h3>No Orders Found</h3>
-    <p>You haven't placed any orders yet.</p>
-    <a href="/order" class="btn-primary">Order Now</a>
-  </div>
-`
+        <div class="empty-state">
+            <img src="/assets/image/empty-orders.svg" alt="No Orders">
+            <h3>No Orders Found</h3>
+            <p>You haven't placed any orders yet.</p>
+            <a href="/order" class="btn-primary">Order Now</a>
+        </div>
+    `
 }
 }, 300)
 }
@@ -342,69 +350,69 @@ const paymentStatusClass = paymentStatus === "completed" ? "completed" : "proces
 modal.innerHTML = `
 <div class="modal-content">
 <div class="modal-header">
-<h3>Order Details</h3>
-<button class="close-modal">&times;</button>
+    <h3>Order Details</h3>
+    <button class="close-modal">×</button>
 </div>
 <div class="modal-body">
-<div class="order-info">
-  <div class="order-header">
-    <div>
-      <h4>Order #${booking.id}</h4>
-      <p><i class="fas fa-calendar-alt"></i> ${formattedDate}</p>
-    </div>
-    <div class="order-status-container">
-      <div class="order-status ${statusClass}">
-        ${booking.status}
-      </div>
-      <div class="payment-status ${paymentStatusClass}">
-        Payment: ${paymentStatus}
-      </div>
-    </div>
-  </div>
-  
-  <div class="order-items">
-    <h4>Items</h4>
-    ${booking.items
-      .map(
-        (item) => `
-        <div class="order-item">
-          <div class="item-image">
-            <img src="${item.image}" alt="${item.name}">
-          </div>
-          <div class="item-details">
-            <h5>${item.name}</h5>
-            <p>Size: ${item.size.name} | Sugar: ${item.sugar.name} | Ice: ${item.ice.name}</p>
-            <p>Toppings: ${item.toppings && item.toppings.length > 0 ? item.toppings.map((t) => t.name).join(", ") : "None"}</p>
-            <div class="item-quantity-price">
-              <span>Qty: ${item.quantity}</span>
-              <span>$${item.totalPrice.toFixed(2)}</span>
+    <div class="order-info">
+        <div class="order-header">
+            <div>
+                <h4>Order #${booking.id}</h4>
+                <p><i class="fas fa-calendar-alt"></i> ${formattedDate}</p>
             </div>
-          </div>
+            <div class="order-status-container">
+                <div class="order-status ${statusClass}">
+                    ${booking.status}
+                </div>
+                <div class="payment-status ${paymentStatusClass}">
+                    Payment: ${paymentStatus}
+                </div>
+            </div>
         </div>
-      `,
-      )
-      .join("")}
-  </div>
-  
-  <div class="order-summary">
-    <h4>Order Summary</h4>
-    <div class="summary-row">
-      <span>Subtotal:</span>
-      <span>$${booking.subtotal.toFixed(2)}</span>
+        
+        <div class="order-items">
+            <h4>Items</h4>
+            ${booking.items
+              .map(
+                (item) => `
+                    <div class="order-item">
+                        <div class="item-image">
+                            <img src="${item.image}" alt="${item.name}">
+                        </div>
+                        <div class="item-details">
+                            <h5>${item.name}</h5>
+                            <p>Size: ${item.size.name} | Sugar: ${item.sugar.name} | Ice: ${item.ice.name}</p>
+                            <p>Toppings: ${item.toppings && item.toppings.length > 0 ? item.toppings.map((t) => t.name).join(", ") : "None"}</p>
+                            <div class="item-quantity-price">
+                                <span>Qty: ${item.quantity}</span>
+                                <span>$${item.totalPrice.toFixed(2)}</span>
+                            </div>
+                        </div>
+                    </div>
+                `,
+              )
+              .join("")}
+        </div>
+        
+        <div class="order-summary">
+            <h4>Order Summary</h4>
+            <div class="summary-row">
+                <span>Subtotal:</span>
+                <span>$${booking.subtotal.toFixed(2)}</span>
+            </div>
+            <div class="summary-row">
+                <span>Tax (8%):</span>
+                <span>$${booking.tax.toFixed(2)}</span>
+            </div>
+            <div class="summary-row total">
+                <span>Total:</span>
+                <span>$${booking.total.toFixed(2)}</span>
+            </div>
+        </div>
     </div>
-    <div class="summary-row">
-      <span>Tax (8%):</span>
-      <span>$${booking.tax.toFixed(2)}</span>
-    </div>
-    <div class="summary-row total">
-      <span>Total:</span>
-      <span>$${booking.total.toFixed(2)}</span>
-    </div>
-  </div>
-</div>
 </div>
 <div class="modal-footer">
-<button class="btn-secondary close-details">Close</button>
+    <button class="btn-secondary close-details">Close</button>
 </div>
 </div>
 `
@@ -459,14 +467,14 @@ bookingCard.remove()
 
 // Check if there are no more bookings and show empty state if needed
 if (bookingsList.children.length === 0) {
-  bookingsList.innerHTML = `
-    <div class="empty-state">
-      <img src="/assets/image/empty-orders.svg" alt="No Orders">
-      <h3>No Orders Found</h3>
-      <p>You haven't placed any orders yet.</p>
-      <a href="/order" class="btn-primary">Order Now</a>
-    </div>
-  `
+bookingsList.innerHTML = `
+            <div class="empty-state">
+                <img src="/assets/image/empty-orders.svg" alt="No Orders">
+                <h3>No Orders Found</h3>
+                <p>You haven't placed any orders yet.</p>
+                <a href="/order" class="btn-primary">Order Now</a>
+            </div>
+        `
 }
 }, 300)
 }
@@ -551,13 +559,13 @@ notification.className = "order-success-notification left-notification"
 notification.innerHTML = `
 <div class="notification-content">
 <div class="success-icon">
-<i class="fas fa-check-circle"></i>
+    <i class="fas fa-check-circle"></i>
 </div>
 <div class="notification-text">
-<h4>Your order drink success!</h4>
-<p>Order #${booking.id} has been successfully completed.</p>
+    <h4>Your order drink success!</h4>
+    <p>Order #${booking.id} has been successfully completed.</p>
 </div>
-<button class="close-notification">&times;</button>
+<button class="close-notification">×</button>
 </div>
 `
 
