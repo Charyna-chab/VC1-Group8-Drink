@@ -142,13 +142,11 @@ document.addEventListener("DOMContentLoaded", () => {
     function setupCategoryFilters() {
         elements.categoryButtons.forEach((button) => {
             button.addEventListener("click", function() {
-                // Update active state
                 elements.categoryButtons.forEach((btn) => btn.classList.remove("active"));
                 this.classList.add("active");
 
                 const category = this.getAttribute("data-category");
 
-                // Filter products
                 let visibleCount = 0;
                 elements.productCards.forEach((card) => {
                     const shouldShow = category === "all" || card.getAttribute("data-category") === category;
@@ -156,7 +154,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     if (shouldShow) visibleCount++;
                 });
 
-                // Show/hide no products message
                 if (elements.noProductMessage) {
                     elements.noProductMessage.style.display = visibleCount === 0 ? "block" : "none";
                 }
@@ -180,7 +177,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     if (shouldShow) visibleCount++;
                 });
 
-                // Show/hide no products message
                 if (elements.noProductMessage) {
                     elements.noProductMessage.style.display = visibleCount === 0 ? "block" : "none";
                 }
@@ -190,36 +186,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // ======== PANEL MANAGEMENT ========
     function closeAllPanels() {
-        // Close order panel
         if (elements.orderPanel && elements.orderPanel.classList.contains("active")) {
             elements.orderPanel.classList.remove("active");
             elements.orderPanel.style.display = "none";
         }
 
-        // Close product detail modal
         if (elements.productDetailModal && elements.productDetailModal.classList.contains("active")) {
             elements.productDetailModal.classList.remove("active");
             elements.productDetailModal.style.display = "none";
         }
 
-        // Close cart panel
         if (elements.cartPanel && elements.cartPanel.classList.contains("active")) {
             elements.cartPanel.classList.remove("active");
             elements.cartPanel.style.display = "none";
         }
 
-        // Close notification panel
         if (elements.notificationPanel && elements.notificationPanel.classList.contains("active")) {
             elements.notificationPanel.classList.remove("active");
         }
 
-        // Hide overlay
         if (elements.overlay) {
             elements.overlay.style.display = "none";
             elements.overlay.classList.remove("active");
         }
 
-        // Remove any confirmation cards
         document.querySelectorAll(".order-confirmation-card").forEach(card => card.remove());
     }
 
@@ -230,7 +220,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 e.preventDefault();
                 e.stopPropagation();
 
-                // Close all other panels first
                 closeAllPanels();
 
                 const productCard = this.closest(".product-card");
@@ -239,7 +228,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     return;
                 }
 
-                // Extract product data
                 const productId = this.getAttribute("data-product-id");
                 const productName = productCard.querySelector("h3").textContent;
                 const productDescription = productCard.querySelector(".product-desc").textContent;
@@ -249,7 +237,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 const productImage = productCard.querySelector(".product-image img").src;
                 const productCategory = productCard.getAttribute("data-category");
 
-                // Store product data for later use
                 Object.assign(currentProduct, {
                     productId,
                     name: productName,
@@ -260,7 +247,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     quantity: 1
                 });
 
-                // Show product detail modal
                 showProductDetail(productId, productName, productDescription, productPrice, productImage, productCategory);
             });
         });
@@ -269,14 +255,12 @@ document.addEventListener("DOMContentLoaded", () => {
     function showProductDetail(id, name, description, price, image, category) {
         if (!elements.productDetailModal) return;
 
-        // Update modal content
         if (elements.detailProductImage) elements.detailProductImage.src = image;
         if (elements.detailProductName) elements.detailProductName.textContent = name;
         if (elements.detailProductDescription) elements.detailProductDescription.textContent = description;
         if (elements.detailProductPrice) elements.detailProductPrice.textContent = price.toFixed(2);
 
         if (elements.detailProductCategory) {
-            // Format category name (e.g., "milk-tea" -> "Milk Tea")
             const formattedCategory = category
                 .split("-")
                 .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
@@ -284,10 +268,8 @@ document.addEventListener("DOMContentLoaded", () => {
             elements.detailProductCategory.textContent = formattedCategory;
         }
 
-        // Update favorites button
         updateFavoriteButtonState(id);
 
-        // Show modal and overlay
         elements.productDetailModal.style.display = "block";
         elements.productDetailModal.classList.add("active");
 
@@ -309,16 +291,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function setupProductDetailActions() {
-        // Customize order button
         if (elements.customizeOrderBtn) {
             elements.customizeOrderBtn.addEventListener("click", () => {
-                // Close product detail modal
                 if (elements.productDetailModal) {
                     elements.productDetailModal.classList.remove("active");
                     elements.productDetailModal.style.display = "none";
                 }
 
-                // Update order panel with product details
                 if (elements.productImage) elements.productImage.src = currentProduct.image;
                 if (elements.productName) {
                     elements.productName.textContent = currentProduct.name;
@@ -327,15 +306,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (elements.productPrice) elements.productPrice.textContent = "$" + currentProduct.price.toFixed(2);
                 if (elements.basePrice) elements.basePrice.textContent = "$" + currentProduct.price.toFixed(2);
 
-                // Reset form
                 resetCustomizationForm();
 
-                // Show order panel and overlay
                 if (elements.orderPanel) {
                     elements.orderPanel.style.display = "block";
                     elements.orderPanel.classList.add("active");
 
-                    // Make sure the toppings section is visible
                     const toppingsSection = document.getElementById("toppings");
                     if (toppingsSection) {
                         toppingsSection.style.display = "block";
@@ -347,7 +323,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                 }
 
-                // Add notification
                 addNotification(
                     "Customizing Order",
                     `You're customizing ${currentProduct.name}. Add toppings and adjust options to your liking!`,
@@ -356,24 +331,17 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
 
-        // Add to favorites button
         if (elements.addToFavoritesBtn) {
             elements.addToFavoritesBtn.addEventListener("click", function() {
                 const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
                 const isFavorite = favorites.some((item) => item.id === currentProduct.productId);
 
                 if (isFavorite) {
-                    // Remove from favorites
                     removeFavorite(currentProduct.productId);
-
-                    // Update button
                     this.innerHTML = '<i class="far fa-heart"></i> Add to Favorites';
-
-                    // Show notification
                     showToast("Removed from Favorites", `${currentProduct.name} has been removed from your favorites.`, "info");
                     addNotification("Removed from Favorites", `${currentProduct.name} has been removed from your favorites.`, "info");
                 } else {
-                    // Add to favorites
                     saveFavorite(
                         currentProduct.productId,
                         currentProduct.name,
@@ -381,15 +349,10 @@ document.addEventListener("DOMContentLoaded", () => {
                         currentProduct.price.toFixed(2),
                         currentProduct.description
                     );
-
-                    // Update button
                     this.innerHTML = '<i class="fas fa-heart"></i> Remove from Favorites';
-
-                    // Show notification
                     showToast("Added to Favorites", `${currentProduct.name} has been added to your favorites!`, "success");
                     addNotification("Added to Favorites", `${currentProduct.name} has been added to your favorites.`, "info");
 
-                    // Add heart beat animation
                     const icon = this.querySelector("i");
                     if (icon) {
                         icon.style.animation = "heartBeat 0.5s ease-in-out";
@@ -401,7 +364,6 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
 
-        // Close detail button
         const closeDetailBtn = elements.productDetailModal ? elements.productDetailModal.querySelector(".close-btn") : null;
         if (closeDetailBtn) {
             closeDetailBtn.addEventListener("click", closeAllPanels);
@@ -421,27 +383,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // ======== CUSTOMIZATION FORM ========
     function resetCustomizationForm() {
-        // Reset quantity
         if (elements.quantityInput) {
             elements.quantityInput.value = 1;
             currentProduct.quantity = 1;
         }
 
-        // Reset selects
         if (elements.drinkSizeSelect) elements.drinkSizeSelect.selectedIndex = 0;
-        if (elements.sugarLevelSelect) elements.sugarLevelSelect.selectedIndex = 2; // Default to 50% sugar
-        if (elements.iceLevelSelect) elements.iceLevelSelect.selectedIndex = 2; // Default to normal ice
+        if (elements.sugarLevelSelect) elements.sugarLevelSelect.selectedIndex = 2;
+        if (elements.iceLevelSelect) elements.iceLevelSelect.selectedIndex = 2;
 
-        // Reset toppings
         elements.toppingCheckboxes.forEach((checkbox) => (checkbox.checked = false));
         currentProduct.toppings = [];
 
-        // Update total price
         updateTotalPrice();
     }
 
     function setupCustomizationForm() {
-        // Size selection
         if (elements.drinkSizeSelect) {
             elements.drinkSizeSelect.addEventListener("change", function() {
                 const selectedOption = this.options[this.selectedIndex];
@@ -457,7 +414,6 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
 
-        // Sugar level selection
         if (elements.sugarLevelSelect) {
             elements.sugarLevelSelect.addEventListener("change", function() {
                 const selectedOption = this.options[this.selectedIndex];
@@ -469,7 +425,6 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
 
-        // Ice level selection
         if (elements.iceLevelSelect) {
             elements.iceLevelSelect.addEventListener("change", function() {
                 const selectedOption = this.options[this.selectedIndex];
@@ -481,13 +436,9 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
 
-        // Quantity change
         setupQuantityControls();
-
-        // Toppings selection
         setupToppingsSelection();
 
-        // Add to cart button
         if (elements.addToCartBtn) {
             elements.addToCartBtn.addEventListener("click", addCurrentProductToCart);
         }
@@ -499,7 +450,6 @@ document.addEventListener("DOMContentLoaded", () => {
         elements.quantityInput.addEventListener("change", function() {
             let quantity = Number.parseInt(this.value);
 
-            // Validate quantity
             if (isNaN(quantity) || quantity < 1) {
                 quantity = 1;
                 this.value = 1;
@@ -509,7 +459,6 @@ document.addEventListener("DOMContentLoaded", () => {
             updateTotalPrice();
         });
 
-        // Quantity buttons
         const minusBtn = document.querySelector(".quantity-btn.minus");
         const plusBtn = document.querySelector(".quantity-btn.plus");
 
@@ -560,32 +509,22 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function updateTotalPrice() {
-        // Base price
         const baseItemPrice = currentProduct.price;
-
-        // Size price
         const sizeItemPrice = currentProduct.size.price || 0;
 
-        // Toppings price
         let toppingsItemPrice = 0;
         currentProduct.toppings.forEach((topping) => {
             toppingsItemPrice += topping.price;
         });
 
-        // Update price displays
         if (elements.sizePrice) elements.sizePrice.textContent = "$" + sizeItemPrice.toFixed(2);
         if (elements.toppingsPrice) elements.toppingsPrice.textContent = "$" + toppingsItemPrice.toFixed(2);
 
-        // Calculate total for one item
         const itemTotal = baseItemPrice + sizeItemPrice + toppingsItemPrice;
-
-        // Calculate total with quantity
         const total = itemTotal * currentProduct.quantity;
 
-        // Update current product total price
         currentProduct.totalPrice = total;
 
-        // Update display
         if (elements.totalPrice) elements.totalPrice.textContent = "$" + total.toFixed(2);
     }
 
@@ -596,13 +535,11 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // Disable the button to prevent multiple clicks
         if (elements.addToCartBtn) {
             elements.addToCartBtn.disabled = true;
             elements.addToCartBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Adding...';
         }
 
-        // Get current selections
         const size = elements.drinkSizeSelect.options[elements.drinkSizeSelect.selectedIndex].text;
         const sizeValue = elements.drinkSizeSelect.value;
         const sizePrice = Number.parseFloat(
@@ -615,7 +552,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const ice = elements.iceLevelSelect.options[elements.iceLevelSelect.selectedIndex].text;
         const iceValue = elements.iceLevelSelect.value;
 
-        // Calculate total price
         const basePrice = currentProduct.price;
 
         let toppingsPrice = 0;
@@ -635,9 +571,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const quantity = currentProduct.quantity;
         const totalPrice = itemPrice * quantity;
 
-        // Create order item
         const orderItem = {
-            id: Date.now().toString(), // Unique ID for the cart item
+            id: Date.now().toString(),
             productId: currentProduct.productId,
             name: currentProduct.name,
             image: currentProduct.image,
@@ -663,34 +598,24 @@ document.addEventListener("DOMContentLoaded", () => {
             status: "processing"
         };
 
-        // Add to cart
         addToCart(orderItem);
 
-        // Close order panel
         closeAllPanels();
 
-        // Re-enable the button
         if (elements.addToCartBtn) {
             elements.addToCartBtn.disabled = false;
             elements.addToCartBtn.innerHTML = '<i class="fas fa-cart-plus"></i> Add to Cart';
         }
 
-        // Show success message
         showToast("Added to Cart", `${orderItem.name} has been added to your cart.`, "success");
         addNotification("Added to Cart", `${orderItem.name} (${orderItem.size.name}) has been added to your cart.`, "cart");
     }
 
     function addToCart(item) {
-        // Add item to cart array
         cart.push(item);
-
-        // Save to localStorage
         localStorage.setItem("cart", JSON.stringify(cart));
-
-        // Update cart count
         updateCartCount();
 
-        // Update cart panel if it's open
         if (elements.cartPanel && elements.cartPanel.classList.contains("active")) {
             renderCartItems();
         }
@@ -703,7 +628,6 @@ document.addEventListener("DOMContentLoaded", () => {
             elements.cartCount.style.display = cartCount > 0 ? "block" : "none";
         }
 
-        // Update booking notification count in sidebar
         const bookingCountElement = document.querySelector(".sidebar-nav .nav-item:nth-child(2) .notification-count");
         if (bookingCountElement) {
             bookingCountElement.textContent = cartCount;
@@ -712,20 +636,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function setupCartActions() {
-        // Open cart panel
         const cartButtons = document.querySelectorAll(".cart-btn");
         cartButtons.forEach((button) => {
             button.addEventListener("click", (e) => {
                 e.preventDefault();
                 e.stopPropagation();
 
-                // Close all other panels first
                 closeAllPanels();
 
-                // Render cart items
                 renderCartItems();
 
-                // Show cart panel and overlay
                 if (elements.cartPanel) {
                     elements.cartPanel.classList.add("active");
                     elements.cartPanel.style.display = "block";
@@ -737,53 +657,40 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         });
 
-        // Checkout button
         if (elements.checkoutBtn) {
-            elements.checkoutBtn.addEventListener("click", () => {
+            elements.checkoutBtn.addEventListener("click", (e) => {
+                e.preventDefault();
                 if (cart.length === 0) {
                     showToast("Empty Cart", "Your cart is empty. Add some items before checking out.", "error");
                     return;
                 }
 
-                // Create booking from cart
-                createBookingFromCart();
+                // Create booking and send cart to server
+                const bookingId = createBookingFromCart();
 
-                // Clear cart
-                cart = [];
-                localStorage.setItem("cart", JSON.stringify(cart));
-
-                // Update cart count
-                updateCartCount();
-
-                // Close cart panel
-                closeAllPanels();
-
-                // Show success message
-                showToast("Order Placed", "Your order has been placed successfully!", "success");
-                addNotification("Order Placed", "Your order has been placed successfully!", "success");
-
-                // Redirect to booking page
-                window.location.href = "/booking";
+                // Send cart data to server via form submission
+                const form = document.createElement("form");
+                form.method = "POST";
+                form.action = `/checkout?booking_id=${bookingId}`;
+                const cartInput = document.createElement("input");
+                cartInput.type = "hidden";
+                cartInput.name = "cart";
+                cartInput.value = JSON.stringify(cart);
+                form.appendChild(cartInput);
+                document.body.appendChild(form);
+                form.submit();
             });
         }
 
-        // Clear cart button
         if (elements.clearCartBtn) {
             elements.clearCartBtn.addEventListener("click", () => {
                 if (cart.length === 0) return;
 
                 if (confirm("Are you sure you want to clear your cart?")) {
-                    // Clear cart
                     cart = [];
                     localStorage.setItem("cart", JSON.stringify(cart));
-
-                    // Update cart count
                     updateCartCount();
-
-                    // Update cart display
                     renderCartItems();
-
-                    // Show notification
                     showToast("Cart Cleared", "Your cart has been cleared.", "info");
                     addNotification("Cart Cleared", "Your cart has been cleared.", "cart");
                 }
@@ -808,18 +715,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 startShoppingBtn.addEventListener("click", closeAllPanels);
             }
 
-            // Update cart summary
             updateCartSummary();
             return;
         }
 
-        // Render cart items
         elements.cartItemsContainer.innerHTML = "";
         cart.forEach((item) => {
             const cartItemElement = document.createElement("div");
             cartItemElement.className = "cart-item";
 
-            // Format toppings
             let toppingsText = "None";
             if (item.toppings && item.toppings.length > 0) {
                 toppingsText = item.toppings.map((t) => t.name).join(", ");
@@ -850,10 +754,7 @@ document.addEventListener("DOMContentLoaded", () => {
             elements.cartItemsContainer.appendChild(cartItemElement);
         });
 
-        // Add event listeners to quantity buttons and remove buttons
         setupCartItemControls();
-
-        // Update cart summary
         updateCartSummary();
     }
 
@@ -914,10 +815,7 @@ document.addEventListener("DOMContentLoaded", () => {
         cart[itemIndex].quantity = quantity;
         cart[itemIndex].totalPrice = cart[itemIndex].basePrice * quantity;
 
-        // Save to localStorage
         localStorage.setItem("cart", JSON.stringify(cart));
-
-        // Update cart display
         renderCartItems();
     }
 
@@ -927,19 +825,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const itemName = cart[itemIndex].name;
 
-        // Remove item from cart
         cart.splice(itemIndex, 1);
-
-        // Save to localStorage
         localStorage.setItem("cart", JSON.stringify(cart));
-
-        // Update cart count
         updateCartCount();
-
-        // Update cart display
         renderCartItems();
 
-        // Show notifications
         showToast("Item Removed", `${itemName} has been removed from your cart.`, "info");
         addNotification("Item Removed", `${itemName} has been removed from your cart.`, "cart");
     }
@@ -947,22 +837,18 @@ document.addEventListener("DOMContentLoaded", () => {
     function updateCartSummary() {
         if (!elements.cartSubtotal || !elements.cartTax || !elements.cartTotal) return;
 
-        // Calculate totals
         const subtotal = cart.reduce((total, item) => total + item.totalPrice, 0);
-        const tax = subtotal * 0.08; // 8% tax
+        const tax = subtotal * 0.08;
         const total = subtotal + tax;
 
-        // Update display
         elements.cartSubtotal.textContent = "$" + subtotal.toFixed(2);
         elements.cartTax.textContent = "$" + tax.toFixed(2);
         elements.cartTotal.textContent = "$" + total.toFixed(2);
 
-        // Disable checkout button if cart is empty
         if (elements.checkoutBtn) {
             elements.checkoutBtn.disabled = cart.length === 0;
         }
 
-        // Disable clear cart button if cart is empty
         if (elements.clearCartBtn) {
             elements.clearCartBtn.disabled = cart.length === 0;
         }
@@ -971,12 +857,10 @@ document.addEventListener("DOMContentLoaded", () => {
     function createBookingFromCart() {
         if (cart.length === 0) return;
 
-        // Calculate total
         const subtotal = cart.reduce((total, item) => total + item.totalPrice, 0);
-        const tax = subtotal * 0.08; // 8% tax
+        const tax = subtotal * 0.08;
         const total = subtotal + tax;
 
-        // Create booking
         const booking = {
             id: "ORD" + Date.now().toString().slice(-6),
             date: new Date().toISOString(),
@@ -987,14 +871,11 @@ document.addEventListener("DOMContentLoaded", () => {
             status: "processing",
         };
 
-        // Get existing bookings
         const bookings = JSON.parse(localStorage.getItem("bookings")) || [];
-
-        // Add new booking
         bookings.unshift(booking);
-
-        // Save to localStorage
         localStorage.setItem("bookings", JSON.stringify(bookings));
+
+        return booking.id;
     }
 
     // ======== FAVORITES MANAGEMENT ========
@@ -1013,14 +894,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 const icon = this.querySelector("i");
                 if (icon.classList.contains("far")) {
-                    // Add to favorites
                     icon.classList.remove("far");
                     icon.classList.add("fas");
                     saveFavorite(productId, productName, productImage, productPrice, productDescription);
                     showToast("Added to Favorites", "Item added to your favorites!", "success");
                     addNotification("Added to Favorites", `${productName} has been added to your favorites.`, "info");
                 } else {
-                    // Remove from favorites
                     icon.classList.remove("fas");
                     icon.classList.add("far");
                     removeFavorite(productId);
@@ -1033,8 +912,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function saveFavorite(id, name, image, price, description) {
         const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
-
-        // Remove price formatting
         price = price.replace("$", "").trim();
 
         if (!favorites.some((item) => item.id === id)) {
@@ -1079,10 +956,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 e.preventDefault();
                 e.stopPropagation();
 
-                // Close all other panels first
                 closeAllPanels();
 
-                // Show notification panel and overlay
                 if (elements.notificationPanel) {
                     elements.notificationPanel.classList.add("active");
                     if (elements.overlay) {
@@ -1095,7 +970,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function showToast(title, message, type = "info") {
-        // Create toast container if it doesn't exist
         let toastContainer = document.querySelector(".toast-container");
         if (!toastContainer) {
             toastContainer = document.createElement("div");
@@ -1126,13 +1000,11 @@ document.addEventListener("DOMContentLoaded", () => {
           <h4>${title}</h4>
           <p>${message}</p>
         </div>
-        <button class="toast-close">&times;</button>
+        <button class="toast-close">×</button>
       `;
 
-        // Add to container
         toastContainer.appendChild(toast);
 
-        // Add close button functionality
         const closeButton = toast.querySelector(".toast-close");
         closeButton.addEventListener("click", () => {
             toast.classList.add("toast-hide");
@@ -1141,7 +1013,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }, 300);
         });
 
-        // Auto remove after 5 seconds
         setTimeout(() => {
             toast.classList.add("toast-hide");
             setTimeout(() => {
@@ -1153,13 +1024,11 @@ document.addEventListener("DOMContentLoaded", () => {
     function addNotification(title, message, type = "info") {
         if (!elements.notificationList) return;
 
-        // Remove empty notification message if present
         const emptyNotification = elements.notificationList.querySelector(".empty-notification");
         if (emptyNotification) {
             emptyNotification.remove();
         }
 
-        // Create notification item
         const notification = document.createElement("div");
         notification.className = "notification-item";
 
@@ -1187,18 +1056,15 @@ document.addEventListener("DOMContentLoaded", () => {
           <p>${message}</p>
           <span class="notification-time">Just now</span>
         </div>
-        <button class="notification-close">&times;</button>
+        <button class="notification-close">×</button>
       `;
 
-        // Add to notification list
         elements.notificationList.insertBefore(notification, elements.notificationList.firstChild);
 
-        // Add close button functionality
         const closeButton = notification.querySelector(".notification-close");
         closeButton.addEventListener("click", () => {
             notification.remove();
 
-            // Show empty notification message if no notifications
             if (elements.notificationList.children.length === 0) {
                 elements.notificationList.innerHTML = `
             <div class="empty-notification">
@@ -1216,7 +1082,6 @@ document.addEventListener("DOMContentLoaded", () => {
         document.head.appendChild(style);
 
         style.textContent += `
-        /* Product Detail Modal Styles */
         .product-detail-modal {
           position: fixed;
           top: 0;
@@ -1369,7 +1234,6 @@ document.addEventListener("DOMContentLoaded", () => {
           to { opacity: 1; transform: translateY(0); }
         }
         
-        /* Animation for heart icon */
         @keyframes heartBeat {
           0% { transform: scale(1); }
           50% { transform: scale(1.3); }
@@ -1378,13 +1242,7 @@ document.addEventListener("DOMContentLoaded", () => {
       `;
     }
 
-    // ======== INITIALIZATION ========
-    // Add styles
     addStyles();
-
-    // Initialize the application
     init();
-
-    // Expose functions to window for external access
     window.addNotification = addNotification;
 });

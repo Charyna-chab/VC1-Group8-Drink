@@ -40,12 +40,14 @@ $currentPage = basename($_SERVER['REQUEST_URI']);
             <i class="fas fa-fw fa-folder"></i>
             <span>Products</span>
         </a>
-        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="/product">Products</a>
-                <a class="collapse-item" href="/topping">Toppings</a>
-            </div>
-        </div>
+    </li>
+    <hr class="sidebar-divider">
+
+    <li class="nav-item <?= $currentPage == 'topping' ? 'active-page' : '' ?>">
+        <a class="nav-link" href="/admin/toppings">
+            <i class="fas fa-fw fa-folder"></i>
+            <span>Toppings</span>
+        </a>
     </li>
     <hr class="sidebar-divider">
     <li class="nav-item">

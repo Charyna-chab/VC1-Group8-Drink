@@ -132,19 +132,41 @@ class ProductController extends BaseController
 
 
 
-    function delete($id)
-    {
-        if (!is_numeric($id)) {
-            $_SESSION['error'] = 'Invalid product ID!';
-            return $this->redirect('/product');
+public function delete($id)
+{
+    if (!is_numeric($id)) {
+        $_SESSION['error'] = 'Invalid product ID!';
+        return $this->redirect('/admin/products');
+    }
+
+    try {
+        // First check if product exists
+        $product = $this->model->getProduct($id);
+        if (!$product) {
+            $_SESSION['error'] = 'Product not found!';
+            return $this->redirect('/admin/products');
         }
 
-        if ($this->model->deleteProduct($id)) {
+        // Delete the product image if exists
+        if (!empty($product['image'])){
+            $imagePath = __DIR__ . '/../../public/' . $product['image'];
+            if (file_exists($imagePath)) {
+                unlink($imagePath);
+            }
+        }
+
+        // Delete from database
+        $deleted = $this->model->deleteProduct($id);
+        
+        if ($deleted) {
             $_SESSION['success'] = 'Product deleted successfully!';
         } else {
             $_SESSION['error'] = 'Failed to delete product!';
         }
-
-        $this->redirect('/product');
+    } catch (PDOException $e) {
+        $_SESSION['error'] = 'Database error: ' . $e->getMessage();
     }
+
+    return $this->redirect('/admin/products');
+}
 }
