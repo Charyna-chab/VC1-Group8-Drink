@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
         iceLevelSelect: document.getElementById("iceLevel"),
         toppingCheckboxes: document.querySelectorAll('#toppings input[type="checkbox"]'),
         customerPhoneInput: document.getElementById("customerPhone"), // Added
-        customerIdInput: document.getElementById("customerId"),       // Added
+        customerIdInput: document.getElementById("customerId"), // Added
 
         // Order customization display elements
         productImage: document.getElementById("productImage"),
@@ -597,7 +597,7 @@ document.addEventListener("DOMContentLoaded", () => {
             quantity: quantity,
             totalPrice: totalPrice,
             customerPhone: customerPhone, // Added customer phone
-            customerId: customerId,       // Added customer ID
+            customerId: customerId, // Added customer ID
             orderDate: new Date().toISOString(),
             status: "processing"
         };
@@ -972,6 +972,54 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         });
     }
+    document.addEventListener('DOMContentLoaded', function() {
+        const orderPanel = document.getElementById('orderPanel');
+        const addToCartBtn = orderPanel.querySelector('.add-to-cart-btn');
+
+        addToCartBtn.addEventListener('click', function() {
+            const productId = document.querySelector('#productImage').getAttribute('data-product-id');
+            const productName = document.querySelector('#productName').innerText;
+            const productPrice = parseFloat(document.querySelector('#productPrice').innerText.replace('$', ''));
+            const quantity = parseInt(document.querySelector('#quantity').value);
+            const drinkSize = document.querySelector('#drinkSize').value;
+            const sugarLevel = document.querySelector('#sugarLevel').value;
+            const iceLevel = document.querySelector('#iceLevel').value;
+            const toppings = Array.from(document.querySelectorAll('#toppings input[type="checkbox"]:checked')).map(topping => topping.value);
+
+            const orderData = {
+                product_id: productId,
+                product_name: productName,
+                price: productPrice,
+                quantity: quantity,
+                drink_size: drinkSize,
+                sugar_level: sugarLevel,
+                ice_level: iceLevel,
+                toppings: toppings
+            };
+
+            fetch('/path/to/your/backend/storeOrder.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(orderData)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Order placed successfully!');
+                        // Optionally, update the UI or redirect the user
+                    } else {
+                        alert('Failed to place order. Please try again.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while placing the order.');
+                });
+        });
+    });
+
 
     function showToast(title, message, type = "info") {
         let toastContainer = document.querySelector(".toast-container");
