@@ -68,4 +68,3 @@
 <link rel="stylesheet" href="/assets/css/favorites.css">
 <script src="/assets/js/favorites.js"></script>
 
-<?php require_once __DIR__ . '/layouts/footer.php'; ?>
