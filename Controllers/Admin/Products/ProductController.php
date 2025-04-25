@@ -35,31 +35,34 @@ class ProductController extends BaseController
     }
 
     public function store()
-    {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $uploadDir = 'uploads/product/';
-            if (!is_dir($uploadDir)) {
-                mkdir($uploadDir, 0777, true);
-            }
+{
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $uploadDir = 'uploads/product/';
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
 
-            $imageName = basename($_FILES['image']['name']);
-            $uploadFile = $uploadDir . $imageName;
+        $imageName = basename($_FILES['image']['name']);
+        $uploadFile = $uploadDir . $imageName;
 
-            if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadFile)) {
-                $data = [
-                    'product_name' => $_POST['product_name'],
-                    'product_detail' => $_POST['product_detail'],
-                    'price' => $_POST['price'],
-                    'image' => $uploadFile,
-                ];
+        // Check if file uploaded successfully
+        if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadFile)) {
+            $data = [
+                'product_name' => $_POST['product_name'],
+                'product_detail' => $_POST['product_detail'],
+                'price' => $_POST['price'],
+                'image' => $uploadFile,
+                'category' => $_POST['category'], // Add category to data array
+            ];
 
-                $this->model->createProduct($data);
-                $this->redirect('/product');
-            } else {
-                die("Failed to upload the image.");
-            }
+            $this->model->createProduct($data);
+            $this->redirect('/product');
+        } else {
+            die("Failed to upload the image.");
         }
     }
+}
+
 
     public function edit($id)
     {
