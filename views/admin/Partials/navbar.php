@@ -201,7 +201,7 @@
         </nav>
 <!-- Modal -->
 <div class="modal fade" id="adminProfileModal" tabindex="-1" role="dialog" aria-labelledby="adminProfileModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-right custom-modal-width" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header bg-gradient-primary text-white">
                 <h5 class="modal-title" id="adminProfileModalLabel">Admin Profile</h5>
@@ -211,15 +211,16 @@
             </div>
 
             <div class="modal-body">
-                <div class="text-center mb-4">
-                    <img src="/assets/image/07.jpg" class="rounded-circle profile-img shadow-sm" alt="Profile Image" width="140" height="140">
-                    <div class="mt-3">
-                        <label for="profileImageUpload" class="btn btn-sm btn-primary">
-                            <i class="fas fa-upload mr-1"></i> Change Photo
-                        </label>
-                        <input type="file" id="profileImageUpload" class="d-none" onchange="previewImage(event)">
-                    </div>
+            <div class="text-center mb-4">
+                <img id="preview" src="/assets/image/07.jpg" class="rounded-circle profile-img shadow-sm" alt="Profile Image" width="140" height="140">
+                <div class="mt-3">
+                    <label for="profileImageUpload" class="btn btn-sm btn-primary">
+                        <i class="fas fa-upload mr-1"></i> Change Photo
+                    </label>
+                    <input type="file" name="profile_image" id="profileImageUpload" class="d-none" onchange="submitImage()">
+                    <input type="hidden" name="user_id" value="1"> <!-- Put actual admin ID here -->
                 </div>
+            </div>
 
                 <form>
                     <div class="form-group">
@@ -290,96 +291,101 @@
 
 
         <script>
-            // JavaScript for image preview
-            function previewImage(event) {
-                const file = event.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        const imgElement = document.querySelector('.profile-img');
-                        imgElement.src = e.target.result;
-                    };
-                    reader.readAsDataURL(file);
-                }
-            }
+ // JavaScript for image preview
+ function previewImage(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imgElement = document.querySelector('.profile-img');
+                imgElement.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+    function submitImage() {
+    const input = document.getElementById('profileImageUpload');
+    const file = input.files[0];
+    if (!file) return;
+
+    const formData = new FormData(document.getElementById('adminImageForm'));
+
+    // Preview image
+    const reader = new FileReader();
+    reader.onload = function (e) {
+        document.getElementById('preview').src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+
+    // Upload image
+    fetch('update_admin_image.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(res => res.text())
+    .then(data => console.log(data))
+    .catch(err => console.error('Upload error:', err));
+}
         </script>
 
-        <style>
-            /* Custom CSS for right-aligned modal */
-            .modal-dialog-right {
-                position: fixed;
-                right: 0;
-                margin-right: 0;
-                max-width: 400px;
-                transition: transform 0.3s ease-out;
-            }
+<style>
+    .bg-gradient-primary {
+        background: linear-gradient(45deg, #007bff, #00b4ff);
+    }
 
-            .modal.fade .modal-dialog-right {
-                transform: translateX(100%);
-            }
+    .rounded-lg {
+        border-radius: 0.5rem !important;
+    }
 
-            .modal.show .modal-dialog-right {
-                transform: translateX(0);
-            }
+    .shadow-sm {
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
+    }
 
-            .bg-gradient-primary {
-                background: linear-gradient(45deg, #007bff, #00b4ff);
-            }
+    .btn {
+        transition: all 0.3s ease;
+    }
 
-            .rounded-lg {
-                border-radius: 0.5rem !important;
-            }
+    .btn:hover {
+        transform: translateY(-2px);
+    }
+    
+    /* Make topbar icons black */
+    .navbar .fas,
+    .navbar .fa {
+        color: rgb(41, 33, 33);
+    }
 
-            .shadow-sm {
-                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
-            }
+    /* Make sidebar icons pink */
+    .sidebar .fas,
+    .sidebar .fa {
+        color: rgb(255, 0, 128);
+    }
 
-            .btn {
-                transition: all 0.3s ease;
-            }
+    .sidebar .fas,
+    .sidebar .fa-fw {
+        color: rgb(255, 0, 128);
+    }
 
-            .btn:hover {
-                transform: translateY(-2px);
-            }
-        </style>
-        <style>
-            /* Make topbar icons black */
-            .navbar .fas,
-            .navbar .fa {
-                color: rgb(41, 33, 33);
-                /* Bootstrap's default dark color */
-            }
+    /* Make sure sidebar text is dark */
+    .sidebar .nav-item .nav-link span {
+        color: rgb(41, 33, 35);
+    }
 
-            /* Make sidebar icons pink */
-            .sidebar .fas,
-            .sidebar .fa {
-                color: rgb(255, 0, 128);
-                /* Hot pink color */
-            }
+    /* Update sidebar-divider color for better visibility on white background */
+    .sidebar-divider {
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
 
-            .sidebar .fas,
-            .sidebar .fa-fw {
+    /* Ensure active items have proper styling */
+    .sidebar .nav-item.active .nav-link {
+        color: #4e73df;
+    }
 
-                /* Make sure sidebar text is dark */
-                .sidebar .nav-item .nav-link span {
-                    color: rgb(41, 33, 35);
-                }
-
-                /* Update sidebar-divider color for better visibility on white background */
-                .sidebar-divider {
-                    border-top: 1px solid rgba(0, 0, 0, 0.1);
-                }
-
-                /* Ensure active items have proper styling */
-                .sidebar .nav-item.active .nav-link {
-                    color: #4e73df;
-                }
-
-                /* Fix any remaining light text */
-                .text-light {
-                    color: #212529 !important;
-                }
-        </style>
+    /* Fix any remaining light text */
+    .text-light {
+        color: #212529 !important;
+    }
+</style>
 
         <!-- End of Topbar -->
         <?php '../layout/footer.php' ?>
