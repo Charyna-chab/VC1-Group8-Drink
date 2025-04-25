@@ -25,27 +25,19 @@ class ProductModel
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
+   
     public function createProduct($data)
-    {
-        try {
-            $query = "INSERT INTO products (product_name, product_detail, price, category, image)
-                  VALUES (:product_name, :product_detail, :price, :category, :image)";
-
-            $stmt = $this->pdo->prepare($query);
-            $success = $stmt->execute($data);
-
-            if (!$success) {
-                $error = $stmt->errorInfo();
-                error_log("Database Error: " . print_r($error, true));
-                return false;
-            }
-
-            return true;
-        } catch (PDOException $e) {
-            error_log("PDO Exception: " . $e->getMessage());
-            return false;
-        }
+{
+    try {
+        $query = "INSERT INTO products (product_name, product_detail, price, image, category)
+                  VALUES (:product_name, :product_detail, :price, :image, :category)";
+        $stmt = $this->pdo->prepare($query);
+        return $stmt->execute($data);
+    } catch (PDOException $e) {
+        die("Database error: " . $e->getMessage());
     }
+}
+
 
     public function getProduct($id)
     {
