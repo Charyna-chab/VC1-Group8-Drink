@@ -7,6 +7,7 @@ require_once './controllers/BaseController.php';
 
 use YourNamespace\Models\ProductModel; // Keep this
 use YourNamespace\BaseController; // Keep this
+use PDOException; // Add this to import PDOException
 
 class ProductController extends BaseController
 {
@@ -30,6 +31,7 @@ class ProductController extends BaseController
     public function create()
     {
         $this->views('products/product-create');
+        
     }
 
     public function store()
@@ -124,10 +126,10 @@ class ProductController extends BaseController
             $_SESSION['error'] = "Failed to update product.";
         }
 
-        return $this->redirect("/admin/products/edit/");
+        return $this->redirect('/product');
     }
 
-    return $this->redirect('/product');
+    
 }
 
 
@@ -136,7 +138,7 @@ public function delete($id)
 {
     if (!is_numeric($id)) {
         $_SESSION['error'] = 'Invalid product ID!';
-        return $this->redirect('/admin/products');
+        return $this->redirect('/product');
     }
 
     try {
@@ -144,7 +146,7 @@ public function delete($id)
         $product = $this->model->getProduct($id);
         if (!$product) {
             $_SESSION['error'] = 'Product not found!';
-            return $this->redirect('/admin/products');
+            return $this->redirect('/product');
         }
 
         // Delete the product image if exists
@@ -167,6 +169,6 @@ public function delete($id)
         $_SESSION['error'] = 'Database error: ' . $e->getMessage();
     }
 
-    return $this->redirect('/admin/products');
+    return $this->redirect('/product');
 }
 }

@@ -59,3 +59,8 @@
         </div>
     </div>
 </div>
+<<<<<<< HEAD
+=======
+
+<?php require_once __DIR__ . '/../layouts/footer.php'; ?>
+>>>>>>> 211bcb54310c5357922032c3f8efde8bc40e7b98
