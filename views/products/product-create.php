@@ -93,14 +93,7 @@
         </div>
     </div>
 </div>
-<<<<<<< HEAD
-=======
-
 <?php require_once __DIR__ . '/../layouts/footer.php'; ?>
-<<<<<<< HEAD
->>>>>>> 211bcb54310c5357922032c3f8efde8bc40e7b98
-=======
-
 <!-- JS for Live Image Preview -->
 <script>
 const imageInput = document.getElementById('imageInput');
@@ -121,4 +114,4 @@ imageInput.addEventListener('change', function() {
     }
 });
 </script>
->>>>>>> 85f47aab5dd11c39d15140bb76b374a355ecea39
+
