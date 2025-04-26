@@ -678,9 +678,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Move to payment step
                 goToStep(2);
                 showToast("Success", "Customer details validated. Proceed to payment.", "success");
-            } else {
-                // Show error toast if validation fails
-                showToast("Validation Error", "Please fix the errors in the form before proceeding.", "error");
             }
 
             // Re-enable the submit button

@@ -22,6 +22,11 @@ $google_maps_api_key = "YOUR_GOOGLE_MAPS_API_KEY"; // Replace with your actual A
 
 <section class="content">
     <div class="checkout-container">
+        <!-- Progress Bar -->
+        <div class="progress-bar-container">
+            <div class="progress-bar-fill" id="progress-bar-fill"></div>
+        </div>
+
         <!-- Checkout Steps -->
         <div class="checkout-steps">
             <div class="step active" data-step="1">
@@ -46,7 +51,7 @@ $google_maps_api_key = "YOUR_GOOGLE_MAPS_API_KEY"; // Replace with your actual A
             </div>
         <?php endif; ?>
 
-        <!-- Step 1: Customer Details (Redesigned) -->
+        <!-- Step 1: Customer Details -->
         <div class="checkout-step-content active" id="step-1">
             <form id="customer-details-form">
                 <div class="checkout-grid">
@@ -188,7 +193,7 @@ $google_maps_api_key = "YOUR_GOOGLE_MAPS_API_KEY"; // Replace with your actual A
             </form>
         </div>
 
-        <!-- Step 2: Payment Method (Completely Redesigned) -->
+        <!-- Step 2: Payment Method -->
         <div class="checkout-step-content" id="step-2">
             <!-- Hidden fields for customer data -->
             <input type="hidden" id="hidden_first_name" name="hidden_first_name">
@@ -231,7 +236,7 @@ $google_maps_api_key = "YOUR_GOOGLE_MAPS_API_KEY"; // Replace with your actual A
                     <!-- ACLEDA Pay -->
                     <div class="payment-option" data-method="acleda">
                         <div class="payment-option-inner">
-                            <img src="/assets/images/acleda-pay-logo.png" alt="ACLEDA Pay" class="payment-logo">
+                            <img src="assets/image/Logo Acleda.png" alt="ACLEDA Pay" class="payment-logo">
                             <h4>ACLEDA Pay</h4>
                         </div>
                     </div>
@@ -239,7 +244,7 @@ $google_maps_api_key = "YOUR_GOOGLE_MAPS_API_KEY"; // Replace with your actual A
                     <!-- Visa Card -->
                     <div class="payment-option" data-method="card">
                         <div class="payment-option-inner">
-                            <i class="fas fa-credit-card payment-icon"></i>
+                            <img src="assets/image/Visa-Card.png" alt="Visa-Card" class="payment-logo">      
                             <h4>Visa Card</h4>
                         </div>
                     </div>
@@ -260,7 +265,7 @@ $google_maps_api_key = "YOUR_GOOGLE_MAPS_API_KEY"; // Replace with your actual A
                         <div class="payment-qr-container">
                             <h4>ABA Pay</h4>
                             <div class="payment-amount">$<span id="aba-payment-amount">0.00</span></div>
-                            <img src="/assets/image/ABA Vanda.jpg" alt="ABA Pay QR Code" class="payment-qr">
+                            <img src="assets/image/ABA Vanda.jpg.jpg" alt="ABA Pay QR Code" class="payment-qr">
                             <p>Scan this QR code with your ABA app to pay</p>
                             
                             <div class="phone-input-container">
@@ -361,11 +366,11 @@ $google_maps_api_key = "YOUR_GOOGLE_MAPS_API_KEY"; // Replace with your actual A
             </div>
         </div>
 
-        <!-- Step 3: Receipt (Enhanced) -->
+        <!-- Step 3: Receipt -->
         <div class="checkout-step-content" id="step-3">
             <div class="order-confirmation" id="receipt-container">
                 <div class="receipt-header">
-                    <img src="/assets/images/logo.png" alt="Xing Fu Cha Logo" class="receipt-logo">
+                    <img src="/assets/image/logo/logo.png" alt="Xing Fu Cha Logo" class="receipt-logo">
                     <h2>Order Receipt</h2>
                     <p>Thank you for your purchase at Xing Fu Cha!</p>
                 </div>
@@ -433,6 +438,18 @@ $google_maps_api_key = "YOUR_GOOGLE_MAPS_API_KEY"; // Replace with your actual A
     </div>
 </section>
 
+<!-- Confirmation Modal -->
+<div class="confirmation-modal" id="confirmation-modal" style="display: none;">
+    <div class="confirmation-modal-content">
+        <h3>Confirm Payment</h3>
+        <p>Are you sure you want to proceed with the payment of <span id="confirmation-amount">$0.00</span> using <span id="confirmation-method"></span>?</p>
+        <div class="confirmation-modal-actions">
+            <button type="button" id="confirm-payment" class="btn-primary">Confirm</button>
+            <button type="button" id="cancel-payment" class="btn-secondary">Cancel</button>
+        </div>
+    </div>
+</div>
+
 <link rel="stylesheet" href="/assets/css/checkout.css">
 <script src="https://maps.googleapis.com/maps/api/js?key=<?php echo $google_maps_api_key; ?>&libraries=places&callback=initMap" async defer></script>
 <script src="/assets/js/checkout.js"></script>
@@ -444,6 +461,27 @@ $google_maps_api_key = "YOUR_GOOGLE_MAPS_API_KEY"; // Replace with your actual A
         max-width: 1200px;
         margin: 0 auto;
         padding: 20px;
+        position: relative;
+    }
+    
+    /* Progress Bar */
+    .progress-bar-container {
+        position: sticky;
+        top: 0;
+        width: 100%;
+        height: 8px;
+        background-color: #f0f0f0;
+        border-radius: 4px;
+        margin-bottom: 20px;
+        z-index: 100;
+        overflow: hidden;
+    }
+    
+    .progress-bar-fill {
+        height: 100%;
+        background-color: #ff6769;
+        width: 33.33%;
+        transition: width 0.5s ease;
     }
     
     /* Checkout Steps */
@@ -452,6 +490,8 @@ $google_maps_api_key = "YOUR_GOOGLE_MAPS_API_KEY"; // Replace with your actual A
         align-items: center;
         justify-content: center;
         margin-bottom: 30px;
+        opacity: 1;
+        transition: opacity 0.3s ease;
     }
     
     .step {
@@ -459,6 +499,11 @@ $google_maps_api_key = "YOUR_GOOGLE_MAPS_API_KEY"; // Replace with your actual A
         flex-direction: column;
         align-items: center;
         position: relative;
+        transition: transform 0.3s ease;
+    }
+    
+    .step:hover {
+        transform: scale(1.1);
     }
     
     .step-number {
@@ -478,6 +523,7 @@ $google_maps_api_key = "YOUR_GOOGLE_MAPS_API_KEY"; // Replace with your actual A
     .step.active .step-number {
         background-color: #ff6769;
         color: white;
+        transform: scale(1.2);
     }
     
     .step-connector {
@@ -485,6 +531,7 @@ $google_maps_api_key = "YOUR_GOOGLE_MAPS_API_KEY"; // Replace with your actual A
         width: 100px;
         background-color: #f0f0f0;
         margin: 0 15px;
+        transition: background-color 0.3s ease;
     }
     
     .step.active + .step-connector {
@@ -495,6 +542,7 @@ $google_maps_api_key = "YOUR_GOOGLE_MAPS_API_KEY"; // Replace with your actual A
         font-size: 14px;
         color: #666;
         font-weight: 500;
+        transition: color 0.3s ease;
     }
     
     .step.active .step-label {
@@ -521,6 +569,12 @@ $google_maps_api_key = "YOUR_GOOGLE_MAPS_API_KEY"; // Replace with your actual A
         border-radius: 12px;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
         padding: 30px;
+        animation: slide-in 0.5s ease;
+    }
+    
+    @keyframes slide-in {
+        from { transform: translateY(20px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
     }
     
     .form-header {
@@ -611,6 +665,7 @@ $google_maps_api_key = "YOUR_GOOGLE_MAPS_API_KEY"; // Replace with your actual A
         top: 50%;
         transform: translateY(-50%);
         color: #999;
+        transition: color 0.3s ease;
     }
     
     .textarea-icon i {
@@ -625,7 +680,7 @@ $google_maps_api_key = "YOUR_GOOGLE_MAPS_API_KEY"; // Replace with your actual A
         border: 1px solid #ddd;
         border-radius: 8px;
         font-size: 14px;
-        transition: border-color 0.3s;
+        transition: all 0.3s ease;
     }
     
     .input-with-icon input:focus,
@@ -633,6 +688,7 @@ $google_maps_api_key = "YOUR_GOOGLE_MAPS_API_KEY"; // Replace with your actual A
         border-color: #ff6769;
         outline: none;
         box-shadow: 0 0 0 2px rgba(255, 103, 105, 0.1);
+        transform: scale(1.02);
     }
     
     .error-message {
@@ -855,7 +911,7 @@ $google_maps_api_key = "YOUR_GOOGLE_MAPS_API_KEY"; // Replace with your actual A
         color: white;
     }
     
-    /* Payment Styles (Redesigned) */
+    /* Payment Styles */
     .payment-container {
         max-width: 800px;
         margin: 0 auto;
@@ -863,6 +919,7 @@ $google_maps_api_key = "YOUR_GOOGLE_MAPS_API_KEY"; // Replace with your actual A
         border-radius: 12px;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
         padding: 30px;
+        animation: slide-in 0.5s ease;
     }
     
     .payment-header {
@@ -987,6 +1044,8 @@ $google_maps_api_key = "YOUR_GOOGLE_MAPS_API_KEY"; // Replace with your actual A
         padding: 30px;
         margin-bottom: 30px;
         min-height: 300px;
+        position: relative;
+        overflow: hidden;
     }
     
     .payment-method-default {
@@ -1007,6 +1066,17 @@ $google_maps_api_key = "YOUR_GOOGLE_MAPS_API_KEY"; // Replace with your actual A
     
     .payment-qr-container {
         text-align: center;
+        position: relative;
+        padding: 20px;
+        background: linear-gradient(45deg, #fff5f5, #f9f9f9);
+        border-radius: 12px;
+        animation: pulse-bg 3s infinite;
+    }
+    
+    @keyframes pulse-bg {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
     }
     
     .payment-qr-container h4 {
@@ -1023,12 +1093,24 @@ $google_maps_api_key = "YOUR_GOOGLE_MAPS_API_KEY"; // Replace with your actual A
     }
     
     .payment-qr {
-        width: 200px;
-        height: 200px;
+        width: 300px;
+        height: 300px;
         margin: 20px auto;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        border: 2px solid #ddd;
+        border-radius: 12px;
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        transition: transform 0.3s ease;
+    }
+    
+    .payment-qr:hover {
+        transform: scale(1.05);
+    }
+    
+    @media (max-width: 576px) {
+        .payment-qr {
+            width: 250px;
+            height: 250px;
+        }
     }
     
     .phone-input-container {
@@ -1055,6 +1137,7 @@ $google_maps_api_key = "YOUR_GOOGLE_MAPS_API_KEY"; // Replace with your actual A
         border-radius: 12px;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
         padding: 30px;
+        animation: slide-in 0.5s ease;
     }
     
     .receipt-header {
@@ -1276,6 +1359,49 @@ $google_maps_api_key = "YOUR_GOOGLE_MAPS_API_KEY"; // Replace with your actual A
         }
     }
     
+    /* Confirmation Modal */
+    .confirmation-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2000;
+    }
+    
+    .confirmation-modal-content {
+        background-color: white;
+        border-radius: 12px;
+        padding: 30px;
+        max-width: 500px;
+        width: 90%;
+        text-align: center;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        animation: slide-in 0.3s ease;
+    }
+    
+    .confirmation-modal-content h3 {
+        margin: 0 0 15px;
+        font-size: 22px;
+        color: #333;
+    }
+    
+    .confirmation-modal-content p {
+        margin: 0 0 20px;
+        font-size: 16px;
+        color: #666;
+    }
+    
+    .confirmation-modal-actions {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+    }
+    
     /* Celebration Animation */
     .celebration-animation {
         position: fixed;
@@ -1346,6 +1472,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const orderTotal = document.getElementById("order-total");
     const selectedPaymentMethodInput = document.getElementById("selected_payment_method");
     const paymentPhoneNumberInput = document.getElementById("payment_phone_number");
+    const progressBarFill = document.getElementById("progress-bar-fill");
+    const confirmationModal = document.getElementById("confirmation-modal");
+    const confirmPaymentBtn = document.getElementById("confirm-payment");
+    const cancelPaymentBtn = document.getElementById("cancel-payment");
+    const confirmationAmount = document.getElementById("confirmation-amount");
+    const confirmationMethod = document.getElementById("confirmation-method");
 
     // Get booking_id from URL
     const urlParams = new URLSearchParams(window.location.search);
@@ -1356,6 +1488,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let map, marker, autocomplete, geocoder;
     let currentTotal = 0;
     let mapInitialized = false;
+    let pendingPayment = null;
 
     // Initialize Google Maps with delay to ensure DOM readiness
     window.initMap = () => {
@@ -1547,8 +1680,8 @@ document.addEventListener("DOMContentLoaded", () => {
             {
                 id: "phone",
                 errorId: "phone_error",
-                message: "Valid phone number is required (10-15 digits)",
-                pattern: /^\+?\d{10,15}$/,
+                message: "Valid phone number is required (8-15 digits)",
+                pattern: /^\+?\d{8,15}$/,
             },
             { id: "address", errorId: "address_error", message: "Delivery address is required", pattern: /.+/ },
         ];
@@ -1586,14 +1719,6 @@ document.addEventListener("DOMContentLoaded", () => {
             errorMessages.push("Map not initialized or invalid location");
         } else {
             addressSearchError.textContent = "";
-        }
-
-        // Log validation errors for debugging
-        if (!isValid) {
-            console.log("Form validation failed:", errorMessages);
-            showToast("Validation Error", "Please fix the errors in the form: " + errorMessages.join(", "), "error");
-        } else {
-            console.log("Form validation passed!");
         }
 
         return isValid;
@@ -1736,6 +1861,18 @@ document.addEventListener("DOMContentLoaded", () => {
     function goToStep(step) {
         steps.forEach((s) => s.classList.toggle("active", s.dataset.step <= step));
         stepContents.forEach((c) => c.classList.toggle("active", c.id === `step-${step}`));
+        
+        // Update progress bar
+        const progressWidth = step === 1 ? 33.33 : step === 2 ? 66.66 : 100;
+        progressBarFill.style.width = `${progressWidth}%`;
+        
+        // Animate step transition
+        const checkoutSteps = document.querySelector(".checkout-steps");
+        checkoutSteps.style.opacity = "0";
+        setTimeout(() => {
+            checkoutSteps.style.opacity = "1";
+        }, 300);
+        
         window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
@@ -1811,6 +1948,24 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         return toast;
+    }
+
+    // Show confirmation modal
+    function showConfirmationModal(method, phoneNumber = null) {
+        pendingPayment = { method, phoneNumber };
+        confirmationAmount.textContent = formatPrice(currentTotal);
+        confirmationMethod.textContent = {
+            card: "Visa Card",
+            aba: "ABA Pay",
+            acleda: "ACLEDA Pay",
+        }[method] || "Unknown";
+        confirmationModal.style.display = "flex";
+    }
+
+    // Hide confirmation modal
+    function hideConfirmationModal() {
+        confirmationModal.style.display = "none";
+        pendingPayment = null;
     }
 
     // Process payment
@@ -1913,7 +2068,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (bookingId) {
             const bookingIndex = bookings.findIndex((b) => b.id === bookingId);
             if (bookingIndex !== -1) {
-                bookings[bookingIndex].status = "completed";
+                bookings[bookingIndex].cartCleared = true;
                 localStorage.setItem("bookings", JSON.stringify(bookings));
             }
         }
@@ -1925,203 +2080,59 @@ document.addEventListener("DOMContentLoaded", () => {
         celebrationContainer.className = "celebration-animation";
         document.body.appendChild(celebrationContainer);
 
-        const colors = ["#ff5e62", "#4caf50", "#2196F3", "#ff9800", "#9C27B0"];
-        for (let i = 0; i < 100; i++) {
+        const colors = ["#ff6769", "#4caf50", "#2196f3", "#f44336", "#ff9800"];
+        for (let i = 0; i < 50; i++) {
             const confetti = document.createElement("div");
             confetti.className = "confetti";
-            confetti.style.left = Math.random() * 100 + "vw";
             confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-            confetti.style.width = Math.random() * 10 + 5 + "px";
-            confetti.style.height = Math.random() * 10 + 10 + "px";
-            confetti.style.animationDuration = Math.random() * 3 + 2 + "s";
+            confetti.style.width = `${Math.random() * 10 + 5}px`;
+            confetti.style.height = `${Math.random() * 10 + 5}px`;
+            confetti.style.left = `${Math.random() * 100}vw`;
+            confetti.style.animationDuration = `${Math.random() * 2 + 1}s`;
+            confetti.style.animationDelay = `${Math.random() * 0.5}s`;
             celebrationContainer.appendChild(confetti);
         }
 
         setTimeout(() => {
             celebrationContainer.classList.add("fade-out");
-            setTimeout(() => {
-                celebrationContainer.remove();
-            }, 1000);
+            setTimeout(() => celebrationContainer.remove(), 1000);
         }, 3000);
     }
 
-    // Format card number with spaces
-    function formatCardNumber(input) {
-        let value = input.value.replace(/\D/g, "");
-        if (value.length > 16) value = value.substr(0, 16);
+    // Event Listeners
+    customerForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        if (validateForm()) {
+            // Store customer details in hidden fields
+            document.getElementById("hidden_first_name").value = document.getElementById("first_name").value;
+            document.getElementById("hidden_last_name").value = document.getElementById("last_name").value;
+            document.getElementById("hidden_email").value = document.getElementById("email").value;
+            document.getElementById("hidden_phone").value = document.getElementById("phone").value;
+            document.getElementById("hidden_address").value = document.getElementById("address").value;
+            document.getElementById("hidden_notes").value = document.getElementById("notes").value;
+            document.getElementById("hidden_lat").value = document.getElementById("lat").value;
+            document.getElementById("hidden_lng").value = document.getElementById("lng").value;
+            document.getElementById("hidden_formatted_address").value = document.getElementById("formatted_address").value;
 
-        // Add spaces after every 4 digits
-        let formattedValue = "";
-        for (let i = 0; i < value.length; i++) {
-            if (i > 0 && i % 4 === 0) {
-                formattedValue += " ";
-            }
-            formattedValue += value[i];
+            goToStep(2);
+            showToast("Success", "Customer details saved. Please select a payment method.", "success");
         }
+    });
 
-        input.value = formattedValue;
-    }
-
-    // Format expiry date
-    function formatExpiryDate(input) {
-        let value = input.value.replace(/\D/g, "");
-        if (value.length > 4) value = value.substr(0, 4);
-
-        if (value.length > 2) {
-            input.value = value.substr(0, 2) + "/" + value.substr(2);
-        } else {
-            input.value = value;
-        }
-    }
-
-    // Handle customer form submission
-    if (customerForm) {
-        customerForm.addEventListener("submit", (e) => {
-            e.preventDefault();
-            console.log("Customer form submitted");
-
-            // Disable the submit button to prevent multiple submissions
-            continueToPaymentBtn.disabled = true;
-            continueToPaymentBtn.textContent = "Validating...";
-
-            // Validate the form
-            if (validateForm()) {
-                // Copy form data to hidden inputs for step 2
-                [
-                    "first_name",
-                    "last_name",
-                    "email",
-                    "phone",
-                    "address",
-                    "notes",
-                    "booking_id",
-                    "lat",
-                    "lng",
-                    "formatted_address",
-                ].forEach((field) => {
-                    const input = document.getElementById(field);
-                    if (input) {
-                        document.getElementById(`hidden_${field}`).value = input.value;
-                    }
-                });
-
-                // Move to payment step
-                goToStep(2);
-                showToast("Success", "Customer details validated. Proceed to payment.", "success");
-            } else {
-                // Show error toast if validation fails
-                showToast("Validation Error", "Please fix the errors in the form before proceeding.", "error");
-            }
-
-            // Re-enable the submit button
-            continueToPaymentBtn.disabled = false;
-            continueToPaymentBtn.textContent = "Continue to Payment";
-        });
-    }
-
-    // Handle payment option selection
     paymentOptions.forEach((option) => {
         option.addEventListener("click", () => {
-            paymentOptions.forEach((o) => o.classList.remove("active"));
+            paymentOptions.forEach((opt) => opt.classList.remove("active"));
             option.classList.add("active");
-
             const method = option.dataset.method;
             selectedPaymentMethodInput.value = method;
 
-            // Hide all payment method contents
             document.querySelectorAll(".payment-method-content").forEach((content) => {
                 content.style.display = "none";
             });
-
-            // Hide default message
             document.getElementById("payment-method-default").style.display = "none";
-
-            // Show selected payment method content
-            const selectedContent = document.getElementById(`${method}_payment_content`);
-            if (selectedContent) {
-                selectedContent.style.display = "block";
-            }
+            document.getElementById(`${method}_payment_content`).style.display = "block";
         });
     });
 
-    // Handle card input formatting
-    const cardNumberInput = document.getElementById("card_number");
-    if (cardNumberInput) {
-        cardNumberInput.addEventListener("input", () => formatCardNumber(cardNumberInput));
-    }
-
-    const expiryDateInput = document.getElementById("expiry_date");
-    if (expiryDateInput) {
-        expiryDateInput.addEventListener("input", () => formatExpiryDate(expiryDateInput));
-    }
-
-    // Handle payment processing buttons
-    if (processCardPaymentBtn) {
-        processCardPaymentBtn.addEventListener("click", () => {
-            if (validateCardForm()) {
-                processPayment("card");
-            }
-        });
-    }
-
-    if (processAbaPaymentBtn) {
-        processAbaPaymentBtn.addEventListener("click", () => {
-            if (validatePhoneNumber("aba_phone", "aba_phone_error")) {
-                const phoneNumber = document.getElementById("aba_phone").value;
-                processPayment("aba", phoneNumber);
-            }
-        });
-    }
-
-    if (processAcledaPaymentBtn) {
-        processAcledaPaymentBtn.addEventListener("click", () => {
-            if (validatePhoneNumber("acleda_phone", "acleda_phone_error")) {
-                const phoneNumber = document.getElementById("acleda_phone").value;
-                processPayment("acleda", phoneNumber);
-            }
-        });
-    }
-
-    // Handle back to customer details
-    if (backToCustomerBtn) {
-        backToCustomerBtn.addEventListener("click", () => goToStep(1));
-    }
-
-   // Handle print receipt
-if (printReceiptBtn) {
-    printReceiptBtn.addEventListener("click", () => {
-        const receiptContent = document.querySelector(".order-confirmation");
-        const printWindow = window.open("", "_blank");
-        printWindow.document.write(`
-            <html>
-                <head>
-                    <title>Xing Fu Cha Order Receipt</title>
-                    <style>
-                        body { font-family: 'Arial', sans-serif; padding: 20px; color: #333; }
-                        .order-confirmation { max-width: 700px; margin: 0 auto; }
-                        .receipt-header { text-align: center; margin-bottom: 20px; }
-                        .receipt-logo { width: 120px; margin-bottom: 10px; }
-                        h2 { font-size: 24px; color: #ff6769; }
-                        .receipt-content { border: 1px solid #ddd; border-radius: 8px; padding: 20px; }
-                        .receipt-section { margin-bottom: 20px; }
-                        h3 { font-size: 18px; color: #ff6769; border-bottom: 2px solid #ff6769; padding-bottom: 5px; }
-                        .receipt-row { display: flex; justify-content: space-between; margin: 10px 0; font-size: 14px; }
-                        .receipt-row span:first-child { font-weight: 600; }
-                        .order-item { display: flex; margin: 10px 0; border-bottom: 1px solid #eee; padding-bottom: 10px; }
-                        .order-item img { width: 80px; height: 80px; object-fit: cover; margin-right: 15px; border-radius: 4px; }
-                        .order-item-details h4 { font-size: 16px; margin: 0 0 5px; }
-                        .order-item-details p { margin: 3px 0; font-size: 13px; }
-                        .receipt-totals { border-top: 2px solid #eee; padding-top: 15px; }
-                        .receipt-total-row { display: flex; justify-content: space-between; margin: 10px 0; font-size: 14px; }
-                        .receipt-total-row.grand-total { font-weight: bold; font-size: 16px; color: #ff6769; }
-                    </style>
-                </head>
-                <body>
-                    ${receiptContent.outerHTML}
-                </body>
-            </html>
-        `);
-        printWindow.document.close();
-        printWindow.print();
-    });
-}
+    backToCustomerBtn.addEventListener("click", () => {
+        goToStep
