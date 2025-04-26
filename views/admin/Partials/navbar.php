@@ -159,7 +159,7 @@
                 </li>
 
                 <li class="nav-item dropdown no-arrow">
-                <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
+                    <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-shopping-cart"></i>
                     </a>
@@ -199,94 +199,94 @@
                 </li>
             </ul>
         </nav>
-<!-- Modal -->
-<div class="modal fade" id="adminProfileModal" tabindex="-1" role="dialog" aria-labelledby="adminProfileModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-right custom-modal-width" role="document">
-        <div class="modal-content">
-            <div class="modal-header bg-gradient-primary text-white">
-                <h5 class="modal-title" id="adminProfileModalLabel">Admin Profile</h5>
-                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
+        <!-- Modal -->
+        <div class="modal fade" id="adminProfileModal" tabindex="-1" role="dialog" aria-labelledby="adminProfileModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-right custom-modal-width" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-gradient-primary text-white">
+                        <h5 class="modal-title" id="adminProfileModalLabel">Admin Profile</h5>
+                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
 
-            <div class="modal-body">
-                <div class="text-center mb-4">
-                    <img src="/assets/image/07.jpg" class="rounded-circle profile-img shadow-sm" alt="Profile Image" width="140" height="140">
-                    <div class="mt-3">
-                        <label for="profileImageUpload" class="btn btn-sm btn-primary">
-                            <i class="fas fa-upload mr-1"></i> Change Photo
-                        </label>
-                        <input type="file" id="profileImageUpload" class="d-none" onchange="previewImage(event)">
+                    <div class="modal-body">
+                        <div class="text-center mb-4">
+                            <img src="/assets/image/07.jpg" class="rounded-circle profile-img shadow-sm" alt="Profile Image" width="140" height="140">
+                            <div class="mt-3">
+                                <label for="profileImageUpload" class="btn btn-sm btn-primary">
+                                    <i class="fas fa-upload mr-1"></i> Change Photo
+                                </label>
+                                <input type="file" id="profileImageUpload" class="d-none" onchange="previewImage(event)">
+                            </div>
+                        </div>
+
+                        <form>
+                            <div class="form-group">
+                                <label for="fullName" class="form-label">Full Name</label>
+                                <input type="text" class="form-control" id="fullName" value="Charyna Chab">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" value="admin@example.com">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="username" value="charyna_admin">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="role" class="form-label">Role</label>
+                                <input type="text" class="form-control" id="role" value="Super Admin" disabled>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="lastLogin" class="form-label">Last Login</label>
+                                <input type="text" class="form-control" id="lastLogin" value="Today, 10:45 AM" disabled>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="bio" class="form-label">Bio</label>
+                                <textarea class="form-control" id="bio" rows="3">System administrator with full access rights</textarea>
+                            </div>
+
+                            <div class="d-flex justify-content-between mt-4">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Save Changes</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
-
-                <form>
-                    <div class="form-group">
-                        <label for="fullName" class="form-label">Full Name</label>
-                        <input type="text" class="form-control" id="fullName" value="Charyna Chab">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" value="admin@example.com">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="username" class="form-label">Username</label>
-                        <input type="text" class="form-control" id="username" value="charyna_admin">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="role" class="form-label">Role</label>
-                        <input type="text" class="form-control" id="role" value="Super Admin" disabled>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="lastLogin" class="form-label">Last Login</label>
-                        <input type="text" class="form-control" id="lastLogin" value="Today, 10:45 AM" disabled>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="bio" class="form-label">Bio</label>
-                        <textarea class="form-control" id="bio" rows="3">System administrator with full access rights</textarea>
-                    </div>
-
-                    <div class="d-flex justify-content-between mt-4">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save Changes</button>
-                    </div>
-                </form>
             </div>
         </div>
-    </div>
-</div>
 
-<!-- Custom CSS -->
-<style>
-    .custom-modal-width {
-        max-width: 90%;
-        width: 90%;
-    }
+        <!-- Custom CSS -->
+        <style>
+            .custom-modal-width {
+                max-width: 90%;
+                width: 90%;
+            }
 
-    .modal-body {
-        font-size: 1.1rem;
-        padding: 2rem;
-    }
+            .modal-body {
+                font-size: 1.1rem;
+                padding: 2rem;
+            }
 
-    .modal-content {
-        border-radius: 1rem;
-    }
+            .modal-content {
+                border-radius: 1rem;
+            }
 
-    .profile-img {
-        object-fit: cover;
-        border: 4px solid #fff;
-    }
+            .profile-img {
+                object-fit: cover;
+                border: 4px solid #fff;
+            }
 
-    .bg-gradient-primary {
-        background: linear-gradient(45deg, #007bff, #6610f2);
-    }
-</style>
+            .bg-gradient-primary {
+                background: linear-gradient(45deg, #007bff, #6610f2);
+            }
+        </style>
 
 
         <script>
