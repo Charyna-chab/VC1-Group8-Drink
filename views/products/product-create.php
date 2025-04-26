@@ -52,14 +52,14 @@
                 <div class="form-floating mb-4">
                     <select class="form-select rounded-3" id="category" name="category" required>
                         <option value="">Select Category</option>
-                        <option value="milk-tea" <?= ($product['category'] ?? '') === 'milk-tea' ? 'selected' : '' ?>>
-                            Milk Tea</option>
-                        <option value="fruit-tea" <?= ($product['category'] ?? '') === 'fruit-tea' ? 'selected' : '' ?>>
-                            Fruit Tea</option>
+                        <option value="brown-sugar" <?= ($product['category'] ?? '') === 'brown-sugar' ? 'selected' : '' ?>>
+                            Brown Sugar</option>
+                        <option value="macchiato" <?= ($product['category'] ?? '') === 'macchiato' ? 'selected' : '' ?>>
+                            Macchiato</option>
                         <option value="coffee" <?= ($product['category'] ?? '') === 'coffee' ? 'selected' : '' ?>>Coffee
-                        </option>
-                        <option value="smoothie" <?= ($product['category'] ?? '') === 'smoothie' ? 'selected' : '' ?>>
-                            Smoothie</option>
+                            </option>
+                        <option value="tea" <?= ($product['category'] ?? '') === 'tea' ? 'selected' : '' ?>>
+                           Tea</option>
                         <option value="snack" <?= ($product['category'] ?? '') === 'snack' ? 'selected' : '' ?>>Snack
                         </option>
                     </select>
