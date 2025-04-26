@@ -1,11 +1,14 @@
 <?php
+
 namespace YourNamespace\Models;
 
 require_once './Database/database.php';
 
 require_once __DIR__ . '/../Database/database.php';
+
 use YourNamespace\Database\Database;
 use PDOException;
+
 class ProductModel
 {
     private $pdo;
@@ -51,42 +54,36 @@ class ProductModel
                     price = :price,
                     category = :category,
                     image = :image
-                WHERE product_id = :id";
-    
-        $stmt = $this->pdo->prepare($sql); // <-- Use $this->pdo, not $this->db
-        return $stmt->execute([
-            ':product_name' => $data['product_name'],
-            ':product_detail' => $data['product_detail'],
-            ':price' => $data['price'],
-            ':category' => $data['category'],
-            ':image' => $data['image'],
-            ':id' => $id
-        ]);
+                WHERE product_id = :product_id";
+
+        $data['product_id'] = $id;
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute($data);
     }
-    
-    
+
+
 
     public function deleteProduct($id)
-{
-    try {
-        // Start transaction in case we need to rollback
-        $this->pdo->beginTransaction();
-        
-        // First delete any related records (like in order_items table)
-        // $this->pdo->prepare("DELETE FROM order_items WHERE product_id = ?")->execute([$id]);
-        
-        // Then delete the product
-        $stmt = $this->pdo->prepare("DELETE FROM products WHERE product_id = ?");
-        $result = $stmt->execute([$id]);
-        
-        $this->pdo->commit();
-        return $result;
-    } catch (PDOException $e) {
-        $this->pdo->rollBack();
-        error_log("Delete product error: " . $e->getMessage());
-        return false;
+    {
+        try {
+            // Start transaction in case we need to rollback
+            $this->pdo->beginTransaction();
+
+            // First delete any related records (like in order_items table)
+            // $this->pdo->prepare("DELETE FROM order_items WHERE product_id = ?")->execute([$id]);
+
+            // Then delete the product
+            $stmt = $this->pdo->prepare("DELETE FROM products WHERE product_id = ?");
+            $result = $stmt->execute([$id]);
+
+            $this->pdo->commit();
+            return $result;
+        } catch (PDOException $e) {
+            $this->pdo->rollBack();
+            error_log("Delete product error: " . $e->getMessage());
+            return false;
+        }
     }
-}
 
     public function getTotalProducts()
     {
