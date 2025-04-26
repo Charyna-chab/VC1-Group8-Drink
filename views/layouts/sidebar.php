@@ -37,14 +37,14 @@ $cart_count = isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0;
                 </a>
                 <div class="settings-dropdown">
                     <div class="role-info">
-                        <p><strong>Current Access:</strong> 
+                        <p><strong>Access:</strong> 
                             <span class="role-badge <?php echo isset($user_role) ? $user_role : 'guest'; ?>">
                                 <?php echo isset($user_role) ? ucfirst($user_role) : 'Guest'; ?>
                             </span>
                         </p>
                         <div class="role-actions">
-                            <a href="/logout" class="role-switch-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
-                            <a href="/admin-login" class="role-switch-btn"><i class="fas fa-user-shield"></i> Admin Login</a>
+                            <a href="/logout" class="role-switch-btn-logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                            <a href="/admin-login" class="role-switch-btn-admin"><i class="fas fa-user-shield"></i> Admin Login</a>
                         </div>
                     </div>
                 </div>
@@ -272,7 +272,14 @@ $cart_count = isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0;
         margin-right: 8px;
         font-size: 14px;
     }
-
+    .role-switch-btn-logout{
+     position: relative;
+     top: 0.5px;
+    }
+    .role-switch-btn-admin{
+     position: relative;
+     top: 2px;;
+    }
     /* User Section Styles */
     .user-section {
         margin-top: auto;
