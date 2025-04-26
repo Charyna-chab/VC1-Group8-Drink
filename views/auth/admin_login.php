@@ -167,7 +167,6 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user']['role']) && $_SESSION
       margin-bottom: 20px;
     }
     
-    /* NEW STYLES FOR USER LOGIN BUTTON */
     .user-login-btn {
       position: absolute;
       top: 20px;
@@ -224,13 +223,11 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user']['role']) && $_SESSION
   </style>
 </head>
 <body>
-  <!-- NEW USER LOGIN BUTTON ADDED HERE -->
   <a href="/login" class="user-login-btn">
     <i class="fas fa-sign-in-alt"></i> User Login
   </a>
 
   <div class="login-card">
-    <!-- Left side - Form -->
     <div class="form-side">
       <div class="login-header">
         <img src="/assets/image/logo/logo.png" alt="XING FU CHA Logo">
@@ -273,7 +270,6 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user']['role']) && $_SESSION
       </div>
     </div>
     
-    <!-- Right side - Image area -->
     <div class="image-side">
       <div class="image-overlay"></div>
       <div class="image-content">
@@ -282,10 +278,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user']['role']) && $_SESSION
     </div>
   </div>
 
-  <!-- Bootstrap JS Bundle with Popper -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    // Toggle password visibility
     document.querySelectorAll('.password-toggle').forEach(function(button) {
       button.addEventListener('click', function() {
         const passwordInput = this.closest('.position-relative').querySelector('input');
