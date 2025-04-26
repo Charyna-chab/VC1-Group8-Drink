@@ -43,32 +43,6 @@ $currentPage = basename($_SERVER['REQUEST_URI']);
     </li>
     <hr class="sidebar-divider">
 
-    <li class="nav-item <?= $currentPage == 'topping' ? 'active-page' : '' ?>">
-        <a class="nav-link" href="/admin/toppings">
-            <i class="fas fa-fw fa-folder"></i>
-            <span>Toppings</span>
-        </a>
-    </li>
-    <hr class="sidebar-divider">
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="/order">
-            <i class="fas fa-shopping-cart" style="color: black !important;"></i>
-            <span>Orders</span>
-        </a>
-    </li>
-
-    <hr class="sidebar-divider">
-
-    <!-- Nav Item - Receipts -->
-    <li class="nav-item <?= $currentPage == 'receipt' ? 'active-page' : '' ?>">
-        <a class="nav-link" href="/receipt">
-            <i class="fas fa-receipt"></i>
-            <span>Receipts</span>
-        </a>
-    </li>
-
-    <hr class="sidebar-divider">
-
     <!-- Nav Item - Feedback -->
     <li class="nav-item <?= $currentPage == 'feedback' ? 'active-page' : '' ?>">
         <a class="nav-link" href="/admin/feedback">
