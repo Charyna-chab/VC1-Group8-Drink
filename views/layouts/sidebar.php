@@ -18,7 +18,6 @@ $cart_count = isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0;
             <li style="margin-bottom: 16px;"><a href="/order"><i class="fas fa-mug-hot" style="color: #ff5e62;"></i> Order drink</a></li>
             <li style="margin-bottom: 16px;"><a href="/booking"><i class="fas fa-calendar-check" style="color: #ff5e62;"></i> Booking</a></li>
             <li style="margin-bottom: 16px;"><a href="/favorites"><i class="fas fa-heart" style="color: #ff5e62;"></i> Favorite</a></li>
-            <li style="margin-bottom: 16px;"><a href="/feedback"><i class="fas fa-comment-alt" style="color: #ff5e62;"></i> Feedback</a></li>
             <li style="margin-bottom: 16px;">
                 <a href="/checkout">
                     <i class="fas fa-shopping-cart" style="color: #ff5e62;"></i> 
@@ -260,7 +259,7 @@ $cart_count = isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0;
         text-decoration: none;
         padding: 8px 0;
         transition: all 0.2s;
-        margin-bottom: 5px;
+        margin-bottom: 25px;
     }
 
     .role-actions a:hover {
