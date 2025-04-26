@@ -43,10 +43,10 @@ if (!isset($products)) {
     <!-- Menu Categories -->
     <div class="menu-categories">
         <button class="category-btn active" data-category="all">All Drinks</button>
-        <button class="category-btn" data-category="milk-tea">Milk Tea</button>
-        <button class="category-btn" data-category="fruit-tea">Fruit Tea</button>
-        <button class="category-btn" data-category="smoothie">Smoothies</button>
+        <button class="category-btn" data-category="brown-sugar">Brown Sugar</button>
+        <button class="category-btn" data-category="macchiato">Macchiato</button>
         <button class="category-btn" data-category="coffee">Coffee</button>
+        <button class="category-btn" data-category="tea">Tea</button>
         <button class="category-btn" data-category="snack">Snacks</button>
     </div>
 
