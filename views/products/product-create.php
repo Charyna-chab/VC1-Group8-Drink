@@ -93,9 +93,7 @@
         </div>
     </div>
 </div>
-
 <?php require_once __DIR__ . '/../layouts/footer.php'; ?>
-
 <!-- JS for Live Image Preview -->
 <script>
 const imageInput = document.getElementById('imageInput');
@@ -116,3 +114,4 @@ imageInput.addEventListener('change', function() {
     }
 });
 </script>
+
