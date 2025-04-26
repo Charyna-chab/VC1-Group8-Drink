@@ -1680,8 +1680,8 @@ document.addEventListener("DOMContentLoaded", () => {
             {
                 id: "phone",
                 errorId: "phone_error",
-                message: "Valid phone number is required (10-15 digits)",
-                pattern: /^\+?\d{10,15}$/,
+                message: "Valid phone number is required (8-15 digits)",
+                pattern: /^\+?\d{8,15}$/,
             },
             { id: "address", errorId: "address_error", message: "Delivery address is required", pattern: /.+/ },
         ];
@@ -1719,14 +1719,6 @@ document.addEventListener("DOMContentLoaded", () => {
             errorMessages.push("Map not initialized or invalid location");
         } else {
             addressSearchError.textContent = "";
-        }
-
-        // Log validation errors for debugging
-        if (!isValid) {
-            console.log("Form validation failed:", errorMessages);
-            showToast("Validation Error", "Please fix the errors in the form: " + errorMessages.join(", "), "error");
-        } else {
-            console.log("Form validation passed!");
         }
 
         return isValid;
