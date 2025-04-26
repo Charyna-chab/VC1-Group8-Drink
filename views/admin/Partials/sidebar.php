@@ -42,15 +42,6 @@ $currentPage = basename($_SERVER['REQUEST_URI']);
         </a>
     </li>
     <hr class="sidebar-divider">
-
-    <!-- Nav Item - Feedback -->
-    <li class="nav-item <?= $currentPage == 'feedback' ? 'active-page' : '' ?>">
-        <a class="nav-link" href="/admin/feedback">
-            <i class="fas fa-comment-alt feedback-icon"></i>
-            <span>Feedback</span>
-        </a>
-    </li>
-
     <!-- Nav Item - Order List -->
     <li class="nav-item <?= $currentPage == 'order-list' ? 'active-page' : '' ?>">
         <a class="nav-link" href="/admin/orders">
