@@ -160,6 +160,7 @@ $route->post("/admin/products/update/{id}", [ProductController::class, 'update']
 $route->post("/admin/products/delete/{id}", [ProductController::class, 'delete']);
 
 
+
 // Admin User Management
 // Fix the user routes to match your controller's expectations
 $route->get("/admin/users", [UserController::class, 'index']);
