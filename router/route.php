@@ -28,6 +28,7 @@ require_once "./controllers/Admin/DashboardController.php";
 require_once "./controllers/Admin/AdminReceiptController.php"; // Fixed path
 require_once __DIR__ . '/../controllers/Customer/ToppingController.php';
 require_once "controllers/ProfileController.php"; // Add this line for ProfileController
+require_once __DIR__ . '/../controllers/WelcomeController.php';
 
 use YourNamespace\Router;
 use YourNamespace\Controllers\WelcomeController;
@@ -158,13 +159,6 @@ $route->get("/admin/products/edit/{id}", [ProductController::class, 'edit']);
 $route->post("/admin/products/update/{id}", [ProductController::class, 'update']);
 $route->post("/admin/products/delete/{id}", [ProductController::class, 'delete']);
 
-// Admin Topping Management Routes
-$route->get("/admin/toppings", [ToppingController::class, 'index']);
-$route->get("/admin/toppings/create", [ToppingController::class, 'create']);
-$route->post("/admin/toppings/store", [ToppingController::class, 'store']);
-$route->get("/admin/toppings/edit/{id}", [ToppingController::class, 'edit']);
-$route->post("/admin/toppings/update/{id}", [ToppingController::class, 'update']);
-$route->post("/admin/toppings/delete/{id}", [ToppingController::class, 'destroy']);
 
 // Admin User Management
 // Fix the user routes to match your controller's expectations
@@ -175,19 +169,7 @@ $route->get("/admin/users/edit/{id}", [UserController::class, 'edit']);
 $route->post("/admin/users/update/{id}", [UserController::class, 'update']);
 $route->post("/admin/users/delete", [UserController::class, 'destroy']);
 
-// Admin Feedback Management
-$route->get("/admin/feedback", [FeedbackController::class, 'index']);
-$route->get("/admin/feedback/create", [FeedbackController::class, 'create']);
-$route->post("/admin/feedback/store", [FeedbackController::class, 'store']);
-$route->get("/admin/feedback/edit/{id}", [FeedbackController::class, 'edit']);
-$route->post("/admin/feedback/update/{id}", [FeedbackController::class, 'update']);
-$route->post("/admin/feedback/delete/{id}", [FeedbackController::class, 'delete']);
 
-// Admin Order List
-$route->get("/admin/orders", [OrderListController::class, 'index']);
-$route->get("/admin/orders/details/{id}", [OrderListController::class, 'details']);
-$route->post("/admin/orders/update-status/{id}", [OrderListController::class, 'updateStatus']);
-$route->post("/admin/orders/delete/{id}", [OrderListController::class, 'delete']);
-$route->get("/admin/orders/export-csv", [OrderListController::class, 'exportCSV']); // New route for CSV export
+
 
 $route->route();
