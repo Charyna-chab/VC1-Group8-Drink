@@ -7,7 +7,7 @@ require_once "Router.php";
 
 require_once "controllers/BaseController.php";
 require_once "controllers/WelcomeController.php";
-require_once __DIR__ . "/..controllers/FavoritesController.php";
+require_once __DIR__ . "/../controllers/FavoritesController.php";
 require_once "controllers/SettingsController.php";
 require_once "controllers/Customer/OrdersController.php";
 require_once "controllers/BookingController.php";
