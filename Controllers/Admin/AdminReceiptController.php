@@ -1,8 +1,8 @@
 <?php
 namespace YourNamespace\Controllers\Admin;
 
-require_once './controllers/BaseController.php';
-require_once './models/ReceiptModel.php';
+require_once __DIR__ . '/../../controllers/BaseController.php';
+require_once __DIR__ . '/../../models/ReceiptModel.php';
 
 use YourNamespace\BaseController;
 
@@ -12,30 +12,33 @@ class AdminReceiptController extends BaseController
 
     function __construct()
     {
-        // Make sure sessions are started if you're using $_SESSION
+        // Start the session if not already started
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
         }
 
-        // Check if user is admin
+        // Check if the user is an admin
         if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
             $_SESSION['error'] = "You don't have permission to access this page.";
             header('Location: /login');
             exit;
         }
 
+        // Initialize the ReceiptModel
         $this->model = new \ReceiptModel();
         
-        // Create receipts table if it doesn't exist
+        // Ensure the receipts table exists
         $this->model->createReceiptsTableIfNotExists();
     }
 
+    // Index function for listing all receipts
     function index()
     {
         $receipts = $this->model->getAllReceipts();
         $this->views('admin/receipts/receipt-list', ['receipts' => $receipts, 'title' => 'Receipt Management']);
     }
 
+    // Function to download receipt details
     function download($id = null)
     {
         if (!$id && isset($_GET['id'])) {
@@ -59,6 +62,7 @@ class AdminReceiptController extends BaseController
         $this->views('admin/receipts/receipt-download', ['receipt' => $receipt, 'title' => 'Receipt Details']);
     }
     
+    // Function to delete a receipt
     function delete($id = null)
     {
         if (!$id && isset($_GET['id'])) {
@@ -71,7 +75,7 @@ class AdminReceiptController extends BaseController
             return;
         }
         
-        // If it's a POST request, delete the receipt
+        // Handle POST request for deleting the receipt
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $result = $this->model->deleteReceipt($id);
             
@@ -97,16 +101,23 @@ class AdminReceiptController extends BaseController
         $this->views('admin/receipts/receipt-delete', ['receipt' => $receipt, 'title' => 'Delete Receipt']);
     }
     
-    // Add a new method to export receipts to CSV
+    // Export receipts to CSV
     function exportCSV() 
     {
         $receipts = $this->model->getAllReceipts();
+        
+        // If no receipts available, show an error
+        if (empty($receipts)) {
+            $_SESSION['error'] = "No receipts available for export.";
+            $this->redirect('/admin/receipts');
+            return;
+        }
         
         // Set headers for CSV download
         header('Content-Type: text/csv');
         header('Content-Disposition: attachment; filename="receipts_export_' . date('Y-m-d') . '.csv"');
         
-        // Open output stream
+        // Open the output stream
         $output = fopen('php://output', 'w');
         
         // Add CSV headers
