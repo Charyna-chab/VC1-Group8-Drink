@@ -221,6 +221,7 @@
                                         <th>Image</th>
                                         <th>Product Name</th>
                                         <th>Product Detail</th>
+                                        <th>Quantity</th>
                                         <th>Price</th>
                                         <th>Category</th>
                                         <th>Action</th>
@@ -236,6 +237,7 @@
                                             </td>
                                             <td class="product-name"><?= htmlspecialchars($product['product_name']) ?></td>
                                             <td class="product-detail"><?= htmlspecialchars($product['product_detail']) ?></td>
+                                            <td class="quantity"><?= htmlspecialchars($product['quantity']) ?></td>
                                             <td>$<?= htmlspecialchars($product['price']) ?></td>
                                             <td><?= htmlspecialchars($product['category']) ?></td>
                                             <td>

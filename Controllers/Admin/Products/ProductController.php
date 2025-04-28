@@ -53,6 +53,7 @@ class ProductController extends BaseController
                 'price' => $_POST['price'],
                 'image' => $uploadFile,
                 'category' => $_POST['category'], // Add category to data array
+                'quantity' => $_POST['quantity'],
             ];
 
             $this->model->createProduct($data);
@@ -89,6 +90,7 @@ class ProductController extends BaseController
         $product_detail = $_POST['product_detail'];
         $price = $_POST['price'];
         $category = $_POST['category'];
+        $quantity = $_POST['quantity'];
         $existing_image = $_POST['existing_image'];
 
         // Handle file upload
@@ -118,6 +120,7 @@ class ProductController extends BaseController
             'product_detail' => $product_detail,
             'price' => $price,
             'category' => $category,
+            'quantity' => $quantity,
             'image' => $image,
         ];
 

@@ -29,8 +29,8 @@ class ProductModel
     public function createProduct($data)
 {
     try {
-        $query = "INSERT INTO products (product_name, product_detail, price, image, category)
-                  VALUES (:product_name, :product_detail, :price, :image, :category)";
+        $query = "INSERT INTO products (product_name, product_detail, price, image, category,quantity)
+                  VALUES (:product_name, :product_detail, :price, :image, :category,:quantity)";
         $stmt = $this->pdo->prepare($query);
         return $stmt->execute($data);
     } catch (PDOException $e) {
@@ -53,6 +53,7 @@ class ProductModel
                     product_detail = :product_detail,
                     price = :price,
                     category = :category,
+                    quantity = :quantity,
                     image = :image
                 WHERE product_id = :product_id";
 

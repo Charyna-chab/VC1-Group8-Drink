@@ -46,6 +46,12 @@
                         value="<?= $product['price'] ?>" required>
                     <label for="price">Price ($)</label>
                 </div>
+                <!-- Quantity -->
+                <div class="form-floating mb-4">
+                    <input type="number"  class="form-control rounded-3" id="quantity" name="quantity"
+                        value="<?= $product['quantity'] ?>" required>
+                    <label for="quantity">Quantity</label>
+                </div>
 
                 <!-- Category -->
                 <div class="form-floating mb-4">
