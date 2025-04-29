@@ -1,56 +1,114 @@
 <?php require_once __DIR__ . '/../admin/Partials/header.php'; ?>
 
-<div class="d-flex justify-content-center">
-    <div class="card shadow mb-4" style="width: 50%; border-radius: 0.75rem;">
-        <div class="card-body">
-            <div class="container">
-                <h4 class="mb-4 text-primary text-center">Edit Product</h4>
-                <form action="/admin/products/update/<?= $product['product_id'] ?>" method="POST" enctype="multipart/form-data">
-                    <input type="hidden" name="product_id" value="<?= $product['product_id'] ?>">
+<div class="container py-5">
+    <div class="card shadow-lg mx-auto" style="max-width: 700px; border-radius: 1rem;">
+        <div class="card-body px-5 py-4">
+            <h3 class="text-center text-primary mb-4">Edit Product</h3>
 
-                    <div class="form-group mb-3 col">
-                        <label for="product_name" class="form-label">Name:</label>
-                        <input type="text" value="<?= htmlspecialchars($product['product_name']) ?>" name="product_name" class="form-control rounded-pill" required>
-                    </div>
+            <form action="/admin/products/update/<?= $product['product_id'] ?>" method="POST"
+                enctype="multipart/form-data">
+                <input type="hidden" name="product_id" value="<?= $product['product_id'] ?>">
 
-                    <div class="form-group mb-3 col">
-                        <label for="product_detail" class="form-label">Product Detail:</label>
-                        <input type="text" value="<?= htmlspecialchars($product['product_detail']) ?>" name="product_detail" class="form-control rounded-pill" required>
-                    </div>
+                <!-- Flash Messages -->
+                <?php if (isset($_SESSION['success'])): ?>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <?= htmlspecialchars($_SESSION['success']) ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <?php unset($_SESSION['success']); ?>
+                <?php endif; ?>
 
-                    <div class="form-group mb-3 col">
-                        <label for="price" class="form-label">Price:</label>
-                        <input type="number" value="<?= $product['price'] ?>" name="price" class="form-control rounded-pill" step="0.01" required>
-                    </div>
+                <?php if (isset($_SESSION['error'])): ?>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <?= htmlspecialchars($_SESSION['error']) ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <?php unset($_SESSION['error']); ?>
+                <?php endif; ?>
 
-                    <div class="form-group mb-3 col">
-                        <label for="category" class="form-label">Category:</label>
-                        <select name="category" class="form-control rounded-pill" required>
-                            <option value="milk-tea" <?= $product['category'] === 'milk-tea' ? 'selected' : '' ?>>Milk Tea</option>
-                            <option value="fruit-tea" <?= $product['category'] === 'fruit-tea' ? 'selected' : '' ?>>Fruit Tea</option>
-                            <option value="coffee" <?= $product['category'] === 'coffee' ? 'selected' : '' ?>>Coffee</option>
-                            <option value="smoothie" <?= $product['category'] === 'smoothie' ? 'selected' : '' ?>>Smoothie</option>
-                        </select>
-                    </div>
+                <!-- Name -->
+                <div class="form-floating mb-4">
+                    <input type="text" class="form-control rounded-3" id="product_name" name="product_name"
+                        value="<?= htmlspecialchars($product['product_name']) ?>" required>
+                    <label for="product_name">Product Name</label>
+                </div>
 
-                    <div class="form-group mb-3 col">
-                        <label for="image" class="form-label">Product Image:</label>
-                        <input type="file" name="image" class="form-control rounded-pill">
-                        <input type="hidden" name="existing_image" value="<?= $product['image'] ?>">
+                <!-- Detail -->
+                <div class="form-floating mb-4">
+                    <textarea class="form-control rounded-3" id="product_detail" name="product_detail" rows="4" required
+                        style="height: 120px;"><?= htmlspecialchars($product['product_detail']) ?></textarea>
+                    <label for="product_detail">Product Detail</label>
+                </div>
+
+                <!-- Price -->
+                <div class="form-floating mb-4">
+                    <input type="number" step="0.01" class="form-control rounded-3" id="price" name="price"
+                        value="<?= $product['price'] ?>" required>
+                    <label for="price">Price ($)</label>
+                </div>
+
+                <!-- Category -->
+                <div class="form-floating mb-4">
+                    <select class="form-select rounded-3" id="category" name="category" required>
+                        <option value="milk-tea" <?= $product['category'] === 'milk-tea' ? 'selected' : '' ?>>Milk Tea
+                        </option>
+                        <option value="fruit-tea" <?= $product['category'] === 'fruit-tea' ? 'selected' : '' ?>>Fruit
+                            Tea</option>
+                        <option value="coffee" <?= $product['category'] === 'coffee' ? 'selected' : '' ?>>Coffee
+                        </option>
+                        <option value="smoothie" <?= $product['category'] === 'smoothie' ? 'selected' : '' ?>>Smoothie
+                        </option>
+                        <option value="snack" <?= $product['category'] === 'snack' ? 'selected' : '' ?>>Snack</option>
+                    </select>
+                    <label for="category">Category</label>
+                </div>
+
+                <!-- Image Upload -->
+                <!-- Product Image -->
+                <div class="mb-4">
+                    <label for="image" class="form-label fw-semibold">Product Image</label>
+                    <input type="file" name="image" class="form-control rounded-pill" accept="image/*" id="imageInput">
+                    <input type="hidden" name="existing_image" value="<?= htmlspecialchars($product['image']) ?>">
+                    <small class="text-muted">Leave blank to keep the current image.</small>
+
+                    <!-- Image Preview -->
+                    <div class="mt-3 text-center" id="previewWrapper">
                         <?php if (!empty($product['image'])): ?>
-                            <div class="mt-2 text-center">
-                                <img src="/uploads/<?= htmlspecialchars($product['image']) ?>" alt="Current Image" style="max-width: 100px; border-radius: 8px;">
-                                <p class="small text-muted mt-1">Current image</p>
-                            </div>
+                        <img src="/uploads/<?= htmlspecialchars($product['image']) ?>" id="imagePreview"
+                            class="img-fluid rounded" style="max-height: 160px;">
+                        <p class="text-muted small mt-1">Current Image</p>
+                        <?php else: ?>
+                        <img id="imagePreview" class="img-fluid rounded d-none" style="max-height: 160px;">
                         <?php endif; ?>
                     </div>
+                </div>
 
-                    <div class="text-center">
-                        <button type="submit" class="btn btn-success mt-3 rounded-pill px-4">Update Product</button>
-                        <a href="/product" class="btn btn-danger mt-3 rounded-pill px-4 ">Cancel</a>
-                    </div>
-                </form>
-            </div>
+
+                <!-- Action Buttons -->
+                <div class="d-flex justify-content-center gap-3 mt-4">
+                    <button type="submit" class="btn btn-success rounded-pill px-4">Update</button>
+                    <a href="/product" class="btn btn-outline-danger rounded-pill px-4">Cancel</a>
+                </div>
+            </form>
         </div>
     </div>
 </div>
+
+<?php require_once __DIR__ . '/../layouts/footer.php'; ?>
+<script>
+document.getElementById('imageInput').addEventListener('change', function (e) {
+    const file = e.target.files[0];
+    const preview = document.getElementById('imagePreview');
+
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            preview.src = e.target.result;
+            preview.classList.remove('d-none');
+        };
+        reader.readAsDataURL(file);
+    }
+});
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

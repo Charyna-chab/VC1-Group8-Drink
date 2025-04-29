@@ -25,6 +25,7 @@
     <script src="/assets/js/payment.js"></script>
     <script src="/assets/js/receipt.js"></script>
     <script src="/assets/js/cash-payment.js"></script>
+    <script src="/assets/js/utils.js"></script>
 
 </body>
 </html>

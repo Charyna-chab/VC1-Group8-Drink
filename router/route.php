@@ -25,7 +25,8 @@ require_once "controllers/CheckoutController.php"; // Add this line
 require_once __DIR__ . '/../controllers/Admin/Users/UserController.php';
 require_once './controllers/Admin/Products/ProductController.php';
 require_once "./controllers/Admin/DashboardController.php";
-require_once "./controllers/Admin/AdminReceiptController.php";
+require_once "./controllers/Admin/AdminReceiptController.php"; // Fixed path
+require_once __DIR__ . '/../controllers/Customer/ToppingController.php';
 require_once "controllers/ProfileController.php"; // Add this line for ProfileController
 require_once __DIR__ . '/../controllers/Admin/OrderListController.php'; // Fixed path for OrderListController
 
@@ -53,6 +54,7 @@ use YourNamespace\Controllers\ProfileController; // Add this line
 use YourNamespace\Controllers\Admin\AdminReceiptController; // Fixed namespace
 use YourNamespace\Controllers\Admin\OrderListController; // Ensure namespace matches the actual class definition
 
+use YourNamespace\Controllers\Admin\Products\ToppingController; // Fixed namespace
 
 $route = new Router();
 
@@ -158,10 +160,16 @@ $route->get("/admin/products/edit/{id}", [ProductController::class, 'edit']);
 $route->post("/admin/products/update/{id}", [ProductController::class, 'update']);
 $route->post("/admin/products/delete/{id}", [ProductController::class, 'delete']);
 
-// Fix the user routes to match your controller's expectations
-$route->post("/admin/products/delete/{id}", [ProductController::class, 'destroy']);
+// Admin Topping Management Routes
+$route->get("/admin/toppings", [ToppingController::class, 'index']);
+$route->get("/admin/toppings/create", [ToppingController::class, 'create']);
+$route->post("/admin/toppings/store", [ToppingController::class, 'store']);
+$route->get("/admin/toppings/edit/{id}", [ToppingController::class, 'edit']);
+$route->post("/admin/toppings/update/{id}", [ToppingController::class, 'update']);
+$route->post("/admin/toppings/delete/{id}", [ToppingController::class, 'destroy']);
 
 // Admin User Management
+// Fix the user routes to match your controller's expectations
 $route->get("/admin/users", [UserController::class, 'index']);
 $route->get("/admin/users/create", [UserController::class, 'create']);
 $route->post("/admin/users/store", [UserController::class, 'store']);

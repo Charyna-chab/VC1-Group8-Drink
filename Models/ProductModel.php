@@ -22,17 +22,19 @@ class ProductModel
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
+   
     public function createProduct($data)
-    {
-        try {
-            $query = "INSERT INTO products (product_name, product_detail, price, image)
-                      VALUES (:product_name, :product_detail, :price, :image)";
-            $stmt = $this->pdo->prepare($query);
-            return $stmt->execute($data);
-        } catch (PDOException $e) {
-            die("Database error: " . $e->getMessage());
-        }
+{
+    try {
+        $query = "INSERT INTO products (product_name, product_detail, price, image, category)
+                  VALUES (:product_name, :product_detail, :price, :image, :category)";
+        $stmt = $this->pdo->prepare($query);
+        return $stmt->execute($data);
+    } catch (PDOException $e) {
+        die("Database error: " . $e->getMessage());
     }
+}
+
 
     public function getProduct($id)
     {
@@ -65,22 +67,26 @@ class ProductModel
     
 
     public function deleteProduct($id)
-    {
-        $stmt = $this->pdo->prepare("DELETE FROM products WHERE product_id = :product_id");
-        return $stmt->execute(['product_id' => $id]);
+{
+    try {
+        // Start transaction in case we need to rollback
+        $this->pdo->beginTransaction();
+        
+        // First delete any related records (like in order_items table)
+        // $this->pdo->prepare("DELETE FROM order_items WHERE product_id = ?")->execute([$id]);
+        
+        // Then delete the product
+        $stmt = $this->pdo->prepare("DELETE FROM products WHERE product_id = ?");
+        $result = $stmt->execute([$id]);
+        
+        $this->pdo->commit();
+        return $result;
+    } catch (PDOException $e) {
+        $this->pdo->rollBack();
+        error_log("Delete product error: " . $e->getMessage());
+        return false;
     }
-
-    public function getTotalPrice()
-    {
-        try {
-            $stmt = $this->pdo->query("SELECT SUM(price) AS total_price FROM products");
-            $result = $stmt->fetch(\PDO::FETCH_ASSOC);
-            return $result['total_price'] ?? 0;
-        } catch (PDOException $e) {
-            // Handle exception
-            return 0;
-        }
-    }
+}
 
     public function getTotalProducts()
     {

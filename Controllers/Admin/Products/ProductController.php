@@ -7,6 +7,7 @@ require_once './controllers/BaseController.php';
 
 use YourNamespace\Models\ProductModel; // Keep this
 use YourNamespace\BaseController; // Keep this
+use PDOException; // Add this to import PDOException
 
 class ProductController extends BaseController
 {
@@ -34,31 +35,34 @@ class ProductController extends BaseController
     }
 
     public function store()
-    {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $uploadDir = 'uploads/product/';
-            if (!is_dir($uploadDir)) {
-                mkdir($uploadDir, 0777, true);
-            }
+{
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $uploadDir = 'uploads/product/';
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
 
-            $imageName = basename($_FILES['image']['name']);
-            $uploadFile = $uploadDir . $imageName;
+        $imageName = basename($_FILES['image']['name']);
+        $uploadFile = $uploadDir . $imageName;
 
-            if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadFile)) {
-                $data = [
-                    'product_name' => $_POST['product_name'],
-                    'product_detail' => $_POST['product_detail'],
-                    'price' => $_POST['price'],
-                    'image' => $uploadFile,
-                ];
+        // Check if file uploaded successfully
+        if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadFile)) {
+            $data = [
+                'product_name' => $_POST['product_name'],
+                'product_detail' => $_POST['product_detail'],
+                'price' => $_POST['price'],
+                'image' => $uploadFile,
+                'category' => $_POST['category'], // Add category to data array
+            ];
 
-                $this->model->createProduct($data);
-                $this->redirect('/product');
-            } else {
-                die("Failed to upload the image.");
-            }
+            $this->model->createProduct($data);
+            $this->redirect('/product');
+        } else {
+            die("Failed to upload the image.");
         }
     }
+}
+
 
     public function edit($id)
     {
@@ -133,35 +137,41 @@ class ProductController extends BaseController
 
 
 
-    function delete($id)
-    {
-        if (!is_numeric($id)) {
-            $_SESSION['error'] = 'Invalid product ID!';
+public function delete($id)
+{
+    if (!is_numeric($id)) {
+        $_SESSION['error'] = 'Invalid product ID!';
+        return $this->redirect('/product');
+    }
+
+    try {
+        // First check if product exists
+        $product = $this->model->getProduct($id);
+        if (!$product) {
+            $_SESSION['error'] = 'Product not found!';
             return $this->redirect('/product');
         }
 
-        if ($this->model->deleteProduct($id)) {
+        // Delete the product image if exists
+        if (!empty($product['image'])){
+            $imagePath = __DIR__ . '/../../public/' . $product['image'];
+            if (file_exists($imagePath)) {
+                unlink($imagePath);
+            }
+        }
+
+        // Delete from database
+        $deleted = $this->model->deleteProduct($id);
+        
+        if ($deleted) {
             $_SESSION['success'] = 'Product deleted successfully!';
         } else {
             $_SESSION['error'] = 'Failed to delete product!';
         }
-
-        $this->redirect('/product');
+    } catch (PDOException $e) {
+        $_SESSION['error'] = 'Database error: ' . $e->getMessage();
     }
 
-    public function destroy($id)
-    {
-        if (!is_numeric($id)) {
-            $_SESSION['error'] = 'Invalid product ID!';
-            return $this->redirect('/product');
-        }
-
-        if ($this->model->deleteProduct($id)) {
-            $_SESSION['success'] = 'Product deleted successfully!';
-        } else {
-            $_SESSION['error'] = 'Failed to delete product!';
-        }
-
-        $this->redirect('/product');
-    }
+    return $this->redirect('/product');
+}
 }
