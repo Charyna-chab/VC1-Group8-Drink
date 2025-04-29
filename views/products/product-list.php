@@ -190,7 +190,7 @@
         }
     </style>
 </head>
-
+<?php require './views/admin/Partials/header.php' ?>
 <body id="page-top">
     <div id="wrapper">
         <?php require_once __DIR__ . '/../admin/Partials/sidebar.php'; ?>
