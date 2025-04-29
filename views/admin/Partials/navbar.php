@@ -12,38 +12,13 @@ if (file_exists($admin_data_file)) {
         $_SESSION['user']['avatar'] = $admin_data[$admin_id]['avatar'];
     }
 } else {
-    // If the JSON file doesn't exist, set a default avatar
+    // If the JSON file doesn't exist, ensure the session has a default avatar
     if (!isset($_SESSION['user']['avatar'])) {
-        $_SESSION['user']['avatar'] = '/assets/image/default_avatar.jpg';
+        $_SESSION['user']['avatar'] = '/assets/image/07.jpg';
     }
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - XING FU CHA</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        /* Add any additional styles if needed */
-        .img-profile {
-            transition: transform 0.3s ease;
-        }
-        .img-profile:hover {
-            transform: scale(1.1);
-        }
-        .profile-img {
-            transition: transform 0.3s ease;
-        }
-        .profile-img:hover {
-            transform: scale(1.05);
-        }
-    </style>
-</head>
-<body>
 <!-- Content Wrapper -->
 <div id="content-wrapper" class="d-flex flex-column">
     <!-- Main Content -->
@@ -64,6 +39,7 @@ if (file_exists($admin_data_file)) {
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-search fa-fw text-gray-600"></i>
                         </a>
+                        <!-- Dropdown - Messages -->
                         <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
                             aria-labelledby="searchDropdown">
                             <form class="form-inline mr-auto w-100 navbar-search">
@@ -86,8 +62,10 @@ if (file_exists($admin_data_file)) {
                         <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-bell fa-fw text-gray-600"></i>
+                            <!-- Counter - Alerts -->
                             <span class="badge badge-danger badge-counter">3+</span>
                         </a>
+                        <!-- Dropdown - Alerts -->
                         <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                             aria-labelledby="alertsDropdown">
                             <h6 class="dropdown-header bg-primary text-white">
@@ -135,8 +113,10 @@ if (file_exists($admin_data_file)) {
                         <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-envelope fa-fw text-gray-600"></i>
+                            <!-- Counter - Messages -->
                             <span class="badge badge-danger badge-counter">7</span>
                         </a>
+                        <!-- Dropdown - Messages -->
                         <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                             aria-labelledby="messagesDropdown">
                             <h6 class="dropdown-header bg-primary text-white">
@@ -209,11 +189,13 @@ if (file_exists($admin_data_file)) {
                                 <span class="text-dark font-weight-semibold">
                                     <?php echo htmlspecialchars($_SESSION['user']['name'] ?? 'Admin User'); ?>
                                 </span>
+                                <!-- Email display remains removed -->
                             </div>
                             <img class="img-profile rounded-circle border border-2 border-primary shadow-sm"
-                                src="<?php echo htmlspecialchars($_SESSION['user']['avatar'] ?? '/assets/image/default_avatar.jpg'); ?>"
-                                style="width: 40px; height: 40px; object-fit: cover;" id="topbarProfilePic">
+                                src="<?php echo htmlspecialchars($_SESSION['user']['avatar'] ?? '/assets/image/07.jpg'); ?>"
+                                style="width: 40px; height: 40px; object-fit: cover;">
                         </a>
+                        <!-- Dropdown - User Information -->
                         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                             aria-labelledby="userDropdown">
                             <a class="dropdown-item" href="#" data-toggle="modal" data-target="#adminProfileModal">
@@ -253,14 +235,14 @@ if (file_exists($admin_data_file)) {
                         <div class="modal-body p-5">
                             <div class="text-center mb-5">
                                 <div class="position-relative d-inline-block">
-                                    <img id="preview" src="<?php echo htmlspecialchars($_SESSION['user']['avatar'] ?? '/assets/image/default_avatar.jpg'); ?>"
+                                    <img id="preview" src="<?php echo htmlspecialchars($_SESSION['user']['avatar'] ?? '/assets/image/07.jpg'); ?>"
                                         class="rounded-circle profile-img shadow-lg border border-3 border-white"
                                         alt="Profile Image" width="150" height="150">
-                                    <label for="profileImageUpload" class="position-absolute bottom-0 right-0 text-white rounded-circle p-2 shadow-sm"
-                                        style="cursor: pointer; transform: translate(20%, 20%); background-color: #ff6769;">
+                                    <label for="profileImageUpload" class="position-absolute bottom-0 right-0 bg-primary text-white rounded-circle p-2 shadow-sm"
+                                        style="cursor: pointer; transform: translate(20%, 20%);">
                                         <i class="fas fa-camera"></i>
                                     </label>
-                                    <input type="file" name="profile_image" id="profileImageUpload" class="d-none" accept="image/*" onchange="updateProfileImage(event)">
+                                    <input type="file" name="profile_image" id="profileImageUpload" class="d-none" accept="image/*" onchange="submitImage()">
                                     <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($_SESSION['user']['id'] ?? '1'); ?>">
                                 </div>
                             </div>
@@ -315,8 +297,8 @@ if (file_exists($admin_data_file)) {
                                 </div>
 
                                 <div class="d-flex justify-content-between mt-5">
-                                    <button type="button" class="btn btn-outline-secondary px-4 py-2 font-weight-semibold" onclick="cancelProfileChanges()">Cancel</button>
-                                    <button type="button" class="btn btn-primary px-4 py-2 font-weight-semibold" onclick="saveProfile()" id="saveProfileBtn" style="display: none;">Save Changes</button>
+                                    <button type="button" class="btn btn-outline-secondary px-4 py-2 font-weight-semibold" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary px-4 py-2 font-weight-semibold" onclick="saveProfile()">Save Changes</button>
                                 </div>
                             </form>
                         </div>
@@ -327,95 +309,75 @@ if (file_exists($admin_data_file)) {
     </div>
 
     <!-- JavaScript -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
-    let originalProfileImage = '<?php echo htmlspecialchars($_SESSION['user']['avatar'] ?? '/assets/image/default_avatar.jpg'); ?>';
-    let newImageFile = null;
+    function submitImage() {
+        const input = document.getElementById('profileImageUpload');
+        const file = input.files[0];
+        if (!file) return;
 
-    function updateProfileImage(event) {
-        const file = event.target.files[0];
-        if (!file) {
-            alert('Please select an image file.');
-            return;
-        }
+        const formData = new FormData();
+        formData.append('profile_image', file);
+        formData.append('user_id', document.querySelector('input[name="user_id"]').value);
 
-        const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-        if (!allowedTypes.includes(file.type)) {
-            alert('Invalid file type. Please upload a JPEG, PNG, or GIF image.');
-            return;
-        }
-
-        newImageFile = file;
+        // Preview image immediately
         const reader = new FileReader();
         reader.onload = function(e) {
-            document.getElementById('preview').src = e.target.result;
-            document.getElementById('topbarProfilePic').src = e.target.result;
-            document.getElementById('saveProfileBtn').style.display = 'block';
+            const previewImage = document.getElementById('preview');
+            const topbarImage = document.querySelector('.img-profile');
+            previewImage.src = e.target.result;
+            topbarImage.src = e.target.result;
         };
         reader.readAsDataURL(file);
-    }
 
-    function cancelProfileChanges() {
-        document.getElementById('preview').src = originalProfileImage;
-        document.getElementById('topbarProfilePic').src = originalProfileImage;
-        document.getElementById('saveProfileBtn').style.display = 'none';
-        newImageFile = null;
-        $('#adminProfileModal').modal('hide');
-    }
-
-    function saveProfile() {
-        const formData = new FormData(document.getElementById('adminProfileForm'));
-        formData.append('user_id', '<?php echo htmlspecialchars($_SESSION['user']['id'] ?? '1'); ?>');
-
-        if (newImageFile) {
-            formData.append('profile_image', newImageFile);
-        }
-
-        const saveBtn = document.getElementById('saveProfileBtn');
-        const originalText = saveBtn.textContent;
-        saveBtn.textContent = 'Saving...';
-        saveBtn.disabled = true;
-
+        // Upload image to the server
         fetch('/update_admin_image.php', {
             method: 'POST',
             body: formData
         })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
+        .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert('Profile updated successfully!');
-                document.getElementById('preview').src = data.image_url || originalProfileImage;
-                document.getElementById('topbarProfilePic').src = data.image_url || originalProfileImage;
-                document.querySelector('.text-dark.font-weight-semibold').textContent = data.name || '<?php echo htmlspecialchars($_SESSION['user']['name'] ?? 'Admin User'); ?>';
-                originalProfileImage = data.image_url || originalProfileImage;
-                document.getElementById('saveProfileBtn').style.display = 'none';
-                $('#adminProfileModal').modal('hide');
-                newImageFile = null;
-                window.location.reload(); // Reload to ensure session sync
+                alert('Profile image updated successfully!');
+                // Update UI with the new image URL from the server
+                document.getElementById('preview').src = data.image_url;
+                document.querySelector('.img-profile').src = data.image_url;
             } else {
-                alert('Failed to update profile: ' + data.message);
-                document.getElementById('preview').src = originalProfileImage;
-                document.getElementById('topbarProfilePic').src = originalProfileImage;
+                alert('Failed to update profile image: ' + data.message);
             }
         })
         .catch(error => {
-            console.error('Error:', error);
-            alert('Error updating profile: ' + error.message);
-            document.getElementById('preview').src = originalProfileImage;
-            document.getElementById('topbarProfilePic').src = originalProfileImage;
+            console.error('Upload error:', error);
+            alert('Error uploading image');
+        });
+    }
+
+    function saveProfile() {
+        const form = document.getElementById('adminProfileForm');
+        const formData = new FormData(form);
+        formData.append('user_id', '<?php echo htmlspecialchars($_SESSION['user']['id'] ?? '1'); ?>');
+
+        fetch('/update_admin_profile.php', {
+            method: 'POST',
+            body: formData
         })
-        .finally(() => {
-            saveBtn.textContent = originalText;
-            saveBtn.disabled = false;
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Profile updated successfully!');
+                document.querySelector('.text-dark.font-weight-semibold').textContent = data.name;
+                // Update session data
+                <?php $_SESSION['user']['name'] = $_POST['fullName'] ?? $_SESSION['user']['name']; ?>
+                <?php $_SESSION['user']['email'] = $_POST['email'] ?? $_SESSION['user']['email']; ?>
+                <?php $_SESSION['user']['bio'] = $_POST['bio'] ?? $_SESSION['user']['bio']; ?>
+                // Reload the page to ensure the image updates
+                window.location.reload();
+            } else {
+                alert('Failed to update profile: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Update error:', error);
+            alert('Error updating profile');
         });
     }
     </script>
-</body>
-</html>
