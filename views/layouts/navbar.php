@@ -71,103 +71,89 @@
             transform: scale(1.1);
         }
 
-/* Bigger Profile Modal */
-.profile-modal {
-    display: flex; /* Change from 'none' to 'flex' to test it immediately */
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    z-index: 1000;
-    justify-content: center;
-    align-items: center;
-}
+        .profile-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
 
-.profile-card {
-    background: white;
-    width: 500px;
-    padding: 40px;
-    border-radius: 20px;
-    text-align: center;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    animation: fadeIn 0.3s ease;
-}
+        .profile-card {
+            background: white;
+            width: 500px;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 0.3s ease;
+        }
 
-.profile-pic-container {
-    position: relative;
-    width: 150px;
-    height: 150px;
-    margin: 0 auto 20px;
-}
+        .profile-pic-container {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 20px;
+        }
 
-.profile-pic {
-    width: 150px;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 50%;
-    border: 4px solid #ddd;
-}
+        .profile-pic {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid #ddd;
+        }
 
-.camera-icon {
-    position: absolute;
-    bottom: 5px;
-    right: 5px;
-    background: #007bff;
-    color: white;
-    padding: 6px;
-    border-radius: 50%;
-    cursor: pointer;
-}
+        .camera-icon {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background: #007bff;
+            color: white;
+            padding: 6px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
 
-.profile-name {
-    font-size: 24px;
-    font-weight: bold;
-    margin: 10px 0;
-}
+        .profile-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
 
-.profile-email {
-    font-size: 16px;
-    color: #555;
-    margin-bottom: 30px;
-}
+        .profile-email {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 30px;
+        }
 
-.profile-actions button {
-    padding: 12px 10px;
-    margin: 0 10px;
-    border: none;
-    border-radius: 10px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background 0.3s;
-}
+        .profile-actions button {
+            padding: 12px 10px;
+            margin: 0 10px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
 
-.cancel-btn {
-    background: #ccc;
-}
+        .cancel-btn {
+            background: #ccc;
+        }
 
-.upgrade-btn {
-    background: #28a745;
-    color: white;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
+        .upgrade-btn {
+            background: #28a745;
+            color: white;
+        }
 
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* Profile Picture Container */
