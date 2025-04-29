@@ -9,6 +9,180 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
     <link href="/assets/css/sb-admin-2.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/sidebar.css">
+
+    <style>
+        body {
+            background-color: #f8f9fc;
+            overflow-x: hidden;
+        }
+
+        #wrapper {
+            display: flex;
+            width: 100%;
+        }
+
+        #sidebar {
+            min-width: 250px;
+            max-width: 250px;
+            min-height: 100vh;
+        }
+
+
+        .card {
+            border: none;
+            border-radius: 0.75rem;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+        }
+
+        .product-image {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+
+        .dropdown-toggle::after {
+            display: none;
+        }
+
+        /* Search Container Styles - Bigger and Right-Aligned */
+        .search-container {
+            position: relative;
+            width: 100%;
+            max-width: 350px;
+            /* Increased from 400px */
+            margin-left: auto;
+            /* This pushes it to the right */
+            margin-right: 0;
+            /* Removes right margin */
+        }
+
+        .search-container .input-group {
+            display: flex;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            /* Stronger shadow */
+            border-radius: 30px;
+            /* More rounded */
+            overflow: hidden;
+            transition: all 0.3s ease;
+            height: 40px;
+            /* Fixed height for bigger size */
+        }
+
+        .search-container .input-group:hover {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            /* Stronger hover shadow */
+        }
+
+        /* Search Input Styles - Bigger */
+        .search-container #searchInput {
+            flex: 1;
+            border: none;
+            padding: 12px 25px;
+            /* Increased padding */
+            font-size: 16px;
+            /* Larger font */
+            background-color: #f8f9fc;
+            color: #333;
+            outline: none;
+            height: 100%;
+            /* Takes full height of container */
+        }
+
+        .search-container #searchInput::placeholder {
+            color: #9a9a9a;
+            font-weight: 300;
+            font-size: 15px;
+            /* Larger placeholder */
+        }
+
+        .search-container #searchInput:focus {
+            background-color: #fff;
+            box-shadow: inset 0 0 0 2px #4e73df;
+            /* Thicker focus border */
+        }
+
+        /* Search Button Styles - Bigger */
+        .search-container #searchButton {
+            border: none;
+            background-color: #4e73df;
+            color: white;
+            padding: 0 25px;
+            /* Wider button */
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 60px;
+            /* Minimum button width */
+        }
+
+        .search-container #searchButton:hover {
+            background-color: #2e59d9;
+        }
+
+        .search-container #searchButton i {
+            font-size: 20px;
+            /* Larger icon */
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .search-container {
+                max-width: 100%;
+            }
+
+            .search-container #searchInput {
+                padding: 10px 20px;
+                font-size: 15px;
+            }
+
+            .search-container #searchButton {
+                padding: 0 20px;
+                min-width: 50px;
+            }
+
+            .search-container #searchButton i {
+                font-size: 18px;
+            }
+        }
+
+        /* Highlight for search results */
+        .highlight-match {
+            background-color: #fffde7;
+            font-weight: bold;
+            padding: 3px 5px;
+            /* Slightly bigger highlight */
+            border-radius: 4px;
+        }
+
+        @media (max-width: 768px) {
+            #sidebar {
+                margin-left: -250px;
+            }
+
+            #sidebar.active {
+                margin-left: 0;
+            }
+
+            #content {
+                width: 100%;
+            }
+
+            .search-container {
+                width: 100%;
+            }
+        }
+        /* style out stock */
+        .quantity.zero {
+            color: #e74a3b;
+            font-weight: bold;
+            background-color: #fde8e8;
+            border-radius: 4px;
+        }
+    </style>
 </head>
 <?php require_once __DIR__ . '/../admin/Partials/header.php';?>
 <body id="page-top">
