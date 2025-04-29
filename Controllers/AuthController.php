@@ -1,10 +1,11 @@
 <?php
-
 namespace YourNamespace\Controllers;
 
 use YourNamespace\BaseController;
+use YourNamespace\Models\UserModel;
 
 require_once 'Database/database.php';
+require_once 'Models/UserModel.php';
 
 use YourNamespace\Database\Database;
 
@@ -13,6 +14,7 @@ class AuthController extends BaseController
     private $conn;
     private $admin_email = "charyna.chab@student.passerellesnumeriques.org";
     private $admin_password = "ryna!@#1649";
+    private $userModel;
 
     public function __construct()
     {
@@ -23,6 +25,9 @@ class AuthController extends BaseController
         // Initialize database connection
         $database = new Database();
         $this->conn = $database->getConnection();
+        
+        // Initialize UserModel
+        $this->userModel = new UserModel();
 
         $this->checkRememberMe();
         $this->ensureAdminExists();
@@ -89,63 +94,101 @@ class AuthController extends BaseController
             $email = $_POST['email'] ?? '';
             $password = $_POST['password'] ?? '';
             $remember = isset($_POST['remember']);
+            $imagePath = null;
 
-            // Validate user credentials against database
-            try {
-                $stmt = $this->conn->prepare("SELECT user_id, name, email, password, role, phone, address, image FROM users WHERE email = :email");
-                $stmt->bindParam(':email', $email);
-                $stmt->execute();
+            // Handle image upload if provided
+            if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] === UPLOAD_ERR_OK) {
+                $file = $_FILES['profile_image'];
+                $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+                $maxFileSize = 5 * 1024 * 1024; // 5MB
 
-                if ($stmt->rowCount() > 0) {
-                    $user = $stmt->fetch(\PDO::FETCH_ASSOC);
+                // Validate file type and size
+                if (!in_array($file['type'], $allowedTypes)) {
+                    $error = 'Invalid file type. Only JPEG, PNG, and GIF are allowed.';
+                } elseif ($file['size'] > $maxFileSize) {
+                    $error = 'File size too large. Maximum size is 5MB.';
+                } else {
+                    // Define upload directory
+                    $uploadDir = 'assets/uploads/';
+                    if (!is_dir($uploadDir)) {
+                        mkdir($uploadDir, 0755, true);
+                    }
 
-                    // Verify password (in a real app, use password_verify with hashed passwords)
-                    if ($password === $user['password']) {
-                        // Check if this is an admin trying to login through user login
-                        if ($user['role'] === 'admin') {
-                            $error = 'Admin users must login through the admin login page.';
-                        } else {
-                            // Set session variables for regular user
-                            $_SESSION['user_id'] = $user['user_id'];
-                            
-                            // Prepare the avatar URL
-                            $avatarUrl = !empty($user['image']) ? '/' . $user['image'] : '/assets/image/placeholder.svg?height=40&width=40';
-                            
-                            $_SESSION['user'] = [
-                                'id' => $user['user_id'],
-                                'name' => $user['name'],
-                                'email' => $user['email'],
-                                'avatar' => $avatarUrl,
-                                'role' => $user['role'],
-                                'phone' => $user['phone'] ?? '',
-                                'address' => $user['address'] ?? ''
-                            ];
+                    // Generate unique file name
+                    $fileName = uniqid('profile_', true) . '.' . pathinfo($file['name'], PATHINFO_EXTENSION);
+                    $imagePath = $uploadDir . $fileName;
 
-                            if ($remember) {
-                                // Create a secure remember me token
-                                $token = bin2hex(random_bytes(32));
+                    // Move the uploaded file
+                    if (!move_uploaded_file($file['tmp_name'], $imagePath)) {
+                        $error = 'Failed to upload image.';
+                        $imagePath = null;
+                    }
+                }
+            }
 
-                                // Store token in database (in a real app)
-                                // $stmt = $this->conn->prepare("UPDATE users SET remember_token = :token WHERE user_id = :user_id");
-                                // $stmt->bindParam(':token', $token);
-                                // $stmt->bindParam(':user_id', $user['user_id']);
-                                // $stmt->execute();
+            // Proceed with login if no errors
+            if (!$error) {
+                // Validate user credentials against database
+                try {
+                    $stmt = $this->conn->prepare("SELECT user_id, name, email, password, role, phone, address, image FROM users WHERE email = :email");
+                    $stmt->bindParam(':email', $email);
+                    $stmt->execute();
 
-                                // Set cookie with token
-                                setcookie('remember_token', $token, time() + (86400 * 30), '/', '', false, true);
+                    if ($stmt->rowCount() > 0) {
+                        $user = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+                        // Verify password (in a real app, use password_verify with hashed passwords)
+                        if ($password === $user['password']) {
+                            // Check if this is an admin trying to login through user login
+                            if ($user['role'] === 'admin') {
+                                $error = 'Admin users must login through the admin login page.';
+                            } else {
+                                // Update image in database if uploaded
+                                if ($imagePath) {
+                                    $this->userModel->updateProfileImage($user['user_id'], $imagePath);
+                                }
+
+                                // Prepare the avatar URL
+                                $avatarUrl = $imagePath ? '/' . $imagePath : (!empty($user['image']) ? '/' . $user['image'] : '/assets/image/placeholder.svg?height=40&width=40');
+
+                                // Set session variables for regular user
+                                $_SESSION['user_id'] = $user['user_id'];
+                                $_SESSION['user'] = [
+                                    'id' => $user['user_id'],
+                                    'name' => $user['name'],
+                                    'email' => $user['email'],
+                                    'avatar' => $avatarUrl,
+                                    'role' => $user['role'],
+                                    'phone' => $user['phone'] ?? '',
+                                    'address' => $user['address'] ?? ''
+                                ];
+
+                                if ($remember) {
+                                    // Create a secure remember me token
+                                    $token = bin2hex(random_bytes(32));
+
+                                    // Store token in database
+                                    $stmt = $this->conn->prepare("UPDATE users SET remember_token = :token WHERE user_id = :user_id");
+                                    $stmt->bindParam(':token', $token);
+                                    $stmt->bindParam(':user_id', $user['user_id']);
+                                    $stmt->execute();
+
+                                    // Set cookie with token
+                                    setcookie('remember_token', $token, time() + (86400 * 30), '/', '', false, true);
+                                }
+
+                                // Redirect to order page
+                                $this->redirect('/order');
                             }
-
-                            // Redirect to order page
-                            $this->redirect('/order');
+                        } else {
+                            $error = 'Invalid password.';
                         }
                     } else {
-                        $error = 'Invalid password.';
+                        $error = 'Email not found.';
                     }
-                } else {
-                    $error = 'Email not found.';
+                } catch (\PDOException $e) {
+                    $error = 'Database error: ' . $e->getMessage();
                 }
-            } catch (\PDOException $e) {
-                $error = 'Database error: ' . $e->getMessage();
             }
         }
 
@@ -244,20 +287,58 @@ class AuthController extends BaseController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $email = $_POST['email'] ?? '';
             $password = $_POST['password'] ?? '';
+            $imagePath = null;
 
-            // Check if this is our designated admin email
-            if ($email === $this->admin_email) {
-                try {
-                    // Check if admin exists in database
-                    $stmt = $this->conn->prepare("SELECT user_id, name, email, password, image FROM users WHERE email = :email AND role = 'admin'");
-                    $stmt->bindParam(':email', $email);
-                    $stmt->execute();
+            // Handle image upload if provided
+            if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] === UPLOAD_ERR_OK) {
+                $file = $_FILES['profile_image'];
+                $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+                $maxFileSize = 5 * 1024 * 1024; // 5MB
 
-                    if ($stmt->rowCount() > 0) {
-                        $admin = $stmt->fetch(\PDO::FETCH_ASSOC);
+                // Validate file type and size
+                if (!in_array($file['type'], $allowedTypes)) {
+                    $error = 'Invalid file type. Only JPEG, PNG, and GIF are allowed.';
+                } elseif ($file['size'] > $maxFileSize) {
+                    $error = 'File size too large. Maximum size is 5MB.';
+                } else {
+                    // Define upload directory
+                    $uploadDir = 'assets/uploads/';
+                    if (!is_dir($uploadDir)) {
+                        mkdir($uploadDir, 0755, true);
+                    }
+
+                    // Generate unique file name
+                    $fileName = uniqid('profile_', true) . '.' . pathinfo($file['name'], PATHINFO_EXTENSION);
+                    $imagePath = $uploadDir . $fileName;
+
+                    // Move the uploaded file
+                    if (!move_uploaded_file($file['tmp_name'], $imagePath)) {
+                        $error = 'Failed to upload image.';
+                        $imagePath = null;
+                    }
+                }
+            }
+
+            // Proceed with login if no errors
+            if (!$error) {
+                // Check if this is our designated admin email
+                if ($email === $this->admin_email) {
+                    try {
+                        // Check if admin exists in database
+                        $stmt = $this->conn->prepare("SELECT user_id, name, email, password, image FROM users WHERE email = :email AND role = 'admin'");
+                        $stmt->bindParam(':email', $email);
+                        $stmt->execute();
+
+                        if ($stmt->rowCount() > 0) {
+                            $admin = $stmt->fetch(\PDO::FETCH_ASSOC);
 
                             // Verify password
                             if ($password === $admin['password']) {
+                                // Update image in database if uploaded
+                                if ($imagePath) {
+                                    $this->userModel->updateProfileImage($admin['user_id'], $imagePath);
+                                }
+
                                 // Generate verification code
                                 $verification_code = rand(100000, 999999);
 
@@ -265,14 +346,11 @@ class AuthController extends BaseController
                                 $_SESSION['admin_email'] = $email;
                                 $_SESSION['admin_id'] = $admin['user_id'];
                                 $_SESSION['admin_name'] = $admin['name'];
+                                $_SESSION['admin_image'] = $imagePath ?? $admin['image'] ?? null;
                                 $_SESSION['verification_code'] = $verification_code;
                                 $_SESSION['verification_time'] = time();
 
-                                // Prepare admin avatar URL
-                                $avatarUrl = !empty($admin['image']) ? '/' . $admin['image'] : '/assets/image/placeholder.svg?height=40&width=40';
-
                                 // For development purposes, store the code in session
-                                // This will allow login without email in case email sending fails
                                 $_SESSION['demo_code'] = $verification_code;
 
                                 // Try to send verification code via email
@@ -280,22 +358,23 @@ class AuthController extends BaseController
 
                                 // Log the attempt
                                 error_log("Admin login attempt: Email sending " . ($emailSent ? "successful" : "failed"));
-                                error_log("Verification code: " . $verification_code); // For debugging
+                                error_log("Verification code: " . $verification_code);
 
                                 $this->redirect('/admin-verification');
                             } else {
                                 $error = 'Invalid password.';
                             }
-                    } else {
-                        // Admin doesn't exist in database yet, create it
-                        $this->ensureAdminExists();
-                        $error = 'Please try logging in again.';
+                        } else {
+                            // Admin doesn't exist in database yet, create it
+                            $this->ensureAdminExists();
+                            $error = 'Please try logging in again.';
+                        }
+                    } catch (\PDOException $e) {
+                        $error = 'Database error: ' . $e->getMessage();
                     }
-                } catch (\PDOException $e) {
-                    $error = 'Database error: ' . $e->getMessage();
+                } else {
+                    $error = 'Invalid admin credentials.';
                 }
-            } else {
-                $error = 'Invalid admin credentials.';
             }
         }
 
@@ -336,7 +415,7 @@ class AuthController extends BaseController
                         <p>If you did not attempt to log in, please ignore this email or contact support.</p>
                     </div>
                     <div class="footer">
-                        <p>&copy; ' . date('Y') . ' XING FU CHA. All rights reserved.</p>
+                        <p>© ' . date('Y') . ' XING FU CHA. All rights reserved.</p>
                     </div>
                 </div>
             </body>
@@ -369,7 +448,7 @@ class AuthController extends BaseController
         }
 
         $error = null;
-        $demo_code = $_SESSION['demo_code'] ?? null; // For development purposes
+        $demo_code = $_SESSION['demo_code'] ?? null;
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $verification_code = $_POST['verification_code'] ?? '';
@@ -380,21 +459,14 @@ class AuthController extends BaseController
                 (time() - $_SESSION['verification_time']) < 600
             ) {
                 // Prepare admin avatar URL
-                $avatarUrl = '/assets/image/placeholder.svg?height=40&width=40';
-                
-                // Get admin image if available
-                try {
-                    $stmt = $this->conn->prepare("SELECT image FROM users WHERE user_id = :user_id");
-                    $stmt->bindParam(':user_id', $_SESSION['admin_id']);
-                    $stmt->execute();
-                    $result = $stmt->fetch(\PDO::FETCH_ASSOC);
-                    
-                    if ($result && !empty($result['image'])) {
-                        $avatarUrl = '/' . $result['image'];
-                    }
-                } catch (\PDOException $e) {
-                    // Silently fail and use default avatar
-                }
+                $avatarUrl = $_SESSION['admin_image'] ? '/' . $_SESSION['admin_image'] : '/assets/image/placeholder.svg?height=40&width=40';
+
+                // Update admin profile in database
+                $this->userModel->updateAdminProfile($_SESSION['admin_id'], [
+                    'name' => $_SESSION['admin_name'],
+                    'email' => $_SESSION['admin_email'],
+                    'image' => $_SESSION['admin_image']
+                ]);
 
                 // Set admin session
                 $_SESSION['user_id'] = $_SESSION['admin_id'];
@@ -410,6 +482,7 @@ class AuthController extends BaseController
                 unset($_SESSION['admin_email']);
                 unset($_SESSION['admin_id']);
                 unset($_SESSION['admin_name']);
+                unset($_SESSION['admin_image']);
                 unset($_SESSION['verification_code']);
                 unset($_SESSION['verification_time']);
                 unset($_SESSION['demo_code']);
@@ -423,6 +496,7 @@ class AuthController extends BaseController
                     unset($_SESSION['admin_email']);
                     unset($_SESSION['admin_id']);
                     unset($_SESSION['admin_name']);
+                    unset($_SESSION['admin_image']);
                     unset($_SESSION['verification_code']);
                     unset($_SESSION['verification_time']);
                     unset($_SESSION['demo_code']);
@@ -438,7 +512,7 @@ class AuthController extends BaseController
         $this->views('auth/admin_verification', [
             'title' => 'Admin Verification - XING FU CHA',
             'error' => $error,
-            'demo_code' => $demo_code // For development purposes
+            'demo_code' => $demo_code
         ]);
     }
 
@@ -449,9 +523,7 @@ class AuthController extends BaseController
         }
 
         if (isset($_COOKIE['remember_token'])) {
-            // In a real application, you would verify the token against the database
             try {
-                // This is a placeholder. In a real app, you would query the database for the token
                 $stmt = $this->conn->prepare("SELECT user_id, name, email, role, phone, address, image FROM users WHERE remember_token = :token");
                 $stmt->bindParam(':token', $_COOKIE['remember_token']);
                 $stmt->execute();
