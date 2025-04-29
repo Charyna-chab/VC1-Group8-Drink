@@ -2,12 +2,6 @@
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-// If already logged in as admin, redirect to dashboard
-if (isset($_SESSION['user_id']) && isset($_SESSION['user']['role']) && $_SESSION['user']['role'] === 'admin') {
-    header("Location: /admin-dashboard");
-    exit();
-}
-// If verification data is not set, redirect to admin login
 if (!isset($_SESSION['admin_email']) || !isset($_SESSION['verification_code'])) {
     header("Location: /admin-login");
     exit();
@@ -22,7 +16,6 @@ if (!isset($_SESSION['admin_email']) || !isset($_SESSION['verification_code'])) 
     <link rel="icon" type="image/png" href="/assets/image/logo/logo.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap">
-    <!-- Prevent caching -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
@@ -143,20 +136,16 @@ if (!isset($_SESSION['admin_email']) || !isset($_SESSION['verification_code'])) 
             <img src="/assets/image/logo/logo.png" alt="XING FU CHA Logo">
             <h2>Admin Verification</h2>
         </div>
-
         <?php if (isset($error)): ?>
             <div class="auth-error">
                 <i class="fas fa-exclamation-circle"></i>
                 <span><?php echo htmlspecialchars($error); ?></span>
             </div>
         <?php endif; ?>
-
         <div class="code-display">
             Verification Code: <strong><?php echo htmlspecialchars($_SESSION['verification_code']); ?></strong>
         </div>
-
         <div class="timer">Code expires in: <span id="verification-timer">1:00</span></div>
-
         <form action="/admin-verification" method="post" class="auth-form">
             <div class="form-group">
                 <input type="text" class="code-input" maxlength="1" pattern="[0-9]" required>
@@ -171,7 +160,6 @@ if (!isset($_SESSION['admin_email']) || !isset($_SESSION['verification_code'])) 
             <a href="/admin-login" class="resend-link">Request New Code</a>
         </form>
     </div>
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const inputs = document.querySelectorAll('.code-input');
@@ -179,10 +167,8 @@ if (!isset($_SESSION['admin_email']) || !isset($_SESSION['verification_code'])) 
             const timerElement = document.getElementById('verification-timer');
             let timeLeft = 60; // 1 minute in seconds
 
-            // Focus on the first input
             inputs[0].focus();
 
-            // Handle input for each digit
             inputs.forEach((input, index) => {
                 input.addEventListener('input', function(e) {
                     const value = e.target.value;
@@ -218,13 +204,11 @@ if (!isset($_SESSION['admin_email']) || !isset($_SESSION['verification_code'])) 
                 });
             });
 
-            // Update hidden input with concatenated code
             function updateHiddenInput() {
                 const code = Array.from(inputs).map(input => input.value).join('');
                 hiddenInput.value = code;
             }
 
-            // Form submission validation
             document.querySelector('.auth-form').addEventListener('submit', function(e) {
                 const code = hiddenInput.value;
                 if (code.length !== 6 || !/^[0-9]{6}$/.test(code)) {
@@ -233,7 +217,6 @@ if (!isset($_SESSION['admin_email']) || !isset($_SESSION['verification_code'])) 
                 }
             });
 
-            // Countdown timer
             const countdownTimer = setInterval(function() {
                 const minutes = Math.floor(timeLeft / 60);
                 const seconds = timeLeft % 60;

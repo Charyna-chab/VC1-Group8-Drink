@@ -22,7 +22,7 @@ if (session_status() == PHP_SESSION_NONE) {
   <style>
     /* NEW IMPROVED STYLES FOR TOP BUTTONS */
     .auth-top-buttons {
-      position: fixed; /* Changed from absolute to fixed */
+      position: fixed;
       top: 20px;
       right: 20px;
       display: flex;
@@ -41,35 +41,113 @@ if (session_status() == PHP_SESSION_NONE) {
     }
     .register-button {
       background-color: #ffffff;
-      color:rgb(255, 0, 72) ;
+      color: rgb(255, 0, 72);
       border: 2px solid #e0e0e0;
     }
     .fa-user-plus {
       background-color: #ffffff;
-      color:rgb(255, 0, 72) ;
-      
+      color: rgb(255, 0, 72);
     }
     .register-button:hover {
-      background-color:rgb(245, 245, 245);
+      background-color: rgb(245, 245, 245);
       transform: translateY(-2px);
     }
     .admin-button {
-      background-color:rgb(255, 79, 79);
+      background-color: rgb(255, 79, 79);
       color: white;
-      border: 2px solidrgb(255, 0, 0);
+      border: 2px solid rgb(255, 0, 0);
     }
     .fa-user-lock {
-      background-color:rgb(255, 79, 79);
+      background-color: rgb(255, 79, 79);
       color: white;
-      
     }
-
     .admin-button:hover {
-      background-color:hsl(0, 100.00%, 50.00%);
+      background-color: hsl(0, 100.00%, 50.00%);
       transform: translateY(-2px);
     }
     .auth-top-button i {
       margin-right: 8px;
+    }
+    /* Enhanced Image Preview Styles */
+    .image-preview {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 50%;
+      display: none;
+      margin: 15px auto;
+      border: 3px solid #ff4f4f;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    /* Improved File Input Styling */
+    .custom-file-upload {
+      display: inline-block;
+      padding: 10px 20px;
+      cursor: pointer;
+      background-color: #ff4f4f;
+      color: white;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+      margin-top: 10px;
+    }
+    .custom-file-upload:hover {
+      background-color: #e04444;
+      transform: translateY(-2px);
+    }
+    .custom-file-upload i {
+      margin-right: 5px;
+    }
+    #profile_image {
+      display: none;
+    }
+    /* Profile Display Styles */
+    .profile-container {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+      z-index: 1000;
+      text-align: center;
+      width: 400px;
+    }
+    .profile-container.active {
+      display: block;
+    }
+    .profile-image {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      margin: 0 auto 20px;
+      object-fit: cover;
+      border: 5px solid #ff4f4f;
+    }
+    .profile-details {
+      margin: 20px 0;
+    }
+    .profile-details h3 {
+      margin: 10px 0;
+      color: #333;
+    }
+    .profile-details p {
+      margin: 5px 0;
+      color: #666;
+    }
+    .close-profile {
+      background-color: #ff4f4f;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .close-profile:hover {
+      background-color: #e04444;
     }
   </style>
 </head>
@@ -79,12 +157,9 @@ if (session_status() == PHP_SESSION_NONE) {
     <a href="/register" class="auth-top-button register-button">
       <i class="fas fa-user-plus"></i> Register
     </a>
-
     <a href="/admin-login" class="auth-top-button admin-button">
-  <i class="fas fa-user-lock"></i> Admin Login
-</a>
-
-
+      <i class="fas fa-user-lock"></i> Admin Login
+    </a>
   </div>
 
   <!-- MAIN CONTENT -->
@@ -112,7 +187,7 @@ if (session_status() == PHP_SESSION_NONE) {
           </div>
         <?php endif; ?>
 
-        <form action="/login" method="post" class="auth-form">
+        <form action="/login" method="post" class="auth-form" enctype="multipart/form-data">
           <div class="form-group">
             <label for="email">Email</label>
             <div class="input-with-icon">
@@ -128,6 +203,15 @@ if (session_status() == PHP_SESSION_NONE) {
               <input type="password" id="password" name="password" placeholder="Enter your password" required>
               <i class="fas fa-eye toggle-password"></i>
             </div>
+          </div>
+
+          <div class="form-group">
+            <label for="profile_image">Profile Image (Optional)</label>
+            <label class="custom-file-upload">
+              <i class="fas fa-image"></i> Choose Image
+              <input type="file" id="profile_image" name="profile_image" accept="image/*">
+            </label>
+            <img id="image-preview" class="image-preview" alt="Image Preview">
           </div>
 
           <div class="form-options">
@@ -167,6 +251,25 @@ if (session_status() == PHP_SESSION_NONE) {
     </div>
   </div>
 
+  <!-- Profile Display Modal -->
+  <?php if (isset($_SESSION['user'])): ?>
+  <div class="profile-container" id="profileModal">
+    <img src="<?php echo htmlspecialchars($_SESSION['user']['avatar']); ?>" class="profile-image" alt="Profile Image">
+    <div class="profile-details">
+      <h3><?php echo htmlspecialchars($_SESSION['user']['name']); ?></h3>
+      <p>Email: <?php echo htmlspecialchars($_SESSION['user']['email']); ?></p>
+      <p>Role: <?php echo htmlspecialchars($_SESSION['user']['role']); ?></p>
+      <?php if (!empty($_SESSION['user']['phone'])): ?>
+        <p>Phone: <?php echo htmlspecialchars($_SESSION['user']['phone']); ?></p>
+      <?php endif; ?>
+      <?php if (!empty($_SESSION['user']['address'])): ?>
+        <p>Address: <?php echo htmlspecialchars($_SESSION['user']['address']); ?></p>
+      <?php endif; ?>
+    </div>
+    <button class="close-profile" onclick="closeProfileModal()">Close</button>
+  </div>
+  <?php endif; ?>
+
   <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Toggle password visibility
@@ -181,7 +284,37 @@ if (session_status() == PHP_SESSION_NONE) {
                 this.classList.toggle('fa-eye');
             });
         }
+
+        // Image preview
+        document.getElementById('profile_image').addEventListener('change', function(e) {
+          const file = e.target.files[0];
+          const preview = document.getElementById('image-preview');
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+              preview.src = e.target.result;
+              preview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+          } else {
+            preview.src = '';
+            preview.style.display = 'none';
+          }
+        });
+
+        // Profile modal handling
+        const profileModal = document.getElementById('profileModal');
+        
+        // Show profile on login if user is logged in
+        <?php if (isset($_SESSION['user'])): ?>
+          profileModal.classList.add('active');
+        <?php endif; ?>
     });
+
+    function closeProfileModal() {
+      const profileModal = document.getElementById('profileModal');
+      profileModal.classList.remove('active');
+    }
   </script>
 </body>
 </html>

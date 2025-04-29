@@ -71,7 +71,6 @@
             transform: scale(1.1);
         }
 
-        /* Profile Modal */
         .profile-modal {
             display: none;
             position: fixed;
@@ -79,7 +78,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.6);
             z-index: 1000;
             justify-content: center;
             align-items: center;
@@ -87,24 +86,74 @@
 
         .profile-card {
             background: white;
-            width: 320px;
-            padding: 30px;
-            border-radius: 15px;
+            width: 500px;
+            padding: 40px;
+            border-radius: 20px;
             text-align: center;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             animation: fadeIn 0.3s ease;
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
+        .profile-pic-container {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 20px;
+        }
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .profile-pic {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid #ddd;
+        }
+
+        .camera-icon {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background: #007bff;
+            color: white;
+            padding: 6px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .profile-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .profile-email {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 30px;
+        }
+
+        .profile-actions button {
+            padding: 12px 10px;
+            margin: 0 10px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .cancel-btn {
+            background: #ccc;
+        }
+
+        .upgrade-btn {
+            background: #28a745;
+            color: white;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* Profile Picture Container */
@@ -158,7 +207,8 @@
         .profile-email {
             color: #666;
             margin-bottom: 25px;
-            font-size: 15px;
+            font-size: 12px;
+            
         }
 
         .profile-stats {
@@ -356,6 +406,8 @@
         $userAvatar = isset($_SESSION['user']['avatar']) ? $_SESSION['user']['avatar'] : '/assets/image/placeholder.svg?height=40&width=40';
         ?>
         <img src="<?php echo htmlspecialchars($userAvatar); ?>" alt="Profile" class="profile-btn" id="profileBtn">
+        <!-- Dynamic Login/Logout/Order Links -->
+
     </div>
 
     <!-- Notification Modal -->
@@ -382,7 +434,7 @@
                 <label for="profileImageInput" class="camera-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                         <path d="M15 12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h1.172a3 3 0 0 0 2.12-.879l.83-.828A1 1 0 0 1 6.827 3h2.344a1 1 0 0 1 .707.293l.828.828A3 3 0 0 0 12.828 5H14a1 1 0 0 1 1 1v6zM2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4H2z"/>
-                        <path d="M8 11a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5zm0 1a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM3 6.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z"/>
+                        <path d="M8 11a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5zm0 1a3.5 3.5 0 0 0 0-7 3.5 3.5 0 0 0 0 7zM3 6.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z"/>
                     </svg>
                 </label>
                 <input type="file" id="profileImageInput" accept="image/*" style="display: none;" onchange="updateProfileImage(event)">
@@ -390,23 +442,7 @@
 
             <h3 class="profile-name" id="profileName"><?php echo isset($_SESSION['user']['name']) ? htmlspecialchars($_SESSION['user']['name']) : 'Guest'; ?></h3>
             <p class="profile-email" id="profileEmail"><?php echo isset($_SESSION['user']['email']) ? htmlspecialchars($_SESSION['user']['email']) : 'guest@example.com'; ?></p>
-
-            <div class="profile-stats">
-                <div class="stat-item">
-                    <div class="stat-value" id="orderCount">0</div>
-                    <div class="stat-label">Orders</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value">320</div>
-                    <div class="stat-label">Points</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value">Gold</div>
-                    <div class="stat-label">Member</div>
-                </div>
-            </div>
-
-            <!-- Action buttons: Cancel and Save -->
+            <!-- Action buttons: Cancel, Save, and Logout -->
             <div class="profile-actions">
                 <button class="cancel-btn" onclick="cancelProfileChanges()">Cancel</button>
                 <button class="upgrade-btn" onclick="saveProfileChanges()" id="saveBtn" style="display: none;">Save Changes</button>
@@ -414,7 +450,6 @@
         </div>
     </div>
 </header>
-
 <script>
     // Get elements
     const profileBtn = document.getElementById('profileBtn');
@@ -656,8 +691,5 @@
     // Initial update
     updateNotificationBadge();
 </script>
-
-
 </body>
-
 </html>

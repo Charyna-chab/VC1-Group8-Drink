@@ -1,5 +1,4 @@
 <?php
-
 namespace YourNamespace\Models;
 
 use PDO;
@@ -29,7 +28,6 @@ class UserModel
     public function createUser($data)
     {
         try {
-            // Validate required fields
             if (empty($data['name']) || empty($data['email']) || empty($data['password'])) {
                 throw new Exception('Required fields are missing');
             }
@@ -44,7 +42,7 @@ class UserModel
                 'phone' => htmlspecialchars($data['phone'] ?? ''),
                 'email' => filter_var($data['email'], FILTER_SANITIZE_EMAIL),
                 'address' => htmlspecialchars($data['address'] ?? ''),
-                'password' => $data['password'], // In a real app, use password_hash
+                'password' => $data['password'],
                 'role' => in_array($data['role'], ['admin', 'user']) ? $data['role'] : 'user'
             ]);
         } catch (PDOException $e) {
@@ -104,6 +102,35 @@ class UserModel
             ]);
         } catch (PDOException $e) {
             error_log("Error updating profile image: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    public function updateAdminProfile($userId, $data)
+    {
+        try {
+            $query = "UPDATE users SET 
+                      name = :name, 
+                      email = :email, 
+                      updated_at = NOW()";
+            
+            $params = [
+                'name' => htmlspecialchars($data['name']),
+                'email' => filter_var($data['email'], FILTER_SANITIZE_EMAIL),
+                'user_id' => $userId
+            ];
+
+            if (!empty($data['image'])) {
+                $query .= ", image = :image";
+                $params['image'] = $data['image'];
+            }
+
+            $query .= " WHERE user_id = :user_id AND role = 'admin'";
+
+            $stmt = $this->pdo->prepare($query);
+            return $stmt->execute($params);
+        } catch (PDOException $e) {
+            error_log("Error updating admin profile: " . $e->getMessage());
             return false;
         }
     }

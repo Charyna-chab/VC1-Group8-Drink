@@ -171,9 +171,7 @@ $route->post("/admin/users/update/{id}", [UserController::class, 'update']);
 $route->post("/admin/users/delete", [UserController::class, 'destroy']);
 
 
-$route->get("/test", function() {
-    echo "Test route works!";
-});
+
 
 
 $route->route();
