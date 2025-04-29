@@ -18,8 +18,24 @@ class OrderModel
 
     public function getOrders()
     {
-        $stmt = $this->pdo->query("SELECT * FROM orders ORDER BY order_id DESC");
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        try {
+            $stmt = $this->pdo->query("
+                SELECT 
+                    o.order_id, 
+                    o.order_date, 
+                    o.drink_size, 
+                    u.name AS customer_name, 
+                    p.product_name
+                FROM orders o
+                JOIN users u ON o.user_id = u.user_id
+                JOIN products p ON o.product_id = p.product_id
+                ORDER BY o.order_date DESC
+            ");
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Error fetching orders: " . $e->getMessage());
+            return [];
+        }
     }
 
     public function createOrder($data)
@@ -91,6 +107,30 @@ class OrderModel
         } catch (PDOException $e) {
             // Handle exception
             return 0;
+        }
+    }
+
+    public function getUserOrders($userId)
+    {
+        try {
+            $stmt = $this->pdo->prepare("
+                SELECT 
+                    o.order_id, 
+                    o.order_date, 
+                    o.drink_size, 
+                    u.name AS customer_name, 
+                    p.product_name
+                FROM orders o
+                JOIN users u ON o.user_id = u.user_id
+                JOIN products p ON o.product_id = p.product_id
+                WHERE o.user_id = :user_id
+                ORDER BY o.order_date DESC
+            ");
+            $stmt->execute([':user_id' => $userId]);
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Error fetching user orders: " . $e->getMessage());
+            return [];
         }
     }
 }

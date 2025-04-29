@@ -3,6 +3,7 @@
 namespace YourNamespace\Controllers;
 
 use YourNamespace\BaseController;
+use PDOException;
 
 class CheckoutController extends BaseController
 {
@@ -122,6 +123,54 @@ class CheckoutController extends BaseController
             'title' => 'Order Successful',
             'order' => $_SESSION['order']
         ]);
+    }
+
+    public function processCheckout()
+    {
+        // Start session if not already started
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        // Check if the user is logged in
+        if (!isset($_SESSION['user_id'])) {
+            http_response_code(401); // Unauthorized
+            echo json_encode(['success' => false, 'message' => 'You must log in to complete the checkout']);
+            exit;
+        }
+
+        // Get JSON data from the request body
+        $json = file_get_contents('php://input');
+        $data = json_decode($json, true);
+
+        if (!$data || !isset($data['order_id'])) {
+            http_response_code(400); // Bad Request
+            echo json_encode(['success' => false, 'message' => 'Invalid request data']);
+            exit;
+        }
+
+        // Database connection
+        require_once __DIR__ . '/../Database/database.php';
+        $db = new \YourNamespace\Database\Database();
+        $pdo = $db->getConnection();
+
+        try {
+            // Update the order status to 'completed'
+            $stmt = $pdo->prepare("
+                UPDATE orders
+                SET status = 'completed'
+                WHERE order_id = :order_id AND user_id = :user_id
+            ");
+            $stmt->execute([
+                ':order_id' => $data['order_id'],
+                ':user_id' => $_SESSION['user_id']
+            ]);
+
+            echo json_encode(['success' => true, 'message' => 'Checkout completed successfully']);
+        } catch (PDOException $e) {
+            http_response_code(500); // Internal Server Error
+            echo json_encode(['success' => false, 'message' => 'Failed to complete checkout']);
+        }
     }
 
     private function processCardPayment()

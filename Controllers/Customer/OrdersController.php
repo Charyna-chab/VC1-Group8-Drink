@@ -1,9 +1,10 @@
 <?php
 
 namespace YourNamespace\Controllers;
-// namespace YourNamespace\Models;
 
 use YourNamespace\BaseController;
+
+use PDOException;
 
 class OrdersController extends BaseController
 {
@@ -13,83 +14,24 @@ class OrdersController extends BaseController
     {
         // Initialize the product model if needed
         $this->productModel = new \YourNamespace\Models\ProductModel();
-        // $this->toppingModel = new \YourNamespace\Models\ToppingModel();
     }
     public function index()
     {
-        // Fetch products from the database and map them with categories
-        $products = array_map(function ($i) {
-            return [
-                'id' => $i['product_id'],	
-                'name' => $i['product_name'],
-                'description' => $i['product_detail'],
-                'price' => $i['price'],
-                'image' => $i['image'],
-                'category' => $i['category'] // Use category from database
-            ];
-        }, $this->productModel->getProducts());
-
-        $toppings =  [
-            [
-                'id' => 1,
-                'name' => 'Boba Pearls',
-                'price' => 0.75
-            ],
-            [
-                'id' => 2,
-                'name' => 'Grass Jelly',
-                'price' => 0.75
-            ],
-            [
-                'id' => 3,
-                'name' => 'Pudding',
-                'price' => 0.75
-            ],
-            [
-                'id' => 4,
-                'name' => 'Aloe Vera',
-                'price' => 0.75
-            ],
-            [
-                'id' => 5,
-                'name' => 'Cheese Foam',
-                'price' => 1.00
-            ],
-            [
-                'id' => 6,
-                'name' => 'Fresh Fruit',
-                'price' => 1.00
-            ],
-            [
-                'id' => 7,
-                'name' => 'Red Bean',
-                'price' => 0.75
-            ],
-            [
-                'id' => 8,
-                'name' => 'Coconut Jelly',
-                'price' => 0.75
-            ]
-        ];
-
-        // Get user favorites if logged in
-        $favorites = [];
-        if (isset($_SESSION['user_id'])) {
-            // In a real app, you would fetch favorites from the database
-            // For now, we'll get from localStorage via JavaScript
-            $favorites = isset($_SESSION['favorites']) ? $_SESSION['favorites'] : [];
+        if (!isset($_SESSION)) {
+            session_start();
         }
 
-        // Get cart count for notification badge
-        $cartCount = isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0;
+        if (!isset($_SESSION['user_id'])) {
+            echo "User not logged in.";
+            exit;
+        }
 
-        $this->views('order', [
-            'title' => 'Order Drinks',
-            'products' => $products,
-            // 'toppings' => $toppings,
-            'favorites' => $favorites,
-            'cartCount' => $cartCount
-        ]);
+        $userId = $_SESSION['user_id']; // Get the logged-in user's ID
+        $orderModel = new \YourNamespace\Models\OrderModel();
+        $orders = $orderModel->getOrders(); // Fetch all orders (or use getUserOrders for specific users)
+
+        // Pass the orders to the view
+        require_once __DIR__ . '/../../views/admin/order-list.php';
     }
 
     public function details($id)
@@ -388,5 +330,73 @@ class OrdersController extends BaseController
             'tax' => 2.24,
             'total' => 30.24
         ]);
+    }
+
+    public function createOrder()
+    {
+        // Start session if not already started
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        // 1. Check if the user is logged in
+        if (!isset($_SESSION['user_id'])) {
+            http_response_code(401); // Unauthorized
+            echo json_encode(['success' => false, 'message' => 'You must log in to place an order']);
+            exit;
+        }
+
+        // 2. Validate request data
+        $json = file_get_contents('php://input');
+        $data = json_decode($json, true);
+
+        if (!$data || !isset($data['product_id']) || !isset($data['quantity'])) {
+            http_response_code(400); // Bad Request
+            echo json_encode(['success' => false, 'message' => 'Invalid request data']);
+            exit;
+        }
+
+        // 3. Validate the product
+        $productModel = new \YourNamespace\Models\ProductModel();
+        $product = $productModel->find($data['product_id']);
+        if (!$product) {
+            http_response_code(404); // Not Found
+            echo json_encode(['success' => false, 'message' => 'Product not found']);
+            exit;
+        }
+
+        // Simulate database insertion for testing
+        try {
+            // Initialize PDO connection
+            $pdo = new \PDO('mysql:host=localhost;dbname=your_database', 'your_username', 'your_password');
+            $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+
+            $stmt = $pdo->prepare("
+                INSERT INTO orders (user_id, product_id, drink_size, quantity, order_date)
+                VALUES (:user_id, :product_id, :drink_size, :quantity, NOW())
+            ");
+            $stmt->execute([
+                ':user_id' => $_SESSION['user_id'],
+                ':product_id' => $data['product_id'],
+                ':drink_size' => $data['drink_size'] ?? null,
+                ':quantity' => $data['quantity']
+            ]);
+
+            // Simulate a successful database operation
+            $simulatedOrderId = rand(1, 1000); // Generate a random order ID for testing
+            echo json_encode([
+                'success' => true,
+                'message' => 'Order created successfully (simulated)',
+                'order_id' => $simulatedOrderId,
+                'user_id' => $_SESSION['user_id'],
+                'product_id' => $data['product_id'],
+                'quantity' => $data['quantity'],
+                'drink_size' => $data['drink_size'] ?? null,
+                'order_date' => date('Y-m-d H:i:s') // Simulate the current timestamp
+            ]);
+        } catch (\Exception $e) {
+            http_response_code(500); // Internal Server Error
+            echo json_encode(['success' => false, 'message' => 'Failed to create order (simulated)']);
+        }
     }
 }

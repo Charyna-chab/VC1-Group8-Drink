@@ -40,7 +40,6 @@ class OrderListModel
             return [];
         }
     }
-   
 
     public function getOrderById($id)
     {

@@ -175,6 +175,6 @@ $route->post("/admin/users/delete/{id}", [UserController::class, 'destroy']);
 $route->post("/admin/users/delete", [UserController::class, 'destroy']);
 
 // Admin Order Management
-$route->get("/admin/orders", [OrderListController::class, 'index']);
+$route->get("/admin/orderslist", [OrderListController::class, 'index']);
 
 $route->route();

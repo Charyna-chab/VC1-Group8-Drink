@@ -1,3 +1,4 @@
+
 <?php require_once __DIR__ . '/../admin/Partials/header.php';?>
 
 <body id="page-top">
@@ -24,23 +25,29 @@
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th>#</th>
-                                            <th>User Name</th>
+                                            <th>Order ID</th>
+                                            <th>Customer Name</th>
                                             <th>Product Name</th>
-                                            <th>Total Price</th>
-                                            <th>Total Order</th>
+                                            <th>Size</th>
+                                            <th>Date</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php foreach ($orders as $index => $order): ?>
+                                        <?php if (empty($orders)): ?>
                                             <tr>
-                                                <td><?= $index + 1 ?></td>
-                                                <td><?= htmlspecialchars($order['user_name']) ?></td>
-                                                <td><?= htmlspecialchars($order['product_name']) ?></td>
-                                                <td>$<?= number_format($order['total_price'], 2) ?></td>
-                                                <td><?= $order['quantity'] ?></td>
+                                                <td colspan="5">No orders found.</td>
                                             </tr>
-                                        <?php endforeach; ?>
+                                        <?php else: ?>
+                                            <?php foreach ($orders as $order): ?>
+                                            <tr>
+                                                <td><?php echo htmlspecialchars($order['order_id']); ?></td>
+                                                <td><?php echo htmlspecialchars($order['customer_name'] ?? 'N/A'); ?></td>
+                                                <td><?php echo htmlspecialchars($order['product_name'] ?? 'N/A'); ?></td>
+                                                <td><?php echo htmlspecialchars($order['drink_size']); ?></td>
+                                                <td><?php echo htmlspecialchars($order['order_date']); ?></td>
+                                            </tr>
+                                            <?php endforeach; ?>
+                                        <?php endif; ?>
                                     </tbody>
                                 </table>
                             </div>
@@ -48,6 +55,8 @@
                     </div>
                 </div>
                 <!-- End of Main Content -->
+
+        
             </div>
         </div>
     </div>

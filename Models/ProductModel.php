@@ -65,6 +65,18 @@ class ProductModel
         return $stmt->execute($data);
     }
 
+    public function find($productId)
+    {
+        try {
+            $stmt = $this->pdo->prepare("SELECT * FROM products WHERE product_id = :product_id");
+            $stmt->execute([':product_id' => $productId]);
+            return $stmt->fetch(\PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Find product error: " . $e->getMessage());
+            return null;
+        }
+    }
+
     public function deleteProduct($id)
     {
         try {

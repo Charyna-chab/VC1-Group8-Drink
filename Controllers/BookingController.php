@@ -3,6 +3,7 @@
 namespace YourNamespace\Controllers;
 
 use YourNamespace\BaseController;
+use PDOException;
 
 class BookingController extends BaseController {
     public function index() {
@@ -142,67 +143,55 @@ class BookingController extends BaseController {
     }
     
     // Add a new method to create a booking from cart
-    public function createBooking() {
+    public function createBooking()
+    {
         // Start session if not already started
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
         }
-        
-        // Check if request is POST
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            http_response_code(405); // Method Not Allowed
-            echo json_encode(['success' => false, 'message' => 'Method not allowed']);
+
+        // Check if the user is logged in
+        if (!isset($_SESSION['user_id'])) {
+            http_response_code(401); // Unauthorized
+            echo json_encode(['success' => false, 'message' => 'You must log in to place an order']);
             exit;
         }
-        
-        // Get JSON data from request body
+
+        // Get JSON data from the request body
         $json = file_get_contents('php://input');
         $data = json_decode($json, true);
-        
+
         if (!$data || !isset($data['items']) || empty($data['items'])) {
             http_response_code(400); // Bad Request
             echo json_encode(['success' => false, 'message' => 'Invalid request data']);
             exit;
         }
-        
-        // Calculate totals
-        $subtotal = 0;
-        foreach ($data['items'] as $item) {
-            $subtotal += $item['totalPrice'];
+
+        // Database connection
+        require_once __DIR__ . '/../Database/database.php';
+        $db = new \YourNamespace\Database\Database();
+        $pdo = $db->getConnection();
+
+        try {
+            // Insert each item into the orders table
+            foreach ($data['items'] as $item) {
+                $stmt = $pdo->prepare("
+                    INSERT INTO orders (user_id, product_id, drink_size, quantity, order_date)
+                    VALUES (:user_id, :product_id, :drink_size, :quantity, NOW())
+                ");
+                $stmt->execute([
+                    ':user_id' => $_SESSION['user_id'],
+                    ':product_id' => $item['product_id'],
+                    ':drink_size' => $item['drink_size'],
+                    ':quantity' => $item['quantity']
+                ]);
+            }
+
+            echo json_encode(['success' => true, 'message' => 'Booking created successfully']);
+        } catch (PDOException $e) {
+            http_response_code(500); // Internal Server Error
+            echo json_encode(['success' => false, 'message' => 'Failed to create booking']);
         }
-        
-        $tax = $subtotal * 0.08; // 8% tax
-        $total = $subtotal + $tax;
-        
-        // Generate a unique order ID
-        $orderId = 'ORD' . date('YmdHis') . rand(100, 999);
-        
-        // Create booking
-        $booking = [
-            'id' => $orderId,
-            'date' => date('Y-m-d H:i:s'),
-            'items' => $data['items'],
-            'subtotal' => $subtotal,
-            'tax' => $tax,
-            'total' => $total,
-            'status' => 'processing',
-            'payment_status' => 'pending'
-        ];
-        
-        // In a real application, you would save the booking to the database
-        // For now, we'll store it in the session
-        if (!isset($_SESSION['bookings'])) {
-            $_SESSION['bookings'] = [];
-        }
-        
-        $_SESSION['bookings'][$orderId] = $booking;
-        
-        echo json_encode([
-            'success' => true,
-            'message' => 'Booking created successfully',
-            'booking' => $booking
-        ]);
-        exit;
     }
     
     // Add a method to complete a booking

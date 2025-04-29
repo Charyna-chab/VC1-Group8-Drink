@@ -6,7 +6,7 @@ $products = $products ?? [];
 $totalPrice = $totalPrice ?? 0;
 $totalProducts = $totalProducts ?? 0;
 $totalorders = $totalorders ?? 0; // Example value, replace with actual data
-$pendingRequests = 18; // You can update this to be dynamic if needed
+$pendingRequests = 21; // You can update this to be dynamic if needed
 
 // Retrieve the total from the session, default to 0 if not set
 $total = isset($_SESSION['product_total']) ? $_SESSION['product_total'] : 0;
@@ -41,7 +41,7 @@ $product_count = $_SESSION['product_count'] ?? 0;
                                     <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                         Order Total (Monthly)</div>
                                     <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                        <span><?= htmlspecialchars($totalorders) ?></span>
+                                    <span><?= $totalorders ?></span>
                                     </div>
                                 </div>
                                 <div class="col-auto">
