@@ -265,3 +265,105 @@ if (!isset($products)) {
 <script src="/assets/js/notification.js"></script>
 
 <?php require_once __DIR__ . '/layouts/footer.php'; ?>
+
+<style>
+    /* General Responsive Fixes */
+@media (max-width: 1200px) {
+    .content {
+        padding: 15px;
+        left: 0;
+    }
+    .products-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 992px) {
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .discount-banner {
+        flex-direction: column;
+        text-align: center;
+        padding: 20px;
+    }
+    .banner-content {
+        max-width: 100%;
+        margin-bottom: 15px;
+    }
+    .discount-banner img {
+        max-width: 200px;
+        height: auto;
+    }
+    .menu-categories {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+    .order-panel {
+        width: 100%;
+        right: -100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .search-filter {
+        width: 100%;
+    }
+    .product-filters {
+        justify-content: center;
+        margin-top: 15px;
+    }
+    .toppings-grid {
+        grid-template-columns: 1fr;
+    }
+    .quantity-control-inner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        left: 0;
+    }
+    .quantity-input {
+        width: 100%;
+    }
+    .add-to-cart-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    .cart-panel-content {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 576px) {
+    .products-grid {
+        grid-template-columns: 1fr;
+    }
+    .menu-categories {
+        justify-content: center;
+    }
+    .discount-banner img {
+        max-width: 150px;
+    }
+    .product-card {
+        margin-bottom: 20px;
+    }
+    .order-summary {
+        font-size: 14px;
+    }
+    .order-summary .summary-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .order-summary .summary-item span {
+        margin-bottom: 5px;
+    }
+    .cart-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .cart-actions button {
+        width: 100%;
+    }
+}   
+</style>
