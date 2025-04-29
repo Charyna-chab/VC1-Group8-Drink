@@ -16,15 +16,16 @@
     <style>
         body {
             background-color: #f8f9fc;
+            
             overflow-x: hidden;
         }
 
         #wrapper {
             display: flex;
             width: 100%;
-        }
+        } 
 
-        #sidebar {
+         #sidebar {
             min-width: 250px;
             max-width: 250px;
             min-height: 100vh;
@@ -32,8 +33,8 @@
 
         #content {
             width: 100%;
-            min-height: 100vh;
-        }
+            /* min-height: 100vh; */
+        } 
 
         .card {
             border: none;
@@ -190,7 +191,6 @@
         }
     </style>
 </head>
-<?php require './views/admin/Partials/header.php' ?>
 <body id="page-top">
     <div id="wrapper">
         <?php require_once __DIR__ . '/../admin/Partials/sidebar.php'; ?>
@@ -228,7 +228,6 @@
                                         <th>Image</th>
                                         <th>Product Name</th>
                                         <th>Product Detail</th>
-                                        <th>Quantity</th>
                                         <th>Price</th>
                                         <th>Category</th>
                                         <th>Action</th>
@@ -236,19 +235,16 @@
                                 </thead>
                                 <tbody>
                                     <?php foreach ($products as $index => $product): ?>
-                                        <tr data-category="<?= htmlspecialchars($product['category']) ?>" data-name="<?= htmlspecialchars($product['product_name']) ?>">
+                                        <tr data-category="<?= htmlspecialchars($product['category'] ?? '') ?>" data-name="<?= htmlspecialchars($product['product_name'] ?? '') ?>">
                                             <td><?= $index + 1 ?></td>
                                             <td>
-                                                <img src="<?= htmlspecialchars($product['image']) ?>" alt="Product Image"
+                                                <img src="<?= htmlspecialchars($product['image'] ?? '/assets/images/default-product.png') ?>" alt="Product Image"
                                                     class="product-image" style="object-fit: cover;">
                                             </td>
-                                            <td class="product-name"><?= htmlspecialchars($product['product_name']) ?></td>
-                                            <td class="product-detail"><?= htmlspecialchars($product['product_detail']) ?></td>
-                                            <td class="quantity <?= $product['quantity'] == 0 ? 'zero' : '' ?>">
-                                                <?= htmlspecialchars($product['quantity']) ?>
-                                            </td>
-                                            <td>$<?= htmlspecialchars($product['price']) ?></td>
-                                            <td><?= htmlspecialchars($product['category']) ?></td>
+                                            <td class="product-name"><?= htmlspecialchars($product['product_name'] ?? 'N/A') ?></td>
+                                            <td class="product-detail"><?= htmlspecialchars($product['product_detail'] ?? 'N/A') ?></td>
+                                            <td>$<?= htmlspecialchars($product['price'] ?? '0.00') ?></td>
+                                            <td><?= htmlspecialchars($product['category'] ?? 'N/A') ?></td>
                                             <td>
                                                 <div class="dropdown">
                                                     <button class="btn btn-sm p-0 border-0 bg-transparent dropdown-toggle"
