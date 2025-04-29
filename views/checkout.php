@@ -913,64 +913,67 @@ $google_maps_api_key = "YOUR_GOOGLE_MAPS_API_KEY"; // Replace with your actual A
     
     /* Payment Styles */
     .payment-container {
-        max-width: 800px;
+        max-width: 900px;
         margin: 0 auto;
         background-color: white;
-        border-radius: 12px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-        padding: 30px;
+        border-radius: 16px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        padding: 40px;
         animation: slide-in 0.5s ease;
     }
     
     .payment-header {
         text-align: center;
-        margin-bottom: 30px;
+        margin-bottom: 40px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid #f5f5f5;
     }
     
     .payment-icon {
-        width: 70px;
-        height: 70px;
+        width: 80px;
+        height: 80px;
         background-color: #ff6769;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        margin: 0 auto 15px;
+        margin: 0 auto 20px;
     }
     
     .payment-icon i {
-        font-size: 30px;
+        font-size: 36px;
         color: white;
     }
     
     .payment-header h3 {
-        margin: 0 0 5px;
-        font-size: 24px;
+        margin: 0 0 10px;
+        font-size: 28px;
         color: #333;
     }
     
     .payment-header p {
         margin: 0;
         color: #666;
-        font-size: 16px;
+        font-size: 18px;
     }
     
     .payment-amount-display {
-        background-color: #f9f9f9;
-        border-radius: 8px;
-        padding: 15px;
-        margin-bottom: 30px;
+        background-color: #fff5f5;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 40px;
         text-align: center;
+        box-shadow: 0 2px 10px rgba(255, 103, 105, 0.1);
     }
     
     .amount-label {
-        font-size: 16px;
+        font-size: 18px;
         color: #666;
-        margin-bottom: 5px;
+        margin-bottom: 10px;
     }
     
     .amount-value {
-        font-size: 28px;
+        font-size: 32px;
         font-weight: bold;
         color: #ff6769;
     }
@@ -978,8 +981,8 @@ $google_maps_api_key = "YOUR_GOOGLE_MAPS_API_KEY"; // Replace with your actual A
     .payment-options {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: 20px;
-        margin-bottom: 30px;
+        gap: 25px;
+        margin-bottom: 40px;
     }
     
     @media (max-width: 768px) {
@@ -996,8 +999,8 @@ $google_maps_api_key = "YOUR_GOOGLE_MAPS_API_KEY"; // Replace with your actual A
     .payment-option-inner {
         background-color: #f9f9f9;
         border: 2px solid #eee;
-        border-radius: 12px;
-        padding: 20px;
+        border-radius: 16px;
+        padding: 25px;
         text-align: center;
         height: 100%;
         display: flex;
@@ -1008,22 +1011,22 @@ $google_maps_api_key = "YOUR_GOOGLE_MAPS_API_KEY"; // Replace with your actual A
     }
     
     .payment-option:hover .payment-option-inner {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        transform: translateY(-8px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
         border-color: #ff6769;
     }
     
     .payment-option.active .payment-option-inner {
         background-color: #fff5f5;
         border-color: #ff6769;
-        box-shadow: 0 8px 15px rgba(255, 103, 105, 0.2);
+        box-shadow: 0 10px 20px rgba(255, 103, 105, 0.25);
     }
     
     .payment-logo {
-        width: 80px;
-        height: 80px;
+        width: 100px;
+        height: 100px;
         object-fit: contain;
-        margin-bottom: 15px;
+        margin-bottom: 20px;
     }
     
     .payment-icon {
@@ -1034,43 +1037,45 @@ $google_maps_api_key = "YOUR_GOOGLE_MAPS_API_KEY"; // Replace with your actual A
     
     .payment-option h4 {
         margin: 0;
-        font-size: 18px;
+        font-size: 20px;
         color: #333;
     }
     
     .payment-method-container {
         background-color: #f9f9f9;
-        border-radius: 12px;
-        padding: 30px;
-        margin-bottom: 30px;
-        min-height: 300px;
+        border-radius: 16px;
+        padding: 40px;
+        margin-bottom: 40px;
+        min-height: 350px;
         position: relative;
         overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
     }
     
     .payment-method-default {
         text-align: center;
-        padding: 40px 0;
+        padding: 50px 0;
     }
     
     .payment-method-icon {
-        font-size: 50px;
+        font-size: 60px;
         color: #ccc;
-        margin-bottom: 20px;
+        margin-bottom: 25px;
     }
     
     .payment-method-default p {
         color: #999;
-        font-size: 18px;
+        font-size: 20px;
     }
     
     .payment-qr-container {
         text-align: center;
         position: relative;
-        padding: 20px;
+        padding: 30px;
         background: linear-gradient(45deg, #fff5f5, #f9f9f9);
-        border-radius: 12px;
+        border-radius: 16px;
         animation: pulse-bg 3s infinite;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
     }
     
     @keyframes pulse-bg {
@@ -1080,47 +1085,47 @@ $google_maps_api_key = "YOUR_GOOGLE_MAPS_API_KEY"; // Replace with your actual A
     }
     
     .payment-qr-container h4 {
-        font-size: 22px;
+        font-size: 26px;
         color: #333;
-        margin-bottom: 10px;
+        margin-bottom: 15px;
     }
     
     .payment-amount {
-        font-size: 28px;
+        font-size: 32px;
         font-weight: bold;
         color: #ff6769;
-        margin: 15px 0;
+        margin: 20px 0;
     }
     
     .payment-qr {
-        width: 300px;
-        height: 300px;
-        margin: 20px auto;
-        border: 2px solid #ddd;
-        border-radius: 12px;
-        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        width: 400px;
+        height: 400px;
+        margin: 25px auto;
+        border: 3px solid #ddd;
+        border-radius: 16px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
         transition: transform 0.3s ease;
     }
     
     .payment-qr:hover {
-        transform: scale(1.05);
+        transform: scale(1.08);
     }
     
     @media (max-width: 576px) {
         .payment-qr {
-            width: 250px;
-            height: 250px;
+            width: 300px;
+            height: 300px;
         }
     }
     
     .phone-input-container {
-        max-width: 400px;
-        margin: 20px auto;
+        max-width: 450px;
+        margin: 25px auto;
         text-align: left;
     }
     
     .card-input-container {
-        max-width: 500px;
+        max-width: 550px;
         margin: 0 auto;
     }
     
@@ -1437,7 +1442,6 @@ $google_maps_api_key = "YOUR_GOOGLE_MAPS_API_KEY"; // Replace with your actual A
         }
     }
 </style>
-
 <script>
 document.addEventListener("DOMContentLoaded", () => {
     // DOM Elements

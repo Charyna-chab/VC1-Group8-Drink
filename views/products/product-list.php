@@ -181,6 +181,13 @@
                 width: 100%;
             }
         }
+        /* style out stock */
+        .quantity.zero {
+            color: #e74a3b;
+            font-weight: bold;
+            background-color: #fde8e8;
+            border-radius: 4px;
+        }
     </style>
 </head>
 
@@ -237,7 +244,9 @@
                                             </td>
                                             <td class="product-name"><?= htmlspecialchars($product['product_name']) ?></td>
                                             <td class="product-detail"><?= htmlspecialchars($product['product_detail']) ?></td>
-                                            <td class="quantity"><?= htmlspecialchars($product['quantity']) ?></td>
+                                            <td class="quantity <?= $product['quantity'] == 0 ? 'zero' : '' ?>">
+                                                <?= htmlspecialchars($product['quantity']) ?>
+                                            </td>
                                             <td>$<?= htmlspecialchars($product['price']) ?></td>
                                             <td><?= htmlspecialchars($product['category']) ?></td>
                                             <td>

@@ -2,7 +2,7 @@
     <?php require_once __DIR__ . '/layouts/navbar.php'; ?>
     
 
-    <div class="section-praents-join-team">
+ <div class="section-praents-join-team">
     <section class="team-intro">
         <div class="container">
             <div class="intro-content">
@@ -24,64 +24,7 @@
         </div>
     </section>
 
-    <section class="why-join">
-        <div class="container">
-            <div class="section-header">
-                <h2>Why Work With Us?</h2>
-                <p>Discover the benefits of joining the XING FU CHA team</p>
-            </div>
-            
-            <div class="benefits-grid">
-                <div class="benefit-item">
-                    <div class="benefit-icon">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <h3>Great Team Culture</h3>
-                    <p>Step into a warm and inviting atmosphere where every member feels like family.</p>
-                </div>
-                
-                <div class="benefit-item">
-                    <div class="benefit-icon">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <h3>Growth Opportunities</h3>
-                    <p>We're all about helping you rise and thrive in your career!</p>
-                </div>
-                
-                <div class="benefit-item">
-                    <div class="benefit-icon">
-                        <i class="fas fa-graduation-cap"></i>
-                    </div>
-                    <h3>Training Programs</h3>
-                    <p>Enjoy thorough training designed to help you perfect your skills and truly shine in your role.</p>
-                </div>
-                
-                <div class="benefit-item">
-                    <div class="benefit-icon">
-                        <i class="fas fa-mug-hot"></i>
-                    </div>
-                    <h3>Free Drinks</h3>
-                    <p>Enjoy complimentary bubble tea during your shifts.</p>
-                </div>
-                
-                <div class="benefit-item">
-                    <div class="benefit-icon">
-                        <i class="fas fa-calendar-alt"></i>
-                    </div>
-                    <h3>Flexible Scheduling</h3>
-                    <p>Work schedules that accommodate your life and studies.</p>
-                </div>
-                
-                <div class="benefit-item">
-                    <div class="benefit-icon">
-                        <i class="fas fa-percentage"></i>
-                    </div>
-                    <h3>Employee Discounts</h3>
-                    <p>Special discounts for you and your family members.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+
 
     <section class="team-values">
         <div class="container">
@@ -273,68 +216,7 @@
         </div>
     </section>
 
-    <section class="faq-section">
-        <div class="container">
-            <div class="section-header">
-                <h2>Frequently Asked Questions</h2>
-                <p>Find answers to common questions about working with us</p>
-            </div>
-            
-            <div class="faq-accordion">
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <h3>Do I need experience to apply?</h3>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        <p>For most entry-level positions, no prior experience is required. We provide comprehensive training for all new team members. What's most important is your attitude, willingness to learn, and passion for customer service.</p>
-                    </div>
-                </div>
-                
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <h3>What are the typical working hours?</h3>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        <p>Our stores typically operate from 8:00 AM to 8:00 PM, with shifts ranging from 4-8 hours depending on your position and availability. We offer both morning and evening shifts, and we're flexible with scheduling to accommodate students and those with other commitments.</p>
-                    </div>
-                </div>
-                
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <h3>Is there opportunity for advancement?</h3>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        <p>We believe in the promoting from within and offer clear career paths for our team members. Many of our managers started as baristas or kitchen staff. We provide training and mentorship to help you grow in your role and take on new responsibilities.</p>
-                    </div>
-                </div>
-                
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <h3>What benefits do employees receive?</h3>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        <p>Our benefits include employee discounts, free drinks during shifts, flexible scheduling, paid training, and opportunities for advancement. Full-time employees may also be eligible for additional benefits depending on their position and tenure.</p>
-                    </div>
-                </div>
-                
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <h3>How long does the application process take?</h3>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        <p>Our application process typically takes 1-2 weeks from submission to final decision. We review applications promptly and reach out to qualified candidates for interviews. The entire process includes application review, initial interview, skills assessment, and final interview.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-
+  
 
     <div id="sharePositionModal" class="modal">
         <div class="modal-content">
@@ -366,7 +248,7 @@
             </div>
         </div>
     </div>
-    </div>
-    <?php $pageScript = '/assets/js/join-team.js'; ?>
-    <?php require_once __DIR__ . '/layouts/footer.php'; ?>
+</div>
+<?php $pageScript = '/assets/js/join-team.js'; ?>
+<?php require_once __DIR__ . '/layouts/footer.php'; ?>
 
