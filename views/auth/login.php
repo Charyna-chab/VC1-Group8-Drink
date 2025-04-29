@@ -41,35 +41,41 @@ if (session_status() == PHP_SESSION_NONE) {
     }
     .register-button {
       background-color: #ffffff;
-      color:rgb(255, 0, 72) ;
+      color: rgb(255, 0, 72);
       border: 2px solid #e0e0e0;
     }
     .fa-user-plus {
       background-color: #ffffff;
-      color:rgb(255, 0, 72) ;
-      
+      color: rgb(255, 0, 72);
     }
     .register-button:hover {
-      background-color:rgb(245, 245, 245);
+      background-color: rgb(245, 245, 245);
       transform: translateY(-2px);
     }
     .admin-button {
-      background-color:rgb(255, 79, 79);
+      background-color: rgb(255, 79, 79);
       color: white;
-      border: 2px solidrgb(255, 0, 0);
+      border: 2px solid rgb(255, 0, 0);
     }
     .fa-user-lock {
-      background-color:rgb(255, 79, 79);
+      background-color: rgb(255, 79, 79);
       color: white;
-      
     }
-
     .admin-button:hover {
-      background-color:hsl(0, 100.00%, 50.00%);
+      background-color: hsl(0, 100.00%, 50.00%);
       transform: translateY(-2px);
     }
     .auth-top-button i {
       margin-right: 8px;
+    }
+    /* Image Preview Styles */
+    .image-preview {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 50%;
+      display: none;
+      margin: 10px auto;
     }
   </style>
 </head>
@@ -79,12 +85,9 @@ if (session_status() == PHP_SESSION_NONE) {
     <a href="/register" class="auth-top-button register-button">
       <i class="fas fa-user-plus"></i> Register
     </a>
-
     <a href="/admin-login" class="auth-top-button admin-button">
-  <i class="fas fa-user-lock"></i> Admin Login
-</a>
-
-
+      <i class="fas fa-user-lock"></i> Admin Login
+    </a>
   </div>
 
   <!-- MAIN CONTENT -->
@@ -112,7 +115,7 @@ if (session_status() == PHP_SESSION_NONE) {
           </div>
         <?php endif; ?>
 
-        <form action="/login" method="post" class="auth-form">
+        <form action="/login" method="post" class="auth-form" enctype="multipart/form-data">
           <div class="form-group">
             <label for="email">Email</label>
             <div class="input-with-icon">
@@ -128,6 +131,12 @@ if (session_status() == PHP_SESSION_NONE) {
               <input type="password" id="password" name="password" placeholder="Enter your password" required>
               <i class="fas fa-eye toggle-password"></i>
             </div>
+          </div>
+
+          <div class="form-group">
+            <label for="profile_image">Profile Image (Optional)</label>
+            <input type="file" class="form-control" id="profile_image" name="profile_image" accept="image/*">
+            <img id="image-preview" class="image-preview" alt="Image Preview">
           </div>
 
           <div class="form-options">
@@ -181,6 +190,23 @@ if (session_status() == PHP_SESSION_NONE) {
                 this.classList.toggle('fa-eye');
             });
         }
+
+        // Image preview
+        document.getElementById('profile_image').addEventListener('change', function(e) {
+          const file = e.target.files[0];
+          const preview = document.getElementById('image-preview');
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+              preview.src = e.target.result;
+              preview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+          } else {
+            preview.src = '';
+            preview.style.display = 'none';
+          }
+        });
     });
   </script>
 </body>
