@@ -1,5 +1,10 @@
 /* Join The Team Page Styles */
 
+.section-praents-join-team {
+    position: relative;
+    top: 500px;
+}
+
 .join-team-hero {
     background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("/assets/image/backgrounds/join-team-hero.jpg") center / cover no-repeat;
 }
@@ -8,6 +13,7 @@
     padding: 60px 0;
     position: relative;
     bottom: 1000px;
+    top: 300px;
 }
 
 .why-join {
