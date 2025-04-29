@@ -1,14 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order List</title>
-    <link href="/assets/css/sb-admin-2.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/style.css">
-    <link rel="stylesheet" href="/assets/css/sidebar.css">
-</head>
+<?php require_once __DIR__ . '/../admin/Partials/header.php';?>
 
 <body id="page-top">
     <div id="wrapper">

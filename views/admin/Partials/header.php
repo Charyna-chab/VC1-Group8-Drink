@@ -11,4 +11,7 @@
     <link href="/assets/css/sb-admin-2.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/style.css">
     <link rel="stylesheet" href="/assets/css/sidebar.css">
+    <link rel="apple-touch-icon" sizes="76x76" href="/assets/image/logo/logo.png">
+    <link rel="icon" type="image/png" href="/assets/image/logo/logo.png">
+    <meta name="description" content="XING FU CHA - Your favorite place for delicious Boba Tea.">
 </head>
