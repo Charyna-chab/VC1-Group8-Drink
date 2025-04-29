@@ -2,9 +2,11 @@
 namespace YourNamespace\Controllers;
 
 require_once './Models/ProductModel.php';
+require_once './Models/OrderModel.php';
 require_once './controllers/BaseController.php';
 
 use YourNamespace\Models\ProductModel;
+use YourNamespace\Models\OrderModel;
 use YourNamespace\BaseController;
 
 class DashboardController extends BaseController
@@ -22,14 +24,14 @@ class DashboardController extends BaseController
 
     public function index()
     {
-        // Fetch total price and total product count
-        $totalPrice = $this->productModel->getTotalPrice();
-        $totalProducts = $this->productModel->getTotalProducts();
+        $orderModel = new OrderModel();
+        $totalorders = $orderModel->getTotalOrders(); // Fetch total orders
 
-        // Pass data to the dashboard view
-        $this->views('dashboard/list', [
-            'totalPrice' => $totalPrice,
-            'totalProducts' => $totalProducts,
+        $this->views('admin/dashboard', [
+            'totalorders' => $totalorders, // Pass total orders to the view
+            'totalPrice' => 10000, // Example value
+            'totalProducts' => 50, // Example value
+            'pendingRequests' => 18 // Example value
         ]);
     }
 

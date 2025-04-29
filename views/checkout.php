@@ -2138,5 +2138,8 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    backToCustomerBtn.addEventListener("click", () => {
-        goToStep
+        backToCustomerBtn.addEventListener("click", () => {
+            goToStep(1); // Replace with the appropriate step number or remove if not needed
+        });
+    
+    }); // Closing the DOMContentLoaded event listener

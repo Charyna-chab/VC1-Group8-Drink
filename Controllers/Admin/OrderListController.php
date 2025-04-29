@@ -1,41 +1,25 @@
 <?php
+
 namespace YourNamespace\Controllers\Admin;
 
-require_once __DIR__ . '/../../Models/OrderListModel.php'; // Add this line
+require_once './Models/OrderModel.php';
+require_once './controllers/BaseController.php';
 
-use YourNamespace\Models\OrderListModel;
+use YourNamespace\Models\OrderModel;
+use YourNamespace\BaseController;
 
-class OrderListController
+class OrderListController extends BaseController
 {
     private $orderModel;
 
     public function __construct()
     {
-        $this->orderModel = new OrderListModel();
+        $this->orderModel = new OrderModel();
     }
 
     public function index()
     {
-        $orders = $this->orderModel->getAllOrders();
-        require_once __DIR__ . '/../../views/order-list.php';
-    }
-
-    public function details($id)
-    {
-        $order = $this->orderModel->getOrderById($id);
-        if (!$order) {
-            $_SESSION['error'] = 'Order not found';
-            header('Location: /admin/orders');
-            exit;
-        }
-        require_once __DIR__ . '/../../views/order-details.php';
-    }
-
-    public function delete($id)
-    {
-        $success = $this->orderModel->deleteOrder($id);
-        $_SESSION[$success ? 'success' : 'error'] = $success ? 'Order deleted successfully' : 'Failed to delete order';
-        header('Location: /admin/orders');
-        exit;
+        $orders = $this->orderModel->getOrders();
+        $this->views('admin/order-list', ['orders' => $orders]);
     }
 }

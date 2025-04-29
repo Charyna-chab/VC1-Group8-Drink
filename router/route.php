@@ -28,10 +28,10 @@ require_once "./controllers/Admin/DashboardController.php";
 require_once "./controllers/Admin/AdminReceiptController.php"; // Fixed path
 require_once __DIR__ . '/../controllers/Customer/ToppingController.php';
 require_once "controllers/ProfileController.php"; // Add this line for ProfileController
-require_once __DIR__ . '/../controllers/WelcomeController.php';
+require_once __DIR__ . '/../controllers/Admin/OrderListController.php'; // Fixed path for OrderListController
 
 use YourNamespace\Router;
-use YourNamespace\Controllers\WelcomeController;
+use YourNamespace\Controllers\WelcomeController;  // Add this line
 use YourNamespace\Controllers\OrdersController;
 use YourNamespace\Controllers\BookingController;
 use YourNamespace\Controllers\FavoritesController;
@@ -50,8 +50,9 @@ use YourNamespace\Controllers\CheckoutController; // Add this line
 use YourNamespace\Controllers\Admin\Users\UserController;
 use YourNamespace\Controllers\Admin\Products\ProductController;
 use YourNamespace\Controllers\Admin\DashboardController;
-use YourNamespace\Controllers\Admin\AdminReceiptController;
 use YourNamespace\Controllers\ProfileController; // Add this line
+use YourNamespace\Controllers\Admin\AdminReceiptController; // Fixed namespace
+use YourNamespace\Controllers\Admin\OrderListController; // Ensure namespace matches the actual class definition
 
 use YourNamespace\Controllers\Admin\Products\ToppingController; // Fixed namespace
 
@@ -168,10 +169,12 @@ $route->get("/admin/users/create", [UserController::class, 'create']);
 $route->post("/admin/users/store", [UserController::class, 'store']);
 $route->get("/admin/users/edit/{id}", [UserController::class, 'edit']);
 $route->post("/admin/users/update/{id}", [UserController::class, 'update']);
+$route->post("/admin/users/delete/{id}", [UserController::class, 'destroy']);
+
+// Admin Feedback
 $route->post("/admin/users/delete", [UserController::class, 'destroy']);
 
-
-
-
+// Admin Order Management
+$route->get("/admin/orders", [OrderListController::class, 'index']);
 
 $route->route();

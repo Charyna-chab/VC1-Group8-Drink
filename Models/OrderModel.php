@@ -3,6 +3,8 @@
 
 namespace YourNamespace\Models;
 
+require_once './Database/database.php';
+
 use YourNamespace\Database\Database;
 use PDOException;
 
@@ -23,11 +25,13 @@ class OrderModel
             $this->pdo->beginTransaction();
 
             foreach ($cartItems as $item) {
-                $stmt = $this->pdo->prepare("INSERT INTO orders (user_id, product_id, drink_size) VALUES (:user_id, :product_id, :drink_size)");
+                $stmt = $this->pdo->prepare("INSERT INTO orders (user_id, product_id, drink_size, quantity) 
+                                             VALUES (:user_id, :product_id, :drink_size, :quantity)");
                 $stmt->execute([
                     'user_id' => $userId,
                     'product_id' => $item['product_id'],
                     'drink_size' => $item['size'],
+                    'quantity' => $item['quantity'],
                 ]);
             }
 
@@ -243,5 +247,32 @@ class OrderModel
                 'month' => 0
             ];
         }
+    }
+
+    // Get orders
+    public function getOrders()
+    {
+        $sql = "SELECT 
+                    o.order_id AS order_id, 
+                    u.name AS user_name, 
+                    p.product_name, 
+                    (p.price * o.quantity) AS total_price, 
+                    o.quantity 
+                FROM orders o
+                JOIN users u ON o.user_id = u.user_id
+                JOIN products p ON o.product_id = p.product_id
+                ORDER BY o.order_date DESC";
+
+        $stmt = $this->pdo->query($sql);
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    // Get total orders
+    public function getTotalOrders()
+    {
+        $sql = "SELECT COUNT(*) AS total_orders FROM orders";
+        $stmt = $this->pdo->query($sql);
+        $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+        return $result['total_orders'] ?? 0;
     }
 }

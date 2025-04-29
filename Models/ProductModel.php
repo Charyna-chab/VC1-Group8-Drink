@@ -21,23 +21,26 @@ class ProductModel
 
     public function getProducts()
     {
-        $stmt = $this->pdo->query("SELECT * FROM products ORDER BY product_id DESC");
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        try {
+            $stmt = $this->pdo->query("SELECT * FROM products ORDER BY product_id DESC");
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Database error: " . $e->getMessage());
+            return [];
+        }
     }
 
-   
     public function createProduct($data)
-{
-    try {
-        $query = "INSERT INTO products (product_name, product_detail, price, image, category,quantity)
-                  VALUES (:product_name, :product_detail, :price, :image, :category,:quantity)";
-        $stmt = $this->pdo->prepare($query);
-        return $stmt->execute($data);
-    } catch (PDOException $e) {
-        die("Database error: " . $e->getMessage());
+    {
+        try {
+            $query = "INSERT INTO products (product_name, product_detail, price, image, category,quantity)
+                      VALUES (:product_name, :product_detail, :price, :image, :category,:quantity)";
+            $stmt = $this->pdo->prepare($query);
+            return $stmt->execute($data);
+        } catch (PDOException $e) {
+            die("Database error: " . $e->getMessage());
+        }
     }
-}
-
 
     public function getProduct($id)
     {
@@ -53,7 +56,7 @@ class ProductModel
                     product_detail = :product_detail,
                     price = :price,
                     category = :category,
-                    quantity = :quantity,
+                   
                     image = :image
                 WHERE product_id = :product_id";
 
@@ -61,8 +64,6 @@ class ProductModel
         $stmt = $this->pdo->prepare($sql);
         return $stmt->execute($data);
     }
-
-
 
     public function deleteProduct($id)
     {
