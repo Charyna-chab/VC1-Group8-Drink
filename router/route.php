@@ -32,7 +32,7 @@ require_once __DIR__ . '/../controllers/Admin/OrderListController.php'; // Fixed
 
 use YourNamespace\Router;
 use YourNamespace\Controllers\WelcomeController;  // Add this line
-use YourNamespace\Controllers\OrdersController;
+use YourNamespace\Controllers\Customer\OrdersController;
 use YourNamespace\Controllers\BookingController;
 use YourNamespace\Controllers\FavoritesController;
 use YourNamespace\Controllers\SettingsController;
@@ -42,7 +42,6 @@ use YourNamespace\Controllers\FeedbackController;
 use YourNamespace\Controllers\PaymentController;
 use YourNamespace\Controllers\CashController;
 use YourNamespace\Controllers\ReceiptController;
-use YourNamespace\Controllers\Admin\AdminFeedbackController;
 use YourNamespace\Controllers\GiftCardController;
 use YourNamespace\Controllers\LocationsController;
 use YourNamespace\Controllers\JoinTheTeamController;
@@ -54,7 +53,7 @@ use YourNamespace\Controllers\ProfileController; // Add this line
 use YourNamespace\Controllers\Admin\AdminReceiptController; // Fixed namespace
 use YourNamespace\Controllers\Admin\OrderListController; // Ensure namespace matches the actual class definition
 
-use YourNamespace\Controllers\Admin\Products\ToppingController; // Fixed namespace
+
 
 $route = new Router();
 

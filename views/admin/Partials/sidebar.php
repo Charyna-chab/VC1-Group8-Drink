@@ -44,7 +44,7 @@ $currentPage = basename($_SERVER['REQUEST_URI']);
     <hr class="sidebar-divider">
     <!-- Nav Item - Order List -->
     <li class="nav-item <?= $currentPage == 'order-list' ? 'active-page' : '' ?>">
-        <a class="nav-link" href="/admin/orders">
+        <a class="nav-link" href="/admin/orderslist">
             <i class="fas fa-list order-list-icon" style="color: black !important;"></i>
             <span>Order List</span>
         </a>

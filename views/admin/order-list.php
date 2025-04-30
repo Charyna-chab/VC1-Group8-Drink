@@ -1,5 +1,4 @@
-
-<?php require_once __DIR__ . '/../admin/Partials/header.php';?>
+<?php require_once __DIR__ . '/../admin/Partials/header.php'; ?>
 
 <body id="page-top">
     <div id="wrapper">
@@ -35,7 +34,7 @@
                                     <tbody>
                                         <?php if (empty($orders)): ?>
                                             <tr>
-                                                <td colspan="5">No orders found.</td>
+                                                <td colspan="5" class="text-center">No orders found. Please check back later.</td>
                                             </tr>
                                         <?php else: ?>
                                             <?php foreach ($orders as $order): ?>
@@ -55,8 +54,6 @@
                     </div>
                 </div>
                 <!-- End of Main Content -->
-
-        
             </div>
         </div>
     </div>
