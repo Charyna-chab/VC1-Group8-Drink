@@ -202,19 +202,9 @@ if (file_exists($admin_data_file)) {
                                 <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                 Profile
                             </a>
-                            <a class="dropdown-item" href="#">
-                                <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                Settings
-                            </a>
-                            <a class="dropdown-item" href="#">
-                                <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                Activity Log
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item text-danger" href="#" data-toggle="modal" data-target="#logoutModal">
-                                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-danger"></i>
-                                Logout
-                            </a>
+
+                            
+                           
                         </div>
                     </li>
                 </ul>
@@ -310,74 +300,74 @@ if (file_exists($admin_data_file)) {
 
     <!-- JavaScript -->
     <script>
-    function submitImage() {
-        const input = document.getElementById('profileImageUpload');
-        const file = input.files[0];
-        if (!file) return;
+        function submitImage() {
+            const input = document.getElementById('profileImageUpload');
+            const file = input.files[0];
+            if (!file) return;
 
-        const formData = new FormData();
-        formData.append('profile_image', file);
-        formData.append('user_id', document.querySelector('input[name="user_id"]').value);
+            const formData = new FormData();
+            formData.append('profile_image', file);
+            formData.append('user_id', document.querySelector('input[name="user_id"]').value);
 
-        // Preview image immediately
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const previewImage = document.getElementById('preview');
-            const topbarImage = document.querySelector('.img-profile');
-            previewImage.src = e.target.result;
-            topbarImage.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
+            // Preview image immediately
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const previewImage = document.getElementById('preview');
+                const topbarImage = document.querySelector('.img-profile');
+                previewImage.src = e.target.result;
+                topbarImage.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
 
-        // Upload image to the server
-        fetch('/update_admin_image.php', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('Profile image updated successfully!');
-                // Update UI with the new image URL from the server
-                document.getElementById('preview').src = data.image_url;
-                document.querySelector('.img-profile').src = data.image_url;
-            } else {
-                alert('Failed to update profile image: ' + data.message);
-            }
-        })
-        .catch(error => {
-            console.error('Upload error:', error);
-            alert('Error uploading image');
-        });
-    }
+            // Upload image to the server
+            fetch('/update_admin_image.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Profile image updated successfully!');
+                        // Update UI with the new image URL from the server
+                        document.getElementById('preview').src = data.image_url;
+                        document.querySelector('.img-profile').src = data.image_url;
+                    } else {
+                        alert('Failed to update profile image: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Upload error:', error);
+                    alert('Error uploading image');
+                });
+        }
 
-    function saveProfile() {
-        const form = document.getElementById('adminProfileForm');
-        const formData = new FormData(form);
-        formData.append('user_id', '<?php echo htmlspecialchars($_SESSION['user']['id'] ?? '1'); ?>');
+        function saveProfile() {
+            const form = document.getElementById('adminProfileForm');
+            const formData = new FormData(form);
+            formData.append('user_id', '<?php echo htmlspecialchars($_SESSION['user']['id'] ?? '1'); ?>');
 
-        fetch('/update_admin_profile.php', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('Profile updated successfully!');
-                document.querySelector('.text-dark.font-weight-semibold').textContent = data.name;
-                // Update session data
-                <?php $_SESSION['user']['name'] = $_POST['fullName'] ?? $_SESSION['user']['name']; ?>
-                <?php $_SESSION['user']['email'] = $_POST['email'] ?? $_SESSION['user']['email']; ?>
-                <?php $_SESSION['user']['bio'] = $_POST['bio'] ?? $_SESSION['user']['bio']; ?>
-                // Reload the page to ensure the image updates
-                window.location.reload();
-            } else {
-                alert('Failed to update profile: ' + data.message);
-            }
-        })
-        .catch(error => {
-            console.error('Update error:', error);
-            alert('Error updating profile');
-        });
-    }
+            fetch('/update_admin_profile.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Profile updated successfully!');
+                        document.querySelector('.text-dark.font-weight-semibold').textContent = data.name;
+                        // Update session data
+                        <?php $_SESSION['user']['name'] = $_POST['fullName'] ?? $_SESSION['user']['name']; ?>
+                        <?php $_SESSION['user']['email'] = $_POST['email'] ?? $_SESSION['user']['email']; ?>
+                        <?php $_SESSION['user']['bio'] = $_POST['bio'] ?? $_SESSION['user']['bio']; ?>
+                        // Reload the page to ensure the image updates
+                        window.location.reload();
+                    } else {
+                        alert('Failed to update profile: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Update error:', error);
+                    alert('Error updating profile');
+                });
+        }
     </script>
