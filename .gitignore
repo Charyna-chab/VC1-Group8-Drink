@@ -1,0 +1,32 @@
+# Composer
+/vendor/
+composer.phar
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Logs / cache / temp
+*.log
+/logs/
+/tmp/
+/cache/
+
+# Uploaded files
+/uploads/
+/assets/uploads/
+/uploads/profiles/
+
+# IDE / editor
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Node
+/node_modules/
