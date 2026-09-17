@@ -1,7 +1,7 @@
 <?php
 namespace YourNamespace\Controllers\Admin\Users;
-require_once './controllers/BaseController.php'; // Correct path to BaseController.php
-require_once './Models/UserModel.php';
+require_once '/home/sreyneath/Desktop/VC1-Group8-Drink/controllers/BaseController.php'; // Correct path to BaseController.php
+require_once '/home/sreyneath/Desktop/VC1-Group8-Drink/Models/UserModel.php';
 
 use YourNamespace\BaseController; // Ensure the namespace matches BaseController
 use YourNamespace\Models\UserModel; // Add this line

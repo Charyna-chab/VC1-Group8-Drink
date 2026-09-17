@@ -2,8 +2,8 @@
 
 namespace YourNamespace\Controllers\Admin;
 
-require_once './controllers/BaseController.php';
-require_once './Models/ProductModel.php';
+require_once '/home/sreyneath/Desktop/VC1-Group8-Drink/controllers/BaseController.php';
+require_once '/home/sreyneath/Desktop/VC1-Group8-Drink/Models/ProductModel.php';
 
 use YourNamespace\BaseController;
 

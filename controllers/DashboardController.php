@@ -1,9 +1,9 @@
 <?php
 namespace YourNamespace\Controllers;
 
-require_once './Models/ProductModel.php';
-require_once './Models/OrderModel.php';
-require_once './controllers/BaseController.php';
+require_once '/home/sreyneath/Desktop/VC1-Group8-Drink/Models/ProductModel.php';
+require_once '/home/sreyneath/Desktop/VC1-Group8-Drink/Models/OrderModel.php';
+require_once '/home/sreyneath/Desktop/VC1-Group8-Drink/controllers/BaseController.php';
 
 use YourNamespace\Models\ProductModel;
 use YourNamespace\Models\OrderModel;

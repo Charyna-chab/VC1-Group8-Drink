@@ -2,7 +2,7 @@
 
 namespace YourNamespace\Models;
 
-require_once './Database/database.php';
+require_once '/home/sreyneath/Desktop/VC1-Group8-Drink/Database/database.php';
 
 require_once __DIR__ . '/../Database/database.php';
 

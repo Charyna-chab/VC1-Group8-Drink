@@ -1,7 +1,7 @@
 <?php
 namespace YourNamespace\Models;
 
-require_once './Database/database.php';
+require_once '/home/sreyneath/Desktop/VC1-Group8-Drink/Database/database.php';
 
 use YourNamespace\Database\Database;
 use PDOException;

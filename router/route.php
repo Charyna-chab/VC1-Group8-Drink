@@ -1,180 +1,154 @@
 <?php
-// File: router/route.php
-
 namespace YourNamespace;
 
-require_once "Router.php";
+$root = dirname(__DIR__);
 
-require_once "controllers/BaseController.php";
-require_once "controllers/WelcomeController.php";
-require_once __DIR__ . "/../controllers/FavoritesController.php";
-require_once "controllers/SettingsController.php";
-require_once "controllers/Customer/OrdersController.php";
-require_once "controllers/BookingController.php";
-require_once "controllers/AuthController.php";
-require_once "controllers/AdminController.php";
-require_once "controllers/FeedbackController.php";
-require_once "controllers/PaymentController.php";
-require_once "controllers/CashController.php";
-require_once "controllers/ReceiptController.php";
-require_once "controllers/Admin/AdminFeedbackController.php";
-require_once "controllers/GiftCardController.php";
-require_once "controllers/LocationsController.php";
-require_once "controllers/JoinTheTeamController.php";
-require_once "controllers/CheckoutController.php"; // Add this line
-require_once __DIR__ . '/../controllers/Admin/Users/UserController.php';
-require_once './controllers/Admin/Products/ProductController.php';
-require_once "./controllers/Admin/DashboardController.php";
-require_once "./controllers/Admin/AdminReceiptController.php"; // Fixed path
-require_once __DIR__ . '/../controllers/Customer/ToppingController.php';
-require_once "controllers/ProfileController.php"; // Add this line for ProfileController
-require_once __DIR__ . '/../controllers/Admin/OrderListController.php'; // Fixed path for OrderListController
+function safe_require($path) {
+    if (file_exists($path)) {
+        require_once $path;
+        return true;
+    }
+    error_log("route.php: missing file: $path");
+    return false;
+}
+
+function class_exists_safe($fqcn) {
+    return class_exists($fqcn);
+}
+
+require_once __DIR__ . "/Router.php";
+
+$required = [
+    "/controllers/BaseController.php",
+    "/controllers/WelcomeController.php",
+    "/controllers/FavoritesController.php",
+    "/controllers/SettingsController.php",
+    "/controllers/Customer/OrdersController.php",
+    "/controllers/BookingController.php",
+    "/controllers/AuthController.php",
+    "/controllers/AdminController.php",
+    "/controllers/FeedbackController.php",
+    "/controllers/PaymentController.php",
+    "/controllers/CashController.php",
+    "/controllers/ReceiptController.php",
+    "/controllers/Admin/AdminFeedbackController.php",
+    "/controllers/GiftCardController.php",
+    "/controllers/LocationsController.php",
+    "/controllers/JoinTheTeamController.php",
+    "/controllers/CheckoutController.php",
+    "/controllers/Admin/Users/UserController.php",
+    "/controllers/Admin/Products/ProductController.php",
+    "/controllers/Admin/DashboardController.php",
+    "/controllers/Admin/AdminReceiptController.php",
+    "/controllers/Customer/ToppingController.php",
+    "/controllers/ProfileController.php",
+    "/controllers/Admin/OrderListController.php",
+];
+foreach ($required as $rel) {
+    safe_require($root . $rel);
+}
 
 use YourNamespace\Router;
-use YourNamespace\Controllers\WelcomeController;  // Add this line
-use YourNamespace\Controllers\OrdersController;
-use YourNamespace\Controllers\BookingController;
-use YourNamespace\Controllers\FavoritesController;
-use YourNamespace\Controllers\SettingsController;
-use YourNamespace\Controllers\AuthController;
-use YourNamespace\Controllers\AdminController;
-use YourNamespace\Controllers\FeedbackController;
-use YourNamespace\Controllers\PaymentController;
-use YourNamespace\Controllers\CashController;
-use YourNamespace\Controllers\ReceiptController;
-use YourNamespace\Controllers\Admin\AdminFeedbackController;
-use YourNamespace\Controllers\GiftCardController;
-use YourNamespace\Controllers\LocationsController;
-use YourNamespace\Controllers\JoinTheTeamController;
-use YourNamespace\Controllers\CheckoutController; // Add this line
-use YourNamespace\Controllers\Admin\Users\UserController;
-use YourNamespace\Controllers\Admin\Products\ProductController;
-use YourNamespace\Controllers\Admin\DashboardController;
-use YourNamespace\Controllers\ProfileController; // Add this line
-use YourNamespace\Controllers\Admin\AdminReceiptController; // Fixed namespace
-use YourNamespace\Controllers\Admin\OrderListController; // Ensure namespace matches the actual class definition
-
-use YourNamespace\Controllers\Admin\Products\ToppingController; // Fixed namespace
 
 $route = new Router();
 
-// Welcome page as the default route
-$route->get("/", [WelcomeController::class, 'welcome']);
+// Register only if class exists
+$map = [
+    // GET,     path,                    FQCN,                                          method
+    ['get',  "/",                       \YourNamespace\Controllers\WelcomeController::class,       'welcome'],
+    ['get',  "/welcome",                \YourNamespace\Controllers\WelcomeController::class,       'welcome'],
 
-// Authentication routes
-$route->get("/login", [AuthController::class, 'login']);
-$route->post("/login", [AuthController::class, 'login']);
-$route->get("/logout", [AuthController::class, 'logout']);
+    ['get',  "/login",                  \YourNamespace\Controllers\AuthController::class,          'login'],
+    ['post', "/login",                  \YourNamespace\Controllers\AuthController::class,          'login'],
+    ['get',  "/logout",                 \YourNamespace\Controllers\AuthController::class,          'logout'],
+    ['get',  "/admin-login",            \YourNamespace\Controllers\AuthController::class,          'adminLogin'],
+    ['post', "/admin-login",            \YourNamespace\Controllers\AuthController::class,          'adminLogin'],
+    ['get',  "/admin-verification",     \YourNamespace\Controllers\AuthController::class,          'adminVerification'],
+    ['post', "/admin-verification",     \YourNamespace\Controllers\AuthController::class,          'adminVerification'],
+    ['get',  "/register",               \YourNamespace\Controllers\AuthController::class,          'register'],
+    ['post', "/register",               \YourNamespace\Controllers\AuthController::class,          'register'],
 
-$route->get("/admin-login", [AuthController::class, 'adminLogin']);
-$route->post("/admin-login", [AuthController::class, 'adminLogin']);
-$route->get("/admin-verification", [AuthController::class, 'adminVerification']);
-$route->post("/admin-verification", [AuthController::class, 'adminVerification']);
+    ['post', "/update-profile-image",   \YourNamespace\Controllers\ProfileController::class,       'updateProfileImage'],
 
-$route->get("/register", [AuthController::class, 'register']);
-$route->post("/register", [AuthController::class, 'register']);
-$route->get("/register-success", [AuthController::class, 'registerSuccess']);
+    ['get',  "/gift-card",              \YourNamespace\Controllers\GiftCardController::class,      'index'],
+    ['get',  "/gift-card/details/{id}", \YourNamespace\Controllers\GiftCardController::class,      'details'],
+    ['get',  "/locations",              \YourNamespace\Controllers\LocationsController::class,     'index'],
+    ['get',  "/locations/details/{id}", \YourNamespace\Controllers\LocationsController::class,     'details'],
+    ['get',  "/join-the-team",          \YourNamespace\Controllers\JoinTheTeamController::class,   'index'],
+    ['get',  "/join-the-team/apply",    \YourNamespace\Controllers\JoinTheTeamController::class,   'apply'],
+    ['post', "/join-the-team/apply",    \YourNamespace\Controllers\JoinTheTeamController::class,   'apply'],
+    ['get',  "/join-the-team/success",  \YourNamespace\Controllers\JoinTheTeamController::class,   'success'],
 
-// Profile image update route - FIXED: using $route instead of $router
-$route->post("/update-profile-image", [ProfileController::class, 'updateProfileImage']);
+    ['get',  "/order",                  \YourNamespace\Controllers\OrdersController::class,        'index'],
+    ['get',  "/order/details/{id}",     \YourNamespace\Controllers\OrdersController::class,        'details'],
+    ['post', "/order/add-to-cart",      \YourNamespace\Controllers\OrdersController::class,        'addToCart'],
+    ['get',  "/cart",                   \YourNamespace\Controllers\OrdersController::class,        'cart'],
 
-// Profile update routes
-$route->post("/update-profile", [AuthController::class, 'updateProfile']);
-$route->post("/update-password", [AuthController::class, 'updatePassword']);
+    ['get',  "/checkout",               \YourNamespace\Controllers\CheckoutController::class,      'index'],
+    ['post', "/process-payment",        \YourNamespace\Controllers\CheckoutController::class,      'processPayment'],
+    ['get',  "/checkout/success",       \YourNamespace\Controllers\CheckoutController::class,      'success'],
 
-// Add these new routes for gift card, locations, join the team, and more
-$route->get("/gift-card", [GiftCardController::class, 'index']);
-$route->get("/gift-card/details/{id}", [GiftCardController::class, 'details']);
+    ['get',  "/payment",                \YourNamespace\Controllers\PaymentController::class,       'index'],
+    ['get',  "/payment/{id}",           \YourNamespace\Controllers\PaymentController::class,       'show'],
+    ['post', "/payment/process",        \YourNamespace\Controllers\PaymentController::class,       'process'],
+    ['get',  "/cash",                   \YourNamespace\Controllers\CashController::class,          'index'],
+    ['post', "/cash/process",           \YourNamespace\Controllers\CashController::class,          'process'],
+    ['get',  "/cash/confirm/{id}",      \YourNamespace\Controllers\CashController::class,          'confirm'],
 
-$route->get("/locations", [LocationsController::class, 'index']);
-$route->get("/locations/details/{id}", [LocationsController::class, 'details']);
+    ['get',  "/receipt",                \YourNamespace\Controllers\ReceiptController::class,       'index'],
+    ['get',  "/receipt/download/{id}",  \YourNamespace\Controllers\ReceiptController::class,       'download'],
+    ['get',  "/receipt/delete/{id}",    \YourNamespace\Controllers\ReceiptController::class,       'delete'],
+    ['post', "/receipt/delete/{id}",    \YourNamespace\Controllers\ReceiptController::class,       'delete'],
 
-$route->get("/join-the-team", [JoinTheTeamController::class, 'index']);
-$route->get("/join-the-team/apply", [JoinTheTeamController::class, 'apply']);
-$route->post("/join-the-team/apply", [JoinTheTeamController::class, 'apply']);
-$route->get("/join-the-team/success", [JoinTheTeamController::class, 'success']);
+    ['get',  "/booking",                \YourNamespace\Controllers\BookingController::class,       'index'],
+    ['get',  "/booking/details/{id}",   \YourNamespace\Controllers\BookingController::class,       'details'],
+    ['post', "/booking/create",         \YourNamespace\Controllers\BookingController::class,       'createBooking'],
 
-// Original routes
-$route->get("/welcome", [WelcomeController::class, 'welcome']);
-$route->get("/order", [OrdersController::class, 'index']);
-$route->get("/order/details/{id}", [OrdersController::class, 'details']);
-$route->post("/order/add-to-cart", [OrdersController::class, 'addToCart']);
-$route->get("/cart", [OrdersController::class, 'cart']);
+    ['get',  "/favorites",              \YourNamespace\Controllers\FavoritesController::class,     'index'],
+    ['post', "/favorites/toggle",       \YourNamespace\Controllers\FavoritesController::class,     'toggle'],
 
-// Checkout routes - Update these to use the new CheckoutController
-$route->get("/checkout", [CheckoutController::class, 'index']);
-$route->post("/process-payment", [CheckoutController::class, 'processPayment']);
-$route->get("/checkout/success", [CheckoutController::class, 'success']);
+    ['get',  "/feedback",               \YourNamespace\Controllers\FeedbackController::class,      'index'],
+    ['post', "/feedback",               \YourNamespace\Controllers\FeedbackController::class,      'index'],
+    ['post', "/feedback/submit-review", \YourNamespace\Controllers\FeedbackController::class,      'submitReview'],
+    ['post', "/feedback/submit-suggestion", \YourNamespace\Controllers\FeedbackController::class,  'submitSuggestion'],
+    ['post', "/feedback/submit-report", \YourNamespace\Controllers\FeedbackController::class,      'submitReport'],
 
-// New payment routes
-$route->get("/payment", [PaymentController::class, 'index']);
-$route->get("/payment/{id}", [PaymentController::class, 'show']);
-$route->post("/payment/process", [PaymentController::class, 'process']);
+    ['get',  "/settings",               \YourNamespace\Controllers\SettingsController::class,      'index'],
+];
 
-// Cash payment routes
-$route->get("/cash", [CashController::class, 'index']);
-$route->post("/cash/process", [CashController::class, 'process']);
-$route->get("/cash/confirm/{id}", [CashController::class, 'confirm']);
+// Admin routes — only register if the class exists
+$adminMap = [
+    ['get',  "/admin-dashboard",        \YourNamespace\Controllers\Admin\DashboardController::class,        'index'],
+    ['get',  "/admin/receipts",         \YourNamespace\Controllers\Admin\AdminReceiptController::class,     'index'],
+    ['get',  "/admin/receipts/download/{id}", \YourNamespace\Controllers\Admin\AdminReceiptController::class, 'download'],
+    ['get',  "/admin/receipts/delete/{id}",   \YourNamespace\Controllers\Admin\AdminReceiptController::class, 'delete'],
+    ['post', "/admin/receipts/delete/{id}",   \YourNamespace\Controllers\Admin\AdminReceiptController::class, 'delete'],
+    ['get',  "/admin/receipts/export-csv",    \YourNamespace\Controllers\Admin\AdminReceiptController::class, 'exportCSV'],
+    ['get',  "/admin/orders",           \YourNamespace\Controllers\Admin\OrderListController::class,       'index'],
+    ['get',  "/admin/users",            \YourNamespace\Controllers\Admin\Users\UserController::class,      'index'],
+    ['get',  "/admin/users/create",     \YourNamespace\Controllers\Admin\Users\UserController::class,      'create'],
+    ['post', "/admin/users/store",      \YourNamespace\Controllers\Admin\Users\UserController::class,      'store'],
+    ['get',  "/admin/users/edit/{id}",  \YourNamespace\Controllers\Admin\Users\UserController::class,      'edit'],
+    ['post', "/admin/users/update/{id}",\YourNamespace\Controllers\Admin\Users\UserController::class,      'update'],
+    ['post', "/admin/users/delete/{id}",\YourNamespace\Controllers\Admin\Users\UserController::class,      'destroy'],
+    ['get',  "/admin/products/create",  \YourNamespace\Controllers\Admin\Products\ProductController::class,'create'],
+    ['post', "/admin/products/store",   \YourNamespace\Controllers\Admin\Products\ProductController::class,'store'],
+    ['get',  "/admin/products/edit/{id}",\YourNamespace\Controllers\Admin\Products\ProductController::class,'edit'],
+    ['post', "/admin/products/update/{id}",\YourNamespace\Controllers\Admin\Products\ProductController::class,'update'],
+    ['post', "/admin/products/delete/{id}",\YourNamespace\Controllers\Admin\Products\ProductController::class,'delete'],
+];
 
-// Receipt routes
-$route->get("/receipt", [ReceiptController::class, 'index']);
-$route->get("/receipt/download/{id}", [ReceiptController::class, 'download']);
-$route->get("/receipt/delete/{id}", [ReceiptController::class, 'delete']);
-$route->post("/receipt/delete/{id}", [ReceiptController::class, 'delete']);
-
-// Admin Receipt routes
-$route->get("/admin/receipts", [AdminReceiptController::class, 'index']);
-$route->get("/admin/receipts/download/{id}", [AdminReceiptController::class, 'download']);
-$route->get("/admin/receipts/delete/{id}", [AdminReceiptController::class, 'delete']);
-$route->post("/admin/receipts/delete/{id}", [AdminReceiptController::class, 'delete']);
-$route->get("/admin/receipts/export-csv", [AdminReceiptController::class, 'exportCSV']);
-
-// Booking routes
-$route->get("/booking", [BookingController::class, 'index']);
-$route->get("/booking/details/{id}", [BookingController::class, 'details']);
-$route->post("/booking/create", [BookingController::class, 'createBooking']);
-
-
-// Favorites routes
-$route->get("/favorites", [FavoritesController::class, 'index']);
-$route->post("/favorites/toggle", [FavoritesController::class, 'toggle']);
-
-// Feedback routes
-$route->get("/feedback", [FeedbackController::class, 'index']);
-$route->post("/feedback", [FeedbackController::class, 'index']);
-$route->post("/feedback/submit-review", [FeedbackController::class, 'submitReview']);
-$route->post("/feedback/submit-suggestion", [FeedbackController::class, 'submitSuggestion']);
-$route->post("/feedback/submit-report", [FeedbackController::class, 'submitReport']);
-
-// Settings routes
-$route->get("/settings", [SettingsController::class, 'index']);
-
-// Admin routes
-$route->get("/admin-dashboard", [DashboardController::class, 'index']);
-
-// Admin Product Management Routes
-$route->get("/product", [ProductController::class, 'index']);
-$route->get("/admin/products/create", [ProductController::class, 'create']);
-$route->post("/admin/products/store", [ProductController::class, 'store']);
-$route->get("/admin/products/edit/{id}", [ProductController::class, 'edit']);
-$route->post("/admin/products/update/{id}", [ProductController::class, 'update']);
-$route->post("/admin/products/delete/{id}", [ProductController::class, 'delete']);
-
-
-
-// Admin User Management
-// Fix the user routes to match your controller's expectations
-$route->get("/admin/users", [UserController::class, 'index']);
-$route->get("/admin/users/create", [UserController::class, 'create']);
-$route->post("/admin/users/store", [UserController::class, 'store']);
-$route->get("/admin/users/edit/{id}", [UserController::class, 'edit']);
-$route->post("/admin/users/update/{id}", [UserController::class, 'update']);
-$route->post("/admin/users/delete/{id}", [UserController::class, 'destroy']);
-
-// Admin Feedback
-$route->post("/admin/users/delete", [UserController::class, 'destroy']);
-
-// Admin Order Management
-$route->get("/admin/orders", [OrderListController::class, 'index']);
+foreach ($map as $r) {
+    [$verb, $path, $cls, $method] = $r;
+    if (class_exists($cls)) {
+        $route->$verb($path, [$cls, $method]);
+    }
+}
+foreach ($adminMap as $r) {
+    [$verb, $path, $cls, $method] = $r;
+    if (class_exists($cls)) {
+        $route->$verb($path, [$cls, $method]);
+    }
+}
 
 $route->route();

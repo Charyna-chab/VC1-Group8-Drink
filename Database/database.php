@@ -11,11 +11,10 @@ class Database
 
     public function __construct()
     {
-        // Configure your database connection
         $dsn = 'mysql:host=localhost;dbname=drink_db;charset=utf8';
-        $username = 'root';
-        $password = '';
-        
+        $username = 'drink_user';
+        $password = 'DrinkPass_2026!';
+
         try {
             $this->pdo = new PDO($dsn, $username, $password);
             $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -25,9 +24,6 @@ class Database
         }
     }
 
-    /**
-     * Helper method to execute queries with parameters
-     */
     public function query($sql, $params = [])
     {
         $stmt = $this->pdo->prepare($sql);
@@ -45,4 +41,3 @@ class Database
         return $this->pdo->lastInsertId();
     }
 }
-

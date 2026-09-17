@@ -1,7 +1,16 @@
 {
+    "name": "vc1-group8/drink",
+    "description": "XING FU CHA - Bubble Tea Ordering System",
+    "type": "project",
+    "require": {
+        "php": ">=7.4"
+    },
     "autoload": {
         "psr-4": {
-            "YourNamespace\\": "controller/"
+            "YourNamespace\\Controllers\\": "controllers/",
+            "YourNamespace\\Models\\": "Models/",
+            "YourNamespace\\Database\\": "Database/",
+            "YourNamespace\\": "controllers/"
         }
     }
 }
